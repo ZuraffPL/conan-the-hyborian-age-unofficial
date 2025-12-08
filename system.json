@@ -71,7 +71,7 @@
   "primaryTokenAttribute": "lifePoints.actual",
   "secondaryTokenAttribute": "combat.armor",
   "url": "https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial",
-  "manifest": "https://raw.githubusercontent.com/ZuraffPL/conan-the-hyborian-age-unofficial/main/system.json",
-  "download": "https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/download/v0.0.35/conan-the-hyborian-age-v0.0.35.zip",
+  "manifest": "https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/latest/download/system.json",
+  "download": "https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/latest/download/conan-the-hyborian-age.zip",
   "license": "LICENSE.txt"
 }
