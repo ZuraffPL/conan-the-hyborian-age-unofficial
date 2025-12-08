@@ -1,3 +1,19 @@
+# [0.0.36] - 2025-12-08
+### Changed
+- Updated manifest URL to use `releases/latest/download/system.json` for automatic latest version detection.
+- Updated download URL to use `releases/latest/download/conan-the-hyborian-age.zip` (without version number).
+- Release assets now include both versioned and non-versioned ZIP files for flexibility.
+
+### Fixed
+- Added Known Issues section documenting that Poisoned status is UI-only (full logic not yet implemented).
+
+### Technical
+- Manifest and download URLs now point to `/latest/` instead of specific version.
+- GitHub release workflow aligned with best practices from other Foundry systems.
+
+### Release
+- Bumped system version to 0.0.36 in `system.json`.
+
 # [0.0.35] - 2025-12-08
 ### Added
 - Added complete French translation (lang/fr.json) with 611 lines covering all system features.

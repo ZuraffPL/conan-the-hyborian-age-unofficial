@@ -45,6 +45,8 @@ This creates dynamic, exciting tests where even desperate situations can turn ar
 
 ## System Features
 
+**[0.0.36]**: Release infrastructure update! Updated manifest and download URLs to use GitHub's `/latest/` endpoint for automatic version detection. Added Known Issues documentation for Poisoned status. Improved release workflow alignment with Foundry VTT best practices.
+
 **[0.0.35]**: CHANGELOG cleanup! Condensed multiple version entries (0.0.16-0.0.21, 0.0.22-0.0.25, 0.0.26-0.0.29) for better readability while preserving all key features and fixes. Added complete French translation (fr.json) with 611 lines covering all system features. System now supports 3 languages (English, Polish, French). See CHANGELOG.md for full details.
 
 **[0.0.34]**: Stamina Spending System! Added comprehensive stamina resource management via right-click context menu on chat messages. Spend 1-2 Stamina to boost roll results (+1/+2) for attribute tests, initiative, and attacks. Spend 1-2 Stamina to add 1d4/2d4 damage to damage rolls. Special "Massive Damage" option when exactly 1 Stamina remains - works like Flex Effect Massive Damage (max die value or double fixed) and CAN STACK with Flex Effect on same roll! New stamina-effects.mjs module with Foundry v13 ApplicationV2 ChatLog integration. Blue/gold gradient cards with animations. **CRITICAL FIX**: Delta system implementation - damage now properly applies to antagonist NPCs (was `actorData.system`, now `delta.system` for v13 unlinked tokens). Context menu shows 5 options based on message type. 10+ localization keys added. See CHANGELOG.md for full details.
