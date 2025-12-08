@@ -1,0 +1,249 @@
+/* === Armor Section on Actor Sheet === */
+
+.armor-section {
+  margin-bottom: 20px;
+}
+
+.armor-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: linear-gradient(to bottom, #8b4513, #654321);
+  border: 2px solid #d4af37;
+  border-radius: 6px 6px 0 0;
+}
+
+.armor-section .section-title {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  color: #f5e6d3;
+}
+
+.armor-section .section-title .primary-name {
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.armor-section .section-title .subtitle-name {
+  font-size: 11px;
+  font-style: italic;
+  opacity: 0.8;
+  font-weight: normal;
+}
+
+/* Armor List */
+.armor-list {
+  border: 2px solid #8b4513;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 10px;
+  background: #f5e6d3;
+  min-height: 100px;
+}
+
+.armor-list.empty-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b4513;
+  font-style: italic;
+}
+
+/* Armor Item */
+.armor-item {
+  background: #fff;
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.armor-item:hover {
+  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+.armor-item:last-child {
+  margin-bottom: 0;
+}
+
+/* First Row: Image, Name, Controls */
+.armor-row-main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.armor-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.armor-item .item-image {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.armor-item .item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.armor-item .item-image img:hover {
+  transform: scale(1.1);
+}
+
+.armor-item .item-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #8b4513;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.armor-item .item-name a {
+  color: #8b4513;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.armor-item .item-name a:hover {
+  color: #d4af37;
+  text-decoration: underline;
+}
+
+/* Controls */
+.armor-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.armor-controls .item-control {
+  padding: 6px 12px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: #f5e6d3;
+  color: #8b4513;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.armor-controls .item-control:hover {
+  background: #8b4513;
+  color: #f5e6d3;
+}
+
+.armor-controls .equip-btn.equipped {
+  background: #2d6a2d;
+  border-color: #2d6a2d;
+  color: #fff;
+}
+
+.armor-controls .equip-btn.equipped:hover {
+  background: #1f4d1f;
+}
+
+.armor-controls .delete-btn:hover {
+  background: #c0392b;
+  border-color: #c0392b;
+  color: #fff;
+}
+
+/* Second Row: Stats */
+.armor-row-stats {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  background: #f5e6d3;
+  border-radius: 4px;
+  font-size: 15px;
+  color: #654321;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.armor-row-stats .armor-stat {
+  white-space: nowrap;
+}
+
+.armor-row-stats .armor-stat strong {
+  color: #8b4513;
+}
+
+.armor-row-stats .stat-separator {
+  color: #d4af37;
+  font-weight: bold;
+}
+
+/* Stipulations (Collapsible) */
+.armor-stipulations {
+  margin-top: 8px;
+  border: 1px solid #d4af37;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.armor-stipulations summary {
+  padding: 6px 10px;
+  background: linear-gradient(to right, #8b4513, #654321);
+  color: #f5e6d3;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.armor-stipulations summary:hover {
+  background: linear-gradient(to right, #a0522d, #7a5230);
+}
+
+.armor-stipulations .stipulations-content {
+  padding: 10px;
+  background: #fff;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #333;
+  border-top: 1px solid #d4af37;
+}
+
+/* Empty List Message */
+.armor-list .empty-list {
+  text-align: center;
+  padding: 20px;
+  color: #8b4513;
+  font-style: italic;
+}

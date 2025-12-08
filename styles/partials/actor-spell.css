@@ -1,0 +1,219 @@
+/**
+ * Actor Sheet - Spell Section Styles
+ * Styles for the spell list on character sheets
+ */
+
+.conan.sheet.actor .spells-section {
+  margin-bottom: 20px;
+}
+
+.conan.sheet.actor .spells-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #8b4513;
+}
+
+.conan.sheet.actor .spells-section .section-title {
+  margin: 0;
+  font-size: 18px;
+  color: #8b4513;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.conan.sheet.actor .spells-section .primary-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.conan.sheet.actor .spells-section .subtitle-name {
+  font-size: 12px;
+  font-weight: normal;
+  font-style: italic;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.conan.sheet.actor .spell-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: rgba(139, 69, 19, 0.1);
+  border-radius: 5px;
+  min-height: 100px;
+}
+
+.conan.sheet.actor .spell-list .empty-list {
+  text-align: center;
+  color: #8b4513;
+  font-style: italic;
+  margin: 20px 0;
+  padding: 20px;
+  background-color: rgba(139, 69, 19, 0.05);
+  border-radius: 5px;
+  border: 1px dashed rgba(139, 69, 19, 0.3);
+}
+
+.conan.sheet.actor .spell-item {
+  background-color: rgba(245, 222, 179, 0.3);
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  border-radius: 5px;
+  padding: 10px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.conan.sheet.actor .spell-item:hover {
+  background-color: rgba(245, 222, 179, 0.5);
+  border-color: rgba(139, 69, 19, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Main row with all info in one line */
+.conan.sheet.actor .spell-row-main {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.conan.sheet.actor .spell-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.conan.sheet.actor .spell-item .item-image {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.conan.sheet.actor .spell-item .item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  border-radius: 3px;
+}
+
+.conan.sheet.actor .spell-item .item-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #4a2511;
+  flex: 0 0 auto;
+  min-width: 150px;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conan.sheet.actor .spell-item .item-name a {
+  color: #4a2511;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.conan.sheet.actor .spell-item .item-name a:hover {
+  color: #8b4513;
+  text-decoration: underline;
+}
+
+/* Statistics in the same row */
+.conan.sheet.actor .spell-row-stats {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 14px;
+  color: #4a2511;
+  flex: 1 1 auto;
+}
+
+.conan.sheet.actor .spell-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.conan.sheet.actor .spell-stat strong {
+  color: #8b4513;
+  font-weight: 600;
+}
+
+.conan.sheet.actor .spell-controls {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Expandable effect details */
+.conan.sheet.actor .spell-details {
+  border-top: 1px solid rgba(139, 69, 19, 0.2);
+  padding-top: 8px;
+}
+
+.conan.sheet.actor .spell-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #8b4513;
+  user-select: none;
+  list-style-position: inside;
+}
+
+.conan.sheet.actor .spell-details summary:hover {
+  color: #a0522d;
+}
+
+.conan.sheet.actor .spell-effect-content {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: rgba(245, 222, 179, 0.3);
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #4a2511;
+}
+
+.conan.sheet.actor .spell-effect-content p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Delete button */
+.conan.sheet.actor .spell-item .delete-btn {
+  padding: 5px 10px;
+  background: linear-gradient(to bottom, #d9534f, #c9302c);
+  color: white;
+  border: 1px solid #ac2925;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.conan.sheet.actor .spell-item .delete-btn:hover {
+  background: linear-gradient(to bottom, #c9302c, #ac2925);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.conan.sheet.actor .spell-item .delete-btn i {
+  pointer-events: none;
+}

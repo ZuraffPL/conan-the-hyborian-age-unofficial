@@ -1,0 +1,74 @@
+<form class="attack-form">
+  <!-- Attack Type Section -->
+  <div class="form-group">
+    <label>{{localize "CONAN.Attack.attackType"}}</label>
+    <div class="attack-type-options">
+      <div class="radio-option">
+        <input type="radio" id="attack-melee" name="attackType" value="melee" checked>
+        <label for="attack-melee">
+          <span class="primary">{{localize "CONAN.Attack.melee"}}</span>
+          <span class="subtitle">(Melee Attack)</span>
+        </label>
+      </div>
+      <div class="radio-option">
+        <input type="radio" id="attack-ranged" name="attackType" value="ranged">
+        <label for="attack-ranged">
+          <span class="primary">{{localize "CONAN.Attack.ranged"}}</span>
+          <span class="subtitle">(Ranged Attack)</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Target Physical Defense -->
+  <div class="form-group">
+    <label for="targetDefense">
+      <span class="primary-label">{{localize "CONAN.Attack.targetPhysicalDefense"}}</span>
+      <span class="subtitle-label">Target Physical Defence</span>
+    </label>
+    <input type="number" name="targetDefense" id="targetDefense" value="{{targetDefense}}" min="1" max="99" />
+  </div>
+
+  <!-- Attack Modifiers Section -->
+  <div class="form-group">
+    <label>{{localize "CONAN.Attack.attackModifiers"}}</label>
+    <div class="modifier-options">
+      <div class="checkbox-option">
+        <input type="checkbox" id="focused-attack" name="focusedAttack" value="true">
+        <label for="focused-attack">
+          <span class="primary">{{localize "CONAN.Attack.focusedAttack"}}</span>
+          <span class="subtitle">(Focused Attack) (2 {{localize "CONAN.Common.actions"}}): +2 {{localize "CONAN.Attack.toAttack"}}</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modifier Slider -->
+  <div class="form-group modifier-group">
+    <label for="modifier">
+      <span class="primary-label">{{localize "CONAN.Dialog.difficulty.modifierLabel"}}</span>
+      <span class="subtitle-label">Modifier</span>
+    </label>
+    <div class="modifier-controls">
+      <span class="modifier-value-label">0</span>
+      <input type="range" name="modifier" id="modifier" value="0" min="-3" max="3" step="1" />
+      <div class="modifier-scale">
+        <span>-3</span>
+        <span>-2</span>
+        <span>-1</span>
+        <span>0</span>
+        <span>+1</span>
+        <span>+2</span>
+        <span>+3</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Roll Button -->
+  <footer class="dialog-buttons">
+    <button type="button" class="dialog-button" data-action="roll">
+      <i class="fas fa-dice-d20"></i>
+      {{localize "CONAN.Attack.rollAttack"}}
+    </button>
+  </footer>
+</form>

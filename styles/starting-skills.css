@@ -1,0 +1,474 @@
+/* === Starting Skills Section === */
+.starting-skills-section {
+  margin: 15px 0;
+  padding: 15px;
+  background: rgba(139, 69, 19, 0.05);
+  border: 2px solid #8b4513;
+  border-radius: 8px;
+}
+
+.starting-skills-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #8b4513;
+}
+
+.starting-skills-section .section-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+
+.starting-skills-section .section-title .primary-name {
+  font-size: 0.65em;
+  color: #5a3410;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+}
+
+.starting-skills-section .section-title .subtitle-name {
+  font-size: 0.6em;
+  color: #8b4513;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.add-skill-btn {
+  padding: 8px 15px;
+  background: linear-gradient(to bottom, #d4a574, #b8956a);
+  border: 2px solid #8b4513;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+.add-skill-btn:hover {
+  background: linear-gradient(to bottom, #c49563, #a78459);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* === Skills List === */
+.starting-skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.starting-skills-list .empty-list {
+  text-align: center;
+  padding: 30px;
+  color: #8b4513;
+  font-style: italic;
+  background: rgba(139, 69, 19, 0.05);
+  border-radius: 5px;
+  border: 1px dashed #8b4513;
+}
+
+/* === Skill Item (Toggle) === */
+.skill-item {
+  background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c1 100%);
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.skill-item:hover {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.skill-item[open] {
+  border-color: #654321;
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 15px;
+  cursor: pointer;
+  background: linear-gradient(to right, rgba(139, 69, 19, 0.1), transparent);
+  transition: all 0.3s;
+  list-style: none;
+}
+
+.skill-header::-webkit-details-marker {
+  display: none;
+}
+
+.skill-header:hover {
+  background: linear-gradient(to right, rgba(139, 69, 19, 0.2), transparent);
+}
+
+.skill-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.skill-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #5a3410;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skill-cost {
+  padding: 3px 10px;
+  background: #8b4513;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.origin-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  background: linear-gradient(135deg, #d4af37, #ffd700);
+  color: #5a3410;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: bold;
+  border: 1px solid #b8956a;
+}
+
+.origin-badge i {
+  font-size: 0.9em;
+}
+
+/* === Skill Actions === */
+.skill-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.skill-action-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: #fff;
+  color: #8b4513;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9em;
+}
+
+.skill-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.skill-action-btn.edit:hover {
+  background: #4caf50;
+  border-color: #4caf50;
+  color: #fff;
+}
+
+.skill-action-btn.delete:hover {
+  background: #f44336;
+  border-color: #f44336;
+  color: #fff;
+}
+
+/* === Skill Content (Expanded) === */
+.skill-content {
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.5);
+  border-top: 1px solid #d4a574;
+}
+
+.skill-effect {
+  color: #5a3410;
+  line-height: 1.6;
+}
+
+.skill-effect strong {
+  color: #8b4513;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  letter-spacing: 0.5px;
+}
+
+.skill-effect p {
+  margin: 8px 0 0 0;
+  padding-left: 10px;
+  border-left: 3px solid #8b4513;
+}
+
+.skill-content .no-effect {
+  color: #999;
+  font-style: italic;
+  margin: 0;
+  text-align: center;
+}
+
+/* === Starting Skills Dialog === */
+.dialog.starting-skills .dialog-content {
+  padding: 15px;
+}
+
+.starting-skills-form {
+  padding: 0;
+}
+
+.starting-skills-form .form-group {
+  margin-bottom: 15px;
+}
+
+.starting-skills-form .form-row {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.starting-skills-form .form-group-small {
+  flex: 0 0 120px;
+  margin-bottom: 0;
+}
+
+.starting-skills-form .form-group-checkbox {
+  flex: 1;
+  margin-bottom: 0;
+  display: flex;
+  align-items: flex-end;
+}
+
+.starting-skills-form .form-group label {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #5a3410;
+}
+
+.starting-skills-form .label-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.starting-skills-form .primary-label {
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.starting-skills-form .subtitle-label {
+  font-size: 0.85em;
+  font-style: italic;
+  color: #8b4513;
+  font-weight: normal;
+}
+
+.starting-skills-form .required {
+  color: #f44336;
+  font-size: 1em;
+  margin-left: 0;
+}
+
+.starting-skills-form input[type="text"],
+.starting-skills-form input[type="number"],
+.starting-skills-form textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  font-size: 1em;
+  background: #fff;
+  color: #5a3410;
+  transition: all 0.3s;
+}
+
+.starting-skills-form input[type="text"]:focus,
+.starting-skills-form input[type="number"]:focus,
+.starting-skills-form textarea:focus {
+  border-color: #654321;
+  box-shadow: 0 0 5px rgba(139, 69, 19, 0.3);
+  outline: none;
+}
+
+.starting-skills-form textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* === Checkbox Group === */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-group label,
+.checkbox-inline {
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-bottom: 0 !important;
+}
+
+.checkbox-group input[type="checkbox"],
+.checkbox-inline input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #8b4513;
+  flex-shrink: 0;
+}
+
+.checkbox-group .checkbox-label,
+.checkbox-inline .checkbox-label {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* === Dialog Buttons (V1 Dialog) === */
+.dialog.starting-skills .dialog-buttons {
+  border-top: 2px solid #8b4513;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+.dialog.starting-skills .dialog-buttons button {
+  background: linear-gradient(to bottom, #d4a574, #b8956a);
+  border: 2px solid #8b4513;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: all 0.3s;
+}
+
+.dialog.starting-skills .dialog-buttons button:hover {
+  background: linear-gradient(to bottom, #c49563, #a78459);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   LEARNED SKILLS SECTION
+   ======================================== */
+
+.learned-skills-section {
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(245, 234, 216, 0.3);
+  border: 2px solid #b8956a;
+  border-radius: 8px;
+}
+
+.learned-skills-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #b8956a;
+}
+
+.learned-skills-section .section-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+
+.learned-skills-section .section-title .primary-name {
+  font-size: 0.65em;
+  color: #5a3410;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+}
+
+.learned-skills-section .section-title .subtitle-name {
+  font-size: 0.6em;
+  color: #8b4513;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.learned-skills-drop-zone {
+  min-height: 100px;
+  border: 2px dashed #b8956a;
+  border-radius: 5px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s;
+}
+
+.learned-skills-drop-zone.drag-over {
+  background: rgba(184, 149, 106, 0.2);
+  border-color: #8b7355;
+  border-style: solid;
+  box-shadow: inset 0 0 10px rgba(139, 115, 85, 0.3);
+}
+
+.learned-skills-drop-zone .empty-list.drop-hint {
+  text-align: center;
+  padding: 40px 20px;
+  color: #8b7355;
+  font-style: italic;
+  font-size: 0.95em;
+}
+
+.learned-skills-drop-zone .skill-item.learned {
+  margin-bottom: 10px;
+}
+
+.skill-type {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.skill-type.origin {
+  background: #90c9e8;
+  color: #1a5a7a;
+}
+
+.skill-type.starting {
+  background: #98d8c8;
+  color: #2d6a5a;
+}
+
+.skill-type.legendary {
+  background: #ffd700;
+  color: #8b6914;
+}
+
+.skill-type.advanced {
+  background: #9370db;
+  color: #4b0082;
+}

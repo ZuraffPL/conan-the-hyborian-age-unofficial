@@ -1,0 +1,104 @@
+<form class="character-creation-form">
+  <div class="dialog-content">
+    <h2 class="creation-title">
+      <span class="primary-text">{{localize "CONAN.Dialog.characterCreation.title"}}</span>
+      <span class="subtitle-text">{{localize "CONAN.Dialog.characterCreation.subtitle"}}</span>
+    </h2>
+
+    {{!-- Origin Selection --}}
+    <div class="creation-section">
+      <label class="section-label">
+        <span class="primary-label">{{localize "CONAN.Dialog.characterCreation.originLabel"}}</span>
+        <span class="subtitle-label">{{localize "CONAN.Dialog.characterCreation.originSubtitle"}}</span>
+      </label>
+      <select name="origin" class="origin-select">
+        <option value="">{{localize "CONAN.Dialog.characterCreation.originSelect"}}</option>
+        <option value="hills" {{#if (eq selectedOrigin "hills")}}selected{{/if}}>{{localize "CONAN.Origins.hills"}}</option>
+        <option value="streets" {{#if (eq selectedOrigin "streets")}}selected{{/if}}>{{localize "CONAN.Origins.streets"}}</option>
+        <option value="steppes" {{#if (eq selectedOrigin "steppes")}}selected{{/if}}>{{localize "CONAN.Origins.steppes"}}</option>
+        <option value="north" {{#if (eq selectedOrigin "north")}}selected{{/if}}>{{localize "CONAN.Origins.north"}}</option>
+        <option value="wilds" {{#if (eq selectedOrigin "wilds")}}selected{{/if}}>{{localize "CONAN.Origins.wilds"}}</option>
+        <option value="civilized" {{#if (eq selectedOrigin "civilized")}}selected{{/if}}>{{localize "CONAN.Origins.civilized"}}</option>
+        <option value="unknown" {{#if (eq selectedOrigin "unknown")}}selected{{/if}}>{{localize "CONAN.Origins.unknown"}}</option>
+        <option value="jhebbal" {{#if (eq selectedOrigin "jhebbal")}}selected{{/if}}>{{localize "CONAN.Origins.jhebbal"}}</option>
+        <option value="acheron" {{#if (eq selectedOrigin "acheron")}}selected{{/if}}>{{localize "CONAN.Origins.acheron"}}</option>
+        <option value="demon" {{#if (eq selectedOrigin "demon")}}selected{{/if}}>{{localize "CONAN.Origins.demon"}}</option>
+      </select>
+    </div>
+
+    {{!-- Attribute Points Distribution --}}
+    <div class="creation-section">
+      <label class="section-label">
+        <span class="primary-label">{{localize "CONAN.Dialog.characterCreation.pointsLabel"}}</span>
+        <span class="subtitle-label">{{localize "CONAN.Dialog.characterCreation.pointsSubtitle"}}</span>
+      </label>
+      <div class="points-info">
+        <span class="remaining-points">{{localize "CONAN.Dialog.characterCreation.remaining"}}: <strong>{{remainingPoints}}</strong> / 16</span>
+      </div>
+
+      <div class="attributes-distribution">
+        {{!-- Might --}}
+        <div class="attribute-row">
+          <span class="attribute-name">
+            <span class="primary">{{localize "CONAN.Attributes.might.abbr"}}</span>
+            <span class="subtitle">{{localize "CONAN.Attributes.might.label"}}</span>
+          </span>
+          <div class="attribute-controls">
+            <button type="button" class="decrement-btn" data-action="decrementAttribute" data-attribute="might" {{#if (eq attributePoints.might 1)}}disabled{{/if}}>-</button>
+            <span class="attribute-value">{{attributePoints.might}}</span>
+            <button type="button" class="increment-btn" data-action="incrementAttribute" data-attribute="might" {{#if (or (eq attributePoints.might 6) (eq remainingPoints 0))}}disabled{{/if}}>+</button>
+          </div>
+        </div>
+
+        {{!-- Edge --}}
+        <div class="attribute-row">
+          <span class="attribute-name">
+            <span class="primary">{{localize "CONAN.Attributes.edge.abbr"}}</span>
+            <span class="subtitle">{{localize "CONAN.Attributes.edge.label"}}</span>
+          </span>
+          <div class="attribute-controls">
+            <button type="button" class="decrement-btn" data-action="decrementAttribute" data-attribute="edge" {{#if (eq attributePoints.edge 1)}}disabled{{/if}}>-</button>
+            <span class="attribute-value">{{attributePoints.edge}}</span>
+            <button type="button" class="increment-btn" data-action="incrementAttribute" data-attribute="edge" {{#if (or (eq attributePoints.edge 6) (eq remainingPoints 0))}}disabled{{/if}}>+</button>
+          </div>
+        </div>
+
+        {{!-- Grit --}}
+        <div class="attribute-row">
+          <span class="attribute-name">
+            <span class="primary">{{localize "CONAN.Attributes.grit.abbr"}}</span>
+            <span class="subtitle">{{localize "CONAN.Attributes.grit.label"}}</span>
+          </span>
+          <div class="attribute-controls">
+            <button type="button" class="decrement-btn" data-action="decrementAttribute" data-attribute="grit" {{#if (eq attributePoints.grit 1)}}disabled{{/if}}>-</button>
+            <span class="attribute-value">{{attributePoints.grit}}</span>
+            <button type="button" class="increment-btn" data-action="incrementAttribute" data-attribute="grit" {{#if (or (eq attributePoints.grit 6) (eq remainingPoints 0))}}disabled{{/if}}>+</button>
+          </div>
+        </div>
+
+        {{!-- Wits --}}
+        <div class="attribute-row">
+          <span class="attribute-name">
+            <span class="primary">{{localize "CONAN.Attributes.wits.abbr"}}</span>
+            <span class="subtitle">{{localize "CONAN.Attributes.wits.label"}}</span>
+          </span>
+          <div class="attribute-controls">
+            <button type="button" class="decrement-btn" data-action="decrementAttribute" data-attribute="wits" {{#if (eq attributePoints.wits 1)}}disabled{{/if}}>-</button>
+            <span class="attribute-value">{{attributePoints.wits}}</span>
+            <button type="button" class="increment-btn" data-action="incrementAttribute" data-attribute="wits" {{#if (or (eq attributePoints.wits 6) (eq remainingPoints 0))}}disabled{{/if}}>+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{!-- Dialog Buttons --}}
+  <footer class="dialog-buttons">
+    <button type="button" class="dialog-button confirm" data-action="confirm" {{#unless canConfirm}}disabled{{/unless}}>
+      <i class="fas fa-check"></i> {{localize "CONAN.Dialog.characterCreation.confirm"}}
+    </button>
+    <button type="button" class="dialog-button cancel" data-action="cancel">
+      <i class="fas fa-times"></i> {{localize "CONAN.Dialog.characterCreation.cancel"}}
+    </button>
+  </footer>
+</form>

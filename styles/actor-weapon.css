@@ -1,0 +1,236 @@
+/* === Weapon Section on Actor Sheet === */
+
+.conan .weapon-section {
+  padding: 15px;
+  background: rgba(139, 69, 19, 0.05);
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.conan .weapon-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #8b4513;
+}
+
+.conan .weapon-section .section-title {
+  margin: 0;
+  font-size: 18px;
+  color: #8b4513;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.conan .weapon-section .primary-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.conan .weapon-section .subtitle-name {
+  font-size: 12px;
+  font-weight: normal;
+  font-style: italic;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+/* === Weapon List === */
+
+.conan .weapon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.conan .weapon-list .empty-list {
+  text-align: center;
+  padding: 30px;
+  color: #8b4513;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.conan .weapon-item {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  padding: 10px;
+  transition: all 0.2s;
+}
+
+.conan .weapon-item:hover {
+  box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
+  border-color: #a0522d;
+}
+
+/* === Weapon Row Main (Image + Name + Controls) === */
+
+.conan .weapon-row-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.conan .weapon-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.conan .weapon-item .item-image {
+  flex: 0 0 40px;
+  height: 40px;
+  border: 1px solid #8b4513;
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.conan .weapon-item .item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.conan .weapon-item .item-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c1810;
+  white-space: nowrap;
+}
+
+.conan .weapon-item .item-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.conan .weapon-item .item-name a:hover {
+  color: #8b4513;
+  text-decoration: underline;
+}
+
+/* === Weapon Controls === */
+
+.conan .weapon-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.conan .weapon-controls button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #8b4513;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #8b4513;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.conan .weapon-controls button:hover {
+  background: rgba(139, 69, 19, 0.1);
+  border-color: #a0522d;
+}
+
+.conan .weapon-controls .equip-btn.equipped {
+  background: #2d5016;
+  color: white;
+  border-color: #2d5016;
+}
+
+.conan .weapon-controls .equip-btn.equipped:hover {
+  background: #3d6020;
+  border-color: #3d6020;
+}
+
+.conan .weapon-controls .delete-btn {
+  background: rgba(200, 50, 50, 0.1);
+  border-color: #8b0000;
+  color: #8b0000;
+}
+
+.conan .weapon-controls .delete-btn:hover {
+  background: rgba(200, 50, 50, 0.2);
+  border-color: #a00000;
+}
+
+/* === Weapon Row Stats === */
+
+.conan .weapon-row-stats {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(139, 69, 19, 0.05);
+  border-radius: 3px;
+  font-size: 14px;
+  color: #2c1810;
+  line-height: 1.6;
+}
+
+.conan .weapon-stat {
+  display: flex;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.conan .weapon-stat strong {
+  color: #8b4513;
+}
+
+.conan .stat-separator {
+  color: #8b4513;
+  opacity: 0.5;
+  margin: 0 2px;
+  font-weight: bold;
+}
+
+/* === Weapon Stipulations === */
+
+.conan .weapon-stipulations {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.conan .weapon-stipulations summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #8b4513;
+  font-size: 13px;
+  padding: 4px 0;
+  user-select: none;
+}
+
+.conan .weapon-stipulations summary:hover {
+  color: #a0522d;
+}
+
+.conan .weapon-stipulations .stipulations-content {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
+  font-size: 13px;
+  color: #2c1810;
+  line-height: 1.5;
+}

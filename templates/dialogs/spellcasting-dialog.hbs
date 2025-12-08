@@ -1,0 +1,98 @@
+{{!-- Spellcasting Dialog Template --}}
+<div class="spellcasting-dialog-content">
+  {{!-- Attribute Display --}}
+  <div class="attribute-section">
+    <div class="attribute-display">
+      <div class="attribute-label">
+        <span class="primary-label">{{localize "CONAN.Attributes.wits.label"}}</span>
+        <span class="subtitle-label">{{localize "CONAN.Attributes.wits.abbr"}}</span>
+      </div>
+      <div class="attribute-value">
+        <span class="die-type">{{wits.die}}</span>
+        <span class="plus">+</span>
+        <span class="attr-value">{{wits.value}}</span>
+      </div>
+    </div>
+    <div class="roll-info">
+      {{localize "CONAN.Spellcasting.rollInfo"}}
+    </div>
+  </div>
+
+  {{!-- Spellcasting Cost Section --}}
+  <div class="cost-section">
+    <h3>
+      <span class="primary-label">{{localize "CONAN.Spellcasting.spellcastingCost"}}</span>
+      <span class="subtitle-label">Spellcasting Cost</span>
+    </h3>
+    <div class="cost-inputs">
+      <div class="form-group">
+        <label>
+          <span class="primary-label">{{localize "CONAN.Resources.lifePoints"}}</span>
+          <span class="subtitle-label">Life Points</span>
+        </label>
+        <input type="number" name="lifePointsCost" value="0" min="0" max="{{lifePoints.actual}}" style="width: 50px;"/>
+      </div>
+      <div class="form-group">
+        <label>
+          <span class="primary-label">{{localize "CONAN.Resources.stamina"}}</span>
+          <span class="subtitle-label">Stamina</span>
+        </label>
+        <input type="number" name="staminaCost" value="0" min="0" max="{{stamina.value}}" style="width: 50px;"/>
+      </div>
+    </div>
+  </div>
+
+  {{!-- Magic Attack Section --}}
+  <div class="magic-attack-section">
+    <div class="attack-row">
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="magicAttack" id="magicAttack" {{#if hasTarget}}checked{{/if}}/>
+          <span class="primary-label">{{localize "CONAN.Spellcasting.magicAttack"}}</span>
+          <span class="subtitle-label">Magic Attack</span>
+        </label>
+      </div>
+      <div class="form-group target-defense">
+        <label>
+          <span class="primary-label">{{localize "CONAN.Spellcasting.targetDefense"}}</span>
+          <span class="subtitle-label">Target Sorcery Defence</span>
+        </label>
+        <input type="number" name="targetDefense" value="{{targetDefense}}" min="5" max="30" style="width: 50px;"/>
+      </div>
+    </div>
+  </div>
+
+  {{!-- Modifier Slider --}}
+  <div class="modifier-section">
+    <h3>
+      <span class="primary-label">{{localize "CONAN.Dialog.difficulty.modifierLabel"}}</span>
+      <span class="subtitle-label">Modifier</span>
+    </h3>
+    <div class="modifier-controls">
+      <div class="modifier-value-label" data-modifier-value>0</div>
+      <input type="range" name="modifier" min="-3" max="3" value="0" step="1" class="modifier-slider"/>
+      <div class="modifier-scale">
+        <span>-3</span>
+        <span>-2</span>
+        <span>-1</span>
+        <span>0</span>
+        <span>+1</span>
+        <span>+2</span>
+        <span>+3</span>
+      </div>
+    </div>
+  </div>
+
+  {{!-- Action Buttons --}}
+  <div class="dialog-buttons">
+    <button type="button" class="cast-button" data-action="cast">
+      <i class="fas fa-magic"></i>
+      <span class="primary-label">{{localize "CONAN.Spellcasting.cast"}}</span>
+      <span class="subtitle-label">Cast</span>
+    </button>
+    <button type="button" class="cancel-button" data-action="cancel">
+      <span class="primary-label">{{localize "CONAN.Common.cancel"}}</span>
+      <span class="subtitle-label">Cancel</span>
+    </button>
+  </div>
+</div>

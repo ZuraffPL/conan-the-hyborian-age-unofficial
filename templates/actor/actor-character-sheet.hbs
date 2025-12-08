@@ -1,0 +1,647 @@
+<form class="{{cssClass}} flexcol">
+  {{!-- Sheet Header --}}
+  <header class="sheet-header">
+    <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="{{actor.name}}" />
+    <div class="header-fields">
+      <div class="charname-row">
+        <h1 class="charname">
+          <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'CONAN.CharacterName'}}" />
+        </h1>
+        <button type="button" class="create-character-btn" data-action="createCharacter" {{#if system.characterCreated}}disabled{{/if}}>
+          <i class="fas fa-user-plus"></i>
+          <span class="btn-text">
+            <span class="primary-text">{{localize "CONAN.Common.createCharacter"}}</span>
+            <span class="subtitle-text">{{localize "CONAN.Common.createCharacterSubtitle"}}</span>
+          </span>
+        </button>
+      </div>
+      <div class="header-row">
+        <div class="header-left">
+          <div class="origin-field">
+            <label>{{localize "CONAN.Character.origin"}}</label>
+            <select name="system.origin" data-dtype="String" {{#if system.characterCreated}}disabled{{/if}}>
+              <option value="">{{localize "CONAN.Character.selectOrigin"}}</option>
+              <option value="hills" {{#if (eq system.origin "hills")}}selected{{/if}}>{{localize "CONAN.Origins.hills"}}</option>
+              <option value="streets" {{#if (eq system.origin "streets")}}selected{{/if}}>{{localize "CONAN.Origins.streets"}}</option>
+              <option value="steppes" {{#if (eq system.origin "steppes")}}selected{{/if}}>{{localize "CONAN.Origins.steppes"}}</option>
+              <option value="north" {{#if (eq system.origin "north")}}selected{{/if}}>{{localize "CONAN.Origins.north"}}</option>
+              <option value="wilds" {{#if (eq system.origin "wilds")}}selected{{/if}}>{{localize "CONAN.Origins.wilds"}}</option>
+              <option value="civilized" {{#if (eq system.origin "civilized")}}selected{{/if}}>{{localize "CONAN.Origins.civilized"}}</option>
+              <option value="unknown" {{#if (eq system.origin "unknown")}}selected{{/if}}>{{localize "CONAN.Origins.unknown"}}</option>
+              <option value="jhebbal" {{#if (eq system.origin "jhebbal")}}selected{{/if}}>{{localize "CONAN.Origins.jhebbal"}}</option>
+              <option value="acheron" {{#if (eq system.origin "acheron")}}selected{{/if}}>{{localize "CONAN.Origins.acheron"}}</option>
+              <option value="demon" {{#if (eq system.origin "demon")}}selected{{/if}}>{{localize "CONAN.Origins.demon"}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="experience-field">
+            <label>{{localize "CONAN.Character.experience"}}</label>
+            <input type="number" name="system.experience.value" value="{{system.experience.value}}" min="0" max="100" data-dtype="Number" class="{{valueChanges.experience}}"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Attributes Section --}}
+  <section class="attributes-section">
+    <h3 class="attributes-title">{{localize "CONAN.CharacterSheet.attributes"}}</h3>
+    <div class="attributes-container">
+      <div class="attributes">
+        <div class="attributes-row">
+          {{#each system.attributes as |attr key|}}
+          <div class="attribute-box" data-attribute="{{key}}">
+            <div class="attribute-header">
+              <span class="attribute-label">{{localize (concat "CONAN.Attributes." key ".label")}}</span>
+              <span class="attribute-abbr">{{localize (concat "CONAN.Attributes." key ".abbr")}}</span>
+            </div>
+            <div class="attribute-values">
+              <input type="number" name="system.attributes.{{key}}.value" value="{{attr.value}}" min="1" max="8" data-dtype="Number" class="attribute-value {{lookup ../valueChanges key}}"/>
+              <select name="system.attributes.{{key}}.die" data-dtype="String" class="attribute-die">
+                <option value="d6" {{#if (eq attr.die "d6")}}selected{{/if}}>k6</option>
+                <option value="d8" {{#if (eq attr.die "d8")}}selected{{/if}}>k8</option>
+                <option value="d10" {{#if (eq attr.die "d10")}}selected{{/if}}>k10</option>
+              </select>
+            </div>
+            <div class="attribute-mod rollable" data-action="rollAttribute" data-attribute="{{key}}" title="{{localize 'CONAN.Common.roll'}}">
+              <i class="fas fa-dice-d20"></i> <span>{{localize "CONAN.Common.roll"}}</span>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+        
+        {{!-- Initiative, Attack, and Spellcasting Buttons --}}
+        <div class="initiative-button-container">
+          <button type="button" class="initiative-button" data-action="rollInitiative">
+            <i class="fas fa-stopwatch"></i>
+            <div class="button-labels">
+              <span class="primary-label">{{localize "CONAN.Combat.initiative"}}</span>
+              <span class="subtitle-label">(Initiative)</span>
+            </div>
+          </button>
+          
+          <button type="button" class="attack-button" data-action="rollAttack">
+            <i class="fas fa-sword"></i>
+            <div class="button-labels">
+              <span class="primary-label">{{localize "CONAN.Attack.title"}}</span>
+              <span class="subtitle-label">(Attack)</span>
+            </div>
+          </button>
+          
+          <button type="button" class="damage-button" data-action="rollDamage">
+            <i class="fas fa-shield-halved"></i>
+            <div class="button-labels">
+              <span class="primary-label">{{localize "CONAN.Damage.title"}}</span>
+              <span class="subtitle-label">(Damage)</span>
+            </div>
+          </button>
+          
+          <button type="button" class="spellcasting-button {{#unless canUseMagic}}disabled{{/unless}}" data-action="castSpell" {{#unless canUseMagic}}disabled{{/unless}}>
+            <i class="fas fa-magic"></i>
+            <div class="button-labels">
+              <span class="primary-label">{{localize "CONAN.Spellcasting.title"}}</span>
+              <span class="subtitle-label">(Spellcasting)</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {{!-- Flex Die and Stamina Section --}}
+      <div class="extra-resources">
+        {{!-- Flex Die --}}
+        <div class="resource-box">
+          <div class="resource-header">
+            <span class="resource-name">{{localize "CONAN.Resources.flexDie"}}</span>
+            <label class="resource-subtitle">Flex Die</label>
+
+          </div>
+          <select name="system.flexDie" data-dtype="String" class="flex-die-select">
+            <option value="d10" {{#if (eq system.flexDie "d10")}}selected{{/if}}>k10</option>
+            <option value="d8" {{#if (eq system.flexDie "d8")}}selected{{/if}}>k8</option>
+            <option value="d6" {{#if (eq system.flexDie "d6")}}selected{{/if}}>k6</option>
+            <option value="d4" {{#if (eq system.flexDie "d4")}}selected{{/if}}>k4</option>
+          </select>
+        </div>
+
+        {{!-- Stamina --}}
+        <div class="resource-box">
+          <div class="resource-header">
+            <span class="resource-name">{{localize "CONAN.Resources.stamina"}}</span>
+            <label class="resource-subtitle">Stamina</label>
+          </div>
+          <input type="number" name="system.stamina.value" value="{{system.stamina.value}}" min="0" max="100" data-dtype="Number" class="stamina-value-single {{valueChanges.stamina}}"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{!-- Life Points & Defense Container --}}
+  <section class="resources-bottom-container">
+    {{!-- Life Points Section --}}
+    <div class="life-points-section">
+      <div class="section-header">
+        <h3 class="section-title">
+          <span class="primary-name">{{localize "CONAN.Resources.lifePoints"}}</span>
+          <label class="subtitle-name">Life Points</label>
+        </h3>
+      </div>
+      <div class="life-points-display">
+        <div class="life-value-container">
+          <input type="number" name="system.lifePoints.actual" value="{{system.lifePoints.actual}}" min="0" max="50" data-dtype="Number" class="life-actual {{#if (lt system.lifePoints.actual system.lifePoints.max)}}life-injured{{/if}}" title="{{localize 'CONAN.Resources.actual'}}"/>
+          <label class="life-label">
+            <span class="primary-label">{{localize "CONAN.Resources.actual"}}</span>
+            <span class="subtitle-label">Actual</span>
+          </label>
+        </div>
+        <span class="separator">/</span>
+        <div class="life-value-container">
+          <input type="number" name="system.lifePoints.max" value="{{system.lifePoints.max}}" min="0" max="50" data-dtype="Number" class="life-max {{valueChanges.lifePointsMax}}" title="{{localize 'CONAN.Resources.max'}}"/>
+          <label class="life-label">
+            <span class="primary-label">{{localize "CONAN.Resources.max"}}</span>
+            <span class="subtitle-label">Max</span>
+          </label>
+        </div>
+        <button type="button" class="poisoned-toggle-btn {{#if system.poisoned}}active{{/if}}" data-action="togglePoisoned" title="{{localize 'CONAN.EffectTooltips.poisoned'}}" style="margin-left: 10px;">
+          <img src="systems/conan-the-hyborian-age/assets/icons/Poisoned.svg" alt="Poisoned" style="width: 28px; height: 28px;">
+        </button>
+      </div>
+    </div>
+
+    {{!-- Defense Section --}}
+    <div class="defense-section">
+      <div class="section-header">
+        <h3 class="section-title">
+          <span class="primary-name">{{localize "CONAN.Resources.defense"}}</span>
+          <label class="subtitle-name">Defense</label>
+        </h3>
+      </div>
+      <div class="defense-fields" style="display: flex; gap: 15px; align-items: center; justify-content: center;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <button type="button" class="defence-toggle-btn {{#if system.defenceActive}}active{{/if}} {{#if system.immobilized}}disabled{{/if}}" data-action="toggleDefence" title="{{localize 'CONAN.Attack.defence'}} (Defence) (1 {{localize 'CONAN.Common.Action'}})" {{#if system.immobilized}}disabled{{/if}}>
+            <i class="fas fa-shield-alt"></i>
+          </button>
+          <button type="button" class="immobilized-toggle-btn {{#if system.immobilized}}active{{/if}}" data-action="toggleImmobilized" title="{{localize 'CONAN.Attack.immobilized'}} (Immobilized)">
+            <img src="systems/conan-the-hyborian-age/assets/icons/paralysis.svg" alt="Immobilized" style="width: 20px; height: 20px;">
+          </button>
+        </div>
+        <div class="defense-field">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Resources.physical"}}</span>
+            <span class="subtitle-label">Physical</span>
+          </label>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <input type="number" name="system.defense.physical" value="{{system.defense.physical}}" min="0" max="30" data-dtype="Number" class="defense-value {{valueChanges.physicalDefense}} {{#if system.immobilized}}immobilized{{/if}}"/>
+            {{#if system.defenceActive}}
+              <span class="defence-bonus">+2</span>
+            {{/if}}
+            {{#if system.immobilized}}
+              <span class="immobilized-indicator">0</span>
+            {{/if}}
+          </div>
+        </div>
+        <div class="defense-field">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Resources.sorcery"}}</span>
+            <span class="subtitle-label">Sorcery</span>
+          </label>
+          <input type="number" name="system.defense.sorcery" value="{{system.defense.sorcery}}" min="0" max="30" data-dtype="Number" class="defense-value {{valueChanges.sorceryDefense}}"/>
+        </div>
+      </div>
+    </div>
+    
+    {{!-- Armor & Encumbrance Section --}}
+    <div class="armor-encumbrance-section">
+      <div class="armor-enc-fields">
+        <div class="armor-enc-field armor-rating-field">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Combat.armorRating"}}</span>
+            <span class="subtitle-label">AR</span>
+          </label>
+          <div class="armor-rating-value {{#if isOverencumbered}}overencumbered{{/if}}">{{totalAR}}</div>
+        </div>
+        <div class="armor-enc-field encumbrance-field">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Combat.encumbrance"}}</span>
+            <span class="subtitle-label">Enc.</span>
+          </label>
+          <div class="encumbrance-value {{#if isOverencumbered}}overencumbered{{/if}}" title="{{#if isOverencumbered}}{{localize 'CONAN.Combat.overencumbered'}}{{/if}}">
+            {{totalEncumbrance}}
+            {{#if isOverencumbered}}
+              <i class="fas fa-exclamation-triangle"></i>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item active" data-tab="skills">{{localize "CONAN.CharacterSheet.skills"}}</a>
+    <a class="item" data-tab="armor">{{localize "CONAN.CharacterSheet.armor"}}</a>
+    <a class="item" data-tab="weapon">{{localize "CONAN.CharacterSheet.weapon"}}</a>
+    {{#if canUseMagic}}
+    <a class="item" data-tab="sorcery">{{localize "CONAN.CharacterSheet.sorcery"}}</a>
+    {{/if}}
+    <a class="item" data-tab="notes">{{localize "CONAN.CharacterSheet.notes"}}</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    {{!-- Skills Tab --}}
+    <div class="tab skills active" data-group="primary" data-tab="skills">
+      {{!-- Origin Skills Section --}}
+      <div class="starting-skills-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <span class="primary-name">{{localize "CONAN.StartingSkills.title"}}</span>
+            <label class="subtitle-name">{{localize "CONAN.StartingSkills.subtitle"}}</label>
+          </h3>
+        </div>
+        
+        <div class="starting-skills-list" data-drop-zone="origin-skill">
+          {{#if originSkills}}
+            {{#each originSkills as |skill|}}
+              <details class="skill-item origin" data-item-id="{{skill._id}}">
+                <summary class="skill-header">
+                  <div class="skill-info">
+                    <span class="skill-name">{{skill.name}}</span>
+                    {{#if skill.system.xpCost}}
+                      <span class="skill-cost">{{skill.system.xpCost}} {{localize "CONAN.Skill.xpCost"}}</span>
+                    {{/if}}
+                    <span class="skill-type {{skill.system.skillType}}">
+                      {{#if (eq skill.system.skillType "origin")}}
+                        {{localize "CONAN.Skill.skillType.origin"}}
+                      {{else if (eq skill.system.skillType "starting")}}
+                        {{localize "CONAN.Skill.skillType.starting"}}
+                      {{/if}}
+                    </span>
+                  </div>
+                  <div class="skill-actions">
+                    <button type="button" class="skill-action-btn edit" data-action="editItem" data-item-id="{{skill._id}}" title="{{localize 'CONAN.Common.edit'}}">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="skill-action-btn delete" data-action="deleteItem" data-item-id="{{skill._id}}" title="{{localize 'CONAN.Common.delete'}}">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </summary>
+                <div class="skill-content">
+                  {{#if skill.system.description}}
+                    <div class="skill-effect">
+                      <strong>{{localize "CONAN.Skill.effect"}}:</strong>
+                      <p>{{skill.system.description}}</p>
+                    </div>
+                  {{else}}
+                    <p class="no-effect">{{localize "CONAN.StartingSkills.noEffect"}}</p>
+                  {{/if}}
+                </div>
+              </details>
+            {{/each}}
+          {{else}}
+            <p class="empty-list drop-hint">{{localize "CONAN.StartingSkills.dropHint"}}</p>
+          {{/if}}
+        </div>
+      </div>
+
+      {{!-- Learned Skills Section --}}
+      <div class="learned-skills-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <span class="primary-name">{{localize "CONAN.LearnedSkills.title"}}</span>
+            <label class="subtitle-name">{{localize "CONAN.LearnedSkills.subtitle"}}</label>
+          </h3>
+        </div>
+        
+        <div class="learned-skills-drop-zone" data-drop-zone="learned-skill">
+          {{#if learnedSkills}}
+            {{#each learnedSkills as |skill|}}
+              <details class="skill-item learned" data-item-id="{{skill._id}}">
+                <summary class="skill-header">
+                  <div class="skill-info">
+                    <span class="skill-name">{{skill.name}}</span>
+                    <span class="skill-cost">{{skill.system.xpCost}} {{localize "CONAN.Skill.xpCost"}}</span>
+                    <span class="skill-type {{skill.system.skillType}}">
+                      {{#if (eq skill.system.skillType "legendary")}}
+                        {{localize "CONAN.Skill.skillType.legendary"}}
+                      {{else if (eq skill.system.skillType "advanced")}}
+                        {{localize "CONAN.Skill.skillType.advanced"}}
+                      {{/if}}
+                    </span>
+                  </div>
+                  <div class="skill-actions">
+                    <button type="button" class="skill-action-btn edit" data-action="editItem" data-item-id="{{skill._id}}" title="{{localize 'CONAN.Common.edit'}}">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="skill-action-btn delete" data-action="deleteItem" data-item-id="{{skill._id}}" title="{{localize 'CONAN.Common.delete'}}">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </summary>
+                <div class="skill-content">
+                  {{#if skill.system.description}}
+                    <div class="skill-effect">
+                      <strong>{{localize "CONAN.Skill.effect"}}:</strong>
+                      <p>{{skill.system.description}}</p>
+                    </div>
+                  {{else}}
+                    <p class="no-effect">{{localize "CONAN.StartingSkills.noEffect"}}</p>
+                  {{/if}}
+                </div>
+              </details>
+            {{/each}}
+          {{else}}
+            <p class="empty-list drop-hint">{{localize "CONAN.LearnedSkills.dropHint"}}</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+
+    {{!-- Armor Tab --}}
+    <div class="tab armor" data-group="primary" data-tab="armor">
+      
+      {{!-- Armor Section --}}
+      <div class="armor-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <span class="primary-name">{{localize "CONAN.CharacterSheet.armor"}}</span>
+            <label class="subtitle-name">Armor</label>
+          </h3>
+        </div>
+        
+        <div class="armor-list items-list" data-item-type="armor">
+          {{#if armor}}
+            {{#each armor as |item|}}
+              <div class="item armor-item" data-item-id="{{item._id}}" draggable="true">
+                {{!-- First Row: Image, Name, and Controls --}}
+                <div class="armor-row-main">
+                  <div class="armor-left">
+                    <div class="item-image">
+                      <img src="{{item.img}}" alt="{{item.name}}" data-action="editItem" data-item-id="{{item._id}}" />
+                    </div>
+                    <h4 class="item-name">
+                      <a data-action="editItem" data-item-id="{{item._id}}">{{item.name}}</a>
+                    </h4>
+                  </div>
+                  <div class="armor-controls">
+                    <button type="button" class="item-control equip-btn {{#if item.system.equipped}}equipped{{/if}}" data-action="toggleEquipped" data-item-id="{{item._id}}" title="{{localize 'CONAN.Common.toggleEquipped'}}">
+                      <i class="fas {{#if item.system.equipped}}fa-check-circle{{else}}fa-circle{{/if}}"></i>
+                      <span>{{#if item.system.equipped}}{{localize "CONAN.Common.equipped"}}{{else}}{{localize "CONAN.Armor.equip"}}{{/if}}</span>
+                    </button>
+                    <button type="button" class="item-control delete-btn" data-action="deleteItem" data-item-id="{{item._id}}" title="{{localize 'CONAN.Common.delete'}}">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                {{!-- Second Row: Stats --}}
+                <div class="armor-row-stats">
+                  <span class="armor-stat">
+                    <strong>{{localize "CONAN.Armor.armorType"}}:</strong> {{localize (concat "CONAN.Armor.types." item.system.armorType)}}
+                  </span>
+                  <span class="stat-separator">|</span>
+                  <span class="armor-stat">
+                    <strong>{{localize "CONAN.Armor.specificMake"}}:</strong> {{localize (concat "CONAN.Armor.makes." item.system.specificMake)}}
+                  </span>
+                  <span class="stat-separator">|</span>
+                  <span class="armor-stat">
+                    <strong>{{localize "CONAN.Armor.armorRating"}}:</strong> {{item.system.armorRating}}
+                  </span>
+                  <span class="stat-separator">|</span>
+                  <span class="armor-stat">
+                    <strong>{{localize "CONAN.Armor.encumbrance"}}:</strong> {{item.system.encumbrance}}
+                  </span>
+                </div>
+                
+                {{!-- Stipulations (Collapsible) --}}
+                {{#if item.system.stipulations}}
+                  <details class="armor-stipulations">
+                    <summary>{{localize "CONAN.Armor.stipulations"}}</summary>
+                    <div class="stipulations-content">
+                      {{item.system.stipulations}}
+                    </div>
+                  </details>
+                {{/if}}
+              </div>
+            {{/each}}
+          {{else}}
+            <p class="empty-list">{{localize "CONAN.CharacterSheet.noArmor"}}</p>
+          {{/if}}
+        </div>
+      </div>
+      
+    </div>
+
+    {{!-- Weapon Tab --}}
+    <div class="tab weapon" data-group="primary" data-tab="weapon">
+      
+      {{!-- Weapon Section --}}
+      <div class="weapon-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <span class="primary-name">{{localize "CONAN.CharacterSheet.weapon"}}</span>
+            <label class="subtitle-name">Weapon</label>
+          </h3>
+        </div>
+        
+        <div class="weapon-list items-list" data-item-type="weapon">
+          {{#if weapons}}
+            {{#each weapons as |item|}}
+              <div class="item weapon-item" data-item-id="{{item._id}}" draggable="true">
+                {{!-- First Row: Image, Name, and Controls --}}
+                <div class="weapon-row-main">
+                  <div class="weapon-left">
+                    <div class="item-image">
+                      <img src="{{item.img}}" alt="{{item.name}}" data-action="editItem" data-item-id="{{item._id}}" />
+                    </div>
+                    <h4 class="item-name">
+                      <a data-action="editItem" data-item-id="{{item._id}}">{{item.name}}</a>
+                    </h4>
+                  </div>
+                  <div class="weapon-controls">
+                    <button type="button" class="item-control equip-btn {{#if item.system.equipped}}equipped{{/if}}" data-action="toggleEquipped" data-item-id="{{item._id}}" title="{{localize 'CONAN.Common.toggleEquipped'}}">
+                      <i class="fas {{#if item.system.equipped}}fa-check-circle{{else}}fa-circle{{/if}}"></i>
+                      <span>{{#if item.system.equipped}}{{localize "CONAN.Common.equipped"}}{{else}}{{localize "CONAN.Weapon.equip"}}{{/if}}</span>
+                    </button>
+                    <button type="button" class="item-control delete-btn" data-action="deleteItem" data-item-id="{{item._id}}" title="{{localize 'CONAN.Common.delete'}}">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                {{!-- Second Row: Stats --}}
+                <div class="weapon-row-stats">
+                  <span class="weapon-stat">
+                    <strong>{{localize "CONAN.Weapon.weaponType"}}:</strong> 
+                    {{#if (eq item.system.weaponType "melee")}}
+                      {{localize "CONAN.Weapon.types.melee"}}
+                    {{else if (eq item.system.weaponType "thrown")}}
+                      {{localize "CONAN.Weapon.types.thrown"}}
+                    {{else if (eq item.system.weaponType "ranged")}}
+                      {{localize "CONAN.Weapon.types.ranged"}}
+                    {{/if}}
+                  </span>
+                  {{#if (eq item.system.weaponType "melee")}}
+                    <span class="stat-separator">|</span>
+                    <span class="weapon-stat">
+                      <strong>{{localize "CONAN.Weapon.handedness"}}:</strong> 
+                      {{#if (eq item.system.handedness "one-handed")}}
+                        {{localize "CONAN.Weapon.handednessOptions.oneHanded"}}
+                      {{else if (eq item.system.handedness "two-handed")}}
+                        {{localize "CONAN.Weapon.handednessOptions.twoHanded"}}
+                      {{/if}}
+                    </span>
+                  {{/if}}
+                  {{#if (and (eq item.system.weaponType "thrown") item.system.improvised)}}
+                    <span class="stat-separator">|</span>
+                    <span class="weapon-stat">
+                      <strong>{{localize "CONAN.Weapon.improvised"}}</strong>
+                    </span>
+                  {{/if}}
+                  <span class="stat-separator">|</span>
+                  <span class="weapon-stat">
+                    <strong>{{localize "CONAN.Weapon.weaponSize"}}:</strong> 
+                    {{#if (eq item.system.weaponSize "light")}}
+                      {{localize "CONAN.Weapon.sizes.light"}}
+                    {{else if (eq item.system.weaponSize "medium")}}
+                      {{localize "CONAN.Weapon.sizes.medium"}}
+                    {{else if (eq item.system.weaponSize "heavy")}}
+                      {{localize "CONAN.Weapon.sizes.heavy"}}
+                    {{else if (eq item.system.weaponSize "various")}}
+                      {{localize "CONAN.Weapon.sizes.various"}}
+                    {{/if}}
+                  </span>
+                  <span class="stat-separator">|</span>
+                  <span class="weapon-stat">
+                    <strong>{{localize "CONAN.Weapon.range"}}:</strong> 
+                    {{#if (eq item.system.range "touch")}}
+                      {{localize "CONAN.Weapon.ranges.touch"}}
+                    {{else if (eq item.system.range "close")}}
+                      {{localize "CONAN.Weapon.ranges.close"}}
+                    {{else if (eq item.system.range "medium3")}}
+                      {{localize "CONAN.Weapon.ranges.medium3"}}
+                    {{else if (eq item.system.range "long4")}}
+                      {{localize "CONAN.Weapon.ranges.long4"}}
+                    {{else if (eq item.system.range "long6")}}
+                      {{localize "CONAN.Weapon.ranges.long6"}}
+                    {{else if (eq item.system.range "distant8")}}
+                      {{localize "CONAN.Weapon.ranges.distant8"}}
+                    {{else}}
+                      {{item.system.range}}
+                    {{/if}}
+                  </span>
+                  <span class="stat-separator">|</span>
+                  <span class="weapon-stat">
+                    <strong>{{localize "CONAN.Weapon.damage"}}:</strong> {{#if item.system.damage.dice}}{{item.system.damage.dice}}{{else}}{{item.system.damage}}{{/if}}{{#if (and (eq item.system.weaponType "ranged") (ne item.system.damageModifier 0))}} {{#if (gt item.system.damageModifier 0)}}+{{/if}}{{item.system.damageModifier}}{{/if}}
+                  </span>
+                </div>
+                
+                {{!-- Stipulations (Collapsible) --}}
+                {{#if item.system.stipulations}}
+                  <details class="weapon-stipulations">
+                    <summary>{{localize "CONAN.Weapon.rules"}}</summary>
+                    <div class="stipulations-content">
+                      {{item.system.stipulations}}
+                    </div>
+                  </details>
+                {{/if}}
+              </div>
+            {{/each}}
+          {{else}}
+            <p class="empty-list">{{localize "CONAN.CharacterSheet.noWeapons"}}</p>
+          {{/if}}
+        </div>
+      </div>
+      
+    </div>
+
+    {{!-- Sorcery Tab --}}
+    {{#if canUseMagic}}
+    <div class="tab sorcery" data-group="primary" data-tab="sorcery">
+      {{!-- Spells Section --}}
+      <div class="spells-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <span class="primary-name">{{localize "CONAN.CharacterSheet.sorcery"}}</span>
+            <label class="subtitle-name">Spells</label>
+          </h3>
+        </div>
+        
+        <div class="spell-list items-list" data-item-type="spell">
+          {{#if spells}}
+            {{#each spells as |item|}}
+              <div class="item spell-item" data-item-id="{{item._id}}" draggable="true">
+                {{!-- Main Row: Image, Name, Stats, and Controls --}}
+                <div class="spell-row-main">
+                  <div class="spell-left">
+                    <div class="item-image">
+                      <img src="{{item.img}}" alt="{{item.name}}" data-action="editItem" data-item-id="{{item._id}}" />
+                    </div>
+                    <h4 class="item-name">
+                      <a data-action="editItem" data-item-id="{{item._id}}">{{item.name}}</a>
+                    </h4>
+                  </div>
+                  
+                  {{!-- Spell Statistics in same row --}}
+                  <div class="spell-row-stats">
+                    <span class="spell-stat">
+                      <strong>{{localize "CONAN.Spell.discipline"}}:</strong> {{localize (concat "CONAN.Spell.disciplines." item.system.discipline)}}
+                    </span>
+                    <span class="spell-stat">
+                      <strong>{{localize "CONAN.Spell.xpCost"}}:</strong> {{item.system.xpCost}}
+                    </span>
+                  </div>
+                  
+                  <div class="spell-controls">
+                    <button type="button" class="item-control delete-btn" data-action="deleteItem" data-item-id="{{item._id}}" title="{{localize 'CONAN.Common.delete'}}">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+
+                {{!-- Expandable Effect Details --}}
+                {{#if item.system.effect}}
+                  <details class="spell-details">
+                    <summary class="spell-details-toggle">{{localize "CONAN.Spell.effect"}}</summary>
+                    <div class="spell-effect-content">
+                      <p>{{item.system.effect}}</p>
+                    </div>
+                  </details>
+                {{/if}}
+              </div>
+            {{/each}}
+          {{else}}
+            <p class="empty-list">{{localize "CONAN.CharacterSheet.noSpells"}}</p>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    {{/if}}
+
+    {{!-- Notes Tab --}}
+    <div class="tab notes" data-group="primary" data-tab="notes">
+      <div class="notes-section">
+        <div class="notes-row">
+          <div class="form-group notes-column">
+            <label for="system.biography">
+              <span class="primary-label">{{localize "CONAN.CharacterSheet.biography"}}</span>
+              <span class="subtitle-label">Character Background</span>
+            </label>
+            <textarea name="system.biography" class="auto-resize" rows="4" placeholder="{{localize 'CONAN.CharacterSheet.biographyPlaceholder'}}">{{system.biography}}</textarea>
+          </div>
+          
+          <div class="notes-separator"></div>
+          
+          <div class="form-group notes-column">
+            <label for="system.notes">
+              <span class="primary-label">{{localize "CONAN.CharacterSheet.notes"}}</span>
+              <span class="subtitle-label">Notes</span>
+            </label>
+            <textarea name="system.notes" class="auto-resize" rows="4" placeholder="{{localize 'CONAN.CharacterSheet.notesPlaceholder'}}">{{system.notes}}</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>

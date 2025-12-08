@@ -1,0 +1,12 @@
+{{!-- Item Header Partial --}}
+<header class="sheet-header">
+  <img class="profile-img" src="{{item.img}}" data-action="editImage" title="{{item.name}}" />
+  <div class="header-fields">
+    <h1 class="charname">
+      <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'CONAN.ItemName'}}" />
+    </h1>
+    <div class="item-subtitle">
+      <span class="item-type">{{localize item.type}}</span>
+    </div>
+  </div>
+</header>

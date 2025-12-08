@@ -1,0 +1,263 @@
+/* === Character Creation Dialog === */
+.character-creation {
+  background: url("../ui/parchment.jpg") repeat;
+  background-size: 400px 400px;
+}
+
+.character-creation .window-content {
+  background: rgba(245, 222, 179, 0.95);
+  padding: 0;
+}
+
+.character-creation-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.character-creation .dialog-content {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* === Title === */
+.character-creation .creation-title {
+  text-align: center;
+  margin: 0 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #8b4513;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.character-creation .creation-title .primary-text {
+  font-size: 20px;
+  font-weight: bold;
+  color: #8b4513;
+  text-transform: uppercase;
+}
+
+.character-creation .creation-title .subtitle-text {
+  font-size: 14px;
+  font-style: italic;
+  opacity: 0.7;
+  color: #8b4513;
+}
+
+/* === Sections === */
+.character-creation .creation-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(139, 69, 19, 0.05);
+  border: 2px solid #8b4513;
+  border-radius: 5px;
+}
+
+.character-creation .section-label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.character-creation .primary-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #8b4513;
+  text-transform: uppercase;
+}
+
+.character-creation .subtitle-label {
+  font-size: 11px;
+  font-style: italic;
+  opacity: 0.7;
+  color: #8b4513;
+}
+
+/* === Origin Select === */
+.character-creation .origin-select {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 13px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.character-creation .origin-select:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 5px rgba(139, 69, 19, 0.5);
+}
+
+/* === Points Info === */
+.character-creation .points-info {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: rgba(139, 69, 19, 0.1);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.character-creation .remaining-points {
+  font-size: 14px;
+  color: #8b4513;
+}
+
+.character-creation .remaining-points strong {
+  font-size: 18px;
+  font-weight: bold;
+  color: #654321;
+}
+
+/* === Attributes Distribution === */
+.character-creation .attributes-distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.character-creation .attribute-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #8b4513;
+  border-radius: 4px;
+}
+
+.character-creation .attribute-name {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.character-creation .attribute-name .primary {
+  font-size: 14px;
+  font-weight: bold;
+  color: #8b4513;
+}
+
+.character-creation .attribute-name .subtitle {
+  font-size: 11px;
+  font-style: italic;
+  opacity: 0.7;
+  color: #8b4513;
+}
+
+/* === Attribute Controls === */
+.character-creation .attribute-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.character-creation .attribute-value {
+  min-width: 30px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #654321;
+}
+
+.character-creation .increment-btn,
+.character-creation .decrement-btn {
+  width: 35px;
+  height: 35px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: linear-gradient(to bottom, #d4a574, #b8956a);
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.character-creation .increment-btn:hover:not(:disabled),
+.character-creation .decrement-btn:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #c49563, #a78459);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.character-creation .increment-btn:active:not(:disabled),
+.character-creation .decrement-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.character-creation .increment-btn:disabled,
+.character-creation .decrement-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: linear-gradient(to bottom, #999, #888);
+}
+
+/* === Dialog Buttons === */
+.character-creation .dialog-buttons {
+  display: flex;
+  gap: 10px;
+  padding: 15px 20px;
+  background: rgba(139, 69, 19, 0.1);
+  border-top: 2px solid #8b4513;
+}
+
+.character-creation .dialog-button {
+  flex: 1;
+  padding: 12px 20px;
+  border: 2px solid #8b4513;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.character-creation .dialog-button.confirm {
+  background: linear-gradient(to bottom, #6b8e23, #556b2f);
+  color: #fff;
+}
+
+.character-creation .dialog-button.confirm:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #7ba428, #667d35);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.character-creation .dialog-button.cancel {
+  background: linear-gradient(to bottom, #d4a574, #b8956a);
+  color: #fff;
+}
+
+.character-creation .dialog-button.cancel:hover {
+  background: linear-gradient(to bottom, #c49563, #a78459);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.character-creation .dialog-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: linear-gradient(to bottom, #999, #888);
+}
+
+.character-creation .dialog-button i {
+  font-size: 16px;
+}

@@ -1,0 +1,25 @@
+{{!-- Actor Header --}}
+<header class="sheet-header">
+  <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="{{actor.name}}" />
+  <div class="header-fields">
+    <h1 class="charname">
+      <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'CONAN.CharacterName'}}" />
+    </h1>
+    <div class="resource">
+      <label>{{localize "CONAN.Resources.health"}}</label>
+      <div class="resource-bar">
+        <input type="text" name="system.health.value" value="{{system.health.value}}" data-dtype="Number" />
+        <span class="sep"> / </span>
+        <input type="text" name="system.health.max" value="{{system.health.max}}" data-dtype="Number" />
+      </div>
+    </div>
+    <div class="resource">
+      <label>{{localize "CONAN.Resources.power"}}</label>
+      <div class="resource-bar">
+        <input type="text" name="system.power.value" value="{{system.power.value}}" data-dtype="Number" />
+        <span class="sep"> / </span>
+        <input type="text" name="system.power.max" value="{{system.power.max}}" data-dtype="Number" />
+      </div>
+    </div>
+  </div>
+</header>

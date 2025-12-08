@@ -1,0 +1,24 @@
+{{!-- Actor Effects Partial --}}
+<div class="effects">
+  <h3>{{localize "CONAN.Effects"}}</h3>
+  <ol class="effects-list">
+    {{#each effects as |effect id|}}
+    <li class="effect" data-effect-id="{{effect._id}}">
+      <img src="{{effect.icon}}" title="{{effect.name}}" width="24" height="24"/>
+      <h4 class="effect-name">{{effect.name}}</h4>
+      <div class="effect-controls">
+        <a class="effect-control effect-toggle {{#if effect.disabled}}disabled{{/if}}" 
+           title="{{localize 'CONAN.Common.edit'}}">
+          <i class="fas {{#if effect.disabled}}fa-circle{{else}}fa-check-circle{{/if}}"></i>
+        </a>
+        <a class="effect-control effect-edit" title="{{localize 'CONAN.Common.edit'}}">
+          <i class="fas fa-edit"></i>
+        </a>
+        <a class="effect-control effect-delete" title="{{localize 'CONAN.Common.delete'}}">
+          <i class="fas fa-trash"></i>
+        </a>
+      </div>
+    </li>
+    {{/each}}
+  </ol>
+</div>

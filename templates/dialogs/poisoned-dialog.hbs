@@ -1,0 +1,68 @@
+{{!-- Poisoned Effects Dialog --}}
+<div class="poisoned-dialog">
+  <div class="dialog-header">
+    <h2>{{localize "CONAN.Poisoned.title"}}</h2>
+  </div>
+  
+  <div class="dialog-content">
+    <p class="poison-instructions">{{localize "CONAN.Poisoned.configure"}}</p>
+    
+    <div class="poison-options">
+      {{!-- Option 1: Attribute Penalty --}}
+      <label class="poison-option">
+        <input type="checkbox" name="poisonEffect1" {{#if poisonEffects.effect1}}checked{{/if}} data-dtype="Boolean">
+        <div class="option-info">
+          <span class="option-name">{{localize "CONAN.Poisoned.option1.name"}}</span>
+          <span class="option-description">{{localize "CONAN.Poisoned.option1.description"}}</span>
+        </div>
+      </label>
+      
+      {{!-- Option 2: Roll Penalty --}}
+      <label class="poison-option">
+        <input type="checkbox" name="poisonEffect2" {{#if poisonEffects.effect2}}checked{{/if}} data-dtype="Boolean">
+        <div class="option-info">
+          <span class="option-name">{{localize "CONAN.Poisoned.option2.name"}}</span>
+          <span class="option-description">{{localize "CONAN.Poisoned.option2.description"}}</span>
+        </div>
+      </label>
+      
+      {{!-- Option 3: Life Drain --}}
+      <label class="poison-option">
+        <input type="checkbox" name="poisonEffect3" {{#if poisonEffects.effect3}}checked{{/if}} data-dtype="Boolean">
+        <div class="option-info">
+          <span class="option-name">{{localize "CONAN.Poisoned.option3.name"}}</span>
+          <span class="option-description">{{localize "CONAN.Poisoned.option3.description"}}</span>
+        </div>
+      </label>
+      
+      {{#if isCharacter}}
+        {{!-- Option 4: Stamina Lock (Characters only) --}}
+        <label class="poison-option">
+          <input type="checkbox" name="poisonEffect4" {{#if poisonEffects.effect4}}checked{{/if}} data-dtype="Boolean">
+          <div class="option-info">
+            <span class="option-name">{{localize "CONAN.Poisoned.option4.name"}}</span>
+            <span class="option-description">{{localize "CONAN.Poisoned.option4.description"}}</span>
+          </div>
+        </label>
+        
+        {{!-- Option 5: Flex Die Disabled (Characters only) --}}
+        <label class="poison-option">
+          <input type="checkbox" name="poisonEffect5" {{#if poisonEffects.effect5}}checked{{/if}} data-dtype="Boolean">
+          <div class="option-info">
+            <span class="option-name">{{localize "CONAN.Poisoned.option5.name"}}</span>
+            <span class="option-description">{{localize "CONAN.Poisoned.option5.description"}}</span>
+          </div>
+        </label>
+      {{/if}}
+    </div>
+  </div>
+  
+  <div class="dialog-buttons">
+    <button type="button" data-action="apply" class="dialog-button apply-button">
+      <i class="fas fa-check"></i> {{localize "CONAN.Poisoned.apply"}}
+    </button>
+    <button type="button" data-action="close" class="dialog-button">
+      <i class="fas fa-times"></i> {{localize "CONAN.Poisoned.close"}}
+    </button>
+  </div>
+</div>

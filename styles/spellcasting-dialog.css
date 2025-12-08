@@ -1,0 +1,356 @@
+/**
+ * Spellcasting Dialog Styles
+ */
+
+.spellcasting-dialog {
+  font-family: 'Roboto', sans-serif;
+}
+
+.spellcasting-dialog-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Attribute Section */
+.spellcasting-dialog .attribute-section {
+  background: rgba(139, 69, 19, 0.1);
+  border: 1px solid #8b4513;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.spellcasting-dialog .attribute-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.spellcasting-dialog .attribute-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.spellcasting-dialog .attribute-value {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #8b4513;
+}
+
+.spellcasting-dialog .roll-info {
+  font-size: 0.9em;
+  font-style: italic;
+  color: #666;
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* Cost Section */
+.spellcasting-dialog .cost-section h3 {
+  margin: 0 0 10px 0;
+  color: #8b4513;
+  border-bottom: 1px solid #8b4513;
+  padding-bottom: 5px;
+}
+
+.spellcasting-dialog .cost-inputs {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.spellcasting-dialog .cost-inputs .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.spellcasting-dialog .cost-inputs label {
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.spellcasting-dialog .cost-inputs input[type="number"] {
+  width: 50px;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid #8b4513;
+  border-radius: 3px;
+}
+
+/* Magic Attack Section */
+.spellcasting-dialog .magic-attack-section {
+  border: 1px solid #8b4513;
+  border-radius: 5px;
+  padding: 15px;
+  background: rgba(139, 69, 19, 0.05);
+}
+
+.spellcasting-dialog .attack-row {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.spellcasting-dialog .checkbox-group {
+  display: flex;
+  align-items: center;
+}
+
+.spellcasting-dialog .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.spellcasting-dialog .target-defense {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.spellcasting-dialog .target-defense label {
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.spellcasting-dialog .target-defense input[type="number"] {
+  width: 50px;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid #8b4513;
+  border-radius: 3px;
+}
+
+/* Modifier Section */
+.spellcasting-dialog .modifier-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.spellcasting-dialog .modifier-section h3 {
+  margin: 0 0 5px 0;
+  color: #8b4513;
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.spellcasting-dialog .modifier-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.spellcasting-dialog .modifier-value-label {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #8b4513;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spellcasting-dialog .modifier-slider {
+  width: 100%;
+  max-width: 100%;
+  height: 20px;
+  border-radius: 10px;
+  background: linear-gradient(to right, 
+    #d32f2f 0%, 
+    #f57c00 25%, 
+    #fbc02d 40%, 
+    #8b4513 50%, 
+    #7cb342 60%, 
+    #388e3c 75%, 
+    #1976d2 100%);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.spellcasting-dialog .modifier-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #8b4513;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.spellcasting-dialog .modifier-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #8b4513;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.spellcasting-dialog .modifier-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  padding: 0 5px;
+  width: 100%;
+}
+
+/* Dialog Buttons */
+.spellcasting-dialog .dialog-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.spellcasting-dialog .cast-button,
+.spellcasting-dialog .cancel-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.spellcasting-dialog .cast-button {
+  background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+  color: #f5e6d3;
+  border: 1px solid #8b4513;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.spellcasting-dialog .cast-button:hover {
+  background: linear-gradient(135deg, #654321 0%, #8b4513 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.spellcasting-dialog .cancel-button {
+  background: #6c757d;
+  color: white;
+}
+
+.spellcasting-dialog .cancel-button:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Label Styles */
+.spellcasting-dialog .primary-label {
+  font-weight: bold;
+  color: #8b4513;
+}
+
+.spellcasting-dialog .subtitle-label {
+  font-size: 0.85em;
+  color: #666;
+  font-style: italic;
+}
+
+/* Chat Message Styles for Spellcasting */
+.conan-spellcasting-chat {
+  border: 2px solid #8b4513;
+  border-radius: 8px;
+  padding: 15px;
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(101, 67, 33, 0.1) 100%);
+}
+
+.conan-spellcasting-chat .spell-header h3 {
+  margin: 0 0 10px 0;
+  color: #8b4513;
+  text-align: center;
+  font-size: 1.2em;
+  border-bottom: 1px solid #8b4513;
+  padding-bottom: 5px;
+}
+
+.conan-spellcasting-chat .spell-cost {
+  text-align: center;
+  font-size: 1.1em;
+  color: #654321;
+}
+
+.spellcasting-roll .spell-cost-display {
+  text-align: center;
+  margin-top: 10px;
+  padding: 8px;
+  background: rgba(139, 69, 19, 0.1);
+  border-radius: 5px;
+}
+
+.spellcasting-roll .cost-label {
+  font-weight: bold;
+  color: #8b4513;
+  margin-right: 5px;
+}
+
+.spellcasting-roll .cost-value {
+  color: #654321;
+  font-size: 1.1em;
+}
+
+/* Spellcasting Button on Character Sheet */
+.spellcasting-button {
+  background: linear-gradient(135deg, #6a1b9a 0%, #4a148c 100%);
+  color: white;
+  border: 2px solid #4a148c;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  font-size: 0.95em;
+}
+
+.spellcasting-button:hover:not(.disabled) {
+  background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.spellcasting-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #6c757d;
+  border-color: #5a6268;
+}
+
+.spellcasting-button i {
+  font-size: 1.2em;
+}
+
+/* Update initiative button container to flex row */
+.initiative-button-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.initiative-button-container button {
+  flex: 1;
+}

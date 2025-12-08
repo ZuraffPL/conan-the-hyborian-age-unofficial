@@ -1,0 +1,35 @@
+<form class="difficulty-form initiative-form">
+  <div class="form-group">
+    <label for="edge-attribute">{{edgeLabel}}</label>
+    <p class="hint">{{hint}}</p>
+  </div>
+  
+  <div class="form-group modifier-group">
+    <label for="modifier">
+      <span class="primary-label">{{modifierLabel}}</span>
+      <span class="subtitle-label">Modifier</span>
+    </label>
+    <div class="modifier-controls">
+      <span class="modifier-value-label">{{modifier}}</span>
+      <input type="range" name="modifier" id="modifier" value="{{modifier}}" min="-3" max="3" step="1" />
+      <div class="modifier-scale">
+        <span>-3</span>
+        <span>-2</span>
+        <span>-1</span>
+        <span>0</span>
+        <span>+1</span>
+        <span>+2</span>
+        <span>+3</span>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="dialog-buttons">
+    <button type="button" class="dialog-button" data-action="roll">
+      <i class="fas fa-dice-d20"></i> {{rollLabel}}
+    </button>
+    <button type="button" class="dialog-button" data-action="cancel">
+      <i class="fas fa-times"></i> {{cancelLabel}}
+    </button>
+  </footer>
+</form>

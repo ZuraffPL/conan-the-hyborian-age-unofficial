@@ -1,0 +1,290 @@
+{{!-- Damage Roll Dialog --}}
+<form class="damage-form">
+  <div class="dialog-content">
+    {{!-- Damage Type Section --}}
+    <div class="form-group">
+      <label>{{localize "CONAN.Damage.damageType"}}</label>
+      <div class="damage-type-options">
+        {{#if (includes allowedDamageTypes 'melee')}}
+        <div class="radio-option">
+          <input type="radio" id="damage-melee" name="damageType" value="melee" {{#if (eq selectedDamageType 'melee')}}checked{{/if}}>
+          <label for="damage-melee">
+            <span class="primary">{{localize "CONAN.Damage.meleeDamage"}}</span>
+            <span class="subtitle">(Melee Damage)</span>
+          </label>
+        </div>
+        {{/if}}
+        {{#if (includes allowedDamageTypes 'thrown')}}
+        <div class="radio-option">
+          <input type="radio" id="damage-thrown" name="damageType" value="thrown" {{#if (eq selectedDamageType 'thrown')}}checked{{/if}}>
+          <label for="damage-thrown">
+            <span class="primary">{{localize "CONAN.Damage.thrownDamage"}}</span>
+            <span class="subtitle">(Thrown Damage)</span>
+          </label>
+        </div>
+        {{/if}}
+        {{#if (includes allowedDamageTypes 'ranged')}}
+        <div class="radio-option">
+          <input type="radio" id="damage-ranged" name="damageType" value="ranged" {{#if (eq selectedDamageType 'ranged')}}checked{{/if}}>
+          <label for="damage-ranged">
+            <span class="primary">{{localize "CONAN.Damage.rangedDamage"}}</span>
+            <span class="subtitle">(Ranged Damage)</span>
+          </label>
+        </div>
+        {{/if}}
+        {{#if (includes allowedDamageTypes 'sorcery')}}
+        <div class="radio-option">
+          <input type="radio" id="damage-sorcery" name="damageType" value="sorcery" {{#if (eq selectedDamageType 'sorcery')}}checked{{/if}}>
+          <label for="damage-sorcery">
+            <span class="primary">{{localize "CONAN.Damage.sorceryDamage"}}</span>
+            <span class="subtitle">(Sorcery Damage)</span>
+          </label>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+
+    {{!-- Separator --}}
+    <div class="section-separator"></div>
+    
+    {{!-- Damage Roll Parameters Section --}}
+    <div class="form-group damage-parameters-section">
+      <label>
+        <span class="primary-label">{{localize "CONAN.Damage.rollParameters"}}</span>
+        <span class="subtitle-label">(Damage Roll Parameters)</span>
+      </label>
+      
+      {{!-- Melee Damage Parameters --}}
+      <div class="damage-params melee-params" data-damage-type="melee" style="display: none;">
+        <div class="params-horizontal">
+          <div class="param-item">
+            <div class="param-label">
+              <span class="primary">{{localize "CONAN.Attributes.might.label"}}</span>
+              <span class="subtitle">({{localize "CONAN.Attributes.might.abbr"}})</span>
+            </div>
+            <div class="param-value">
+              <span class="value-display">{{actor.system.attributes.might.value}}</span>
+            </div>
+          </div>
+          
+          {{#if equippedMeleeWeapons}}
+            {{#if (gt equippedMeleeWeapons.length 1)}}
+              <div class="param-item weapon-selection">
+                <label for="weapon-select">
+                  <span class="primary">{{localize "CONAN.Damage.selectWeapon"}}</span>
+                  <span class="subtitle">(Select Weapon)</span>
+                </label>
+                <select name="weaponId" id="weapon-select" class="weapon-select">
+                  {{#each equippedMeleeWeapons as |weapon|}}
+                    <option value="{{weapon._id}}">{{weapon.name}} ({{#if weapon.system.damage.dice}}{{weapon.system.damage.dice}}{{else}}{{weapon.system.damage}}{{/if}})</option>
+                  {{/each}}
+                </select>
+              </div>
+            {{else}}
+              <div class="param-item">
+                <div class="param-label">
+                  <span class="primary">{{localize "CONAN.Damage.weaponDamage"}}</span>
+                  <span class="subtitle">({{equippedMeleeWeapons.0.name}})</span>
+                </div>
+                <div class="param-value">
+                  <span class="value-display">{{#if equippedMeleeWeapons.0.system.damage.dice}}{{equippedMeleeWeapons.0.system.damage.dice}}{{else}}{{equippedMeleeWeapons.0.system.damage}}{{/if}}</span>
+                </div>
+              </div>
+              <input type="hidden" name="weaponId" value="{{equippedMeleeWeapons.0._id}}" />
+            {{/if}}
+          {{else}}
+            <div class="param-item">
+              <div class="param-label">
+                <span class="primary">{{localize "CONAN.Damage.unarmedDamage"}}</span>
+                <span class="subtitle">(Unarmed)</span>
+              </div>
+              <div class="param-value">
+                <span class="value-display">2</span>
+              </div>
+            </div>
+            <input type="hidden" name="weaponId" value="unarmed" />
+          {{/if}}
+          
+          <div class="param-item">
+            <div class="param-label">
+              <span class="primary">{{localize "CONAN.Dialog.difficulty.modifierLabel"}}</span>
+              <span class="subtitle">(Modifier)</span>
+            </div>
+            <div class="param-value">
+              <span class="value-display modifier-display">+0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {{!-- Thrown Damage Parameters (hidden by default) --}}
+      <div class="damage-params thrown-params" data-damage-type="thrown" style="display: none;">
+        <div class="params-horizontal">
+          <div class="param-item">
+            <div class="param-label">
+              <span class="primary">{{localize "CONAN.Attributes.might.label"}}</span>
+              <span class="subtitle">({{localize "CONAN.Attributes.might.abbr"}})</span>
+            </div>
+            <div class="param-value">
+              <span class="value-display">{{actor.system.attributes.might.value}}</span>
+            </div>
+          </div>
+          
+          {{#if equippedThrownWeapons}}
+            {{#if (gt equippedThrownWeapons.length 1)}}
+              <div class="param-item weapon-selection">
+                <label for="thrown-weapon-select">
+                  <span class="primary">{{localize "CONAN.Damage.selectWeapon"}}</span>
+                  <span class="subtitle">(Select Weapon)</span>
+                </label>
+                <select name="thrownWeaponId" id="thrown-weapon-select" class="weapon-select">
+                  {{#each equippedThrownWeapons as |weapon|}}
+                    <option value="{{weapon._id}}">{{weapon.name}} ({{#if weapon.system.damage.dice}}{{weapon.system.damage.dice}}{{else}}{{weapon.system.damage}}{{/if}})</option>
+                  {{/each}}
+                </select>
+              </div>
+            {{else}}
+              <div class="param-item">
+                <div class="param-label">
+                  <span class="primary">{{localize "CONAN.Damage.weaponDamage"}}</span>
+                  <span class="subtitle">({{equippedThrownWeapons.0.name}})</span>
+                </div>
+                <div class="param-value">
+                  <span class="value-display">{{#if equippedThrownWeapons.0.system.damage.dice}}{{equippedThrownWeapons.0.system.damage.dice}}{{else}}{{equippedThrownWeapons.0.system.damage}}{{/if}}</span>
+                </div>
+              </div>
+              <input type="hidden" name="thrownWeaponId" value="{{equippedThrownWeapons.0._id}}" />
+            {{/if}}
+          {{else}}
+            <div class="param-item no-weapon">
+              <span class="warning-text">{{localize "CONAN.Damage.noThrownWeapon"}}</span>
+            </div>
+          {{/if}}
+          
+          <div class="param-item">
+            <div class="param-label">
+              <span class="primary">{{localize "CONAN.Dialog.difficulty.modifierLabel"}}</span>
+              <span class="subtitle">(Modifier)</span>
+            </div>
+            <div class="param-value">
+              <span class="value-display modifier-display">+0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {{!-- Ranged Damage Parameters (hidden by default) --}}
+      <div class="damage-params ranged-params" data-damage-type="ranged" style="display: none;">
+        <div class="params-horizontal">
+          {{#if equippedRangedWeapons}}
+            {{#if (gt equippedRangedWeapons.length 1)}}
+              <div class="param-item weapon-selection">
+                <label for="ranged-weapon-select">
+                  <span class="primary">{{localize "CONAN.Damage.selectWeapon"}}</span>
+                  <span class="subtitle">(Select Weapon)</span>
+                </label>
+                <select name="rangedWeaponId" id="ranged-weapon-select" class="weapon-select">
+                  {{#each equippedRangedWeapons as |weapon|}}
+                    <option value="{{weapon._id}}">{{weapon.name}} ({{weapon.system.damage.dice}}{{#if weapon.system.damageModifier}}{{#if (gt weapon.system.damageModifier 0)}}+{{/if}}{{weapon.system.damageModifier}}{{/if}})</option>
+                  {{/each}}
+                </select>
+              </div>
+            {{else}}
+              <div class="param-item">
+                <div class="param-label">
+                  <span class="primary">{{localize "CONAN.Damage.weaponDamage"}}</span>
+                  <span class="subtitle">({{equippedRangedWeapons.0.name}})</span>
+                </div>
+                <div class="param-value">
+                  <span class="value-display">
+                    {{#if equippedRangedWeapons.0.system.damage.dice}}
+                      {{equippedRangedWeapons.0.system.damage.dice}}
+                    {{else}}
+                      {{equippedRangedWeapons.0.system.damage}}
+                    {{/if}}
+                    {{#if (and (not (eq equippedRangedWeapons.0.system.damageModifier null)) (not (eq equippedRangedWeapons.0.system.damageModifier undefined)) (ne equippedRangedWeapons.0.system.damageModifier 0))}}
+                      {{#if (gt equippedRangedWeapons.0.system.damageModifier 0)}}+{{/if}}{{equippedRangedWeapons.0.system.damageModifier}}
+                    {{/if}}
+                  </span>
+                </div>
+              </div>
+              <input type="hidden" name="rangedWeaponId" value="{{equippedRangedWeapons.0._id}}" />
+            {{/if}}
+          {{else}}
+            <div class="param-item no-weapon">
+              <span class="warning-text">{{localize "CONAN.Damage.noRangedWeapon"}}</span>
+            </div>
+          {{/if}}
+          
+          <div class="param-item">
+            <div class="param-label">
+              <span class="primary">{{localize "CONAN.Dialog.difficulty.modifierLabel"}}</span>
+              <span class="subtitle">(Modifier)</span>
+            </div>
+            <div class="param-value">
+              <span class="value-display modifier-display">+0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {{!-- Sorcery Damage Parameters (now with 3 options) --}}
+      <div class="damage-params sorcery-params" data-damage-type="sorcery" style="display: none;">
+        <div class="params-horizontal magic-damage-row">
+          <label for="sorcery-damage-type" class="magic-type-label">
+            <span class="primary">{{localize "CONAN.Damage.sorceryType"}}</span>
+            <span class="subtitle">{{localize "CONAN.Damage.sorceryType"}}</span>
+          </label>
+          <select name="sorceryDamageType" id="sorcery-damage-type" class="sorcery-damage-type-select">
+            <option value="wits-die" {{#if (eq sorceryDamageType "wits-die")}}selected{{/if}}>{{localize "CONAN.Damage.sorceryWitsDie"}}</option>
+            <option value="custom-die" {{#if (eq sorceryDamageType "custom-die")}}selected{{/if}}>{{localize "CONAN.Damage.sorceryCustomDie"}}</option>
+            <option value="fixed" {{#if (eq sorceryDamageType "fixed")}}selected{{/if}}>{{localize "CONAN.Damage.sorceryFixed"}}</option>
+          </select>
+          <span class="sorcery-die-display magic-damage-inline"></span>
+          <div class="param-item magic-mod-col">
+            <div class="param-label" style="margin-bottom: 2px;">
+              <span class="primary">{{localize "CONAN.Dialog.difficulty.modifierLabel"}}</span>
+              <span class="subtitle">(Modifier 0-10)</span>
+            </div>
+            <div class="param-value" style="max-width: 100px;">
+              <input type="number" name="sorceryCustomModifier" value="0" min="0" max="10" class="sorcery-mod-input" style="width: 70px; text-align: center;" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    {{!-- Separator --}}
+    <div class="section-separator"></div>
+    
+    {{!-- Modifier Slider --}}
+    <div class="form-group modifier-group">
+      <label for="modifier">
+        <span class="primary-label">{{localize "CONAN.Dialog.difficulty.modifierLabel"}}</span>
+        <span class="subtitle-label">Modifier</span>
+      </label>
+      <div class="modifier-controls">
+        <span class="modifier-value-label">0</span>
+        <input type="range" name="modifier" id="modifier" value="0" min="-3" max="3" step="1" />
+        <div class="modifier-scale">
+          <span>-3</span>
+          <span>-2</span>
+          <span>-1</span>
+          <span>0</span>
+          <span>+1</span>
+          <span>+2</span>
+          <span>+3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="dialog-buttons">
+    <button type="button" class="dialog-button" data-action="cancel">
+      <i class="fas fa-times"></i> {{cancelLabel}}
+    </button>
+    <button type="button" class="dialog-button primary" data-action="roll">
+      <i class="fas fa-dice"></i> {{rollLabel}}
+    </button>
+  </footer>
+</form>

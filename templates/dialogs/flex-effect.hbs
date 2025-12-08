@@ -1,0 +1,21 @@
+<form class="flex-effect-form">
+  <div class="flex-header">
+    <i class="fas fa-star"></i>
+    <h2>{{title}}</h2>
+    <p class="flex-subtitle">{{subtitle}}</p>
+  </div>
+
+  <div class="flex-effects">
+    {{#each effects as |effect|}}
+    <button type="button" class="flex-effect-option" data-action="selectEffect" data-effect="{{effect.id}}">
+      <div class="effect-icon">
+        <i class="fas {{effect.icon}}"></i>
+      </div>
+      <div class="effect-content">
+        <h3 class="effect-name">{{effect.name}}</h3>
+        <p class="effect-description">{{effect.description}}</p>
+      </div>
+    </button>
+    {{/each}}
+  </div>
+</form>

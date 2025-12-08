@@ -1,0 +1,150 @@
+/* === Weapon Item Sheet === */
+
+.window-app.weapon,
+.conan.sheet.item.weapon {
+  min-height: 500px;
+  min-width: 720px;
+  max-width: 750px;
+}
+
+.window-app.weapon .sheet-header,
+.conan.sheet.item.weapon .sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: linear-gradient(to bottom, #8b4513, #654321);
+  border-bottom: 3px solid #d4af37;
+}
+
+.conan.sheet.item.weapon .profile-img {
+  width: 80px;
+  height: 80px;
+  border: 3px solid #d4af37;
+  border-radius: 8px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.conan.sheet.item.weapon .profile-img:hover {
+  transform: scale(1.05);
+}
+
+.conan.sheet.item.weapon .header-fields {
+  flex: 1;
+}
+
+.conan.sheet.item.weapon .charname input {
+  font-family: "Cinzel", serif;
+  font-size: 22px;
+  font-weight: bold;
+  color: #f5e6d3;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 5px;
+  width: 100%;
+}
+
+.conan.sheet.item.weapon .charname input:focus {
+  border-bottom-color: #d4af37;
+  outline: none;
+}
+
+.conan.sheet.item.weapon .item-subtitle {
+  font-size: 13px;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 5px;
+}
+
+/* Sheet Body */
+.conan.sheet.item.weapon .sheet-body {
+  padding: 15px;
+  overflow-y: auto;
+}
+
+/* Form Groups */
+.conan.sheet.item.weapon .form-group {
+  margin-bottom: 15px;
+}
+
+.conan.sheet.item.weapon .form-group label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #8b4513;
+  margin-bottom: 5px;
+}
+
+.conan.sheet.item.weapon .form-group .primary-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.conan.sheet.item.weapon .form-group .subtitle-label {
+  font-size: 11px;
+  font-style: italic;
+  opacity: 0.7;
+  font-weight: normal;
+  text-transform: none;
+  margin-top: 2px;
+}
+
+.conan.sheet.item.weapon .form-group input[type="text"],
+.conan.sheet.item.weapon .form-group select,
+.conan.sheet.item.weapon .form-group textarea {
+  padding: 8px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #fff;
+  color: #333;
+}
+
+.conan.sheet.item.weapon .form-group textarea {
+  width: 100%;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.4;
+  min-height: 60px;
+  overflow: hidden;
+  transition: height 0.2s;
+}
+
+.conan.sheet.item.weapon .form-group input:focus,
+.conan.sheet.item.weapon .form-group select:focus,
+.conan.sheet.item.weapon .form-group textarea:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+}
+
+/* Checkbox Group */
+.conan.sheet.item.weapon .checkbox-group {
+  padding: 10px;
+  background: #f5e6d3;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+}
+
+.conan.sheet.item.weapon .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.conan.sheet.item.weapon .checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.conan.sheet.item.weapon .checkbox-label .primary-label {
+  flex: 1;
+}

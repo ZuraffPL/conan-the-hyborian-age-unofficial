@@ -1,0 +1,610 @@
+
+{
+  "TYPES": {
+    "Actor": {
+      "character": "Character",
+      "minion": "Minion",
+      "antagonist": "Antagonist"
+    },
+    "Item": {
+      "weapon": "Weapon",
+      "armor": "Armor",
+      "skill": "Skill",
+      "spell": "Spell"
+    }
+  },
+  
+  "CONAN": {
+
+    "SystemName": "Conan: The Hyborian Age",
+    
+    "CharacterName": "Character Name",
+    "ItemName": "Item Name",
+    "Skills": "Skills",
+    "Items": "Items",
+    "Effects": "Effects",
+    
+    "Character": {
+      "origin": "Origin",
+      "selectOrigin": "-- Select Origin --",
+      "experience": "Experience Points (XP)"
+    },
+    
+    "Origins": {
+      "hills": "From the Hills",
+      "streets": "From the Streets",
+      "steppes": "From the Steppes",
+      "north": "From the North",
+      "wilds": "From the Wilds",
+      "civilized": "From a Civilized Land",
+      "unknown": "From Parts Unknown",
+      "jhebbal": "From the Blood of Jhebbal Sag",
+      "acheron": "From the Blood of Acheron",
+      "demon": "From the Blood of Demon"
+    },
+    
+    "SheetLabels": {
+      "Actor": "Character Sheet",
+      "Minion": "Minion Sheet",
+      "Antagonist": "Antagonist Sheet",
+      "Item": "Item Sheet"
+    },
+    
+    "Attributes": {
+      "might": {
+        "label": "Might",
+        "abbr": "MIG"
+      },
+      "edge": {
+        "label": "Edge",
+        "abbr": "EDG"
+      },
+      "grit": {
+        "label": "Grit",
+        "abbr": "GRT"
+      },
+      "wits": {
+        "label": "Wits",
+        "abbr": "WIT"
+      }
+    },
+    
+    "Resources": {
+      "health": "Health",
+      "power": "Power",
+      "experience": "Experience",
+      "stamina": "Stamina",
+      "lifePoints": "Life Points",
+      "actual": "Actual",
+      "max": "Max",
+      "defense": "Defense",
+      "physical": "Physical",
+      "sorcery": "Sorcery"
+    },
+
+    "Defense": {
+      "physical": "Physical Defence",
+      "sorcery": "Sorcery Defence"
+    },
+    
+    "CharacterSheet": {
+      "attributes": "Stats",
+      "skills": "Skills",
+      "armor": "Armor",
+      "weapon": "Weapon",
+      "noArmor": "No armor. Drag armor from items or click + to create new.",
+      "noWeapons": "No weapons. Drag weapons from items or click + to create new.",
+      "noSpells": "No spells. Drag spells from items.",
+      "sorcery": "Sorcery Skills",
+      "notes": "Notes",
+      "combat": "Combat",
+      "inventory": "Inventory",
+      "biography": "Character Background",
+      "biographyPlaceholder": "Enter character's origin and background story...",
+      "notesPlaceholder": "Enter notes about the character...",
+      "effects": "Effects"
+    },
+    
+    "DamageTypes": {
+      "slashing": "Slashing",
+      "piercing": "Piercing",
+      "bludgeoning": "Bludgeoning",
+      "fire": "Fire",
+      "cold": "Cold",
+      "poison": "Poison",
+      "psychic": "Psychic"
+    },
+    
+    "WeaponTypes": {
+      "melee": "Melee",
+      "ranged": "Ranged",
+      "thrown": "Thrown"
+    },
+    
+    "ArmorTypes": {
+      "light": "Light",
+      "medium": "Medium",
+      "heavy": "Heavy"
+    },
+    
+    "Weapon": {
+      "details": "Details",
+      "weaponType": "Weapon Type",
+      "handedness": "Handedness",
+      "weaponSize": "Size",
+      "damage": "Damage",
+      "range": "Range",
+      "improvised": "Improvised",
+      "rules": "Rules",
+      "stipulations": "Stipulations",
+      "equip": "Equip",
+      "damageModifier": "Modifier",
+      "types": {
+        "melee": "Melee Weapon",
+        "thrown": "Thrown Weapon",
+        "ranged": "Ranged Weapon"
+      },
+      "handednessOptions": {
+        "oneHanded": "One-Handed",
+        "twoHanded": "Two-Handed"
+      },
+      "sizes": {
+        "light": "Light",
+        "medium": "Medium",
+        "heavy": "Heavy",
+        "various": "Various*"
+      },
+      "ranges": {
+        "touch": "Touch",
+        "close": "Close/1 Area",
+        "short": "Short",
+        "medium": "Medium",
+        "medium3": "Medium/3 Areas",
+        "long": "Long",
+        "long4": "Long/4 Areas",
+        "long6": "Long/6 Areas",
+        "distant8": "Distant/8 Areas"
+      },
+      "variousWeaponNote": "*Any melee weapon that can be thrown but was not designed for throwing. Damage of such weapon corresponds to its damage as a melee weapon.\n-3 to all attack tests.\nCharacters with Brawn 5 or greater can increase throwing range to medium/3 areas"
+    },
+    
+    "Armor": {
+      "details": "Details",
+      "armorType": "Armor Type",
+      "specificMake": "Specific Make",
+      "armorRating": "Armor Rating (AR)",
+      "encumbrance": "Encumbrance",
+      "stipulations": "Stipulations",
+      "quality": "Quality",
+      "equip": "Equip",
+      "types": {
+        "light": "Light",
+        "medium": "Medium",
+        "heavy": "Heavy",
+        "shield": "Shield"
+      },
+      "makes": {
+        "leather": "Leather",
+        "hide": "Hide",
+        "bones": "Bones",
+        "breastplate": "Breastplate",
+        "cuirass": "Cuirass",
+        "hauberk": "Hauberk",
+        "fullPlate": "Full Plate",
+        "knightArmor": "Knight's Armor",
+        "wood": "Wood",
+        "metal": "Metal",
+        "makeshift": "Makeshift"
+      }
+    },
+    
+    "ItemQualities": {
+      "poor": "Poor",
+      "standard": "Standard",
+      "superior": "Superior",
+      "masterwork": "Masterwork"
+    },
+    
+    "NpcTypes": {
+      "standard": "Standard",
+      "minion": "Minion",
+      "toughened": "Toughened",
+      "nemesis": "Nemesis"
+    },
+    
+    "CreatureTypes": {
+      "human": "Human",
+      "inanimate": "Inanimate",
+      "undead": "Undead",
+      "monstrosity": "Monstrosity",
+      "demon": "Demon",
+      "beast": "Beast"
+    },
+
+    "NPC": {
+      "threshold": "Life Threshold",
+      "defenseThreshold": "Defense & Threshold",
+      "lifePoints": "Life Points",
+      "defenseLifePoints": "Defense & Life Points",
+      "wounded": "Wounded",
+      "armor": "Armor",
+      "armorAbbr": "AR",
+      "damage": "Damage",
+      "actions": "Actions & Attacks",
+      "effects": "Effects",
+      "meleeDamage": "Melee",
+      "rangedDamage": "Ranged",
+      "notApplicable": "N/A",
+      "actionsPerRound": "Actions per Round",
+      "attacksPerRound": "Attacks per Round",
+      "tabStats": "Statistics",
+      "tabPowers": "Powers & Actions",
+      "powersAndRules": "Powers and Special Actions",
+      "powersPlaceholder": "Describe special powers, abilities and actions for this NPC...",
+      "magicPowers": "Magic Powers",
+      "magicPowersPlaceholder": "Describe magic powers, spells and supernatural abilities...",
+      "specialActions": "Special Actions",
+      "specialActionsPlaceholder": "Describe special actions, combat abilities and unique rules...",
+      "weaponInfo": "Weapon Information",
+      "weaponName": "Weapon Name",
+      "damageDie": "Damage Die",
+      "damageModifier": "Damage Modifier"
+    },
+    
+    "ItemNew": "New {type}",
+    
+    "ItemTypes": {
+      "weapon": "Weapon",
+      "armor": "Armor",
+      "skill": "Skill",
+      "spell": "Spell"
+    },
+    
+    "Combat": {
+      "armorRating": "Armor Rating",
+      "encumbrance": "Encumbrance",
+      "overencumbered": "Overencumbered! Encumbrance exceeds Might value.",
+      "initiative": "Initiative",
+      "rollInitiative": "Roll for Initiative",
+      "initiativeRolled": "rolled for Initiative",
+      "initiativeHint": "Roll is made on Edge attribute"
+    },
+    
+    "Common": {
+      "name": "Name",
+      "description": "Description",
+      "quantity": "Quantity",
+      "weight": "Weight",
+      "price": "Price",
+      "equipped": "Equipped",
+      "toggleEquipped": "Toggle Equipped",
+      "damage": "Damage",
+      "range": "Range",
+      "armor": "Armor",
+      "level": "Level",
+      "type": "Type",
+      "create": "Create",
+      "createCharacter": "Create",
+      "createCharacterSubtitle": "Create",
+      "Action": "Action",
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "roll": "Roll",
+      "disabled": "Disabled",
+      "add": "Add",
+      "update": "Update",
+      "cancel": "Cancel"
+    },
+    
+    "Warnings": {
+      "cannotUseWeaponWithShield": "You cannot use this weapon with a shield! With a shield you can only use: one-handed melee weapons, thrown weapons, or light ranged weapons.",
+      "alreadyHaveTwoHandedWeapon": "You already have a two-handed weapon equipped!",
+      "twoHandedRequiresBothHands": "Two-handed weapons require both hands - you cannot have other weapons equipped.",
+      "alreadyHaveHeavyRanged": "You already have a heavy ranged weapon equipped!",
+      "heavyRangedRequiresBothHands": "Heavy ranged weapons require both hands - you cannot have other weapons equipped.",
+      "bothHandsOccupied": "Both hands are occupied by a two-handed weapon or heavy ranged weapon!",
+      "maxTwoOneHandedWeapons": "You can have a maximum of two one-handed melee weapons equipped.",
+      "cannotCombineMeleeAndThrown": "You cannot have two one-handed melee weapons and a thrown weapon at the same time. Valid combinations: 2x one-handed OR 1x one-handed + 1x thrown.",
+      "alreadyHaveThrownWeapon": "You already have a thrown weapon equipped!",
+      "cannotEquipMultipleRanged": "You can only have one ranged weapon equipped.",
+      "notEnoughXPForSpell": "Not enough XP to add this spell!",
+      "notEnoughXPForSkill": "Not enough XP to add this skill!",
+      "originCannotUseMagic": "Your origin does not allow the use of magic!",
+      "disciplineNotAllowed": "Your origin does not allow learning the discipline: {discipline}",
+      "maxDisciplinesReached": "Maximum discipline limit ({max}) reached for this origin!",
+      "cannotDefenceWhenImmobilized": "Cannot activate Defence while Immobilized!",
+      "damageNotApplicable": "This damage type is not applicable for this NPC.",
+      "onlySkillsAllowed": "Only skills can be added to this section.",
+      "alreadyHave": "Already have {name}.",
+      "onlyOriginSkillsAllowed": "Only origin skills can be added to this section.",
+      "onlyLearnedSkillsAllowed": "Only Legendary or Advanced skills can be added to this section."
+    },
+    
+    "Notifications": {
+      "xpAdjusted": "Experience points adjusted: {change} XP (remaining: {remaining} XP)",
+      "itemSyncedToWorld": "Item '{name}' has been synchronized to world items.",
+      "itemSyncedToActors": "Item '{name}' has been synchronized to {count} character sheets."
+    },
+    
+    "Skill": {
+      "name": "Skill Name",
+      "effect": "Skill Effect",
+      "xpCost": "XP Cost",
+      "skillType": {
+        "label": "Skill Type",
+        "origin": "Origin",
+        "starting": "Starting",
+        "legendary": "Legendary",
+        "advanced": "Advanced"
+      }
+    },
+    
+    "Spell": {
+      "name": "Spell Name",
+      "discipline": "Discipline",
+      "xpCost": "XP Cost",
+      "effect": "Effect",
+      "disciplines": {
+        "alchemy": "Alchemy",
+        "blackMagic": "Black Magic",
+        "demonicMagic": "Demonic Magic",
+        "necromanticMagic": "Necromantic Magic",
+        "whiteMagic": "White Magic"
+      }
+    },
+
+    "Spells": {
+      "spellRemoved": "Spell removed, refunded {cost} XP"
+    },
+    
+    "Roll": {
+      "success": "Success",
+      "failure": "Failure",
+      "flexEffect": "Flex Effect!",
+      "flexDie": "Flex Die",
+      "windsOfFate": "Winds of Fate are against you. Rolled a one",
+      "attributeTest": "Attribute Test",
+      "attributeDie": "Attribute Die",
+      "targetDifficulty": "Difficulty",
+      "rollDamage": "Roll Damage"
+    },
+    
+    "Spellcasting": {
+      "title": "Spellcasting",
+      "rollInfo": "Roll is made using the Wits attribute",
+      "spellcastingCost": "Spellcasting Cost",
+      "magicAttack": "Magic Attack",
+      "targetDefense": "Target Sorcery Defence",
+      "cast": "Cast Spell",
+      "castingSpell": "Casting Spell",
+      "cost": "Cost",
+      "notEnoughLifePoints": "Not enough Life Points!",
+      "notEnoughStamina": "Not enough Stamina!",
+      "noCostSpecified": "You must specify a spellcasting cost (Life Points and/or Stamina)!"
+    },
+    
+    "Attack": {
+      "title": "Attack",
+      "attackType": "Attack Type",
+      "melee": "Melee Attack",
+      "ranged": "Ranged Attack",
+      "thrown": "Thrown Attack",
+      "sorcery": "Sorcery Attack",
+      "targetPhysicalDefense": "Target Physical Defense",
+      "attackModifiers": "Attack Modifiers",
+      "focusedAttack": "Focused Attack",
+      "defence": "Defence",
+      "immobilized": "Immobilized",
+      "toAttack": "to attack",
+      "toPhysicalDefense": "to Physical Defence",
+      "rollAttack": "Roll Attack",
+      "defenceApplied": "+2 bonus to Physical Defence has been applied"
+    },
+    
+    "Damage": {
+      "DealDamage": "Deal Damage",
+      "title": "Damage Roll",
+      "description": "Roll damage dice for your attack.",
+      "comingSoon": "Damage roll functionality coming soon...",
+      "roll": "Roll Damage",
+      "rollDamage": "Roll Damage",
+      "damageType": "Damage Type",
+      "meleeDamage": "Melee Damage",
+      "thrownDamage": "Thrown Damage",
+      "rangedDamage": "Ranged Damage",
+      "sorceryDamage": "Sorcery Damage",
+      "rollParameters": "Damage Roll Parameters",
+      "selectWeapon": "Select Weapon",
+      "weaponDamage": "Weapon Damage",
+      "unarmedDamage": "Unarmed Combat",
+      "noMeleeWeapon": "No melee weapon equipped",
+      "noThrownWeapon": "No thrown weapon equipped",
+      "noRangedWeapon": "No ranged weapon equipped",
+      "sorceryWitsDie": "Wits Die",
+      "sorceryCustomDie": "Custom Die",
+      "sorceryFixed": "Fixed Value",
+      "sorceryType": "Magic Damage Type",
+      "sorceryCustomDieLabel": "Select Damage Die",
+      "sorceryFixedLabel": "Fixed Damage Value",
+      "sorceryFixedValue": "Fixed Damage",
+      "totalDamage": "Total Damage",
+      "fixedValue": "Fixed Value",
+      "flexDie": "Flex Die",
+      "noTarget": "No target selected! Select a target token first.",
+      "tooManyTargets": "Too many targets selected! Select only one target.",
+      "attackerNotFound": "Attacker not found!",
+      "alreadyDealt": "Damage has already been dealt from this attack!",
+      "damageDealt": "Damage Dealt",
+      "damageApplied": "Damage Applied",
+      "attacker": "Attacker",
+      "target": "Target",
+      "armor": "Armor",
+      "finalDamage": "Final Damage",
+      "characterTookDamage": "{name} took {damage} damage (armor: {armor}). Remaining HP: {remaining}",
+      "antagonistTookDamage": "{name} took {damage} damage (armor: {armor}). Remaining LP: {remaining}",
+      "minionWounded": "{name} took {damage} damage (armor: {armor}) - below threshold ({threshold}). Minion is now Wounded!",
+      "minionDefeated": "{name} took {damage} damage (armor: {armor}) - Minion defeated!",
+      "defeated": "DEFEATED"
+    },
+    
+    "DamageDialog": {
+      "NoWeaponFound": "Weapon not found in inventory!",
+      "NoWeaponId": "No weapon ID provided!"
+    },
+    
+    "EffectTooltips": {
+      "defence": "Defence (+2 to Physical Defence)",
+      "immobilized": "Immobilized (Physical Defence = 0)",
+      "poisoned": "Poisoned"
+    },
+    
+    "Poisoned": {
+      "title": "Poison Effects",
+      "configure": "Select active poison effects:",
+      "apply": "Apply",
+      "close": "Close",
+      "option1": {
+        "name": "Attribute Penalty",
+        "description": "-1 to all Attributes"
+      },
+      "option2": {
+        "name": "Roll Penalty",
+        "description": "-1 to all rolls (tests, attacks, spellcasting, damage)"
+      },
+      "option3": {
+        "name": "Life Drain",
+        "description": "Lose 1 Life Point at the end of each combat round"
+      },
+      "option4": {
+        "name": "Stamina Lock",
+        "description": "Cannot spend Stamina points (Characters only)"
+      },
+      "option5": {
+        "name": "Flex Die Disabled",
+        "description": "Flex Die is not used in any rolls (Characters only)"
+      },
+      "lifeDrain": "suffers poison damage and loses 1 Life Point",
+      "minionWounded": "is wounded by poison",
+      "minionDead": "dies from poison",
+      "staminaLocked": "Cannot spend Stamina - poisoned and stamina is locked!"
+    },
+    
+    
+    "Dialog": {
+      "difficulty": {
+        "title": "Test Difficulty",
+        "label": "Set Difficulty:",
+        "hint": "Difficulty: Easy (4-6), Moderate (7-9), Tough (10-12), Legendary (13+)",
+        "modifierLabel": "Modifier",
+        "modifier": "Modifier",
+        "roll": "Roll",
+        "cancel": "Cancel"
+      },
+      "characterCreation": {
+        "title": "Character Creation",
+        "subtitle": "Character Creation",
+        "originLabel": "Origin",
+        "originSubtitle": "Origin",
+        "originSelect": "-- Choose / Select --",
+        "pointsLabel": "Distribute Stat Points",
+        "pointsSubtitle": "Distribute Stat Points",
+        "remaining": "Remaining points / Remaining",
+        "confirm": "Confirm / Confirm",
+        "cancel": "Cancel / Cancel",
+        "mustDistribute": "You must distribute all 16 points and select an origin!",
+        "created": "Character created!"
+      }
+    },
+    
+    "FlexEffect": {
+      "title": "Flex Effect!",
+      "subtitle": "Maximum result on Flex Die - choose effect:",
+      "flexEffectUsed": "Flex Effect Used",
+      "stamina": {
+        "name": "Stamina",
+        "description": "Gain 1 Stamina point"
+      },
+      "success": {
+        "name": "Success",
+        "description": "Automatically pass the test (failure → success)"
+      },
+      "sorcery": {
+        "name": "Sorcery",
+        "description": "Recover spent spell cost",
+        "restored": "Restored",
+        "recovered": "recovered spell costs using Flex Effect"
+      },
+      "massive": {
+        "name": "Massive Damage",
+        "description": "Add maximum weapon die value or double fixed damage",
+        "bonusDamage": "Massive Damage Bonus",
+        "totalDamage": "Total Damage",
+        "message": "used Flex Effect - Massive Damage!"
+      },
+      "damage": {
+        "name": "Massive Damage",
+        "description": "Double your damage dice (roll twice)"
+      }
+    },
+    
+    "StartingSkills": {
+      "title": "Starting Skills",
+      "subtitle": "Starting Skills",
+      "add": "Add Skill",
+      "dropHint": "Drag and drop origin skills from the Items tab here.",
+      "dialogTitle": "Starting Skill",
+      "name": "Skill Name",
+      "namePlaceholder": "Enter skill name",
+      "cost": "XP Cost",
+      "effect": "Skill Effect",
+      "effectPlaceholder": "Describe the skill effect from the rulebook",
+      "isOrigin": "Origin Skill",
+      "origin": "Origin",
+      "nameRequired": "Skill name is required!",
+      "costRequired": "XP cost is required!",
+      "notEnoughXP": "Not enough XP!",
+      "skillAdded": "Skill added successfully",
+      "skillUpdated": "Skill updated successfully",
+      "skillDeleted": "Skill deleted",
+      "deleteTitle": "Delete Skill",
+      "deleteConfirm": "Are you sure you want to delete this skill?",
+      "empty": "No starting skills. Click 'Add Skill' to begin.",
+      "noEffect": "No effect description"
+    },
+    
+    "LearnedSkills": {
+      "title": "Learned Skills",
+      "subtitle": "Learned Skills",
+      "dropHint": "Drag skills here from Items tab",
+      "notEnoughXP": "Insufficient XP! Required: {cost}, available: {available}",
+      "skillAdded": "Skill added",
+      "skillRemoved": "Skill removed, refunded {cost} XP",
+      "cannotAddOrigin": "Origin skills should be added in Starting Skills section"
+    },
+    
+    "Stamina": {
+      "spend1": "Spend 1 Stamina to boost result by +1",
+      "spend2": "Spend 2 Stamina to boost result by +2",
+      "spendDamage1": "Spend 1 Stamina to add 1d4 damage",
+      "spendDamage2": "Spend 2 Stamina to add 2d4 damage",
+      "spendLastForMassive": "Spend last Stamina point to trigger Massive Damage",
+      "boosted": "Stamina Boost",
+      "damageBoosted": "Damage Boosted with Stamina",
+      "massiveDamage": "Massive Damage (Stamina)",
+      "massiveDamageMessage": "spent their last Stamina point for Massive Damage!",
+      "spent": "Spent {cost} Stamina",
+      "lastPointSpent": "Spent last Stamina point",
+      "notEnoughStamina": "Not enough Stamina! Required: {required}, current: {current}",
+      "needsExactlyOne": "You need to have exactly 1 Stamina point to use this option!",
+      "actorNotFound": "Actor not found for this message",
+      "rollBoosted": "Result boosted from {oldValue} to {newValue} (+{boost}) - {status}",
+      "initiativeBoosted": "Initiative boosted from {oldValue} to {newValue} (+{boost})",
+      "boostedNotification": "Roll result boosted by +{boost} (spent {cost} Stamina)",
+      "massiveDamageNotification": "Massive Damage! +{bonus} to damage (spent last Stamina point)",
+      "damageIncrease": "Additional Damage",
+      "totalDamageAfterBoost": "Total Damage After Boost"
+    }
+  }
+}
+

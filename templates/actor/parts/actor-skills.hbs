@@ -1,0 +1,15 @@
+{{!-- Actor Skills Partial --}}
+<div class="skills">
+  <h3>{{localize "CONAN.Skills"}}</h3>
+  <ol class="skills-list">
+    {{#each system.skills as |skill key|}}
+    <li class="skill" data-skill="{{key}}">
+      <label class="skill-label">{{localize skill.label}}</label>
+      <input type="number" name="system.skills.{{key}}.value" value="{{skill.value}}" data-dtype="Number"/>
+      <a class="skill-roll" data-skill="{{key}}" title="{{localize 'CONAN.Common.roll'}}">
+        <i class="fas fa-dice-d20"></i>
+      </a>
+    </li>
+    {{/each}}
+  </ol>
+</div>

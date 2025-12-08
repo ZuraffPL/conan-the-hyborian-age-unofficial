@@ -1,0 +1,610 @@
+
+{
+  "TYPES": {
+    "Actor": {
+      "character": "Personnage",
+      "minion": "Séide",
+      "antagonist": "Antagoniste"
+    },
+    "Item": {
+      "weapon": "Arme",
+      "armor": "Armure",
+      "skill": "Compétence",
+      "spell": "Sort"
+    }
+  },
+  
+  "CONAN": {
+
+    "SystemName": "Conan : L'Âge Hyborien",
+    
+    "CharacterName": "Nom du Personnage",
+    "ItemName": "Nom de l'Objet",
+    "Skills": "Compétences",
+    "Items": "Objets",
+    "Effects": "Effets",
+    
+    "Character": {
+      "origin": "Origine",
+      "selectOrigin": "-- Sélectionner une Origine --",
+      "experience": "Points d'Expérience (XP)"
+    },
+    
+    "Origins": {
+      "hills": "Des Collines",
+      "streets": "Des Rues",
+      "steppes": "Des Steppes",
+      "north": "Du Nord",
+      "wilds": "Des Terres Sauvages",
+      "civilized": "D'une Terre Civilisée",
+      "unknown": "De Contrées Inconnues",
+      "jhebbal": "Du Sang de Jhebbal Sag",
+      "acheron": "Du Sang d'Achéron",
+      "demon": "Du Sang de Démon"
+    },
+    
+    "SheetLabels": {
+      "Actor": "Feuille de Personnage",
+      "Minion": "Feuille de Séide",
+      "Antagonist": "Feuille d'Antagoniste",
+      "Item": "Feuille d'Objet"
+    },
+    
+    "Attributes": {
+      "might": {
+        "label": "Force",
+        "abbr": "FOR"
+      },
+      "edge": {
+        "label": "Agilité",
+        "abbr": "AGI"
+      },
+      "grit": {
+        "label": "Résistance",
+        "abbr": "RES"
+      },
+      "wits": {
+        "label": "Astuce",
+        "abbr": "AST"
+      }
+    },
+    
+    "Resources": {
+      "health": "Santé",
+      "power": "Pouvoir",
+      "experience": "Expérience",
+      "stamina": "Endurance",
+      "lifePoints": "Points de Vie",
+      "actual": "Actuel",
+      "max": "Max",
+      "defense": "Défense",
+      "physical": "Physique",
+      "sorcery": "Sorcellerie"
+    },
+
+    "Defense": {
+      "physical": "Défense Physique",
+      "sorcery": "Défense contre la Sorcellerie"
+    },
+    
+    "CharacterSheet": {
+      "attributes": "Attributs",
+      "skills": "Compétences",
+      "armor": "Armure",
+      "weapon": "Arme",
+      "noArmor": "Aucune armure. Glissez une armure depuis les objets ou cliquez sur + pour en créer une nouvelle.",
+      "noWeapons": "Aucune arme. Glissez des armes depuis les objets ou cliquez sur + pour en créer une nouvelle.",
+      "noSpells": "Aucun sort. Glissez des sorts depuis les objets.",
+      "sorcery": "Compétences de Sorcellerie",
+      "notes": "Notes",
+      "combat": "Combat",
+      "inventory": "Inventaire",
+      "biography": "Historique du Personnage",
+      "biographyPlaceholder": "Entrez l'origine et l'histoire du personnage...",
+      "notesPlaceholder": "Entrez des notes sur le personnage...",
+      "effects": "Effets"
+    },
+    
+    "DamageTypes": {
+      "slashing": "Tranchant",
+      "piercing": "Perforant",
+      "bludgeoning": "Contondant",
+      "fire": "Feu",
+      "cold": "Froid",
+      "poison": "Poison",
+      "psychic": "Psychique"
+    },
+    
+    "WeaponTypes": {
+      "melee": "Corps à corps",
+      "ranged": "Distance",
+      "thrown": "Lancer"
+    },
+    
+    "ArmorTypes": {
+      "light": "Légère",
+      "medium": "Moyenne",
+      "heavy": "Lourde"
+    },
+    
+    "Weapon": {
+      "details": "Détails",
+      "weaponType": "Type d'Arme",
+      "handedness": "Prise en Main",
+      "weaponSize": "Taille",
+      "damage": "Dégâts",
+      "range": "Portée",
+      "improvised": "Improvisée",
+      "rules": "Règles",
+      "stipulations": "Conditions",
+      "equip": "Équiper",
+      "damageModifier": "Modificateur",
+      "types": {
+        "melee": "Arme de Mêlée",
+        "thrown": "Arme de Lancer",
+        "ranged": "Arme à Distance"
+      },
+      "handednessOptions": {
+        "oneHanded": "Une Main",
+        "twoHanded": "Deux Mains"
+      },
+      "sizes": {
+        "light": "Légère",
+        "medium": "Moyenne",
+        "heavy": "Lourde",
+        "various": "Diverses*"
+      },
+      "ranges": {
+        "touch": "Contact",
+        "close": "Proche/1 Zone",
+        "short": "Courte",
+        "medium": "Moyenne",
+        "medium3": "Moyenne/3 Zones",
+        "long": "Longue",
+        "long4": "Longue/4 Zones",
+        "long6": "Longue/6 Zones",
+        "distant8": "Distante/8 Zones"
+      },
+      "variousWeaponNote": "*Toute arme de mêlée qui peut être lancée mais qui n'a pas été conçue pour le lancer. Les dégâts d'une telle arme correspondent à ses dégâts en tant qu'arme de mêlée.\n-3 à tous les tests d'attaque.\nLes personnages avec Force 5 ou plus peuvent augmenter la portée de lancer à moyenne/3 zones"
+    },
+    
+    "Armor": {
+      "details": "Détails",
+      "armorType": "Type d'Armure",
+      "specificMake": "Fabrication Spécifique",
+      "armorRating": "Indice d'Armure (IA)",
+      "encumbrance": "Encombrement",
+      "stipulations": "Conditions",
+      "quality": "Qualité",
+      "equip": "Équiper",
+      "types": {
+        "light": "Légère",
+        "medium": "Moyenne",
+        "heavy": "Lourde",
+        "shield": "Bouclier"
+      },
+      "makes": {
+        "leather": "Cuir",
+        "hide": "Peau",
+        "bones": "Os",
+        "breastplate": "Cuirasse",
+        "cuirass": "Plastron",
+        "hauberk": "Haubert",
+        "fullPlate": "Armure Complète",
+        "knightArmor": "Armure de Chevalier",
+        "wood": "Bois",
+        "metal": "Métal",
+        "makeshift": "Improvisée"
+      }
+    },
+    
+    "ItemQualities": {
+      "poor": "Médiocre",
+      "standard": "Standard",
+      "superior": "Supérieure",
+      "masterwork": "Chef-d'œuvre"
+    },
+    
+    "NpcTypes": {
+      "standard": "Standard",
+      "minion": "Séide",
+      "toughened": "Endurci",
+      "nemesis": "Némésis"
+    },
+    
+    "CreatureTypes": {
+      "human": "Humain",
+      "inanimate": "Inanimé",
+      "undead": "Mort-vivant",
+      "monstrosity": "Monstruosité",
+      "demon": "Démon",
+      "beast": "Bête"
+    },
+
+    "NPC": {
+      "threshold": "Seuil de Vie",
+      "defenseThreshold": "Défense et Seuil",
+      "lifePoints": "Points de Vie",
+      "defenseLifePoints": "Défense et Points de Vie",
+      "wounded": "Blessé",
+      "armor": "Armure",
+      "armorAbbr": "AR",
+      "damage": "Dégâts",
+      "actions": "Actions et Attaques",
+      "effects": "Effets",
+      "meleeDamage": "Mêlée",
+      "rangedDamage": "Distance",
+      "notApplicable": "N/A",
+      "actionsPerRound": "Actions par Round",
+      "attacksPerRound": "Attaques par Round",
+      "tabStats": "Statistiques",
+      "tabPowers": "Pouvoirs et Actions",
+      "powersAndRules": "Pouvoirs et Actions Spéciales",
+      "powersPlaceholder": "Décrivez les pouvoirs, capacités et actions spéciaux de ce PNJ...",
+      "magicPowers": "Pouvoirs Magiques",
+      "magicPowersPlaceholder": "Décrivez les pouvoirs magiques, sorts et capacités surnaturelles...",
+      "specialActions": "Actions Spéciales",
+      "specialActionsPlaceholder": "Décrivez les actions spéciales, capacités de combat et règles uniques...",
+      "weaponInfo": "Information sur l'Arme",
+      "weaponName": "Nom de l'Arme",
+      "damageDie": "Dé de Dégâts",
+      "damageModifier": "Modificateur de Dégâts"
+    },
+    
+    "ItemNew": "Nouveau {type}",
+    
+    "ItemTypes": {
+      "weapon": "Arme",
+      "armor": "Armure",
+      "skill": "Compétence",
+      "spell": "Sort"
+    },
+    
+    "Combat": {
+      "armorRating": "Indice d'Armure",
+      "encumbrance": "Encombrement",
+      "overencumbered": "Surchargé ! L'encombrement dépasse la valeur de Force.",
+      "initiative": "Initiative",
+      "rollInitiative": "Lancer pour l'Initiative",
+      "initiativeRolled": "a lancé pour l'Initiative",
+      "initiativeHint": "Le jet se fait sur l'attribut Agilité"
+    },
+    
+    "Common": {
+      "name": "Nom",
+      "description": "Description",
+      "quantity": "Quantité",
+      "weight": "Poids",
+      "price": "Prix",
+      "equipped": "Équipé",
+      "toggleEquipped": "Basculer Équipé",
+      "damage": "Dégâts",
+      "range": "Portée",
+      "armor": "Armure",
+      "level": "Niveau",
+      "type": "Type",
+      "create": "Créer",
+      "createCharacter": "Créer",
+      "createCharacterSubtitle": "Créer",
+      "Action": "Action",
+      "actions": "Actions",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "roll": "Lancer",
+      "disabled": "Désactivé",
+      "add": "Ajouter",
+      "update": "Mettre à jour",
+      "cancel": "Annuler"
+    },
+    
+    "Warnings": {
+      "cannotUseWeaponWithShield": "Vous ne pouvez pas utiliser cette arme avec un bouclier ! Avec un bouclier, vous ne pouvez utiliser que : des armes de mêlée à une main, des armes de lancer, ou des armes à distance légères.",
+      "alreadyHaveTwoHandedWeapon": "Vous avez déjà une arme à deux mains équipée !",
+      "twoHandedRequiresBothHands": "Les armes à deux mains nécessitent les deux mains - vous ne pouvez pas avoir d'autres armes équipées.",
+      "alreadyHaveHeavyRanged": "Vous avez déjà une arme à distance lourde équipée !",
+      "heavyRangedRequiresBothHands": "Les armes à distance lourdes nécessitent les deux mains - vous ne pouvez pas avoir d'autres armes équipées.",
+      "bothHandsOccupied": "Les deux mains sont occupées par une arme à deux mains ou une arme à distance lourde !",
+      "maxTwoOneHandedWeapons": "Vous pouvez avoir au maximum deux armes de mêlée à une main équipées.",
+      "cannotCombineMeleeAndThrown": "Vous ne pouvez pas avoir deux armes de mêlée à une main et une arme de lancer en même temps. Combinaisons valides : 2x une main OU 1x une main + 1x lancer.",
+      "alreadyHaveThrownWeapon": "Vous avez déjà une arme de lancer équipée !",
+      "cannotEquipMultipleRanged": "Vous ne pouvez avoir qu'une seule arme à distance équipée.",
+      "notEnoughXPForSpell": "Pas assez d'XP pour ajouter ce sort !",
+      "notEnoughXPForSkill": "Pas assez d'XP pour ajouter cette compétence !",
+      "originCannotUseMagic": "Votre origine ne permet pas l'utilisation de la magie !",
+      "disciplineNotAllowed": "Votre origine ne permet pas l'apprentissage de la discipline : {discipline}",
+      "maxDisciplinesReached": "Limite maximale de disciplines ({max}) atteinte pour cette origine !",
+      "cannotDefenceWhenImmobilized": "Impossible d'activer la Défense lorsque Immobilisé !",
+      "damageNotApplicable": "Ce type de dégâts n'est pas applicable pour ce PNJ.",
+      "onlySkillsAllowed": "Seules les compétences peuvent être ajoutées à cette section.",
+      "alreadyHave": "Vous avez déjà {name}.",
+      "onlyOriginSkillsAllowed": "Seules les compétences d'origine peuvent être ajoutées à cette section.",
+      "onlyLearnedSkillsAllowed": "Seules les compétences Légendaires ou Avancées peuvent être ajoutées à cette section."
+    },
+    
+    "Notifications": {
+      "xpAdjusted": "Points d'expérience ajustés : {change} XP (restant : {remaining} XP)",
+      "itemSyncedToWorld": "L'objet '{name}' a été synchronisé avec les objets du monde.",
+      "itemSyncedToActors": "L'objet '{name}' a été synchronisé avec {count} feuilles de personnage."
+    },
+    
+    "Skill": {
+      "name": "Nom de la Compétence",
+      "effect": "Effet de la Compétence",
+      "xpCost": "Coût en XP",
+      "skillType": {
+        "label": "Type de Compétence",
+        "origin": "Origine",
+        "starting": "Départ",
+        "legendary": "Légendaire",
+        "advanced": "Avancée"
+      }
+    },
+    
+    "Spell": {
+      "name": "Nom du Sort",
+      "discipline": "Discipline",
+      "xpCost": "Coût en XP",
+      "effect": "Effet",
+      "disciplines": {
+        "alchemy": "Alchimie",
+        "blackMagic": "Magie Noire",
+        "demonicMagic": "Magie Démoniaque",
+        "necromanticMagic": "Magie Nécromatique",
+        "whiteMagic": "Magie Blanche"
+      }
+    },
+
+    "Spells": {
+      "spellRemoved": "Sort retiré, {cost} XP remboursés"
+    },
+    
+    "Roll": {
+      "success": "Succès",
+      "failure": "Échec",
+      "flexEffect": "Effet de Souplesse !",
+      "flexDie": "Dé de Souplesse",
+      "windsOfFate": "Les Vents du Destin sont contre vous. Vous avez fait un",
+      "attributeTest": "Test d'Attribut",
+      "attributeDie": "Dé d'Attribut",
+      "targetDifficulty": "Difficulté",
+      "rollDamage": "Lancer les Dégâts"
+    },
+    
+    "Spellcasting": {
+      "title": "Lancer de Sort",
+      "rollInfo": "Le jet se fait en utilisant l'attribut Astuce",
+      "spellcastingCost": "Coût du Lancer de Sort",
+      "magicAttack": "Attaque Magique",
+      "targetDefense": "Défense contre la Sorcellerie de la Cible",
+      "cast": "Lancer le Sort",
+      "castingSpell": "Lancer de Sort",
+      "cost": "Coût",
+      "notEnoughLifePoints": "Pas assez de Points de Vie !",
+      "notEnoughStamina": "Pas assez d'Endurance !",
+      "noCostSpecified": "Vous devez spécifier un coût de lancer de sort (Points de Vie et/ou Endurance) !"
+    },
+    
+    "Attack": {
+      "title": "Attaque",
+      "attackType": "Type d'Attaque",
+      "melee": "Attaque au Corps à Corps",
+      "ranged": "Attaque à Distance",
+      "thrown": "Attaque de Lancer",
+      "sorcery": "Attaque de Sorcellerie",
+      "targetPhysicalDefense": "Défense Physique de la Cible",
+      "attackModifiers": "Modificateurs d'Attaque",
+      "focusedAttack": "Attaque Concentrée",
+      "defence": "Défense",
+      "immobilized": "Immobilisé",
+      "toAttack": "à l'attaque",
+      "toPhysicalDefense": "à la Défense Physique",
+      "rollAttack": "Lancer l'Attaque",
+      "defenceApplied": "Bonus de +2 à la Défense Physique appliqué"
+    },
+    
+    "Damage": {
+      "DealDamage": "Infliger des Dégâts",
+      "title": "Jet de Dégâts",
+      "description": "Lancez les dés de dégâts pour votre attaque.",
+      "comingSoon": "Fonctionnalité de jet de dégâts à venir...",
+      "roll": "Lancer les Dégâts",
+      "rollDamage": "Lancer les Dégâts",
+      "damageType": "Type de Dégâts",
+      "meleeDamage": "Dégâts de Mêlée",
+      "thrownDamage": "Dégâts de Lancer",
+      "rangedDamage": "Dégâts à Distance",
+      "sorceryDamage": "Dégâts de Sorcellerie",
+      "rollParameters": "Paramètres du Jet de Dégâts",
+      "selectWeapon": "Sélectionner l'Arme",
+      "weaponDamage": "Dégâts de l'Arme",
+      "unarmedDamage": "Combat à Mains Nues",
+      "noMeleeWeapon": "Aucune arme de mêlée équipée",
+      "noThrownWeapon": "Aucune arme de lancer équipée",
+      "noRangedWeapon": "Aucune arme à distance équipée",
+      "sorceryWitsDie": "Dé d'Astuce",
+      "sorceryCustomDie": "Dé Personnalisé",
+      "sorceryFixed": "Valeur Fixe",
+      "sorceryType": "Type de Dégâts Magiques",
+      "sorceryCustomDieLabel": "Sélectionner le Dé de Dégâts",
+      "sorceryFixedLabel": "Valeur de Dégâts Fixe",
+      "sorceryFixedValue": "Dégâts Fixes",
+      "totalDamage": "Dégâts Totaux",
+      "fixedValue": "Valeur Fixe",
+      "flexDie": "Dé de Souplesse",
+      "noTarget": "Aucune cible sélectionnée ! Sélectionnez d'abord un jeton cible.",
+      "tooManyTargets": "Trop de cibles sélectionnées ! Sélectionnez une seule cible.",
+      "attackerNotFound": "Attaquant introuvable !",
+      "alreadyDealt": "Les dégâts ont déjà été infligés par cette attaque !",
+      "damageDealt": "Dégâts Infligés",
+      "damageApplied": "Dégâts Appliqués",
+      "attacker": "Attaquant",
+      "target": "Cible",
+      "armor": "Armure",
+      "finalDamage": "Dégâts Finaux",
+      "characterTookDamage": "{name} a reçu {damage} dégâts (armure : {armor}). PV restants : {remaining}",
+      "antagonistTookDamage": "{name} a reçu {damage} dégâts (armure : {armor}). PV restants : {remaining}",
+      "minionWounded": "{name} a reçu {damage} dégâts (armure : {armor}) - en dessous du seuil ({threshold}). Le Séide est maintenant Blessé !",
+      "minionDefeated": "{name} a reçu {damage} dégâts (armure : {armor}) - Séide vaincu !",
+      "defeated": "VAINCU"
+    },
+    
+    "DamageDialog": {
+      "NoWeaponFound": "Arme introuvable dans l'inventaire !",
+      "NoWeaponId": "Aucun ID d'arme fourni !"
+    },
+    
+    "EffectTooltips": {
+      "defence": "Défense (+2 à la Défense Physique)",
+      "immobilized": "Immobilisé (Défense Physique = 0)",
+      "poisoned": "Empoisonné"
+    },
+    
+    "Poisoned": {
+      "title": "Effets du Poison",
+      "configure": "Sélectionnez les effets de poison actifs :",
+      "apply": "Appliquer",
+      "close": "Fermer",
+      "option1": {
+        "name": "Pénalité d'Attribut",
+        "description": "-1 à tous les Attributs"
+      },
+      "option2": {
+        "name": "Pénalité de Jet",
+        "description": "-1 à tous les jets (tests, attaques, lancer de sorts, dégâts)"
+      },
+      "option3": {
+        "name": "Drain de Vie",
+        "description": "Perdez 1 Point de Vie à la fin de chaque round de combat"
+      },
+      "option4": {
+        "name": "Blocage d'Endurance",
+        "description": "Impossible de dépenser des points d'Endurance (Personnages uniquement)"
+      },
+      "option5": {
+        "name": "Dé de Souplesse Désactivé",
+        "description": "Le Dé de Souplesse n'est pas utilisé dans les jets (Personnages uniquement)"
+      },
+      "lifeDrain": "subit des dégâts de poison et perd 1 Point de Vie",
+      "minionWounded": "est blessé par le poison",
+      "minionDead": "meurt du poison",
+      "staminaLocked": "Impossible de dépenser de l'Endurance - empoisonné et endurance bloquée !"
+    },
+    
+    
+    "Dialog": {
+      "difficulty": {
+        "title": "Difficulté du Test",
+        "label": "Définir la Difficulté :",
+        "hint": "Difficulté : Facile (4-6), Modéré (7-9), Difficile (10-12), Légendaire (13+)",
+        "modifierLabel": "Modificateur",
+        "modifier": "Modificateur",
+        "roll": "Lancer",
+        "cancel": "Annuler"
+      },
+      "characterCreation": {
+        "title": "Création de Personnage",
+        "subtitle": "Création de Personnage",
+        "originLabel": "Origine",
+        "originSubtitle": "Origine",
+        "originSelect": "-- Choisir / Sélectionner --",
+        "pointsLabel": "Distribuer les Points d'Attribut",
+        "pointsSubtitle": "Distribuer les Points d'Attribut",
+        "remaining": "Points restants / Restant",
+        "confirm": "Confirmer / Confirmer",
+        "cancel": "Annuler / Annuler",
+        "mustDistribute": "Vous devez distribuer tous les 16 points et sélectionner une origine !",
+        "created": "Personnage créé !"
+      }
+    },
+    
+    "FlexEffect": {
+      "title": "Effet de Souplesse !",
+      "subtitle": "Résultat maximum sur le Dé de Souplesse - choisissez l'effet :",
+      "flexEffectUsed": "Effet de Souplesse Utilisé",
+      "stamina": {
+        "name": "Endurance",
+        "description": "Gagnez 1 point d'Endurance"
+      },
+      "success": {
+        "name": "Succès",
+        "description": "Réussissez automatiquement le test (échec → succès)"
+      },
+      "sorcery": {
+        "name": "Sorcellerie",
+        "description": "Récupérez le coût du sort dépensé",
+        "restored": "Restauré",
+        "recovered": "a récupéré les coûts du sort en utilisant l'Effet de Souplesse"
+      },
+      "massive": {
+        "name": "Dégâts Massifs",
+        "description": "Ajoutez la valeur maximale du dé d'arme ou doublez les dégâts fixes",
+        "bonusDamage": "Bonus de Dégâts Massifs",
+        "totalDamage": "Dégâts Totaux",
+        "message": "a utilisé l'Effet de Souplesse - Dégâts Massifs !"
+      },
+      "damage": {
+        "name": "Dégâts Massifs",
+        "description": "Doublez vos dés de dégâts (lancez deux fois)"
+      }
+    },
+    
+    "StartingSkills": {
+      "title": "Compétences de Départ",
+      "subtitle": "Compétences de Départ",
+      "add": "Ajouter une Compétence",
+      "dropHint": "Glissez-déposez les compétences d'origine depuis l'onglet Objets ici.",
+      "dialogTitle": "Compétence de Départ",
+      "name": "Nom de la Compétence",
+      "namePlaceholder": "Entrez le nom de la compétence",
+      "cost": "Coût en XP",
+      "effect": "Effet de la Compétence",
+      "effectPlaceholder": "Décrivez l'effet de la compétence selon le livre de règles",
+      "isOrigin": "Compétence d'Origine",
+      "origin": "Origine",
+      "nameRequired": "Le nom de la compétence est requis !",
+      "costRequired": "Le coût en XP est requis !",
+      "notEnoughXP": "Pas assez d'XP !",
+      "skillAdded": "Compétence ajoutée avec succès",
+      "skillUpdated": "Compétence mise à jour avec succès",
+      "skillDeleted": "Compétence supprimée",
+      "deleteTitle": "Supprimer la Compétence",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette compétence ?",
+      "empty": "Aucune compétence de départ. Cliquez sur 'Ajouter une Compétence' pour commencer.",
+      "noEffect": "Aucune description d'effet"
+    },
+    
+    "LearnedSkills": {
+      "title": "Compétences Apprises",
+      "subtitle": "Compétences Apprises",
+      "dropHint": "Glissez les compétences ici depuis l'onglet Objets",
+      "notEnoughXP": "XP insuffisants ! Requis : {cost}, disponible : {available}",
+      "skillAdded": "Compétence ajoutée",
+      "skillRemoved": "Compétence retirée, {cost} XP remboursés",
+      "cannotAddOrigin": "Les compétences d'origine doivent être ajoutées dans la section Compétences de Départ"
+    },
+    
+    "Stamina": {
+      "spend1": "Dépenser 1 Endurance pour augmenter le résultat de +1",
+      "spend2": "Dépenser 2 Endurance pour augmenter le résultat de +2",
+      "spendDamage1": "Dépenser 1 Endurance pour ajouter 1d4 dégâts",
+      "spendDamage2": "Dépenser 2 Endurance pour ajouter 2d4 dégâts",
+      "spendLastForMassive": "Dépenser le dernier point d'Endurance pour déclencher les Dégâts Massifs",
+      "boosted": "Augmentation d'Endurance",
+      "damageBoosted": "Dégâts Augmentés par l'Endurance",
+      "massiveDamage": "Dégâts Massifs (Endurance)",
+      "massiveDamageMessage": "a dépensé son dernier point d'Endurance pour les Dégâts Massifs !",
+      "spent": "Dépensé {cost} Endurance",
+      "lastPointSpent": "Dernier point d'Endurance dépensé",
+      "notEnoughStamina": "Pas assez d'Endurance ! Requis : {required}, actuel : {current}",
+      "needsExactlyOne": "Vous devez avoir exactement 1 point d'Endurance pour utiliser cette option !",
+      "actorNotFound": "Acteur introuvable pour ce message",
+      "rollBoosted": "Résultat augmenté de {oldValue} à {newValue} (+{boost}) - {status}",
+      "initiativeBoosted": "Initiative augmentée de {oldValue} à {newValue} (+{boost})",
+      "boostedNotification": "Résultat du jet augmenté de +{boost} (dépensé {cost} Endurance)",
+      "massiveDamageNotification": "Dégâts Massifs ! +{bonus} aux dégâts (dernier point d'Endurance dépensé)",
+      "damageIncrease": "Dégâts Supplémentaires",
+      "totalDamageAfterBoost": "Dégâts Totaux Après Augmentation"
+    }
+  }
+}
+

@@ -1,0 +1,67 @@
+{{!-- NPC Damage Dialog --}}
+<form class="damage-form">
+  <div class="dialog-header">
+    <h2>{{title}}</h2>
+    <p class="attack-type-label">{{attackTypeLabel}}</p>
+  </div>
+
+  <div class="dialog-section">
+    <h3>{{localize "CONAN.NPC.weaponInfo"}}</h3>
+    
+    <div class="weapon-info-display">
+      {{#if brawnValue}}
+      <div class="info-row">
+        <span class="info-label">{{localize "CONAN.Attributes.might.label"}}:</span>
+        <span class="info-value">{{brawnValue}}</span>
+      </div>
+      {{/if}}
+      
+      <div class="info-row">
+        <span class="info-label">{{localize "CONAN.NPC.weaponName"}}:</span>
+        <span class="info-value">{{weaponName}}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="info-label">{{localize "CONAN.NPC.damageDie"}}:</span>
+        <span class="info-value">{{damageDie}}</span>
+      </div>
+      
+      {{#if (ne damageModifier 0)}}
+      <div class="info-row">
+        <span class="info-label">{{localize "CONAN.NPC.damageModifier"}}:</span>
+        <span class="info-value">{{#if (gt damageModifier 0)}}+{{/if}}{{damageModifier}}</span>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="dialog-section">
+    <h3>{{modifierLabel}}</h3>
+    
+    <div class="modifier-slider-container">
+      <input type="range" name="modifier" min="-3" max="3" value="{{modifier}}" step="1" />
+      <div class="modifier-scale">
+        <span>-3</span>
+        <span>-2</span>
+        <span>-1</span>
+        <span>0</span>
+        <span>+1</span>
+        <span>+2</span>
+        <span>+3</span>
+      </div>
+      <div class="modifier-value-container">
+        <label>{{localize "CONAN.Dialog.difficulty.modifier"}}:</label>
+        <span class="modifier-value-label">{{#if (gte modifier 0)}}+{{/if}}{{modifier}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-buttons">
+    <button type="button" data-action="roll" class="dialog-button primary">
+      <i class="fas fa-dice"></i> {{rollLabel}}
+    </button>
+    <button type="button" data-action="cancel" class="dialog-button">
+      <i class="fas fa-times"></i> {{cancelLabel}}
+    </button>
+  </div>
+</form>

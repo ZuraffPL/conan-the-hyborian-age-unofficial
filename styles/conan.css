@@ -1,0 +1,1601 @@
+/* ================================================== */
+/*  Conan: The Hyborian Age System Styles            */
+/* ================================================== */
+
+/* Import specific stylesheets */
+@import url("./partials/actor-spell.css");
+@import url("./partials/combat-tracker.css");
+@import url("./partials/poisoned-effects.css");
+
+/* === Global Styles === */
+.conan {
+  font-family: "Signika", sans-serif;
+  color: #1a1a1a;
+}
+
+.conan form {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.conan .window-content {
+  background: url("../ui/parchment.webp") repeat;
+  background-color: #f4e8d8;
+  font-size: 13px;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* === Sheet Header === */
+.conan .sheet-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.05);
+  border-bottom: 2px solid #8b4513;
+  flex-shrink: 0;
+}
+
+.conan .sheet-header img.profile-img {
+  flex: 0 0 100px;
+  height: 100px;
+  margin-right: 10px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.conan .sheet-header .header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.conan .sheet-header .header-row {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.conan .sheet-header .header-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.conan .sheet-header .header-right {
+  flex: 0 0 180px;
+  display: flex;
+  flex-direction: column;
+}
+
+.conan .charname-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 5px;
+}
+
+.conan .sheet-header h1.charname {
+  flex: 0 1 auto;
+  min-width: 350px;
+  margin: 0;
+  border-bottom: 2px solid #8b4513;
+  font-size: 24px;
+  font-weight: bold;
+  color: #8b4513;
+}
+
+.conan .sheet-header h1.charname input {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+/* === Create Character Button === */
+.conan .create-character-btn {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(to bottom, #6b8e23, #556b2f);
+  border: 2px solid #4a5f1f;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.conan .create-character-btn:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #7ba428, #667d35);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+.conan .create-character-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.conan .create-character-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: linear-gradient(to bottom, #999, #888);
+  border-color: #666;
+}
+
+.conan .create-character-btn i {
+  font-size: 16px;
+}
+
+.conan .create-character-btn .btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.conan .create-character-btn .primary-text {
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.conan .create-character-btn .subtitle-text {
+  font-size: 10px;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.conan .origin-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.conan .origin-field label {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #8b4513;
+  margin-bottom: 4px;
+}
+
+.conan .origin-field select {
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  padding: 6px 10px;
+  background: white;
+  color: #1a1a1a;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.conan .origin-field select:hover {
+  border-color: #654321;
+  background: rgba(139, 69, 19, 0.05);
+}
+
+.conan .origin-field select:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+.conan .origin-field select:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: rgba(139, 69, 19, 0.1);
+  color: #654321;
+  border-color: rgba(139, 69, 19, 0.5);
+}
+
+.conan .experience-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.conan .experience-field label {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #8b4513;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.conan .experience-field input {
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  padding: 8px 10px;
+  background: white;
+  color: #1a1a1a;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.conan .experience-field input:hover {
+  border-color: #654321;
+  background: rgba(139, 69, 19, 0.05);
+}
+
+.conan .experience-field input:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+.conan .resource {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+}
+
+.conan .resource label {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #8b4513;
+  margin-bottom: 2px;
+}
+
+.conan .resource-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.conan .resource input {
+  flex: 0 0 40px;
+  text-align: center;
+  border: 1px solid #8b4513;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.conan .resource span.sep {
+  flex: 0;
+}
+
+/* === Sheet Tabs === */
+.conan .sheet-tabs {
+  display: flex;
+  border-bottom: 2px solid #8b4513;
+  background: rgba(139, 69, 19, 0.1);
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+/* === Attributes Section (outside tabs) === */
+.conan .attributes-section {
+  background: rgba(139, 69, 19, 0.05);
+  border-bottom: 3px solid #8b4513;
+  padding: 10px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.conan .attributes-title {
+  text-align: center;
+  color: #8b4513;
+  text-transform: uppercase;
+  font-size: 16px;
+  margin: 0 0 10px 0;
+  border-bottom: 2px solid #8b4513;
+  padding-bottom: 3px;
+}
+
+.conan .attributes-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+/* === Resources Bottom Container (Life Points & Defense) === */
+.conan .resources-bottom-container {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  background: rgba(139, 69, 19, 0.05);
+  border-bottom: 3px solid #8b4513;
+  padding: 10px 15px;
+  margin: 0;
+}
+
+/* === Life Points Section === */
+.conan .life-points-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-right: 2px solid #8b4513;
+}
+
+.conan .life-points-section .section-header {
+  margin-bottom: 10px;
+}
+
+.conan .life-points-section .section-title {
+  margin: 0;
+  font-size: 14px;
+  color: #8b4513;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.conan .life-points-section .primary-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.conan .life-points-section .subtitle-name {
+  font-size: 11px;
+  font-weight: normal;
+  font-style: italic;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.conan .life-points-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.conan .life-value-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.conan .life-value-container input {
+  width: 60px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.conan .life-value-container input.life-injured {
+  background: rgba(255, 100, 100, 0.3);
+  border-color: #d32f2f;
+  box-shadow: 0 0 8px rgba(211, 47, 47, 0.4);
+}
+
+.conan .life-value-container .life-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.conan .life-value-container .primary-label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #8b4513;
+  text-transform: uppercase;
+}
+
+.conan .life-value-container .subtitle-label {
+  font-size: 10px;
+  font-weight: normal;
+  font-style: italic;
+  opacity: 0.7;
+  color: #8b4513;
+}
+
+.conan .life-points-display .separator {
+  font-size: 20px;
+  font-weight: bold;
+  color: #8b4513;
+  margin: 0 5px;
+}
+
+/* === Defense Section === */
+.conan .defense-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+  margin: 0;
+  background: transparent;
+  border: none;
+}
+
+.conan .defense-section .section-header {
+  margin-bottom: 10px;
+}
+
+.conan .defense-section .section-title {
+  margin: 0;
+  font-size: 14px;
+  color: #8b4513;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.conan .defense-section .primary-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.conan .defense-section .subtitle-name {
+  font-size: 11px;
+  font-weight: normal;
+  font-style: italic;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.conan .defense-fields {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.conan .defense-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 0 0 auto;
+}
+
+.conan .defense-field label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+}
+
+.conan .defense-field .primary-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #8b4513;
+}
+
+.conan .defense-field .subtitle-label {
+  font-size: 10px;
+  font-style: italic;
+  opacity: 0.7;
+  color: #8b4513;
+}
+
+.conan .defense-field input.defense-value {
+  width: 70px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Defence Toggle Button */
+.conan .defence-toggle-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+  color: #666;
+  font-size: 16px;
+  padding: 0;
+}
+
+.conan .defence-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #6b3410;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.conan .defence-toggle-btn.active {
+  background: rgba(218, 165, 32, 0.3);
+  border-color: #daa520;
+  color: #daa520;
+  box-shadow: 0 0 8px rgba(218, 165, 32, 0.4);
+}
+
+.conan .defence-toggle-btn.active:hover {
+  background: rgba(218, 165, 32, 0.4);
+  box-shadow: 0 0 12px rgba(218, 165, 32, 0.6);
+}
+
+/* Defence Bonus Display */
+.conan .defence-bonus {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #daa520;
+  background: rgba(218, 165, 32, 0.15);
+  border: 1px solid #daa520;
+  border-radius: 3px;
+  padding: 2px 6px;
+  vertical-align: middle;
+}
+
+/* Defence Toggle Disabled State */
+.conan .defence-toggle-btn.disabled,
+.conan .defence-toggle-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(150, 150, 150, 0.2);
+  border-color: #999;
+  color: #999;
+}
+
+.conan .defence-toggle-btn.disabled:hover,
+.conan .defence-toggle-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background: rgba(150, 150, 150, 0.2);
+}
+
+/* Immobilized Toggle Button */
+.conan .immobilized-toggle-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.conan .immobilized-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #6b3410;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.conan .immobilized-toggle-btn.active {
+  background: rgba(220, 20, 60, 0.3);
+  border-color: #dc143c;
+  box-shadow: 0 0 8px rgba(220, 20, 60, 0.4);
+}
+
+.conan .immobilized-toggle-btn.active:hover {
+  background: rgba(220, 20, 60, 0.4);
+  box-shadow: 0 0 12px rgba(220, 20, 60, 0.6);
+}
+
+.conan .immobilized-toggle-btn.active img {
+  filter: brightness(0) saturate(100%) invert(30%) sepia(87%) saturate(2477%) hue-rotate(335deg) brightness(91%) contrast(88%) !important;
+}
+
+/* Poisoned Toggle Button */
+.conan .poisoned-toggle-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.conan .poisoned-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #6b3410;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.conan .poisoned-toggle-btn.active {
+  background: rgba(21, 162, 14, 0.3);
+  border-color: #15a20e;
+  box-shadow: 0 0 8px rgba(21, 162, 14, 0.4);
+}
+
+.conan .poisoned-toggle-btn.active:hover {
+  background: rgba(21, 162, 14, 0.4);
+  box-shadow: 0 0 12px rgba(21, 162, 14, 0.6);
+}
+
+.conan .poisoned-toggle-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Immobilized Indicator */
+.conan .immobilized-indicator {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #dc143c;
+  background: rgba(220, 20, 60, 0.15);
+  border: 2px solid #dc143c;
+  border-radius: 3px;
+  padding: 2px 8px;
+  vertical-align: middle;
+}
+
+/* Defense Value when Immobilized */
+.conan .defense-value.immobilized {
+  opacity: 0.5;
+  text-decoration: line-through;
+  color: #999;
+}
+
+/* === Armor & Encumbrance Section === */
+.conan .armor-encumbrance-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+  margin: 0;
+  background: transparent;
+  border-left: 3px solid #8b4513;
+}
+
+.conan .armor-enc-fields {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.conan .armor-enc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.conan .armor-enc-field label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  width: 100%;
+}
+
+.conan .armor-enc-field .primary-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #8b4513;
+  text-align: center;
+}
+
+.conan .armor-enc-field .subtitle-label {
+  font-size: 10px;
+  font-style: italic;
+  opacity: 0.7;
+  color: #8b4513;
+}
+
+.conan .armor-rating-value,
+.conan .encumbrance-value {
+  width: 70px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #2c5f2d;
+}
+
+.conan .armor-rating-value.overencumbered,
+.conan .encumbrance-value.overencumbered {
+  color: #8b0000;
+  border-color: #8b0000;
+  background: rgba(255, 200, 200, 0.9);
+}
+
+.conan .encumbrance-value i {
+  margin-left: 5px;
+  font-size: 14px;
+  color: #8b0000;
+}
+
+.conan .sheet-tabs .item {
+  flex: 1;
+  text-align: center;
+  padding: 2.5px 0;
+  border-right: 1px solid #8b4513;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #8b4513;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.conan .sheet-tabs .item:last-child {
+  border-right: none;
+}
+
+.conan .sheet-tabs .item:hover {
+  background: rgba(139, 69, 19, 0.2);
+}
+
+.conan .sheet-tabs .item.active {
+  background: rgba(139, 69, 19, 0.3);
+  text-shadow: 0 0 10px rgba(139, 69, 19, 0.5);
+}
+
+/* === Sheet Body === */
+.conan .sheet-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  min-height: 0;
+}
+
+.conan .sheet-body .tab {
+  display: none;
+}
+
+/* Custom Scrollbar for Sheet Body */
+.conan .sheet-body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.conan .sheet-body::-webkit-scrollbar-track {
+  background: rgba(139, 69, 19, 0.1);
+  border-radius: 5px;
+}
+
+.conan .sheet-body::-webkit-scrollbar-thumb {
+  background: #8b4513;
+  border-radius: 5px;
+}
+
+.conan .sheet-body::-webkit-scrollbar-thumb:hover {
+  background: #654321;
+}
+
+.conan .sheet-body .tab.active {
+  display: block;
+}
+
+/* === Attributes === */
+.conan .attributes {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.conan .attributes h3 {
+  text-align: center;
+  color: #8b4513;
+  text-transform: uppercase;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #8b4513;
+  padding-bottom: 3px;
+}
+
+.conan .attributes-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0;
+  flex-wrap: nowrap;
+}
+
+.conan .attribute-box {
+  flex: 1;
+  min-width: 150px;
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(245, 232, 216, 0.8) 100%);
+  border: 2px solid #8b4513;
+  border-right: none;
+  position: relative;
+}
+
+.conan .attribute-box:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.conan .attribute-box:last-child {
+  border-radius: 0 8px 8px 0;
+  border-right: 2px solid #8b4513;
+}
+
+.conan .attribute-box::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10%;
+  height: 80%;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, #8b4513, transparent);
+}
+
+.conan .attribute-box:last-child::after {
+  display: none;
+}
+
+.conan .attribute-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.conan .attribute-abbr {
+  font-size: 12px;
+  font-weight: bold;
+  color: #654321;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.conan .attribute-label {
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #8b4513;
+  margin-top: 2px;
+}
+
+.conan .attribute-values {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.conan .attribute-value {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  border: 3px solid #8b4513;
+  border-radius: 50%;
+  background: white;
+  color: #8b4513;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.conan .attribute-value:hover {
+  border-color: #654321;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 10px rgba(139, 69, 19, 0.3);
+}
+
+.conan .attribute-value:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 15px rgba(139, 69, 19, 0.5);
+}
+
+.conan .attribute-die {
+  width: 70px;
+  padding: 6px 8px;
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  background: white;
+  color: #8b4513;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.conan .attribute-die:hover {
+  border-color: #654321;
+  background: rgba(139, 69, 19, 0.05);
+}
+
+.conan .attribute-die:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+.conan .attribute-mod {
+  margin-top: 8px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #654321;
+  background: rgba(139, 69, 19, 0.1);
+  border: 1px solid #8b4513;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+}
+
+.conan .attribute-mod:hover {
+  background: rgba(139, 69, 19, 0.2);
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.conan .attribute-mod i {
+  color: #8b4513;
+}
+
+/* === Initiative Button === */
+.conan .initiative-button-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.conan .initiative-button,
+.conan .attack-button,
+.conan .damage-button,
+.conan .spellcasting-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  min-height: 40px;
+  color: white;
+  border: 2px solid #654321;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.conan .initiative-button {
+  padding: 8px 12px;
+}
+
+.conan .attack-button,
+.conan .damage-button {
+  padding: 8px 8px;
+}
+
+.conan .spellcasting-button {
+  padding: 8px 36px;
+}
+
+.conan .initiative-button {
+  background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+}
+
+.conan .attack-button {
+  background: linear-gradient(135deg, #c41e3a 0%, #8b1a2d 100%);
+  border-color: #8b1a2d;
+}
+
+.conan .damage-button {
+  background: linear-gradient(135deg, #dc143c 0%, #8b0000 100%);
+  border-color: #8b0000;
+}
+
+.conan .spellcasting-button {
+  background: linear-gradient(135deg, #6a1b9a 0%, #4a148c 100%);
+  border-color: #4a148c;
+}
+
+.conan .initiative-button:hover {
+  background: linear-gradient(135deg, #a0522d 0%, #8b4513 100%);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.conan .attack-button:hover {
+  background: linear-gradient(135deg, #d43347 0%, #a0222f 100%);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.conan .damage-button:hover {
+  background: linear-gradient(135deg, #e6324b 0%, #a00000 100%);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.conan .spellcasting-button:hover:not(.disabled) {
+  background: linear-gradient(135deg, #7b1fa2 0%, #5e1b70 100%);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.conan .spellcasting-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.conan .initiative-button i,
+.conan .attack-button i,
+.conan .damage-button i,
+.conan .spellcasting-button i {
+  font-size: 18px;
+}
+
+.conan .initiative-button .button-labels,
+.conan .attack-button .button-labels,
+.conan .damage-button .button-labels,
+.conan .spellcasting-button .button-labels {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.conan .spellcasting-button .button-labels {
+  white-space: nowrap;
+}
+
+.conan .damage-button .primary-label,
+.conan .spellcasting-button .primary-label {
+  font-size: 14px;
+}
+
+.conan .spellcasting-button .primary-label {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.conan .damage-button .primary-label {
+  white-space: nowrap;
+}
+
+.conan .initiative-button .subtitle-label,
+.conan .attack-button .subtitle-label,
+.conan .damage-button .subtitle-label,
+.conan .spellcasting-button .subtitle-label {
+  font-size: 11px;
+  opacity: 0.8;
+  font-weight: normal;
+}
+
+/* === Extra Resources (Flex Die & Stamina) === */
+.conan .extra-resources {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-left: 15px;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.conan .resource-box {
+  flex: 0 0 auto;
+  width: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(245, 232, 216, 0.9) 100%);
+  border: 2px solid #8b4513;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.conan .resource-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.conan .resource-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #654321;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.conan .resource-subtitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8b4513;
+  margin-top: 2px;
+}
+
+.conan .flex-die-select {
+  width: 90px;
+  height: 38px;
+  padding: 6px 8px;
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  background: white;
+  color: #8b4513;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1.2;
+}
+
+.conan .flex-die-select:hover {
+  border-color: #654321;
+  background: rgba(139, 69, 19, 0.05);
+}
+
+.conan .flex-die-select:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+.conan .stamina-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.conan .stamina-value {
+  width: 60px;
+  padding: 6px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  background: white;
+  color: #8b4513;
+  transition: all 0.2s;
+}
+
+.conan .stamina-value:hover {
+  border-color: #654321;
+  background: rgba(139, 69, 19, 0.05);
+}
+
+.conan .stamina-value:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+.conan .stamina-value-single {
+  width: 80px;
+  padding: 10px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  background: white;
+  color: #8b4513;
+  transition: all 0.2s;
+}
+
+.conan .stamina-value-single:hover {
+  border-color: #654321;
+  background: rgba(139, 69, 19, 0.05);
+}
+
+.conan .stamina-value-single:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+.conan .stamina-bar .sep {
+  color: #8b4513;
+  font-size: 18px;
+}
+
+.conan .stamina-max {
+  color: #654321;
+  font-size: 18px;
+}
+
+/* === Items List === */
+.conan .items-header {
+  display: flex;
+  align-items: center;
+  background: rgba(139, 69, 19, 0.2);
+  border: 1px solid #8b4513;
+  border-radius: 4px 4px 0 0;
+  padding: 5px;
+  margin-top: 7.5px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #8b4513;
+}
+
+.conan .items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #8b4513;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+}
+
+.conan .item {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
+  background: white;
+  transition: background 0.2s;
+}
+
+.conan .item:hover {
+  background: rgba(139, 69, 19, 0.05);
+}
+
+.conan .item:last-child {
+  border-bottom: none;
+}
+
+.conan .item-image {
+  flex: 0 0 30px;
+  height: 30px;
+  margin-right: 10px;
+  border: 1px solid #8b4513;
+  border-radius: 3px;
+}
+
+.conan .item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.conan .item-name {
+  flex: 1;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.conan .item-name:hover {
+  color: #8b4513;
+}
+
+.conan .item-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.conan .item-controls a {
+  color: #8b4513;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.conan .item-controls a:hover {
+  color: #654321;
+}
+
+/* === Biography === */
+.conan .notes-section {
+  padding: 15px;
+}
+
+.conan .notes-section .notes-row {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.conan .notes-section .notes-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.conan .notes-section .notes-separator {
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, #8b4513, transparent);
+  flex-shrink: 0;
+  margin: 30px 0;
+}
+
+.conan .notes-section .form-group {
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.conan .notes-section .form-group label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.conan .notes-section .form-group .primary-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #8b4513;
+  text-transform: uppercase;
+}
+
+.conan .notes-section .form-group .subtitle-label {
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.7;
+  color: #8b4513;
+  margin-top: 2px;
+}
+
+.conan .notes-section textarea.auto-resize {
+  width: 100%;
+  min-height: 200px;
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #1a1a1a;
+  resize: none;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.conan .notes-section textarea.auto-resize:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+.conan .notes-section textarea.auto-resize::placeholder {
+  color: rgba(139, 69, 19, 0.5);
+  font-style: italic;
+}
+
+/* === Biography (legacy) === */
+.conan .biography {
+  padding: 10px;
+  min-height: 200px;
+}
+
+.conan .editor {
+  height: 100%;
+  min-height: 300px;
+}
+
+/* === Rollable === */
+.conan .rollable:hover {
+  cursor: pointer;
+  text-shadow: 0 0 10px red;
+}
+
+/* === Form Groups === */
+.conan .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.conan .form-group label {
+  font-weight: bold;
+  margin-bottom: 3px;
+  color: #8b4513;
+}
+
+.conan .form-group input,
+.conan .form-group select,
+.conan .form-group textarea {
+  border: 1px solid #8b4513;
+  border-radius: 3px;
+  padding: 5px;
+  background: white;
+}
+
+.conan .form-group input:focus,
+.conan .form-group select:focus,
+.conan .form-group textarea:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 5px rgba(139, 69, 19, 0.3);
+}
+
+/* === Grid Layout === */
+.conan .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.conan .form-grid.grid-3col {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* === Buttons === */
+.conan button,
+.conan .button {
+  background: #8b4513;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+
+.conan button:hover,
+.conan .button:hover {
+  background: #654321;
+  box-shadow: 0 0 10px rgba(139, 69, 19, 0.5);
+}
+
+.conan .item-create {
+  margin: 10px 0;
+  width: 100%;
+}
+
+/* === Scrollbar === */
+.conan ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.conan ::-webkit-scrollbar-track {
+  background: rgba(139, 69, 19, 0.1);
+  border-radius: 4px;
+}
+
+.conan ::-webkit-scrollbar-thumb {
+  background: #8b4513;
+  border-radius: 4px;
+}
+
+.conan ::-webkit-scrollbar-thumb:hover {
+  background: #654321;
+}
+
+/* === Value Change Highlighting === */
+input.value-increased,
+select.value-increased {
+  background-color: rgba(76, 175, 80, 0.15) !important;
+  border-color: #4caf50 !important;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+input.value-decreased,
+select.value-decreased {
+  background-color: rgba(244, 67, 54, 0.15) !important;
+  border-color: #f44336 !important;
+  box-shadow: 0 0 5px rgba(244, 67, 54, 0.3);
+}
+
+input.value-increased:focus,
+select.value-increased:focus {
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+  border-color: #4caf50 !important;
+}
+
+input.value-decreased:focus,
+select.value-decreased:focus {
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
+  border-color: #f44336 !important;
+}
+
+/* === Responsive Scaling for Lower Resolutions === */
+
+/* For screens smaller than 1366px width (common laptop resolution, below 1080p equivalent) */
+@media (max-width: 1366px) {
+  /* Scale down character and NPC sheets */
+  .app.sheet.actor {
+    transform: scale(0.85);
+    transform-origin: top left;
+    width: calc(640px * 0.85) !important;
+    height: calc(1000px * 0.85) !important;
+  }
+
+  /* Adjust font sizes for better readability */
+  .conan {
+    font-size: 12px;
+  }
+
+  .conan .window-content {
+    font-size: 12px;
+  }
+
+  /* Reduce padding and margins */
+  .conan .sheet-header {
+    padding: 8px;
+  }
+
+  .conan .sheet-header img.profile-img {
+    flex: 0 0 85px;
+    height: 85px;
+  }
+}
+
+/* For very small screens (tablets, etc.) */
+@media (max-width: 1024px) {
+  .app.sheet.actor {
+    transform: scale(0.75);
+    transform-origin: top left;
+    width: calc(640px * 0.75) !important;
+    height: calc(1000px * 0.75) !important;
+  }
+
+  .conan {
+    font-size: 11px;
+  }
+
+  .conan .window-content {
+    font-size: 11px;
+  }
+}

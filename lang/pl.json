@@ -1,0 +1,610 @@
+
+
+{
+  "TYPES": {
+    "Actor": {
+      "character": "Postać",
+      "minion": "Sługus",
+      "antagonist": "Antagonista"
+    },
+    "Item": {
+      "weapon": "Broń",
+      "armor": "Zbroja",
+      "skill": "Umiejętność",
+      "spell": "Zaklęcie"
+    }
+  },
+  
+  "CONAN": {
+    "SystemName": "Conan: Era Hyboryjska",
+    "CharacterName": "Nazwa Postaci",
+    "ItemName": "Nazwa Przedmiotu",
+    "Skills": "Umiejętności",
+    "Items": "Przedmioty",
+    "Effects": "Efekty",
+    
+    "Character": {
+      "origin": "Pochodzenie",
+      "selectOrigin": "-- Wybierz Pochodzenie --",
+      "experience": "Punkty Doświadczenia (XP)"
+    },
+    
+    "Origins": {
+      "hills": "Ze Wzgórz",
+      "streets": "Z Ulic",
+      "steppes": "Ze Stepów",
+      "north": "Z Północy",
+      "wilds": "Z Dziczy",
+      "civilized": "Z Cywilizowanych Krain",
+      "unknown": "Z Nieznanych Ziem",
+      "jhebbal": "Z Krwi Jhebbal-Saga",
+      "acheron": "Z Krwi Acheronu",
+      "demon": "Z Krwi Demona"
+    },
+    
+    "SheetLabels": {
+      "Actor": "Karta Postaci",
+      "Minion": "Karta Sługusa",
+      "Antagonist": "Karta Antagonisty",
+      "Item": "Karta Przedmiotu"
+    },
+    
+    "Attributes": {
+      "might": {
+        "label": "Krzepa",
+        "abbr": "Might"
+      },
+      "edge": {
+        "label": "Refleks",
+        "abbr": "Edge"
+      },
+      "grit": {
+        "label": "Hart",
+        "abbr": "Grit"
+      },
+      "wits": {
+        "label": "Spryt",
+        "abbr": "Wits",
+        "die": "Kość Sprytu"
+      }
+    },
+    
+    "Resources": {
+      "health": "Zdrowie",
+      "power": "Moc",
+      "experience": "Doświadczenie",
+      "flexDie": "Kość Brawury",
+      "stamina": "Wytrwałość",
+      "lifePoints": "Punkty Życia",
+      "actual": "Aktualne",
+      "max": "Maksymalne",
+      "defense": "Obrona",
+      "physical": "Fizyczna",
+      "sorcery": "Przed Magią"
+    },
+
+    "Defense": {
+      "physical": "Obrona Fizyczna",
+      "sorcery": "Obrona przed Magią"
+    },
+    
+    "CharacterSheet": {
+      "attributes": "Atrybuty",
+      "skills": "Umiejętności",
+      "armor": "Zbroja",
+      "weapon": "Broń",
+      "noArmor": "Brak zbroi. Przeciągnij zbroję z przedmiotów lub kliknij + aby utworzyć nową.",
+      "noWeapons": "Brak broni. Przeciągnij broń z przedmiotów lub kliknij + aby utworzyć nową.",
+      "noSpells": "Brak zaklęć. Przeciągnij zaklęcia z przedmiotów.",
+      "sorcery": "Czarnoksięstwo",
+      "notes": "Notatki",
+      "combat": "Walka",
+      "inventory": "Ekwipunek",
+      "biography": "Historia Postaci",
+      "biographyPlaceholder": "Wpisz historię pochodzenia i przeszłości postaci...",
+      "notesPlaceholder": "Wpisz notatki dotyczące postaci...",
+      "effects": "Efekty"
+    },
+    
+    "DamageTypes": {
+      "slashing": "Cięte",
+      "piercing": "Kłute",
+      "bludgeoning": "Obuchowe",
+      "fire": "Ogień",
+      "cold": "Zimno",
+      "poison": "Trucizna",
+      "psychic": "Psychiczne"
+    },
+    
+    "WeaponTypes": {
+      "melee": "Broń Biała",
+      "ranged": "Broń Dystansowa",
+      "thrown": "Broń Rzucana"
+    },
+    
+    "ArmorTypes": {
+      "light": "Lekka",
+      "medium": "Średnia",
+      "heavy": "Ciężka"
+    },
+    
+    "Weapon": {
+      "details": "Szczegóły",
+      "weaponType": "Typ Broni",
+      "handedness": "Ręczność",
+      "weaponSize": "Rozmiar",
+      "damage": "Obrażenia",
+      "range": "Zasięg",
+      "improvised": "Improwizowana",
+      "rules": "Uwagi",
+      "stipulations": "Zastrzeżenia",
+      "equip": "Weź do ręki",
+      "damageModifier": "Modyfikator",
+      "types": {
+        "melee": "Broń Biała",
+        "thrown": "Broń Miotana",
+        "ranged": "Broń Dystansowa"
+      },
+      "handednessOptions": {
+        "oneHanded": "Jednoręczna",
+        "twoHanded": "Dwuręczna"
+      },
+      "sizes": {
+        "light": "Lekka",
+        "medium": "Średnia",
+        "heavy": "Ciężka",
+        "various": "Różna*"
+      },
+      "ranges": {
+        "touch": "Zwarcie",
+        "close": "Bliski/1 Obszar",
+        "short": "Krótki",
+        "medium": "Średni",
+        "medium3": "Średni/3 Obszary",
+        "long": "Długi",
+        "long4": "Daleki/4 Obszary",
+        "long6": "Daleki/6 Obszarów",
+        "distant8": "Odległy/8 Obszarów"
+      },
+      "variousWeaponNote": "*Dowolna broń biała, która może zostać rzucona, ale nie została zaprojektowana do rzucania. Obrażenia takiej broni odpowiadają jej obrażeniom jako broń biała.\n-3 do wszystkich testów ataku.\nPostaci z Krzepą 5 lub większą mogą zwiększyć zasięg rzutu do średniego/3 obszary"
+    },
+    
+    "Armor": {
+      "details": "Szczegóły",
+      "armorType": "Typ Zbroi",
+      "specificMake": "Wykonanie/Materiał",
+      "armorRating": "Wartość Pancerza (WP)",
+      "encumbrance": "Obciążenie (Obc.)",
+      "stipulations": "Zastrzeżenia",
+      "quality": "Jakość",
+      "equip": "Załóż",
+      "types": {
+        "light": "Lekka",
+        "medium": "Średnia",
+        "heavy": "Ciężka",
+        "shield": "Tarcza"
+      },
+      "makes": {
+        "leather": "Zszyte skóry",
+        "hide": "Skóra utwardzana",
+        "bones": "Związane kości",
+        "breastplate": "Napierśnik",
+        "cuirass": "Kirys",
+        "hauberk": "Kolczuga",
+        "fullPlate": "Pełna płytowa",
+        "knightArmor": "Rycerska turniejowa",
+        "wood": "Drewniana",
+        "metal": "Metalowa",
+        "makeshift": "Prowizoryczna"
+      }
+    },
+    
+    "ItemQualities": {
+      "poor": "Kiepska",
+      "standard": "Standardowa",
+      "superior": "Wyższa",
+      "masterwork": "Mistrzowska"
+    },
+    
+    "NpcTypes": {
+      "standard": "Standardowy",
+      "minion": "Poplecznik",
+      "toughened": "Zahartowany",
+      "nemesis": "Nemezis"
+    },
+    
+    "CreatureTypes": {
+      "human": "Człowiek",
+      "inanimate": "Konstrukt",
+      "undead": "Nieumarły",
+      "monstrosity": "Monstrum",
+      "demon": "Demon",
+      "beast": "Bestia"
+    },
+
+    "NPC": {
+      "threshold": "Próg Życia",
+      "defenseThreshold": "Obrona i Próg Życia",
+      "lifePoints": "Punkty Życia",
+      "defenseLifePoints": "Obrony i Punkty Życia",
+      "wounded": "Ranny",
+      "armor": "Pancerz",
+      "armorAbbr": "WP",
+      "damage": "Obrażenia",
+      "actions": "Akcje i ataki",
+      "effects": "Stany",
+      "meleeDamage": "Wręcz",
+      "rangedDamage": "Dystansowe",
+      "notApplicable": "N/A",
+      "actionsPerRound": "Ilość akcji w rundzie",
+      "attacksPerRound": "Ilość ataków w rundzie",
+      "tabStats": "Statystyki",
+      "tabPowers": "Moce i Akcje Specjalne",
+      "powersAndRules": "Moce i Akcje Specjalne",
+      "powersPlaceholder": "Opisz specjalne moce, zdolności i zasady dla tego NPC...",
+      "magicPowers": "Moce Magiczne",
+      "magicPowersPlaceholder": "Opisz moce magiczne, czary i zdolności nadprzyrodzone...",
+      "specialActions": "Akcje Specjalne",
+      "specialActionsPlaceholder": "Opisz specjalne akcje, zdolności bojowe i unikalne zasady...",
+      "weaponInfo": "Informacje o Broni",
+      "weaponName": "Nazwa Broni",
+      "damageDie": "Kość Obrażeń",
+      "damageModifier": "Modyfikator Obrażeń"
+    },
+    
+    "ItemNew": "Nowy: {type}",
+    
+    "ItemTypes": {
+      "weapon": "Broń",
+      "armor": "Zbroja",
+      "skill": "Umiejętność",
+      "spell": "Zaklęcie"
+    },
+    
+    "Combat": {
+      "armorRating": "Wartość Pancerza",
+      "encumbrance": "Obciążenie",
+      "overencumbered": "Przeciążona! Obciążenie przekracza wartość Krzepy.",
+      "initiative": "Inicjatywa",
+      "rollInitiative": "Rzut na Inicjatywę",
+      "initiativeRolled": "rzucił/a na Inicjatywę",
+      "initiativeHint": "Rzut wykonywany jest na atrybut Refleks (Edge)"
+    },
+    
+    "Common": {
+      "name": "Nazwa",
+      "description": "Opis",
+      "quantity": "Ilość",
+      "weight": "Waga",
+      "price": "Cena",
+      "equipped": "Założone",
+      "toggleEquipped": "Przełącz założenie",
+      "damage": "Obrażenia",
+      "range": "Zasięg",
+      "armor": "Pancerz",
+      "level": "Poziom",
+      "type": "Typ",
+      "create": "Utwórz",
+      "createCharacter": "Stwórz",
+      "createCharacterSubtitle": "Create",
+      "Action": "Akcja",
+      "actions": "Akcje",
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "roll": "Rzut",
+      "disabled": "Wyłączone",
+      "add": "Dodaj",
+      "update": "Aktualizuj",
+      "cancel": "Anuluj"
+    },
+    
+    "Warnings": {
+      "cannotUseWeaponWithShield": "Nie możesz użyć tej broni z tarczą! Z tarczą możesz używać tylko: broni białej jednoręcznej, broni miotanej lub broni dystansowej lekkiej.",
+      "alreadyHaveTwoHandedWeapon": "Masz już założoną broń dwuręczną!",
+      "twoHandedRequiresBothHands": "Broń dwuręczna wymaga obu rąk - nie możesz mieć innych założonych broni.",
+      "alreadyHaveHeavyRanged": "Masz już założoną ciężką broń dystansową!",
+      "heavyRangedRequiresBothHands": "Ciężka broń dystansowa wymaga obu rąk - nie możesz mieć innych założonych broni.",
+      "bothHandsOccupied": "Obie ręce są zajęte przez broń dwuręczną lub ciężką broń dystansową!",
+      "maxTwoOneHandedWeapons": "Możesz mieć założone maksymalnie dwie bronie jednoręczne białe.",
+      "cannotCombineMeleeAndThrown": "Nie możesz mieć jednocześnie dwóch broni białych jednoręcznych i broni miotanej. Możliwe kombinacje: 2x jednoręczna ALBO 1x jednoręczna + 1x miotana.",
+      "alreadyHaveThrownWeapon": "Masz już założoną broń miotaną!",
+      "cannotEquipMultipleRanged": "Możesz mieć założoną tylko jedną broń dystansową.",
+      "notEnoughXPForSpell": "Niewystarczająca ilość punktów XP, aby dodać to zaklęcie!",
+      "notEnoughXPForSkill": "Niewystarczająca ilość punktów XP, aby dodać tę umiejętność!",
+      "originCannotUseMagic": "Twoje pochodzenie nie pozwala na używanie magii!",
+      "disciplineNotAllowed": "Twoje pochodzenie nie pozwala na naukę dyscypliny: {discipline}",
+      "maxDisciplinesReached": "Osiągnięto limit dyscyplin magicznych ({max}) dla tego pochodzenia!",
+      "cannotDefenceWhenImmobilized": "Nie można aktywować Obrony podczas Unieruchomienia!",
+      "damageNotApplicable": "Ten typ obrażeń nie jest dostępny dla tego NPC.",
+      "onlySkillsAllowed": "Tylko umiejętności mogą być dodane do tej sekcji.",
+      "alreadyHave": "Już posiadasz {name}.",
+      "onlyOriginSkillsAllowed": "Do tej sekcji można dodać tylko umiejętności z pochodzenia.",
+      "onlyLearnedSkillsAllowed": "Do tej sekcji można dodać tylko umiejętności Legendarne lub Zaawansowane."
+    },
+    
+    "Notifications": {
+      "xpAdjusted": "Punkty doświadczenia zostały skorygowane: {change} PD (pozostało: {remaining} PD)",
+      "itemSyncedToWorld": "Przedmiot '{name}' został zsynchronizowany z bazą przedmiotów.",
+      "itemSyncedToActors": "Przedmiot '{name}' został zsynchronizowany na {count} kartach postaci."
+    },
+    
+    "Skill": {
+      "name": "Nazwa umiejętności",
+      "effect": "Efekt Umiejętności",
+      "xpCost": "Koszt w PD",
+      "skillType": {
+        "label": "Typ Umiejętności",
+        "origin": "Z pochodzenia",
+        "starting": "Początkowa",
+        "legendary": "Legendarna",
+        "advanced": "Zaawansowana"
+      }
+    },
+    
+    "Spell": {
+      "name": "Nazwa zaklęcia",
+      "discipline": "Dyscyplina",
+      "xpCost": "Koszt w PD",
+      "effect": "Efekt",
+      "disciplines": {
+        "alchemy": "Alchemia",
+        "blackMagic": "Czarna Magia",
+        "demonicMagic": "Demonologia",
+        "necromanticMagic": "Nekromancja",
+        "whiteMagic": "Biała Magia"
+      }
+    },
+
+    "Spells": {
+      "spellRemoved": "Zaklęcie usunięte, zwrócono {cost} PD"
+    },
+    
+    "Roll": {
+      "success": "Sukces",
+      "failure": "Porażka",
+      "flexEffect": "Efekt Brawury!",
+      "flexDie": "Kość Brawury",
+      "windsOfFate": "Wiatry losu nie sprzyjają. Wypadła jedynka",
+      "attributeTest": "Test Atrybutu",
+      "attributeDie": "Kość Atrybutu",
+      "targetDifficulty": "Trudność",
+      "rollDamage": "Rzuć na Obrażenia"
+    },
+    
+    "Spellcasting": {
+      "title": "Rzucanie Czarów",
+      "rollInfo": "Rzut wykonywany jest na atrybut Spryt (Wits)",
+      "spellcastingCost": "Koszt Rzucenia Czaru",
+      "magicAttack": "Atak Magiczny",
+      "targetDefense": "Obrona Przed Magią Celu",
+      "cast": "Rzuć Czar",
+      "castingSpell": "Rzucanie Czaru",
+      "cost": "Koszt",
+      "notEnoughLifePoints": "Niewystarczająca ilość Punktów Życia!",
+      "notEnoughStamina": "Niewystarczająca ilość Wytrwałości!",
+      "noCostSpecified": "Musisz określić koszt rzucenia czaru (Punkty Życia i/lub Wytrwałość)!"
+    },
+    
+    "Attack": {
+      "title": "Atak",
+      "attackType": "Rodzaj Ataku",
+      "melee": "Atak Wręcz",
+      "ranged": "Atak Dystansowy",
+      "thrown": "Atak Miotany",
+      "sorcery": "Atak Magiczny",
+      "targetPhysicalDefense": "Obrona Fizyczna Celu",
+      "attackModifiers": "Modyfikatory Ataku",
+      "focusedAttack": "Skupiony Atak",
+      "defence": "Obrona",
+      "immobilized": "Unieruchomiona",
+      "toAttack": "do ataku",
+      "toPhysicalDefense": "do Obrony Fizycznej",
+      "rollAttack": "Wykonaj Atak",
+      "defenceApplied": "Bonus +2 do Obrony Fizycznej został zastosowany"
+    },
+    
+    "Damage": {
+      "DealDamage": "Zadaj obrażenia",
+        "sorceryWitsDie": "Kość Sprytu",
+        "sorceryCustomDie": "Własna kość",
+        "sorceryFixed": "Stała wartość",
+        "sorceryType": "Typ obrażeń magicznych",
+        "sorceryCustomDieLabel": "Wybierz kość obrażeń",
+        "sorceryFixedLabel": "Stała liczba obrażeń",
+          "sorceryFixedValue": "Stała wartość",
+          "fixedValue": "Stała wartość",
+        "flexDie": "Kość Brawury",
+      "title": "Obrażenia",
+      "description": "Wykonaj rzut na obrażenia od ataku.",
+      "comingSoon": "Funkcjonalność rzutu na obrażenia wkrótce dostępna...",
+      "roll": "Rzut na obrażenia",
+      "rollDamage": "Rzut na obrażenia",
+      "damageType": "Rodzaj Obrażeń",
+      "meleeDamage": "Obrażenia Wręcz",
+      "thrownDamage": "Obrażenia Miotane",
+      "rangedDamage": "Obrażenia Dystansowe",
+      "sorceryDamage": "Obrażenia Magiczne",
+      "rollParameters": "Parametry Rzutu na Obrażenia",
+      "selectWeapon": "Wybierz Broń",
+      "weaponDamage": "Obrażenia Broni",
+      "unarmedDamage": "Walka Wręcz",
+      "noMeleeWeapon": "Brak założonej broni białej",
+      "noThrownWeapon": "Brak założonej broni miotanej",
+      "noRangedWeapon": "Brak założonej broni dystansowej",
+      "totalDamage": "Suma Obrażeń",
+      "noTarget": "Brak wybranego celu! Najpierw wybierz token celu.",
+      "tooManyTargets": "Zbyt wiele wybranych celów! Wybierz tylko jeden cel.",
+      "attackerNotFound": "Nie znaleziono atakującego!",
+      "alreadyDealt": "Obrażenia z tego ataku zostały już zadane!",
+      "damageDealt": "Obrażenia zadane",
+      "damageApplied": "Obrażenia zastosowane",
+      "attacker": "Atakujący",
+      "target": "Cel",
+      "armor": "Pancerz",
+      "finalDamage": "Finalne obrażenia",
+      "characterTookDamage": "{name} otrzymał(a) {damage} obrażeń (pancerz: {armor}). Pozostało PŻ: {remaining}",
+      "antagonistTookDamage": "{name} otrzymał {damage} obrażeń (pancerz: {armor}). Pozostało PŻ: {remaining}",
+      "minionWounded": "{name} otrzymał {damage} obrażeń (pancerz: {armor}) - poniżej progu ({threshold}). Sługus jest teraz Ranny!",
+      "minionDefeated": "{name} otrzymał {damage} obrażeń (pancerz: {armor}) - Sługus pokonany!",
+      "defeated": "POKONANY"
+    },
+    
+    "DamageDialog": {
+      "NoWeaponFound": "Nie znaleziono broni w ekwipunku!",
+      "NoWeaponId": "Nie podano ID broni!"
+    },
+    
+    "EffectTooltips": {
+      "defence": "Obrona (+2 do Obrony Fizycznej)",
+      "immobilized": "Unieruchomienie (Obrona Fizyczna = 0)",
+      "poisoned": "Zatrucie"
+    },
+    
+    "Poisoned": {
+      "title": "Efekty Trucizny",
+      "configure": "Wybierz aktywne efekty trucizny:",
+      "apply": "Zastosuj",
+      "close": "Zamknij",
+      "option1": {
+        "name": "Kara do Atrybutów",
+        "description": "-1 do wszystkich Atrybutów"
+      },
+      "option2": {
+        "name": "Kara do Rzutów",
+        "description": "-1 do wszystkich rzutów (testy, ataki, czary, obrażenia)"
+      },
+      "option3": {
+        "name": "Utrata Życia",
+        "description": "Utrata 1 Punktu Życia na koniec każdej rundy walki"
+      },
+      "option4": {
+        "name": "Blokada Wytrwałości",
+        "description": "Nie można wydawać punktów Wytrwałości (tylko Postacie)"
+      },
+      "option5": {
+        "name": "Wyłączona Kość Brawury",
+        "description": "Kość Flex nie jest używana w rzutach (tylko Postacie)"
+      },
+      "lifeDrain": "traci 1 Punkt Życia przez truciznę",
+      "minionWounded": "został ranny przez truciznę",
+      "minionDead": "umiera od trucizny",
+      "staminaLocked": "Nie można wydawać Staminy - postać jest zatruta i stamina zablokowana!"
+    },
+    
+    "Dialog": {
+      "difficulty": {
+        "title": "Trudność Testu",
+        "label": "Ustaw trudność:",
+        "hint": "Trudność: Łatwy (4-6), Umiarkowany (7-9), Trudny (10-12), Legendarny (13+)",
+        "modifierLabel": "Modyfikator",
+        "modifier": "Modyfikator",
+        "roll": "Rzuć",
+        "cancel": "Anuluj"
+      },
+      "characterCreation": {
+        "title": "Kreacja Postaci",
+        "subtitle": "Character Creation",
+        "originLabel": "Pochodzenie",
+        "originSubtitle": "Origin",
+        "originSelect": "-- Wybierz / Select --",
+        "pointsLabel": "Rozdaj Punkty Atrybutów",
+        "pointsSubtitle": "Distribute Attribute Points",
+        "remaining": "Pozostało punktów / Remaining",
+        "confirm": "Zatwierdź / Confirm",
+        "cancel": "Anuluj / Cancel",
+        "mustDistribute": "Musisz rozdysponować wszystkie 16 punktów i wybrać pochodzenie!",
+        "created": "Postać została stworzona!"
+      }
+    },
+    
+    "FlexEffect": {
+      "title": "Efekt Brawury!",
+      "subtitle": "Maksymalny wynik na Kości Brawury - wybierz efekt:",
+      "flexEffectUsed": "Użyto Efektu Brawury",
+      "stamina": {
+        "name": "Wytrwałość",
+        "description": "Otrzymujesz 1 punkt Wytrwałości"
+      },
+      "success": {
+        "name": "Sukces",
+        "description": "Automatycznie zdajesz test (porażka → sukces)"
+      },
+      "sorcery": {
+        "name": "Czarnoksięstwo",
+        "description": "Odzyskanie kosztu rzuconego zaklęcia",
+        "restored": "Odzyskano",
+        "recovered": "odzyskał(a) koszty rzucenia zaklęcia dzięki Efektowi Brawury"
+      },
+      "massive": {
+        "name": "Kolosalne Obrażenia",
+        "description": "Dodaj maksymalną wartość z kości obrażeń lub podwój stałe obrażenia",
+        "bonusDamage": "Bonus za Kolosalne Obrażenia",
+        "totalDamage": "Całkowite Obrażenia",
+        "message": "użył(a) Efektu Brawury - Kolosalne Obrażenia!"
+      },
+      "damage": {
+        "name": "Kolosalne Obrażenia",
+        "description": "Podwajasz kostkę obrażeń (rzucasz dwa razy)"
+      }
+    },
+    
+    "StartingSkills": {
+      "title": "Umiejętności Początkowe",
+      "subtitle": "Starting Skills",
+      "add": "Dodaj Umiejętność",
+      "dropHint": "Przeciągnij tutaj umiejętności z pochodzenia z zakładki Items.",
+      "dialogTitle": "Umiejętność Początkowa",
+      "name": "Nazwa Umiejętności",
+      "namePlaceholder": "Wpisz nazwę umiejętności",
+      "cost": "Koszt XP",
+      "effect": "Efekt Umiejętności",
+      "effectPlaceholder": "Opisz działanie umiejętności z podręcznika",
+      "isOrigin": "Z Pochodzenia",
+      "origin": "Pochodzenie",
+      "nameRequired": "Nazwa umiejętności jest wymagana!",
+      "costRequired": "Koszt XP jest wymagany!",
+      "notEnoughXP": "Niewystarczająca ilość punktów XP!",
+      "skillAdded": "Umiejętność dodana pomyślnie",
+      "skillUpdated": "Umiejętność zaktualizowana pomyślnie",
+      "skillDeleted": "Umiejętność usunięta",
+      "deleteTitle": "Usuń Umiejętność",
+      "deleteConfirm": "Czy na pewno chcesz usunąć tę umiejętność?",
+      "empty": "Brak umiejętności początkowych. Kliknij 'Dodaj Umiejętność', aby rozpocząć.",
+      "noEffect": "Brak opisu efektu"
+    },
+    
+    "LearnedSkills": {
+      "title": "Posiadane Umiejętności",
+      "subtitle": "Learned Skills",
+      "dropHint": "Przeciągnij umiejętności tutaj z zakładki Items",
+      "notEnoughXP": "Niewystarczająca ilość PD! Potrzeba: {cost}, dostępne: {available}",
+      "skillAdded": "Umiejętność dodana",
+      "skillRemoved": "Umiejętność usunięta, zwrócono {cost} PD",
+      "cannotAddOrigin": "Umiejętności z pochodzenia dodaj w sekcji Starting Skills"
+    },
+    
+    "Stamina": {
+      "spend1": "Wydaj 1 punkt Wytrwałości, by podnieść wynik o +1",
+      "spend2": "Wydaj 2 punkty Wytrwałości, by podnieść wynik o +2",
+      "spendDamage1": "Wydaj 1 punkt Wytrwałości, by dodać 1k4 obrażeń",
+      "spendDamage2": "Wydaj 2 punkty Wytrwałości, by dodać 2k4 obrażeń",
+      "spendLastForMassive": "Wydaj ostatni punkt Wytrwałości, by wywołać Kolosalne obrażenia",
+      "boosted": "Wzmocnienie Wytrwałością",
+      "damageBoosted": "Obrażenia Wzmocnione Wytrwałością",
+      "massiveDamage": "Kolosalne Obrażenia (Wytrwałość)",
+      "massiveDamageMessage": "wydał(a) ostatni punkt Wytrwałości na Kolosalne Obrażenia!",
+      "spent": "Wydano {cost} pkt Wytrwałości",
+      "lastPointSpent": "Wydano ostatni punkt Wytrwałości",
+      "notEnoughStamina": "Za mało Wytrwałości! Potrzeba: {required}, aktualna: {current}",
+      "needsExactlyOne": "Musisz mieć dokładnie 1 punkt Wytrwałości, by użyć tej opcji!",
+      "actorNotFound": "Nie znaleziono postaci dla tej wiadomości",
+      "rollBoosted": "Wynik podniesiony z {oldValue} do {newValue} (+{boost}) - {status}",
+      "initiativeBoosted": "Inicjatywa podniesiona z {oldValue} do {newValue} (+{boost})",
+      "boostedNotification": "Wynik rzutu podniesiony o +{boost} (wydano {cost} pkt Wytrwałości)",
+      "massiveDamageNotification": "Kolosalne Obrażenia! +{bonus} do obrażeń (wydano ostatni punkt Wytrwałości)",
+      "damageIncrease": "Dodatkowe obrażenia",
+      "totalDamageAfterBoost": "Obrażenia po wzmocnieniu"
+    }
+  }
+}
+

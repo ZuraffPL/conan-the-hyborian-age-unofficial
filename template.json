@@ -1,0 +1,271 @@
+{
+  "Actor": {
+    "types": ["character", "minion", "antagonist"],
+    "templates": {
+      "base": {
+        "health": {
+          "value": 10,
+          "min": 0,
+          "max": 10
+        },
+        "power": {
+          "value": 5,
+          "min": 0,
+          "max": 5
+        },
+        "biography": "",
+        "notes": ""
+      },
+      "attributes": {
+        "attributes": {
+          "might": {
+            "value": 1,
+            "mod": 0,
+            "die": "d6"
+          },
+          "edge": {
+            "value": 1,
+            "mod": 0,
+            "die": "d6"
+          },
+          "grit": {
+            "value": 1,
+            "mod": 0,
+            "die": "d6"
+          },
+          "wits": {
+            "value": 1,
+            "mod": 0,
+            "die": "d6"
+          }
+        }
+      },
+      "combat": {
+        "combat": {
+          "reach": 1,
+          "armor": 0,
+          "initiative": 0
+        }
+      }
+    },
+    "character": {
+      "templates": ["base", "attributes", "combat"],
+      "origin": "",
+      "characterCreated": false,
+      "flexDie": "d10",
+      "stamina": {
+        "value": 1,
+        "max": 100
+      },
+      "lifePoints": {
+        "actual": 10,
+        "max": 50
+      },
+      "defense": {
+        "physical": 0,
+        "sorcery": 0
+      },
+      "poisoned": false,
+      "poisonEffects": {
+        "effect1": false,
+        "effect2": false,
+        "effect3": false,
+        "effect4": false,
+        "effect5": false
+      },
+      "level": 1,
+      "experience": {
+        "value": 0,
+        "max": 100
+      },
+      "initial": {
+        "might": 1,
+        "edge": 1,
+        "grit": 1,
+        "wits": 1,
+        "lifePoints": 10,
+        "stamina": 1,
+        "physicalDefense": 0,
+        "sorceryDefense": 0,
+        "experience": 0
+      },
+      "startingSkills": [],
+      "skills": []
+    },
+    "minion": {
+      "templates": ["base"],
+      "description": "",
+      "creatureType": "human",
+      "attributes": {
+        "might": {
+          "value": 1,
+          "die": "d6"
+        },
+        "edge": {
+          "value": 1,
+          "die": "d6"
+        },
+        "grit": {
+          "value": 1,
+          "die": "d6"
+        },
+        "wits": {
+          "value": 1,
+          "die": "d6"
+        }
+      },
+      "defense": {
+        "physical": 5,
+        "sorcery": 5
+      },
+      "armor": 0,
+      "threshold": 5,
+      "wounded": false,
+      "defeated": false,
+      "damage": {
+        "melee": {
+          "name": "",
+          "die": "d6",
+          "modifier": 0,
+          "notApplicable": false
+        },
+        "ranged": {
+          "name": "",
+          "die": "d6",
+          "modifier": 0,
+          "notApplicable": false
+        }
+      },
+      "actions": {
+        "perRound": 1,
+        "attacks": 1
+      },
+      "powers": {
+        "magic": "",
+        "special": ""
+      },
+      "poisoned": false,
+      "poisonEffects": {
+        "effect1": false,
+        "effect2": false,
+        "effect3": false,
+        "effect4": false,
+        "effect5": false
+      }
+    },
+    "antagonist": {
+      "templates": ["base"],
+      "description": "",
+      "creatureType": "human",
+      "attributes": {
+        "might": {
+          "value": 1,
+          "die": "d6"
+        },
+        "edge": {
+          "value": 1,
+          "die": "d6"
+        },
+        "grit": {
+          "value": 1,
+          "die": "d6"
+        },
+        "wits": {
+          "value": 1,
+          "die": "d6"
+        }
+      },
+      "defense": {
+        "physical": 10,
+        "sorcery": 10
+      },
+      "armor": 0,
+      "lifePoints": 20,
+      "damage": {
+        "melee": {
+          "name": "",
+          "die": "d6",
+          "modifier": 0,
+          "notApplicable": false
+        },
+        "ranged": {
+          "name": "",
+          "die": "d6",
+          "modifier": 0,
+          "notApplicable": false
+        }
+      },
+      "actions": {
+        "perRound": 1,
+        "attacks": 1
+      },
+      "powers": {
+        "magic": "",
+        "special": ""
+      },
+      "poisoned": false,
+      "poisonEffects": {
+        "effect1": false,
+        "effect2": false,
+        "effect3": false,
+        "effect4": false,
+        "effect5": false
+      }
+    }
+  },
+  "Item": {
+    "types": ["weapon", "armor", "skill", "spell"],
+    "templates": {
+      "base": {
+        "description": "",
+        "quantity": 1,
+        "weight": 0,
+        "price": 0
+      },
+      "physical": {
+        "equipped": false,
+        "quality": "standard"
+      }
+    },
+    "weapon": {
+      "templates": ["base", "physical"],
+      "weaponType": "melee",
+      "handedness": "one-handed",
+      "weaponSize": "medium",
+      "improvised": false,
+      "damage": {
+        "dice": "1d6",
+        "bonus": 0,
+        "type": "slashing"
+      },
+      "damageModifier": 0,
+      "range": {
+        "value": 0,
+        "long": 0
+      },
+      "stipulations": ""
+    },
+    "armor": {
+      "templates": ["base", "physical"],
+      "armorType": "light",
+      "specificMake": "leather",
+      "armorRating": 3,
+      "encumbrance": 1,
+      "stipulations": ""
+    },
+    "skill": {
+      "templates": ["base"],
+      "rank": 0,
+      "attribute": "strength",
+      "trained": false,
+      "xpCost": 0,
+      "skillType": "origin"
+    },
+    "spell": {
+      "templates": ["base"],
+      "discipline": "alchemy",
+      "xpCost": 0,
+      "effect": ""
+    }
+  }
+}

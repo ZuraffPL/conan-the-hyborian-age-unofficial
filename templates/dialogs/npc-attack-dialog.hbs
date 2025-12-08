@@ -1,0 +1,47 @@
+<form class="attack-form">
+  <!-- Attack Type Display (read-only) -->
+  <div class="form-group">
+    <label>{{localize "CONAN.Attack.attackType"}}</label>
+    <div class="attack-type-display">
+      <strong>{{attackTypeLabel}}</strong>
+    </div>
+  </div>
+
+  <!-- Target Physical Defense -->
+  <div class="form-group">
+    <label for="targetDefense">
+      <span class="primary-label">{{localize "CONAN.Attack.targetPhysicalDefense"}}</span>
+      <span class="subtitle-label">Target Physical Defence</span>
+    </label>
+    <input type="number" name="targetDefense" id="targetDefense" value="{{targetDefense}}" min="1" max="99" />
+  </div>
+
+  <!-- Modifier Slider -->
+  <div class="form-group modifier-group">
+    <label for="modifier">
+      <span class="primary-label">{{localize "CONAN.Dialog.difficulty.modifierLabel"}}</span>
+      <span class="subtitle-label">Modifier</span>
+    </label>
+    <div class="modifier-controls">
+      <span class="modifier-value-label">0</span>
+      <input type="range" name="modifier" id="modifier" value="0" min="-3" max="3" step="1" />
+      <div class="modifier-scale">
+        <span>-3</span>
+        <span>-2</span>
+        <span>-1</span>
+        <span>0</span>
+        <span>+1</span>
+        <span>+2</span>
+        <span>+3</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Roll Button -->
+  <footer class="dialog-buttons">
+    <button type="button" class="dialog-button" data-action="roll">
+      <i class="fas fa-dice-d20"></i>
+      {{localize "CONAN.Attack.rollAttack"}}
+    </button>
+  </footer>
+</form>

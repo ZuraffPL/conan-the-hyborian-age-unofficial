@@ -1,0 +1,16 @@
+/* ================================================== */
+/*  Combat Tracker Status Icons                      */
+/* ================================================== */
+
+#combat .combatant .token-effects {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  min-height: 28px;
+}
+
+#combat .combatant .token-effects img.token-effect {
+  flex-shrink: 0;
+  object-fit: contain;
+}

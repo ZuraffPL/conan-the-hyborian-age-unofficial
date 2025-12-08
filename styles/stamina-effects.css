@@ -1,0 +1,307 @@
+/* Stamina Effects Styling */
+
+.conan-stamina-boost {
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  border: 2px solid #3949ab;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Massive Damage variant - orange/red gradient */
+.conan-stamina-boost.massive-damage {
+  background: linear-gradient(135deg, #bf360c 0%, #d84315 100%);
+  border: 2px solid #ff5722;
+}
+
+.conan-stamina-boost.massive-damage .stamina-header i {
+  color: #ffeb3b;
+  animation: explosion-pulse 1.5s ease-in-out infinite;
+}
+
+.conan-stamina-boost .stamina-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.conan-stamina-boost .stamina-header i {
+  color: #ffd54f;
+  font-size: 1.3em;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.conan-stamina-boost .stamina-header h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.2em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.conan-stamina-boost .stamina-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.conan-stamina-boost .boost-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 1.4em;
+  font-weight: bold;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.conan-stamina-boost .original-value {
+  color: #bdbdbd;
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+
+.conan-stamina-boost .boost-info i {
+  color: #fff;
+  font-size: 0.8em;
+  flex-shrink: 0;
+}
+
+.conan-stamina-boost .new-value {
+  color: #ffd54f;
+  font-size: 1.2em;
+  text-shadow: 0 0 8px rgba(255, 213, 79, 0.6);
+  white-space: nowrap;
+}
+
+.conan-stamina-boost .new-value.success {
+  color: #66bb6a;
+  text-shadow: 0 0 8px rgba(102, 187, 106, 0.6);
+}
+
+.conan-stamina-boost .boost-amount {
+  color: #81c784;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.conan-stamina-boost .difficulty-check {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.conan-stamina-boost .difficulty-label {
+  color: #e0e0e0;
+}
+
+.conan-stamina-boost .difficulty-value {
+  color: #fff;
+  font-weight: bold;
+}
+
+.conan-stamina-boost .roll-result {
+  text-align: center;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: rgba(244, 67, 54, 0.3);
+  color: #ef5350;
+  border: 2px solid #e57373;
+}
+
+.conan-stamina-boost .roll-result.success {
+  background: rgba(76, 175, 80, 0.3);
+  color: #66bb6a;
+  border: 2px solid #81c784;
+}
+
+.conan-stamina-boost .stamina-cost {
+  text-align: center;
+  padding: 6px;
+  color: #ffd54f;
+  font-size: 0.95em;
+  font-style: italic;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+/* Damage button styling */
+.conan-stamina-boost .roll-damage-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%);
+  color: #fff;
+  border: 2px solid #f44336;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.conan-stamina-boost .roll-damage-btn:hover {
+  background: linear-gradient(135deg, #c62828 0%, #e53935 100%);
+  border-color: #ff5252;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.5);
+  transform: translateY(-2px);
+}
+
+.conan-stamina-boost .roll-damage-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.conan-stamina-boost .roll-damage-btn i {
+  margin-right: 6px;
+}
+
+/* Damage boost specific styling */
+.conan-stamina-boost.damage-boost .damage-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.conan-stamina-boost.damage-boost .damage-component {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95em;
+}
+
+.conan-stamina-boost.damage-boost .damage-component.additional {
+  color: #81c784;
+  font-weight: bold;
+}
+
+.conan-stamina-boost.damage-boost .component-label {
+  color: #e0e0e0;
+}
+
+.conan-stamina-boost.damage-boost .component-value {
+  color: #fff;
+  font-weight: bold;
+}
+
+.conan-stamina-boost.damage-boost .damage-total {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(76, 175, 80, 0.3);
+  border: 2px solid #81c784;
+  border-radius: 6px;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.conan-stamina-boost.damage-boost .total-label {
+  color: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.conan-stamina-boost.damage-boost .total-value {
+  color: #66bb6a;
+  text-shadow: 0 0 8px rgba(102, 187, 106, 0.6);
+  flex-shrink: 0;
+}
+
+/* Deal Damage button in damage boost messages */
+.conan-stamina-boost.damage-boost .deal-pc-damage-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%);
+  color: #fff;
+  border: 2px solid #f44336;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.conan-stamina-boost.damage-boost .deal-pc-damage-btn:hover {
+  background: linear-gradient(135deg, #c62828 0%, #e53935 100%);
+  border-color: #ff5252;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.5);
+  transform: translateY(-2px);
+}
+
+.conan-stamina-boost.damage-boost .deal-pc-damage-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.conan-stamina-boost.damage-boost .deal-pc-damage-btn i {
+  margin-right: 6px;
+}
+
+/* Massive Damage styling */
+.conan-stamina-boost.massive-damage .massive-damage-info {
+  text-align: center;
+  color: #fff;
+}
+
+.conan-stamina-boost.massive-damage .massive-damage-info p {
+  margin: 0 0 10px 0;
+  font-size: 1.1em;
+}
+
+/* Pulse animation for stamina icon */
+@keyframes pulse-glow {
+  0%, 100% {
+    text-shadow: 0 0 4px rgba(255, 213, 79, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(255, 213, 79, 0.9);
+  }
+}
+
+/* Explosion pulse animation for massive damage */
+@keyframes explosion-pulse {
+  0%, 100% {
+    text-shadow: 0 0 8px rgba(255, 235, 59, 0.6);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 235, 59, 1);
+    transform: scale(1.2);
+  }
+}
+
+/* Context menu styling (enhanced appearance) */
+#context-menu .context-item i.fa-plus-circle {
+  color: #ffd54f;
+}
+
+#context-menu .context-item:hover i.fa-plus-circle {
+  color: #ffecb3;
+}

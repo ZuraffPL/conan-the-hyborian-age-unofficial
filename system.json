@@ -1,0 +1,77 @@
+{
+  "id": "conan-the-hyborian-age",
+  "title": "Conan: The Hyborian Age",
+  "description": "Unofficial system for playing Conan: The Hyborian Age RPG by Monolith Boardgames",
+  "version": "0.0.35",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13.350",
+    "maximum": "13"
+  },
+  "authors": [
+    {
+      "name": "Zuraff",
+      "discord": "eliandir_"
+    }
+  ],
+  "esmodules": [
+    "module/conan.mjs"
+  ],
+  "styles": [
+    "styles/conan.css",
+    "styles/roll-chat.css",
+    "styles/roll-dialog.css",
+    "styles/flex-dialog.css",
+    "styles/character-creation-dialog.css",
+    "styles/starting-skills.css",
+    "styles/item-armor.css",
+    "styles/item-weapon.css",
+    "styles/item-skill.css",
+    "styles/actor-armor.css",
+    "styles/actor-weapon.css",
+    "styles/actor-npc.css",
+    "styles/spellcasting-dialog.css",
+    "styles/attack-dialog.css",
+    "styles/stamina-effects.css",
+    "styles/partials/damage-dialog.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "pl",
+      "name": "Polski",
+      "path": "lang/pl.json"
+    },
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "lang/fr.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {},
+      "minion": {},
+      "antagonist": {}
+    },
+    "Item": {
+      "weapon": {},
+      "armor": {},
+      "skill": {},
+      "spell": {}
+    }
+  },
+  "socket": true,
+  "gridDistance": 2,
+  "gridUnits": "m",
+  "primaryTokenAttribute": "lifePoints.actual",
+  "secondaryTokenAttribute": "combat.armor",
+  "url": "https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial",
+  "manifest": "https://raw.githubusercontent.com/ZuraffPL/conan-the-hyborian-age-unofficial/main/system.json",
+  "download": "https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/download/v0.0.35/conan-the-hyborian-age-v0.0.35.zip",
+  "license": "LICENSE.txt"
+}

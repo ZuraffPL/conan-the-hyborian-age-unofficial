@@ -1,0 +1,1173 @@
+/**
+ * NPC Actor Sheet Styles (Minion & Antagonist)
+ */
+
+.conan.sheet.actor.minion,
+.conan.sheet.actor.antagonist {
+  min-height: 400px;
+}
+
+/* NPC Sheet Header */
+.conan.sheet.actor.minion .sheet-header,
+.conan.sheet.actor.antagonist .sheet-header {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(101, 67, 33, 0.1) 100%);
+  border-bottom: 2px solid #8b4513;
+}
+
+.conan.sheet.actor.minion .profile-img,
+.conan.sheet.actor.antagonist .profile-img {
+  width: 100px;
+  height: 100px;
+  border: 3px solid #8b4513;
+  border-radius: 5px;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+.conan.sheet.actor.minion .header-fields,
+.conan.sheet.actor.antagonist .header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.conan.sheet.actor.minion .charname,
+.conan.sheet.actor.antagonist .charname {
+  margin: 0;
+  border-bottom: 2px solid #8b4513;
+  padding-bottom: 5px;
+}
+
+.conan.sheet.actor.minion .charname input,
+.conan.sheet.actor.antagonist .charname input {
+  font-family: "Modesto Condensed", "Palatino Linotype", serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #8b4513;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-transform: uppercase;
+}
+
+.conan.sheet.actor.minion .actor-type-row,
+.conan.sheet.actor.antagonist .actor-type-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.conan.sheet.actor.minion .actor-type-label,
+.conan.sheet.actor.antagonist .actor-type-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px 10px;
+  background: rgba(139, 69, 19, 0.15);
+  border-left: 3px solid #8b4513;
+  flex-shrink: 0;
+}
+
+.conan.sheet.actor.minion .actor-type-label .primary-label,
+.conan.sheet.actor.antagonist .actor-type-label .primary-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #8b4513;
+  text-transform: uppercase;
+}
+
+.conan.sheet.actor.minion .actor-type-label .subtitle-label,
+.conan.sheet.actor.antagonist .actor-type-label .subtitle-label {
+  font-size: 12px;
+  font-style: italic;
+  color: #666;
+}
+
+.conan.sheet.actor.minion .creature-type-field,
+.conan.sheet.actor.antagonist .creature-type-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.conan.sheet.actor.minion .creature-type-field label,
+.conan.sheet.actor.antagonist .creature-type-field label {
+  display: flex;
+  flex-direction: column;
+}
+
+.conan.sheet.actor.minion .creature-type-field .primary-label,
+.conan.sheet.actor.antagonist .creature-type-field .primary-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #8b4513;
+  text-transform: uppercase;
+}
+
+.conan.sheet.actor.minion .creature-type-field .subtitle-label,
+.conan.sheet.actor.antagonist .creature-type-field .subtitle-label {
+  font-size: 11px;
+  font-style: italic;
+  color: #666;
+}
+
+.conan.sheet.actor.minion .creature-type-field select,
+.conan.sheet.actor.antagonist .creature-type-field select {
+  padding: 6px 10px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: #f5e6d3;
+  color: #3d2408;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.conan.sheet.actor.minion .creature-type-field select:focus,
+.conan.sheet.actor.antagonist .creature-type-field select:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 5px rgba(139, 69, 19, 0.3);
+}
+
+.conan.sheet.actor.minion .description-field,
+.conan.sheet.actor.antagonist .description-field {
+  flex: 1;
+}
+
+.conan.sheet.actor.minion .description-field textarea,
+.conan.sheet.actor.antagonist .description-field textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  border: 1px solid #8b4513;
+  border-radius: 4px;
+  background: #f5e6d3;
+  color: #3d2408;
+  font-family: inherit;
+  resize: vertical;
+}
+
+/* NPC Sheet Body */
+.conan.sheet.actor.minion .sheet-body,
+.conan.sheet.actor.antagonist .sheet-body {
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tabs Navigation */
+.conan.sheet.actor.minion .sheet-tabs,
+.conan.sheet.actor.antagonist .sheet-tabs {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 0;
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(101, 67, 33, 0.1) 100%);
+  border-bottom: 3px solid #8b4513;
+  margin: 0;
+  padding: 0;
+}
+
+.conan.sheet.actor.minion .sheet-tabs .item,
+.conan.sheet.actor.antagonist .sheet-tabs .item {
+  flex: 1;
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #654321;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-right: 1px solid #8b4513;
+  background: rgba(245, 230, 211, 0.3);
+  transition: all 0.2s;
+}
+
+.conan.sheet.actor.minion .sheet-tabs .item:last-child,
+.conan.sheet.actor.antagonist .sheet-tabs .item:last-child {
+  border-right: none;
+}
+
+.conan.sheet.actor.minion .sheet-tabs .item:hover,
+.conan.sheet.actor.antagonist .sheet-tabs .item:hover {
+  background: rgba(245, 230, 211, 0.6);
+  color: #8b4513;
+}
+
+.conan.sheet.actor.minion .sheet-tabs .item.active,
+.conan.sheet.actor.antagonist .sheet-tabs .item.active {
+  background: #f5e6d3;
+  color: #8b4513;
+  border-bottom: 3px solid #654321;
+  margin-bottom: -3px;
+}
+
+.conan.sheet.actor.minion .sheet-tabs .item i,
+.conan.sheet.actor.antagonist .sheet-tabs .item i {
+  margin-right: 5px;
+}
+
+/* Tab Content */
+.conan.sheet.actor.minion .tab,
+.conan.sheet.actor.antagonist .tab {
+  display: none;
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.conan.sheet.actor.minion .tab.active,
+.conan.sheet.actor.antagonist .tab.active {
+  display: block;
+}
+
+/* Attributes Section */
+.conan.sheet.actor.minion .attributes-section,
+.conan.sheet.actor.antagonist .attributes-section {
+  background: rgba(139, 69, 19, 0.05);
+  border-bottom: 3px solid #8b4513;
+  padding: 5px 10px;
+  margin: 0 0 5px 0;
+}
+
+.conan.sheet.actor.minion .section-header,
+.conan.sheet.actor.antagonist .section-header {
+  text-align: center;
+  color: #8b4513;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 0 5px 0;
+  border-bottom: 2px solid #8b4513;
+  padding-bottom: 2px;
+}
+
+.conan.sheet.actor.minion .attributes-row,
+.conan.sheet.actor.antagonist .attributes-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0;
+  flex-wrap: nowrap;
+}
+
+.conan.sheet.actor.minion .attribute-box,
+.conan.sheet.actor.antagonist .attribute-box {
+  flex: 0 0 auto;
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 10px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(245, 232, 216, 0.8) 100%);
+  border: 2px solid #8b4513;
+  border-right: none;
+  position: relative;
+}
+
+.conan.sheet.actor.minion .attribute-box:first-child,
+.conan.sheet.actor.antagonist .attribute-box:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.conan.sheet.actor.minion .attribute-box:last-child,
+.conan.sheet.actor.antagonist .attribute-box:last-child {
+  border-radius: 0 8px 8px 0;
+  border-right: 2px solid #8b4513;
+}
+
+.conan.sheet.actor.minion .attribute-box::after,
+.conan.sheet.actor.antagonist .attribute-box::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10%;
+  height: 80%;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, #8b4513, transparent);
+}
+
+.conan.sheet.actor.minion .attribute-box:last-child::after,
+.conan.sheet.actor.antagonist .attribute-box:last-child::after {
+  display: none;
+}
+
+.conan.sheet.actor.minion .attribute-header,
+.conan.sheet.actor.antagonist .attribute-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.conan.sheet.actor.minion .attribute-abbr,
+.conan.sheet.actor.antagonist .attribute-abbr {
+  font-size: 16px;
+  font-weight: bold;
+  color: #654321;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.conan.sheet.actor.minion .attribute-label,
+.conan.sheet.actor.antagonist .attribute-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #8b4513;
+  margin-top: 2px;
+}
+
+.conan.sheet.actor.minion .attribute-values,
+.conan.sheet.actor.antagonist .attribute-values {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.conan.sheet.actor.minion .attribute-value,
+.conan.sheet.actor.antagonist .attribute-value {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  border: 3px solid #8b4513;
+  border-radius: 50%;
+  background: white;
+  color: #8b4513;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.conan.sheet.actor.minion .attribute-value:hover,
+.conan.sheet.actor.antagonist .attribute-value:hover {
+  border-color: #654321;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 10px rgba(139, 69, 19, 0.3);
+}
+
+.conan.sheet.actor.minion .attribute-value:focus,
+.conan.sheet.actor.antagonist .attribute-value:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 15px rgba(139, 69, 19, 0.5);
+}
+
+.conan.sheet.actor.minion .attribute-die,
+.conan.sheet.actor.antagonist .attribute-die {
+  width: 60px;
+  padding: 6px 4px;
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  background: white;
+  color: #8b4513;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.conan.sheet.actor.minion .attribute-die:hover,
+.conan.sheet.actor.antagonist .attribute-die:hover {
+  border-color: #654321;
+  background: rgba(139, 69, 19, 0.05);
+}
+
+.conan.sheet.actor.minion .attribute-die:focus,
+.conan.sheet.actor.antagonist .attribute-die:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+.conan.sheet.actor.minion .attribute-mod,
+.conan.sheet.actor.antagonist .attribute-mod {
+  margin-top: 8px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #654321;
+  background: rgba(139, 69, 19, 0.1);
+  border: 1px solid #8b4513;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.conan.sheet.actor.minion .attribute-mod:hover,
+.conan.sheet.actor.antagonist .attribute-mod:hover {
+  background: rgba(139, 69, 19, 0.2);
+  transform: scale(1.05);
+}
+
+.conan.sheet.actor.minion .attribute-mod i,
+.conan.sheet.actor.antagonist .attribute-mod i {
+  color: #8b4513;
+}
+
+/* Defense and Threshold Section (NPC specific) */
+.conan.sheet.actor.minion .defense-section,
+.conan.sheet.actor.antagonist .defense-section {
+  background: rgba(139, 69, 19, 0.05);
+  border-bottom: 3px solid #8b4513;
+  padding: 10px;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.conan.sheet.actor.minion .defense-row,
+.conan.sheet.actor.antagonist .defense-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0;
+  flex-wrap: nowrap;
+}
+
+.conan.sheet.actor.minion .defense-box,
+.conan.sheet.actor.antagonist .defense-box {
+  flex: 0 0 auto;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(245, 232, 216, 0.8) 100%);
+  border: 2px solid #8b4513;
+  border-right: none;
+  position: relative;
+}
+
+/* Minion defense boxes - narrower for 5 elements */
+.conan.sheet.actor.minion .defense-box {
+  width: 115px;
+  justify-content: center;
+}
+
+/* Wider boxes for defense stats (Physical and Sorcery Defence) */
+.conan.sheet.actor.minion .defense-box:nth-child(1),
+.conan.sheet.actor.minion .defense-box:nth-child(2) {
+  width: 125px;
+}
+
+/* Narrower box for Armor */
+.conan.sheet.actor.minion .defense-box:nth-child(4) {
+  width: 100px;
+}
+
+/* Ensure perfect centering for minion defense boxes */
+.conan.sheet.actor.minion .defense-header {
+  text-align: center;
+}
+
+.conan.sheet.actor.minion .defense-abbr {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.conan.sheet.actor.minion .defense-label {
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.conan.sheet.actor.minion .defense-value {
+  margin: 0 auto;
+}
+
+/* Wounded box - special styling for minion */
+.conan.sheet.actor.minion .defense-box.wounded-box {
+  width: 95px;
+  justify-content: center;
+  padding: 15px 8px;
+}
+
+.conan.sheet.actor.minion .defense-box:first-child,
+.conan.sheet.actor.antagonist .defense-box:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.conan.sheet.actor.minion .defense-box:last-child,
+.conan.sheet.actor.antagonist .defense-box:last-child {
+  border-radius: 0 8px 8px 0;
+  border-right: 2px solid #8b4513;
+}
+
+.conan.sheet.actor.minion .defense-box::after,
+.conan.sheet.actor.antagonist .defense-box::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10%;
+  height: 80%;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, #8b4513, transparent);
+}
+
+.conan.sheet.actor.minion .defense-box:last-child::after,
+.conan.sheet.actor.antagonist .defense-box:last-child::after {
+  display: none;
+}
+
+.conan.sheet.actor.minion .defense-header,
+.conan.sheet.actor.antagonist .defense-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+  width: 100%;
+  text-align: center;
+  min-height: 50px;
+}
+
+.conan.sheet.actor.minion .defense-abbr,
+.conan.sheet.actor.antagonist .defense-abbr {
+  font-size: 16px;
+  font-weight: bold;
+  color: #654321;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  width: 100%;
+}
+
+.conan.sheet.actor.minion .defense-label,
+.conan.sheet.actor.antagonist .defense-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #8b4513;
+  margin-top: 2px;
+  text-align: center;
+  width: 100%;
+}
+
+.conan.sheet.actor.minion .defense-value-container,
+.conan.sheet.actor.antagonist .defense-value-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.conan.sheet.actor.minion .defense-value-container.defence-active,
+.conan.sheet.actor.antagonist .defense-value-container.defence-active {
+  background-color: rgba(34, 139, 34, 0.15);
+  box-shadow: 0 0 10px rgba(34, 139, 34, 0.2);
+}
+
+.conan.sheet.actor.minion .defense-value-container.immobilized-active,
+.conan.sheet.actor.antagonist .defense-value-container.immobilized-active {
+  background-color: rgba(220, 20, 60, 0.15);
+  box-shadow: 0 0 10px rgba(220, 20, 60, 0.2);
+}
+
+.conan.sheet.actor.minion .defense-indicators,
+.conan.sheet.actor.antagonist .defense-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+}
+
+.conan.sheet.actor.minion .defence-bonus,
+.conan.sheet.actor.antagonist .defence-bonus {
+  background-color: rgba(34, 139, 34, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.conan.sheet.actor.minion .immobilized-indicator,
+.conan.sheet.actor.antagonist .immobilized-indicator {
+  background-color: rgba(220, 20, 60, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.conan.sheet.actor.minion .defense-value,
+.conan.sheet.actor.antagonist .defense-value {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  border: 3px solid #8b4513;
+  border-radius: 50%;
+  background: white;
+  color: #8b4513;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.conan.sheet.actor.minion .defense-value.immobilized,
+.conan.sheet.actor.antagonist .defense-value.immobilized {
+  opacity: 0.5;
+  text-decoration: line-through;
+  color: #999;
+}
+
+.conan.sheet.actor.minion .defense-value:hover,
+.conan.sheet.actor.antagonist .defense-value:hover {
+  border-color: #654321;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 10px rgba(139, 69, 19, 0.3);
+}
+
+.conan.sheet.actor.minion .defense-value:focus,
+.conan.sheet.actor.antagonist .defense-value:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 15px rgba(139, 69, 19, 0.5);
+}
+
+/* Special styling for Life Points field (3-digit numbers) */
+.conan.sheet.actor.antagonist .defense-box:last-child .defense-value {
+  width: 80px;
+  height: 80px;
+  font-size: 24px;
+}
+
+/* Wounded Status - now within defense box */
+.conan.sheet.actor.minion .defense-box.wounded-box .wounded-checkbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.conan.sheet.actor.minion .defense-box.wounded-box .wounded-checkbox input[type="checkbox"] {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  accent-color: #dc143c;
+  margin: 0;
+}
+
+.conan.sheet.actor.minion .defense-box.wounded-box .wounded-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.conan.sheet.actor.minion .defense-box.wounded-box .wounded-label .primary-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #654321;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.conan.sheet.actor.minion .defense-box.wounded-box .wounded-label .subtitle-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #8b4513;
+}
+
+/* Wounded box active state */
+.conan.sheet.actor.minion .defense-box.wounded-box.active {
+  background: rgba(220, 20, 60, 0.15);
+  border-color: #dc143c;
+  box-shadow: 0 0 8px rgba(220, 20, 60, 0.4);
+}
+
+.conan.sheet.actor.minion .defense-box.wounded-box.active .wounded-label .primary-label {
+  color: #dc143c;
+}
+
+.conan.sheet.actor.minion .defense-box.wounded-box.active .wounded-label .subtitle-label {
+  color: #dc143c;
+}
+
+/* Wounded icon */
+.conan.sheet.actor.minion .wounded-icon {
+  font-size: 24px;
+  color: #dc143c;
+  margin-top: 5px;
+  display: none;
+}
+
+.conan.sheet.actor.minion .defense-box.wounded-box.active .wounded-icon {
+  display: block;
+}
+
+/* Damage and Actions Container */
+.conan.sheet.actor.minion .damage-actions-container,
+.conan.sheet.actor.antagonist .damage-actions-container {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  padding: 0;
+}
+
+/* Damage Section */
+.conan.sheet.actor.minion .damage-section,
+.conan.sheet.actor.antagonist .damage-section {
+  flex: 2;
+  background: rgba(139, 69, 19, 0.05);
+  border: 2px solid #8b4513;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* Right Column (Actions + Effects) */
+.conan.sheet.actor.minion .right-column,
+.conan.sheet.actor.antagonist .right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Actions Section */
+.conan.sheet.actor.minion .actions-section,
+.conan.sheet.actor.antagonist .actions-section {
+  background: rgba(139, 69, 19, 0.05);
+  border: 2px solid #8b4513;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* Damage Row */
+.conan.sheet.actor.minion .damage-row,
+.conan.sheet.actor.antagonist .damage-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding: 8px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(245, 232, 216, 0.6) 100%);
+  border: 1px solid #8b4513;
+  border-radius: 6px;
+}
+
+.conan.sheet.actor.minion .damage-row:last-child,
+.conan.sheet.actor.antagonist .damage-row:last-child {
+  margin-bottom: 0;
+}
+
+/* Damage Row Header */
+.conan.sheet.actor.minion .damage-row-header,
+.conan.sheet.actor.antagonist .damage-row-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.conan.sheet.actor.minion .damage-row-header > div,
+.conan.sheet.actor.antagonist .damage-row-header > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.conan.sheet.actor.minion .damage-row-header .primary-label,
+.conan.sheet.actor.antagonist .damage-row-header .primary-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #654321;
+  text-transform: uppercase;
+}
+
+.conan.sheet.actor.minion .damage-row-header .subtitle-label,
+.conan.sheet.actor.antagonist .damage-row-header .subtitle-label {
+  font-size: 10px;
+  font-style: italic;
+  color: #8b4513;
+}
+
+/* NPC Attack Button */
+.conan.sheet.actor.minion .npc-attack-btn,
+.conan.sheet.actor.antagonist .npc-attack-btn {
+  padding: 2px 8px;
+  background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+  color: #f5e6d3;
+  border: 2px solid #5a3410;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 22px;
+}
+
+.conan.sheet.actor.minion .npc-attack-btn:hover,
+.conan.sheet.actor.antagonist .npc-attack-btn:hover {
+  background: linear-gradient(135deg, #c41e3a 0%, #8b1a2d 100%);
+  border-color: #6d1423;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.conan.sheet.actor.minion .npc-attack-btn i,
+.conan.sheet.actor.antagonist .npc-attack-btn i {
+  font-size: 13px;
+}
+
+/* NPC Damage Button */
+.conan.sheet.actor.minion .npc-damage-btn,
+.conan.sheet.actor.antagonist .npc-damage-btn {
+  padding: 2px;
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 22px;
+}
+
+.conan.sheet.actor.minion .npc-damage-btn:hover,
+.conan.sheet.actor.antagonist .npc-damage-btn:hover {
+  transform: scale(1.05);
+  border-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.conan.sheet.actor.minion .npc-damage-btn img,
+.conan.sheet.actor.antagonist .npc-damage-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Remove old damage-type-label styles */
+.conan.sheet.actor.minion .damage-fields,
+.conan.sheet.actor.antagonist .damage-fields {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.conan.sheet.actor.minion .damage-name,
+.conan.sheet.actor.antagonist .damage-name {
+  flex: 1;
+  padding: 4px 8px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: white;
+  color: #3d2408;
+  font-size: 13px;
+}
+
+.conan.sheet.actor.minion .damage-name:disabled,
+.conan.sheet.actor.antagonist .damage-name:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.conan.sheet.actor.minion .damage-die,
+.conan.sheet.actor.antagonist .damage-die {
+  width: 65px;
+  padding: 4px 6px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: white;
+  color: #8b4513;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.conan.sheet.actor.minion .damage-die:disabled,
+.conan.sheet.actor.antagonist .damage-die:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.conan.sheet.actor.minion .damage-modifier,
+.conan.sheet.actor.antagonist .damage-modifier {
+  width: 35px;
+  padding: 4px 6px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: white;
+  color: #8b4513;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.conan.sheet.actor.minion .damage-modifier:disabled,
+.conan.sheet.actor.antagonist .damage-modifier:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.conan.sheet.actor.minion .damage-na,
+.conan.sheet.actor.antagonist .damage-na {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 4px 8px;
+  border: 1px solid #8b4513;
+  border-radius: 4px;
+  background: rgba(139, 69, 19, 0.05);
+  transition: all 0.2s;
+}
+
+.conan.sheet.actor.minion .damage-na:hover,
+.conan.sheet.actor.antagonist .damage-na:hover {
+  background: rgba(139, 69, 19, 0.1);
+}
+
+.conan.sheet.actor.minion .damage-na input[type="checkbox"],
+.conan.sheet.actor.antagonist .damage-na input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #8b4513;
+}
+
+.conan.sheet.actor.minion .damage-na span,
+.conan.sheet.actor.antagonist .damage-na span {
+  font-size: 11px;
+  font-weight: bold;
+  color: #8b4513;
+}
+
+/* Action Field */
+.conan.sheet.actor.minion .action-field,
+.conan.sheet.actor.antagonist .action-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.conan.sheet.actor.minion .action-field:last-child,
+.conan.sheet.actor.antagonist .action-field:last-child {
+  margin-bottom: 0;
+}
+
+.conan.sheet.actor.minion .action-field label,
+.conan.sheet.actor.antagonist .action-field label {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.conan.sheet.actor.minion .action-field .primary-label,
+.conan.sheet.actor.antagonist .action-field .primary-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #654321;
+  text-transform: uppercase;
+}
+
+.conan.sheet.actor.minion .action-field .subtitle-label,
+.conan.sheet.actor.antagonist .action-field .subtitle-label {
+  font-size: 10px;
+  font-style: italic;
+  color: #8b4513;
+}
+
+.conan.sheet.actor.minion .action-value,
+.conan.sheet.actor.antagonist .action-value {
+  width: 60px;
+  padding: 6px 10px;
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  background: white;
+  color: #8b4513;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.conan.sheet.actor.minion .action-value:hover,
+.conan.sheet.actor.antagonist .action-value:hover {
+  border-color: #654321;
+  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+.conan.sheet.actor.minion .action-value:focus,
+.conan.sheet.actor.antagonist .action-value:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 12px rgba(139, 69, 19, 0.5);
+}
+
+/* Effects Section */
+.conan.sheet.actor.minion .effects-section,
+.conan.sheet.actor.antagonist .effects-section {
+  background: rgba(139, 69, 19, 0.05);
+  border: 2px solid #8b4513;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.conan.sheet.actor.minion .effects-row,
+.conan.sheet.actor.antagonist .effects-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Powers and Special Rules Section */
+.conan.sheet.actor.minion .powers-section,
+.conan.sheet.actor.antagonist .powers-section {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.conan.sheet.actor.minion .powers-subsection,
+.conan.sheet.actor.antagonist .powers-subsection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.conan.sheet.actor.minion .subsection-header,
+.conan.sheet.actor.antagonist .subsection-header {
+  font-size: 16px;
+  font-weight: bold;
+  color: #8b4513;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(101, 67, 33, 0.1) 100%);
+  border-left: 4px solid #8b4513;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.conan.sheet.actor.minion .subsection-header i,
+.conan.sheet.actor.antagonist .subsection-header i {
+  font-size: 18px;
+  color: #654321;
+}
+
+.conan.sheet.actor.minion .powers-separator,
+.conan.sheet.actor.antagonist .powers-separator {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #8b4513 20%, #8b4513 80%, transparent 100%);
+  position: relative;
+  margin: 10px 0;
+}
+
+.conan.sheet.actor.minion .powers-separator::before,
+.conan.sheet.actor.antagonist .powers-separator::before {
+  content: "◆";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #f5e6d3;
+  padding: 0 15px;
+  color: #8b4513;
+  font-size: 14px;
+}
+
+.conan.sheet.actor.minion .powers-section textarea,
+.conan.sheet.actor.antagonist .powers-section textarea {
+  width: 100%;
+  min-height: 80px;
+  max-height: 400px;
+  padding: 15px;
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  background: #f5e6d3;
+  color: #3d2408;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+  transition: all 0.2s;
+  overflow-y: auto;
+}
+
+.conan.sheet.actor.minion .powers-section textarea:focus,
+.conan.sheet.actor.antagonist .powers-section textarea:focus {
+  outline: none;
+  border-color: #654321;
+  box-shadow: 0 0 12px rgba(139, 69, 19, 0.3);
+  background: #fff;
+}
+
+.conan.sheet.actor.minion .powers-section textarea::placeholder,
+.conan.sheet.actor.antagonist .powers-section textarea::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Strikethrough effect for N/A damage rows */
+.conan.sheet.actor.minion .damage-row.not-applicable,
+.conan.sheet.actor.antagonist .damage-row.not-applicable {
+  position: relative;
+  opacity: 0.5;
+}
+
+.conan.sheet.actor.minion .damage-row.not-applicable::before,
+.conan.sheet.actor.antagonist .damage-row.not-applicable::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  background: #8b4513;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.conan.sheet.actor.minion .damage-row.not-applicable .damage-fields,
+.conan.sheet.actor.antagonist .damage-row.not-applicable .damage-fields {
+  opacity: 0.6;
+}
+

@@ -1,0 +1,740 @@
+/* Magic Damage Chat Header - purple with pulse */
+
+.conan-roll-chat.damage-roll.spellcasting-roll .roll-header {
+  background: linear-gradient(90deg, #4b176a 0%, #a020f0 100%);
+  border-radius: 8px 8px 0 0;
+  padding: 10px 0 4px 0;
+  box-shadow: 0 2px 8px rgba(75,23,106,0.18);
+  position: relative;
+  animation: magic-pulse 2.2s infinite alternate;
+}
+
+@keyframes magic-pulse {
+  0% {
+    box-shadow: 0 0 16px 4px #4b176a, 0 2px 8px rgba(75,23,106,0.18);
+    filter: brightness(1.04) saturate(1.08);
+  }
+  100% {
+    box-shadow: 0 0 40px 12px #a020f0, 0 2px 16px rgba(160,32,240,0.22);
+    filter: brightness(1.14) saturate(1.22);
+  }
+}
+.value-display-witsdie {
+  padding: 8px 16px;
+  background: rgba(212, 175, 55, 0.18);
+  border-radius: 4px;
+  border: 1px solid #d4af37;
+  min-width: 60px;
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 20px;
+  font-weight: bold;
+  color: #5a2e0a;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.sorcery-die-display.magic-damage-inline {
+  margin-left: 12px;
+  margin-right: 12px;
+  vertical-align: middle;
+  min-width: 60px;
+  display: inline-flex;
+  align-items: center;
+}
+.magic-damage-inline {
+  margin-left: 12px;
+  margin-right: 12px;
+  vertical-align: middle;
+}
+.magic-damage-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.magic-type-label {
+  margin-bottom: 0;
+  margin-right: 8px;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.magic-mod-col {
+  max-width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 8px;
+}
+
+
+.magic-damage-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.magic-type-col, .magic-die-col, .magic-mod-col {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0;
+  min-width: unset;
+  align-items: center;
+}
+.magic-type-col {
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+}
+.magic-mod-col {
+  max-width: 120px;
+  display: flex;
+  align-items: center;
+}
+.conan.damage .sorcery-damage-type-select {
+  width: auto !important;
+  min-width: 120px;
+  max-width: 200px;
+  display: inline-block;
+  box-sizing: border-box;
+}
+.conan.damage .value-display-witsdie {
+  padding: 8px 16px;
+  background: rgba(212, 175, 55, 0.2);
+  border-radius: 4px;
+  border: 1px solid #d4af37;
+  min-width: 60px;
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 20px;
+  font-weight: bold;
+  color: #5a2e0a;
+}
+/* Damage Dialog Styling */
+.conan.damage .damage-form {
+  padding: 10px 15px;
+  max-height: calc(100vh - 150px);
+}
+
+.conan.damage .form-group {
+  margin-bottom: 15px;
+}
+
+.conan.damage .form-group label {
+  display: block;
+  font-weight: bold;
+  color: #8b4513;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  font-size: 15px;
+}
+
+.conan.damage .form-group .primary-label {
+  font-size: 15px;
+}
+
+.conan.damage .form-group .subtitle-label {
+  font-size: 11px;
+  font-style: italic;
+  opacity: 0.7;
+  font-weight: normal;
+  text-transform: none;
+}
+
+/* Radio Options */
+.conan.damage .damage-type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  background: none;
+}
+
+.conan.damage .radio-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.conan.damage .radio-option input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid #8b4513;
+  border-radius: 6px;
+  background: #fff;
+  margin: 0 12px 0 0;
+  position: relative;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(139,69,19,0.08);
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.conan.damage .radio-option input[type="radio"]:checked {
+  border-color: #d4af37;
+  background: #fffbe6;
+  box-shadow: 0 0 0 3px #d4af3733, 0 2px 6px rgba(139,69,19,0.08);
+}
+
+.conan.damage .radio-option input[type="radio"]::before {
+  content: '';
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: transparent;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: background 0.2s;
+}
+
+.conan.damage .radio-option input[type="radio"]:checked::before {
+  background: #8b4513;
+  box-shadow: 0 2px 6px rgba(139,69,19,0.18), 0 0 0 2.5px #d4af37;
+}
+
+.conan.damage .radio-option input[type="radio"] {
+  position: relative;
+}
+
+.conan.damage .radio-option label {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* Ensure radio and label are always aligned */
+.conan.damage .radio-option {
+  align-items: center;
+  min-height: 32px;
+}
+
+/* Section Separator */
+.conan.damage .section-separator {
+  height: 2px;
+  background: linear-gradient(to right, transparent, #8b4513, transparent);
+  margin: 15px 0;
+}
+
+/* Damage roll parameters section */
+.conan.damage .damage-parameters-section {
+  margin-bottom: 15px;
+}
+
+.conan.damage .damage-parameters-section > label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.conan.damage .damage-parameters-section .primary-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #8b4513;
+  text-transform: uppercase;
+}
+
+.conan.damage .damage-parameters-section .subtitle-label {
+  font-size: 11px;
+  color: #999;
+  font-style: italic;
+  margin-top: 2px;
+  text-transform: none;
+  font-weight: normal;
+}
+
+/* Damage parameters sections */
+.conan.damage .damage-params {
+  padding: 10px;
+  background: rgba(139, 69, 19, 0.05);
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.conan.damage .params-horizontal {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.conan.damage .param-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.conan.damage .param-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.conan.damage .param-label .primary {
+  font-size: 14px;
+  font-weight: bold;
+  color: #5a2e0a;
+}
+
+.conan.damage .param-label .subtitle {
+  font-size: 11px;
+  color: #8b6914;
+  font-style: italic;
+}
+
+.conan.damage .param-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #5a2e0a;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.conan.damage .param-value .value-display {
+  padding: 8px 16px;
+  background: rgba(212, 175, 55, 0.2);
+  border-radius: 4px;
+  border: 1px solid #d4af37;
+  min-width: 80px;
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Weapon selection */
+.conan.damage .weapon-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.conan.damage .weapon-selection label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+  text-transform: none;
+  font-weight: normal;
+  text-align: center;
+}
+
+.conan.damage .weapon-selection .primary {
+  font-size: 14px;
+  font-weight: bold;
+  color: #5a2e0a;
+}
+
+.conan.damage .weapon-selection .subtitle {
+  font-size: 11px;
+  color: #8b6914;
+  font-style: italic;
+}
+
+.conan.damage .weapon-select {
+  width: 220px;
+  min-width: 180px;
+  max-width: 100%;
+  padding: 6px 10px;
+  background: #fff;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  color: #5a2e0a;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.conan.damage .weapon-select:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #d4af37;
+}
+
+.conan.damage .weapon-select option {
+  background: #fff;
+  color: #5a2e0a;
+}
+
+/* No weapon warning */
+.conan.damage .no-weapon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.conan.damage .warning-text {
+  color: #dc143c;
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Placeholder text */
+.conan.damage .placeholder-text {
+  text-align: center;
+  color: #8b6914;
+  font-style: italic;
+  margin: 10px 0;
+}
+
+.conan.damage .damage-info {
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.1) 0%, rgba(139, 0, 0, 0.1) 100%);
+  border: 2px solid #dc143c;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.conan.damage .damage-info p {
+  margin: 0;
+  color: #5a2e0a;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.conan.damage .damage-options {
+  padding: 12px;
+  background: rgba(139, 69, 19, 0.05);
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  min-height: 100px;
+}
+
+.conan.damage .damage-options p {
+  margin: 0;
+  color: #8b4513;
+  font-size: 14px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* === Modifier Slider === */
+.conan.damage .modifier-group {
+  width: 100%;
+}
+
+.conan.damage .modifier-group label {
+  display: flex;
+  flex-direction: column;
+}
+
+.conan.damage .modifier-group .primary-label {
+  font-size: 15px;
+}
+
+.conan.damage .modifier-group .subtitle-label {
+  font-size: 11px;
+  font-style: italic;
+  opacity: 0.7;
+  font-weight: normal;
+  text-transform: none;
+}
+
+.conan.damage .modifier-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.conan.damage .modifier-value-label {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #8b4513;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.conan.damage input[type="range"] {
+  width: 100%;
+  max-width: 100%;
+  height: 20px;
+  border-radius: 10px;
+  background: linear-gradient(to right, 
+    #d32f2f 0%, 
+    #f57c00 25%, 
+    #fbc02d 40%, 
+    #8b4513 50%, 
+    #7cb342 60%, 
+    #388e3c 75%, 
+    #1976d2 100%);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.conan.damage .modifier-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  padding: 0 5px;
+  width: 100%;
+}
+
+.conan.damage input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #8b4513;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.conan.damage input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #8b4513;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* === Dialog Buttons === */
+.conan.damage .dialog-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 2px solid #8b4513;
+}
+
+.conan.damage .dialog-button {
+  flex: 1;
+  padding: 10px 15px;
+  background: linear-gradient(to bottom, #d4a574, #b8956a);
+  border: 2px solid #8b4513;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.conan.damage .dialog-button:hover {
+  background: linear-gradient(to bottom, #c49563, #a78459);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.conan.damage .dialog-button.primary {
+  background: linear-gradient(to bottom, #dc143c, #8b0000);
+  border-color: #8b0000;
+}
+
+.conan.damage .dialog-button.primary:hover {
+  background: linear-gradient(to bottom, #e6324b, #a00000);
+  box-shadow: 0 3px 8px rgba(220, 20, 60, 0.4);
+}
+
+/* NPC Damage Dialog Styles */
+.conan.dialog.damage .damage-form {
+  padding: 16px;
+  background: #f5e6d3;
+}
+
+.conan.dialog.damage .dialog-header {
+  text-align: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #8b4513;
+}
+
+.conan.dialog.damage .dialog-header h2 {
+  margin: 0 0 8px 0;
+  color: #3d2408;
+  font-size: 24px;
+}
+
+.conan.dialog.damage .attack-type-label {
+  margin: 0;
+  color: #8b4513;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.conan.dialog.damage .dialog-section {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: white;
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+}
+
+.conan.dialog.damage .dialog-section h3 {
+  margin: 0 0 12px 0;
+  color: #3d2408;
+  font-size: 18px;
+  text-align: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d4a574;
+}
+
+.conan.dialog.damage .weapon-info-display {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.conan.dialog.damage .info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: #faf8f4;
+  border-radius: 4px;
+  border: 1px solid #e6d5c3;
+}
+
+.conan.dialog.damage .info-label {
+  font-weight: bold;
+  color: #5a2e0a;
+}
+
+.conan.dialog.damage .info-value {
+  color: #8b4513;
+  font-weight: 600;
+}
+
+.conan.dialog.damage .modifier-slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.conan.dialog.damage .modifier-value-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #3d2408;
+}
+
+.conan.dialog.damage .modifier-value-label {
+  font-size: 24px;
+  color: #8b4513;
+  min-width: 50px;
+  text-align: center;
+}
+
+.conan.dialog.damage input[type="range"] {
+  width: 100%;
+  height: 20px;
+  border-radius: 10px;
+  background: linear-gradient(to right, 
+    #d32f2f 0%, 
+    #f57c00 25%, 
+    #fbc02d 40%, 
+    #8b4513 50%, 
+    #7cb342 60%, 
+    #388e3c 75%, 
+    #1976d2 100%);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.conan.dialog.damage input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #8b4513;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.conan.dialog.damage input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #8b4513;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.conan.dialog.damage .modifier-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  padding: 0 5px;
+  margin-top: 4px;
+}
+
+.conan.dialog.damage .dialog-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.conan.dialog.damage .dialog-button {
+  padding: 10px 24px;
+  border: 2px solid #8b4513;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  background: linear-gradient(to bottom, #d4a574, #b8935e);
+  color: #3d2408;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.conan.dialog.damage .dialog-button:hover {
+  background: linear-gradient(to bottom, #c49563, #a78459);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+.conan.dialog.damage .dialog-button.primary {
+  background: linear-gradient(to bottom, #8b4513, #654321);
+  border-color: #654321;
+  color: #f5e6d3;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.conan.dialog.damage .dialog-button.primary:hover {
+  background: linear-gradient(to bottom, #654321, #8b4513);
+  box-shadow: 0 3px 8px rgba(139, 69, 19, 0.4);
+}

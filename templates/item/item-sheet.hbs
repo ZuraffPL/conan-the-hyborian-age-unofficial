@@ -1,0 +1,532 @@
+{{!-- Universal item sheet that loads type-specific content --}}
+<form class="{{cssClass}}" autocomplete="off">
+  {{#if (eq item.type "armor")}}
+    {{!-- ARMOR SHEET --}}
+    <style>
+      .armor-stats {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+      .armor-stats .form-group {
+        flex: 0 0 auto;
+      }
+      .form-group select {
+        width: 80px !important;
+      }
+      select[name="system.specificMake"] {
+        width: 145px !important;
+      }
+      .form-group input[type="number"] {
+        width: 60px !important;
+      }
+      .armor-stats .form-group input[type="number"] {
+        width: 60px !important;
+        text-align: center;
+      }
+      .stipulations-group textarea {
+        width: 100% !important;
+      }
+      .charname input {
+        max-width: 350px !important;
+      }
+    </style>
+    {{!-- Sheet Header --}}
+    <header class="sheet-header">
+      <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" alt="{{item.name}}"/>
+      <div class="header-fields">
+        <h1 class="charname">
+          <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'CONAN.Common.name'}}"/>
+        </h1>
+        <div class="item-subtitle">{{localize "TYPES.Item.armor"}}</div>
+      </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+      
+      {{!-- Armor Type --}}
+      <div class="form-group">
+        <label>
+          <span class="primary-label">{{localize "CONAN.Armor.armorType"}}</span>
+          <span class="subtitle-label">Armor Type</span>
+        </label>
+        <select name="system.armorType" data-dtype="String">
+          {{#select system.armorType}}
+          <option value="light">{{localize "CONAN.Armor.types.light"}}</option>
+          <option value="medium">{{localize "CONAN.Armor.types.medium"}}</option>
+          <option value="heavy">{{localize "CONAN.Armor.types.heavy"}}</option>
+          <option value="shield">{{localize "CONAN.Armor.types.shield"}}</option>
+          {{/select}}
+        </select>
+      </div>
+
+      {{!-- Specific Make --}}
+      <div class="form-group">
+        <label>
+          <span class="primary-label">{{localize "CONAN.Armor.specificMake"}}</span>
+          <span class="subtitle-label">Specific Make</span>
+        </label>
+        <select name="system.specificMake" data-dtype="String">
+          {{#if (eq system.armorType "light")}}
+            {{#select system.specificMake}}
+            <option value="leather">{{localize "CONAN.Armor.makes.leather"}}</option>
+            <option value="hide">{{localize "CONAN.Armor.makes.hide"}}</option>
+            <option value="bones">{{localize "CONAN.Armor.makes.bones"}}</option>
+            {{/select}}
+          {{else if (eq system.armorType "medium")}}
+            {{#select system.specificMake}}
+            <option value="breastplate">{{localize "CONAN.Armor.makes.breastplate"}}</option>
+            <option value="cuirass">{{localize "CONAN.Armor.makes.cuirass"}}</option>
+            <option value="hauberk">{{localize "CONAN.Armor.makes.hauberk"}}</option>
+            {{/select}}
+          {{else if (eq system.armorType "heavy")}}
+            {{#select system.specificMake}}
+            <option value="fullPlate">{{localize "CONAN.Armor.makes.fullPlate"}}</option>
+            <option value="knightArmor">{{localize "CONAN.Armor.makes.knightArmor"}}</option>
+            {{/select}}
+          {{else if (eq system.armorType "shield")}}
+            {{#select system.specificMake}}
+            <option value="wood">{{localize "CONAN.Armor.makes.wood"}}</option>
+            <option value="metal">{{localize "CONAN.Armor.makes.metal"}}</option>
+            <option value="makeshift">{{localize "CONAN.Armor.makes.makeshift"}}</option>
+            {{/select}}
+          {{/if}}
+        </select>
+      </div>
+
+      {{!-- Stats Row --}}
+      <div class="armor-stats">
+        <div class="form-group stat-group">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Armor.armorRating"}}</span>
+            <span class="subtitle-label">AR</span>
+          </label>
+          <input type="number" name="system.armorRating" value="{{system.armorRating}}" data-dtype="Number"/>
+        </div>
+
+        <div class="form-group stat-group">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Armor.encumbrance"}}</span>
+            <span class="subtitle-label">Enc.</span>
+          </label>
+          <input type="number" name="system.encumbrance" value="{{system.encumbrance}}" data-dtype="Number"/>
+        </div>
+      </div>
+
+      {{!-- Equipped Checkbox --}}
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+          <span class="primary-label">{{localize "CONAN.Common.equipped"}}</span>
+          <span class="subtitle-label">Equipped</span>
+        </label>
+      </div>
+
+      {{!-- Stipulations --}}
+      <div class="form-group stipulations-group">
+        <label>
+          <span class="primary-label">{{localize "CONAN.Armor.stipulations"}}</span>
+          <span class="subtitle-label">Stipulations</span>
+        </label>
+        <textarea name="system.stipulations" rows="4">{{system.stipulations}}</textarea>
+      </div>
+
+    </section>
+  {{else if (eq item.type "weapon")}}
+    {{!-- WEAPON SHEET --}}
+    <style>
+      .weapon-type-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+      .weapon-type-row .form-group {
+        flex: 0 0 auto;
+      }
+      .weapon-type-row .form-group select {
+        width: 130px !important;
+      }
+      .weapon-type-row select[name="system.weaponSize"] {
+        width: 100px !important;
+      }
+      .weapon-stats {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+      .weapon-stats .form-group {
+        flex: 0 0 auto;
+      }
+      .form-group select {
+        width: 120px !important;
+      }
+      .form-group input[type="text"] {
+        width: 80px !important;
+      }
+      .stipulations-group textarea {
+        width: 100% !important;
+      }
+      .charname input {
+        max-width: 350px !important;
+      }
+    </style>
+    
+    {{!-- Sheet Header --}}
+    <header class="sheet-header">
+      <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" alt="{{item.name}}"/>
+      <div class="header-fields">
+        <h1 class="charname">
+          <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'CONAN.Common.name'}}"/>
+        </h1>
+        <div class="item-subtitle">{{localize "TYPES.Item.weapon"}}</div>
+      </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+      
+      {{!-- Weapon Type Row (Type + Handedness for melee / Improvised for thrown) --}}
+      <div class="weapon-type-row">
+        {{!-- Weapon Type --}}
+        <div class="form-group">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Weapon.weaponType"}}</span>
+            <span class="subtitle-label">(Type)</span>
+          </label>
+          <select name="system.weaponType" data-dtype="String">
+            {{#select system.weaponType}}
+            <option value="melee">{{localize "CONAN.Weapon.types.melee"}}</option>
+            <option value="thrown">{{localize "CONAN.Weapon.types.thrown"}}</option>
+            <option value="ranged">{{localize "CONAN.Weapon.types.ranged"}}</option>
+            {{/select}}
+          </select>
+        </div>
+
+        {{!-- Handedness (only for melee weapons) --}}
+        {{#if (eq system.weaponType "melee")}}
+        <div class="form-group">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Weapon.handedness"}}</span>
+            <span class="subtitle-label">(Handedness)</span>
+          </label>
+          <select name="system.handedness" data-dtype="String">
+            {{#select system.handedness}}
+            <option value="one-handed">{{localize "CONAN.Weapon.handednessOptions.oneHanded"}}</option>
+            <option value="two-handed">{{localize "CONAN.Weapon.handednessOptions.twoHanded"}}</option>
+            {{/select}}
+          </select>
+        </div>
+        {{/if}}
+
+        {{!-- Improvised (only for thrown weapons) --}}
+        {{#if (eq system.weaponType "thrown")}}
+        <div class="form-group checkbox-group" style="padding: 8px; margin: 0;">
+          <label class="checkbox-label">
+            <input type="checkbox" name="system.improvised" {{checked system.improvised}}/>
+            <span class="primary-label">{{localize "CONAN.Weapon.improvised"}}</span>
+            <span class="subtitle-label">(Improvised)</span>
+          </label>
+        </div>
+        {{/if}}
+      </div>
+
+      {{!-- Weapon Size, Range & Damage Row --}}
+      <div class="weapon-type-row">
+        {{!-- Weapon Size (all types) --}}
+        <div class="form-group">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Weapon.weaponSize"}}</span>
+            <span class="subtitle-label">(Size)</span>
+          </label>
+          <select name="system.weaponSize" data-dtype="String">
+            {{#select system.weaponSize}}
+            {{#if (eq system.weaponType "thrown")}}
+              {{!-- Thrown weapons: light, medium, various --}}
+              <option value="light">{{localize "CONAN.Weapon.sizes.light"}}</option>
+              <option value="medium">{{localize "CONAN.Weapon.sizes.medium"}}</option>
+              <option value="various">{{localize "CONAN.Weapon.sizes.various"}}</option>
+            {{else if (eq system.weaponType "ranged")}}
+              {{!-- Ranged weapons: light, medium, heavy --}}
+              <option value="light">{{localize "CONAN.Weapon.sizes.light"}}</option>
+              <option value="medium">{{localize "CONAN.Weapon.sizes.medium"}}</option>
+              <option value="heavy">{{localize "CONAN.Weapon.sizes.heavy"}}</option>
+            {{else if (eq system.handedness "two-handed")}}
+              {{!-- Two-handed melee weapons: no light option --}}
+              <option value="medium">{{localize "CONAN.Weapon.sizes.medium"}}</option>
+              <option value="heavy">{{localize "CONAN.Weapon.sizes.heavy"}}</option>
+            {{else}}
+              {{!-- One-handed melee weapons: all sizes --}}
+              <option value="light">{{localize "CONAN.Weapon.sizes.light"}}</option>
+              <option value="medium">{{localize "CONAN.Weapon.sizes.medium"}}</option>
+              <option value="heavy">{{localize "CONAN.Weapon.sizes.heavy"}}</option>
+            {{/if}}
+            {{/select}}
+          </select>
+        </div>
+
+        {{!-- Range (dependent on weapon type and size) --}}
+        <div class="form-group">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Weapon.range"}}</span>
+            <span class="subtitle-label">(Range)</span>
+          </label>
+          <select name="system.range" data-dtype="String">
+            {{#if (eq system.weaponType "melee")}}
+              {{#if (and (eq system.handedness "two-handed") (eq system.weaponSize "medium"))}}
+                {{#select system.range}}
+                <option value="close">{{localize "CONAN.Weapon.ranges.close"}}</option>
+                {{/select}}
+              {{else}}
+                {{#select system.range}}
+                <option value="touch">{{localize "CONAN.Weapon.ranges.touch"}}</option>
+                {{/select}}
+              {{/if}}
+            {{else if (eq system.weaponType "thrown")}}
+              {{!-- For thrown weapons --}}
+              {{#select system.range}}
+              <option value="close">{{localize "CONAN.Weapon.ranges.close"}}</option>
+              <option value="medium3">{{localize "CONAN.Weapon.ranges.medium3"}}</option>
+              {{/select}}
+            {{else if (eq system.weaponType "ranged")}}
+              {{!-- For ranged weapons - dependent on size --}}
+              {{#if (eq system.weaponSize "light")}}
+                {{#select system.range}}
+                <option value="medium3">{{localize "CONAN.Weapon.ranges.medium3"}}</option>
+                <option value="long4">{{localize "CONAN.Weapon.ranges.long4"}}</option>
+                {{/select}}
+              {{else if (eq system.weaponSize "medium")}}
+                {{#select system.range}}
+                <option value="medium3">{{localize "CONAN.Weapon.ranges.medium3"}}</option>
+                <option value="long6">{{localize "CONAN.Weapon.ranges.long6"}}</option>
+                {{/select}}
+              {{else if (eq system.weaponSize "heavy")}}
+                {{#select system.range}}
+                <option value="distant8">{{localize "CONAN.Weapon.ranges.distant8"}}</option>
+                {{/select}}
+              {{/if}}
+            {{/if}}
+          </select>
+        </div>
+
+        {{!-- Damage (dependent on type, handedness and size) --}}
+        <div class="form-group">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Weapon.damage"}}</span>
+            <span class="subtitle-label">(Damage)</span>
+          </label>
+          {{#if (eq system.weaponType "melee")}}
+            {{!-- Melee weapon damage --}}
+            <select name="system.damage" data-dtype="String" style="width: 55px !important;">
+              {{#if (eq system.handedness "one-handed")}}
+                {{#if (eq system.weaponSize "light")}}
+                  {{#select system.damage}}
+                  <option value="1d4">1d4</option>
+                  {{/select}}
+                {{else if (eq system.weaponSize "medium")}}
+                  {{#select system.damage}}
+                  <option value="1d6">1d6</option>
+                  {{/select}}
+                {{else if (eq system.weaponSize "heavy")}}
+                  {{#select system.damage}}
+                  <option value="1d6">1d6</option>
+                  <option value="1d8">1d8</option>
+                  {{/select}}
+                {{/if}}
+              {{else if (eq system.handedness "two-handed")}}
+                {{#if (eq system.weaponSize "medium")}}
+                  {{#select system.damage}}
+                  <option value="1d10">1d10</option>
+                  {{/select}}
+                {{else if (eq system.weaponSize "heavy")}}
+                  {{#select system.damage}}
+                  <option value="1d12">1d12</option>
+                  {{/select}}
+                {{/if}}
+              {{/if}}
+            </select>
+          {{else if (eq system.weaponType "thrown")}}
+            {{!-- Thrown weapon damage --}}
+            <select name="system.damage" data-dtype="String" style="width: 55px !important;">
+              {{#if (eq system.weaponSize "light")}}
+                {{#if system.improvised}}
+                  {{#select system.damage}}
+                  <option value="2">2</option>
+                  {{/select}}
+                {{else}}
+                  {{#select system.damage}}
+                  <option value="1d4">1d4</option>
+                  {{/select}}
+                {{/if}}
+              {{else if (eq system.weaponSize "medium")}}
+                {{#select system.damage}}
+                <option value="1d6">1d6</option>
+                {{/select}}
+              {{else if (eq system.weaponSize "various")}}
+                {{#select system.damage}}
+                <option value="1d4">1d4</option>
+                <option value="1d6">1d6</option>
+                <option value="1d8">1d8</option>
+                <option value="1d10">1d10</option>
+                <option value="1d12">1d12</option>
+                {{/select}}
+              {{/if}}
+            </select>
+          {{else if (eq system.weaponType "ranged")}}
+            {{!-- Ranged weapon damage --}}
+            <select name="system.damage" data-dtype="String" style="width: 55px !important;">
+              {{#if (eq system.weaponSize "light")}}
+                {{#select system.damage}}
+                <option value="1d4">1d4</option>
+                {{/select}}
+              {{else if (eq system.weaponSize "medium")}}
+                {{#select system.damage}}
+                <option value="1d6">1d6</option>
+                <option value="1d8">1d8</option>
+                {{/select}}
+              {{else if (eq system.weaponSize "heavy")}}
+                {{#select system.damage}}
+                <option value="1d8">1d8</option>
+                <option value="1d10">1d10</option>
+                {{/select}}
+              {{/if}}
+            </select>
+          {{/if}}
+        </div>
+
+        {{!-- Damage Modifier (only for ranged weapons) --}}
+        {{#if (eq system.weaponType "ranged")}}
+        <div class="form-group">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Weapon.damageModifier"}}</span>
+            <span class="subtitle-label">(Modifier)</span>
+          </label>
+          <input type="number" name="system.damageModifier" value="{{system.damageModifier}}" data-dtype="Number" style="width: 30px !important;"/>
+        </div>
+        {{/if}}
+      </div>
+
+      {{!-- Equipped Checkbox --}}
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+          <span class="primary-label">{{localize "CONAN.Common.equipped"}}</span>
+          <span class="subtitle-label">(Equipped)</span>
+        </label>
+      </div>
+
+      {{!-- Rules/Notes --}}
+      <div class="form-group stipulations-group">
+        <label>
+          <span class="primary-label">{{localize "CONAN.Weapon.rules"}}</span>
+          <span class="subtitle-label">(Rules)</span>
+        </label>
+        <textarea name="system.stipulations" rows="4">{{system.stipulations}}</textarea>
+      </div>
+
+    </section>
+  {{else if (eq item.type "skill")}}
+    {{!-- SKILL SHEET --}}
+    {{!-- Sheet Header --}}
+    <header class="sheet-header">
+      <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" alt="{{item.name}}"/>
+      <div class="header-fields">
+        <h1 class="charname">
+          <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'CONAN.Skill.name'}}"/>
+        </h1>
+        <div class="item-subtitle">{{localize "TYPES.Item.skill"}}</div>
+      </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+      {{!-- Effect Description --}}
+      <div class="form-group">
+        <label>
+          <span class="primary-label">{{localize "CONAN.Skill.effect"}}</span>
+          <span class="subtitle-label">(Skill Effect)</span>
+        </label>
+        <textarea name="system.description" rows="4">{{system.description}}</textarea>
+      </div>
+
+      {{!-- XP Cost and Skill Type Row --}}
+      <div style="display: flex; gap: 20px; align-items: flex-end; margin-bottom: 15px;">
+        <div style="flex: 0 0 auto;">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Skill.xpCost"}}</span>
+            <span class="subtitle-label">(XP Cost)</span>
+          </label>
+          <input type="number" name="system.xpCost" value="{{system.xpCost}}" data-dtype="Number" min="0" style="width: 50px;"/>
+        </div>
+
+        <div style="flex: 0 0 auto;">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Skill.skillType.label"}}</span>
+            <span class="subtitle-label">(Skill Type)</span>
+          </label>
+          <select name="system.skillType" data-dtype="String" style="width: 140px;">
+            {{#select system.skillType}}
+            <option value="origin">{{localize "CONAN.Skill.skillType.origin"}}</option>
+            <option value="starting">{{localize "CONAN.Skill.skillType.starting"}}</option>
+            <option value="legendary">{{localize "CONAN.Skill.skillType.legendary"}}</option>
+            <option value="advanced">{{localize "CONAN.Skill.skillType.advanced"}}</option>
+            {{/select}}
+          </select>
+        </div>
+      </div>
+    </section>
+  {{else if (eq item.type "spell")}}
+    {{!-- SPELL SHEET --}}
+    {{!-- Sheet Header --}}
+    <header class="sheet-header">
+      <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" alt="{{item.name}}"/>
+      <div class="header-fields">
+        <h1 class="charname">
+          <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'CONAN.Spell.name'}}"/>
+        </h1>
+        <div class="item-subtitle">{{localize "TYPES.Item.spell"}}</div>
+      </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+      {{!-- Discipline and XP Cost Row --}}
+      <div style="display: flex; gap: 15px; align-items: flex-start; justify-content: space-between; margin-bottom: 15px;">
+        <div class="form-group" style="flex: 0 0 120px; margin-bottom: 0;">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Spell.discipline"}}</span>
+            <span class="subtitle-label">(Discipline)</span>
+          </label>
+          <select name="system.discipline" data-dtype="String" style="width: 120px;">
+            {{#select system.discipline}}
+            <option value="alchemy">{{localize "CONAN.Spell.disciplines.alchemy"}}</option>
+            <option value="blackMagic">{{localize "CONAN.Spell.disciplines.blackMagic"}}</option>
+            <option value="demonicMagic">{{localize "CONAN.Spell.disciplines.demonicMagic"}}</option>
+            <option value="necromanticMagic">{{localize "CONAN.Spell.disciplines.necromanticMagic"}}</option>
+            <option value="whiteMagic">{{localize "CONAN.Spell.disciplines.whiteMagic"}}</option>
+            {{/select}}
+          </select>
+        </div>
+        
+        <div class="form-group" style="flex: 0 0 50px; margin-bottom: 0;">
+          <label>
+            <span class="primary-label">{{localize "CONAN.Spell.xpCost"}}</span>
+            <span class="subtitle-label">(XP)</span>
+          </label>
+          <input type="number" name="system.xpCost" value="{{system.xpCost}}" min="0" data-dtype="Number" style="width: 50px;"/>
+        </div>
+      </div>
+
+      {{!-- Effect --}}
+      <div class="form-group">
+        <label>
+          <span class="primary-label">{{localize "CONAN.Spell.effect"}}</span>
+          <span class="subtitle-label">(Effect)</span>
+        </label>
+        <textarea name="system.effect" rows="4">{{system.effect}}</textarea>
+      </div>
+
+    </section>
+  {{/if}}
+</form>
+

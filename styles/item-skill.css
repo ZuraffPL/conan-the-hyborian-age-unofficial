@@ -1,0 +1,109 @@
+/* ======================================
+   SKILL ITEM SHEET STYLES
+   ====================================== */
+
+/* Label styling to match form-group labels */
+.conan.item .sheet-body label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  margin-bottom: 3px;
+  color: #8b4513;
+}
+
+.conan.item .sheet-body label .primary-label {
+  font-size: 1em;
+  font-weight: bold;
+  color: #5e3a1a;
+}
+
+.conan.item .sheet-body label .subtitle-label {
+  font-size: 0.85em;
+  font-weight: normal;
+  color: #8b7355;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+/* Disabled field styling for mutual exclusion */
+select[data-skill-type-select]:disabled,
+input[data-origin-checkbox]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #e8d4b0 !important;
+  color: #8b7355 !important;
+}
+
+/* Label styling for disabled fields */
+select[data-skill-type-select]:disabled + label,
+input[data-origin-checkbox]:disabled ~ span {
+  opacity: 0.6;
+  color: #8b7355;
+}
+
+/* Visual indicator - dim the entire form group when disabled */
+.form-group:has(select[data-skill-type-select]:disabled) label,
+.form-group:has(input[data-origin-checkbox]:disabled) label {
+  opacity: 0.7;
+}
+
+/* Tooltip/helper text for disabled state */
+select[data-skill-type-select]:disabled::after,
+input[data-origin-checkbox]:disabled::after {
+  content: " (wyłączone / disabled)";
+  font-size: 0.85em;
+  font-style: italic;
+  color: #999;
+}
+
+/* Hover effect to show it's disabled */
+select[data-skill-type-select]:disabled:hover,
+input[data-origin-checkbox]:disabled:hover {
+  background-color: #d4c4a8 !important;
+  box-shadow: inset 0 0 5px rgba(139, 115, 85, 0.3);
+}
+
+/* Active/enabled state - highlight */
+select[data-skill-type-select]:not(:disabled),
+input[data-origin-checkbox]:not(:disabled) {
+  border: 1px solid #8b7355;
+  transition: all 0.2s ease;
+}
+
+select[data-skill-type-select]:not(:disabled):hover,
+input[data-origin-checkbox]:not(:disabled):hover {
+  border-color: #6b5335;
+  box-shadow: 0 0 3px rgba(107, 83, 53, 0.5);
+}
+
+/* Checkbox specific styling */
+input[data-origin-checkbox] {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+input[data-origin-checkbox]:disabled {
+  cursor: not-allowed;
+}
+
+/* Select specific styling */
+select[data-skill-type-select] {
+  padding: 4px 8px;
+  border-radius: 3px;
+  background-color: #f5ead8;
+  font-family: inherit;
+}
+
+/* Visual feedback for standard type when origin is checked */
+.form-group:has(input[data-origin-checkbox]:checked) select[data-skill-type-select] {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Visual feedback when legendary/advanced is selected */
+.form-group:has(select[data-skill-type-select] option[value="legendary"]:checked) input[data-origin-checkbox],
+.form-group:has(select[data-skill-type-select] option[value="advanced"]:checked) input[data-origin-checkbox] {
+  opacity: 0.5;
+}
