@@ -56,7 +56,9 @@ See [CHANGELOG.md](https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial
 
 ## 🐛 Known Issues
 
-None at this time. Please report issues on the [GitHub Issues](https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/issues) page.
+**Poisoned Status**: The Poisoned status toggle and dialog are currently UI-only features. The full game logic for poison effects (damage over time, attribute penalties, etc.) has not been implemented yet and will be added in future versions.
+
+Please report any other issues on the [GitHub Issues](https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/issues) page.
 
 ## 🙏 Credits
 
