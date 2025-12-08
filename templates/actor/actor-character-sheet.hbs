@@ -130,7 +130,12 @@
             <span class="resource-name">{{localize "CONAN.Resources.stamina"}}</span>
             <label class="resource-subtitle">Stamina</label>
           </div>
-          <input type="number" name="system.stamina.value" value="{{system.stamina.value}}" min="0" max="100" data-dtype="Number" class="stamina-value-single {{valueChanges.stamina}}"/>
+          <div class="stamina-controls">
+            <input type="number" name="system.stamina.value" value="{{system.stamina.value}}" min="0" max="100" data-dtype="Number" class="stamina-value-single {{valueChanges.stamina}}"/>
+            <button type="button" class="stamina-spend-btn" data-action="spendStamina" data-tooltip="{{localize 'CONAN.Stamina.spend'}}">
+              <i class="fas fa-hand-holding-dollar"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>

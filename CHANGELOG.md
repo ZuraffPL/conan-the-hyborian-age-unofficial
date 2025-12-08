@@ -1,3 +1,33 @@
+# [0.0.37] - 2025-12-08
+### Added
+- Added Stamina tactical spend button to character sheet.
+- Added Stamina spend dialog with 3 tactical options (1 Stamina each):
+  - Extra movement action
+  - Increase thrown weapon range by 1 level or 2 zones
+  - Ignore encumbrance effect for 1 round
+- Added stamina-spend-dialog.mjs module with ApplicationV2 dialog implementation.
+- Added stamina-spend-dialog.hbs template with radio button selection UI.
+- Added stamina-spend-dialog.css with complete styling for dialog and chat messages.
+- Added 14 new localization keys for Stamina spend system (PL/EN/FR).
+
+### Changed
+- Icon-only Stamina spend button on character sheet with tooltip for compact display.
+- Streamlined chat message format (removed header, kept character name highlighted).
+- Updated yellow color scheme with black text-shadow for better contrast.
+
+### Fixed
+- Replaced deprecated `FormDataExtended` with `foundry.applications.ux.FormDataExtended`.
+- Fixed radio button icon alignment in dialog (icons no longer overlap radio buttons).
+- Fixed chat message to display hardcoded cost value (1) instead of template variable.
+
+### Technical
+- Stamina spend dialog follows ApplicationV2 pattern with HandlebarsApplicationMixin.
+- Chat messages include flags for tracking spent Stamina and selected option.
+- Button integrated into `.stamina-controls` wrapper with flexbox layout.
+
+### Release
+- Bumped system version to 0.0.37 in `system.json`.
+
 # [0.0.36] - 2025-12-08
 ### Changed
 - Updated manifest URL to use `releases/latest/download/system.json` for automatic latest version detection.

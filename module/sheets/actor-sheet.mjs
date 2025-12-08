@@ -12,6 +12,7 @@ import { SpellcastingDialog } from "../helpers/spellcasting-dialog.mjs";
 import { AttackDialog } from "../helpers/attack-dialog.mjs";
 import { DamageDialog } from "../helpers/damage-dialog.mjs";
 import { PoisonedDialog } from "../helpers/poisoned-dialog.mjs";
+import { StaminaSpendDialog } from "../helpers/stamina-spend-dialog.mjs";
 import { ConanSocket } from "../helpers/socket.mjs";
 
 export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicationMixin(
@@ -36,6 +37,7 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
       toggleDefence: ConanActorSheet._onToggleDefence,
       toggleImmobilized: ConanActorSheet._onToggleImmobilized,
       togglePoisoned: ConanActorSheet._onTogglePoisoned,
+      spendStamina: ConanActorSheet._onSpendStamina,
       addStartingSkill: ConanActorSheet._onAddStartingSkill,
       editStartingSkill: ConanActorSheet._onEditStartingSkill,
       deleteStartingSkill: ConanActorSheet._onDeleteStartingSkill,
@@ -754,6 +756,10 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
       const dialog = new PoisonedDialog(this.baseActor);
       dialog.render(true);
     }
+  }
+
+  static async _onSpendStamina(event, target) {
+    await StaminaSpendDialog.prompt(this.baseActor);
   }
 
   static async _onAddStartingSkill(event, target) {

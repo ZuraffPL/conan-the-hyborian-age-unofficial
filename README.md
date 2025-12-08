@@ -45,6 +45,8 @@ This creates dynamic, exciting tests where even desperate situations can turn ar
 
 ## System Features
 
+**[0.0.37]**: Stamina Tactical Spend! Added dedicated button on character sheet to spend Stamina on tactical options. New dialog offers 3 choices (1 Stamina each): extra movement action, increase thrown weapon range (+1 level or +2 zones), or ignore encumbrance for 1 round. Icon-only button with tooltip for compact display. Complete ApplicationV2 dialog implementation with stamina-spend-dialog.mjs/hbs/css. Streamlined chat messages with highlighted character name. Fixed deprecated FormDataExtended (now foundry.applications.ux.FormDataExtended). Fixed radio button icon alignment. Yellow color scheme with black text-shadow for better contrast. 14 new localization keys (PL/EN/FR). See CHANGELOG.md for full details.
+
 **[0.0.36]**: Release infrastructure update! Updated manifest and download URLs to use GitHub's `/latest/` endpoint for automatic version detection. Added Known Issues documentation for Poisoned status. Improved release workflow alignment with Foundry VTT best practices.
 
 **[0.0.35]**: CHANGELOG cleanup! Condensed multiple version entries (0.0.16-0.0.21, 0.0.22-0.0.25, 0.0.26-0.0.29) for better readability while preserving all key features and fixes. Added complete French translation (fr.json) with 611 lines covering all system features. System now supports 3 languages (English, Polish, French). See CHANGELOG.md for full details.
@@ -512,6 +514,7 @@ conan-the-hyborian-age/
 │   │   ├── socket.mjs
 │   │   ├── spellcasting-dialog.mjs
 │   │   ├── stamina-effects.mjs
+│   │   ├── stamina-spend-dialog.mjs
 │   │   ├── starting-skills-dialog.mjs
 │   │   └── templates.mjs
 │   └── sheets/
@@ -534,6 +537,7 @@ conan-the-hyborian-age/
 │   ├── roll-dialog.css
 │   ├── spellcasting-dialog.css
 │   ├── stamina-effects.css
+│   ├── stamina-spend-dialog.css
 │   ├── starting-skills.css
 │   └── partials/
 │       ├── actor-spell.css
@@ -564,7 +568,8 @@ conan-the-hyborian-age/
     │   ├── npc-attack-dialog.hbs
     │   ├── npc-difficulty-dialog.hbs
     │   ├── poisoned-dialog.hbs
-    │   └── spellcasting-dialog.hbs
+    │   ├── spellcasting-dialog.hbs
+    │   └── stamina-spend-dialog.hbs
     └── item/
         ├── item-armor-sheet.hbs
         ├── item-equipment-sheet.hbs

@@ -2,7 +2,7 @@
   "id": "conan-the-hyborian-age",
   "title": "Conan: The Hyborian Age",
   "description": "Unofficial system for playing Conan: The Hyborian Age RPG by Monolith Boardgames",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "compatibility": {
     "minimum": "13",
     "verified": "13.350",
@@ -33,6 +33,7 @@
     "styles/spellcasting-dialog.css",
     "styles/attack-dialog.css",
     "styles/stamina-effects.css",
+    "styles/stamina-spend-dialog.css",
     "styles/partials/damage-dialog.css"
   ],
   "languages": [

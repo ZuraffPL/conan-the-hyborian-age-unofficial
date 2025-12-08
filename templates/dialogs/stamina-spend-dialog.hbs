@@ -1,0 +1,52 @@
+{{!-- Stamina Spend Dialog --}}
+<div class="stamina-spend-dialog-content">
+  <div class="dialog-header">
+    <i class="fas fa-bolt"></i>
+    <h2>{{localize "CONAN.Stamina.spendTitle"}}</h2>
+  </div>
+  
+  <div class="stamina-info">
+    <div class="current-stamina">
+      <span class="label">{{localize "CONAN.Stamina.current"}}:</span>
+      <span class="value">{{currentStamina}}</span>
+    </div>
+  </div>
+  
+  {{#unless hasStamina}}
+  <div class="no-stamina-warning">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>{{localize "CONAN.Stamina.noStaminaAvailable"}}</p>
+  </div>
+  {{/unless}}
+  
+  <div class="options-list">
+    {{#each options}}
+    <label class="option-item {{#unless ../hasStamina}}disabled{{/unless}}">
+      <input type="radio" name="option" value="{{id}}" {{#unless ../hasStamina}}disabled{{/unless}} />
+      <div class="option-content">
+        <div class="option-header">
+          <span class="option-label">
+            <i class="{{icon}}"></i>
+            {{label}}
+          </span>
+          <span class="option-cost">
+            <i class="fas fa-bolt"></i> {{cost}}
+          </span>
+        </div>
+        <div class="option-description">
+          {{description}}
+        </div>
+      </div>
+    </label>
+    {{/each}}
+  </div>
+  
+  <div class="dialog-buttons">
+    <button type="button" data-action="spend" {{#unless hasStamina}}disabled{{/unless}}>
+      <i class="fas fa-check"></i> {{localize "CONAN.Stamina.spend"}}
+    </button>
+    <button type="button" data-action="cancel">
+      <i class="fas fa-times"></i> {{localize "CONAN.Common.cancel"}}
+    </button>
+  </div>
+</div>

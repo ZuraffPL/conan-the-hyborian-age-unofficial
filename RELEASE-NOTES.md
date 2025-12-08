@@ -1,24 +1,19 @@
-# Release v0.0.35 - CHANGELOG Cleanup & French Translation
+# Release v0.0.36 - Release Infrastructure Improvements
 
-## 🎉 What's New
-
-### Added
-- **Complete French Translation** (lang/fr.json) with 611 lines covering all system features
-- System now supports **3 languages**: English, Polish, and French
-- French language registration in system.json
+## 🔧 What's New
 
 ### Changed
-- **CHANGELOG Cleanup**: Condensed multiple version entries for better readability:
-  - Versions 0.0.16-0.0.21 combined (Magic Damage System, Defence/Immobilized toggles, Poisoned status, Damage Roll System)
-  - Versions 0.0.22-0.0.25 combined (Modularized Sorcery Damage, "Deal Damage" button, visual improvements, sheet synchronization)
-  - Versions 0.0.26-0.0.29 combined (Complete damage application system for PC/NPC, token configuration, HP indicator)
-- Improved CHANGELOG structure for easier navigation
+- **Updated Manifest URL**: Now uses `releases/latest/download/system.json` for automatic latest version detection
+- **Updated Download URL**: Now uses `releases/latest/download/conan-the-hyborian-age.zip` (without version number)
+- **Release Assets**: Include both versioned and non-versioned ZIP files for flexibility
 
-### French Translations
-- **Attributes**: Force (Might), Agilité (Edge), Résistance (Grit), Astuce (Wits)
-- **Resources**: Endurance (Stamina), Points de Vie (Life Points)
-- **Features**: Effet de Souplesse (Flex Effect), Dégâts Massifs (Massive Damage)
-- All UI elements, dialogs, chat messages, and system features fully localized
+### Fixed
+- **Known Issues Documentation**: Added Known Issues section documenting that Poisoned status is UI-only (full logic not yet implemented)
+
+### Technical
+- Manifest and download URLs now point to `/latest/` instead of specific version
+- GitHub release workflow aligned with best practices from other Foundry systems
+- Improved automatic update detection for Foundry VTT users
 
 ## 📦 Installation
 
