@@ -4,8 +4,11 @@
 
 /* Import specific stylesheets */
 @import url("./partials/actor-spell.css");
+@import url("./partials/attack-dialog.css");
 @import url("./partials/combat-tracker.css");
 @import url("./partials/poisoned-effects.css");
+@import url("./partials/spellcasting-dialog.css");
+@import url("./partials/stamina-spend-dialog.css");
 
 /* === Global Styles === */
 .conan {
@@ -364,6 +367,12 @@
   margin-top: 2px;
 }
 
+/* Hide English subtitles when language is English */
+html[lang="en"] .conan .life-points-section .subtitle-name,
+html[lang="en"] .conan .life-value-container .subtitle-label {
+  display: none;
+}
+
 .conan .life-points-display {
   display: flex;
   align-items: center;
@@ -462,6 +471,12 @@
   font-style: italic;
   opacity: 0.7;
   margin-top: 2px;
+}
+
+/* Hide English subtitles when language is English */
+html[lang="en"] .conan .defense-section .subtitle-name,
+html[lang="en"] .conan .defense-field .subtitle-label {
+  display: none;
 }
 
 .conan .defense-fields {
@@ -724,6 +739,11 @@
   font-style: italic;
   opacity: 0.7;
   color: #8b4513;
+}
+
+/* Hide English subtitles when language is English */
+html[lang="en"] .conan .armor-enc-field .subtitle-label {
+  display: none;
 }
 
 .conan .armor-rating-value,
@@ -1117,6 +1137,14 @@
   font-size: 11px;
   opacity: 0.8;
   font-weight: normal;
+}
+
+/* Hide English subtitles when language is English */
+html[lang="en"] .conan .initiative-button .subtitle-label,
+html[lang="en"] .conan .attack-button .subtitle-label,
+html[lang="en"] .conan .damage-button .subtitle-label,
+html[lang="en"] .conan .spellcasting-button .subtitle-label {
+  display: none;
 }
 
 /* === Extra Resources (Flex Die & Stamina) === */

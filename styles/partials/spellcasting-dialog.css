@@ -270,6 +270,11 @@
   font-style: italic;
 }
 
+/* Hide English subtitles when language is English */
+html[lang="en"] .spellcasting-dialog .subtitle-label {
+  display: none;
+}
+
 /* Chat Message Styles for Spellcasting */
 .conan-spellcasting-chat {
   border: 2px solid #8b4513;

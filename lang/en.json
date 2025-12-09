@@ -53,19 +53,19 @@
     "Attributes": {
       "might": {
         "label": "Might",
-        "abbr": "MIG"
+        "abbr": "MIGHT"
       },
       "edge": {
         "label": "Edge",
-        "abbr": "EDG"
+        "abbr": "EDGE"
       },
       "grit": {
         "label": "Grit",
-        "abbr": "GRT"
+        "abbr": "GRIT"
       },
       "wits": {
         "label": "Wits",
-        "abbr": "WIT"
+        "abbr": "WITS"
       }
     },
     
@@ -73,6 +73,7 @@
       "health": "Health",
       "power": "Power",
       "experience": "Experience",
+      "flexDie": "Flex Die",
       "stamina": "Stamina",
       "lifePoints": "Life Points",
       "actual": "Actual",
@@ -222,7 +223,7 @@
     },
 
     "NPC": {
-      "threshold": "Life Threshold",
+      "threshold": "Threshold",
       "defenseThreshold": "Defense & Threshold",
       "lifePoints": "Life Points",
       "defenseLifePoints": "Defense & Life Points",

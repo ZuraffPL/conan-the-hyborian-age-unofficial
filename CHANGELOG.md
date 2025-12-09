@@ -1,3 +1,32 @@
+# [0.0.38] - 2025-12-09
+### Added
+- Added missing `flexDie` localization key to English translation.
+- Added CSS rules to hide redundant English subtitles when system language is set to English.
+
+### Changed
+- Reorganized CSS structure: moved dialog stylesheets to `styles/partials/` folder.
+- Moved `attack-dialog.css` to `styles/partials/` and imported in `conan.css`.
+- Moved `spellcasting-dialog.css` to `styles/partials/` and imported in `conan.css`.
+- Moved `stamina-spend-dialog.css` to `styles/partials/` and imported in `conan.css`.
+- Updated `system.json` to reflect new CSS structure (removed direct references to moved files).
+
+### Fixed
+- Fixed modifier slider colors in attack dialog (added `!important` to gradient background).
+- Hidden English subtitle labels in English language mode for:
+  - Attack and Damage dialogs (subtitle/subtitle-label)
+  - Spellcasting dialog (subtitle-label)
+  - Character sheet sections: Life Points, Defense, Armor & Encumbrance
+  - Character sheet action buttons: Initiative, Attack, Damage Roll, Spellcasting
+  - NPC sheets: Actor type, Creature type, Wounded status, Damage rows, Actions
+
+### Technical
+- CSS now uses `html[lang="en"]` selectors to conditionally hide English subtitles.
+- Improved CSS organization with partials folder for dialog-specific styles.
+- Updated README.md file structure to reflect new CSS organization.
+
+### Release
+- Bumped system version to 0.0.38 in `system.json`.
+
 # [0.0.37] - 2025-12-08
 ### Added
 - Added Stamina tactical spend button to character sheet.

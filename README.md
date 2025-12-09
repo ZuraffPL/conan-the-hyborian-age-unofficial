@@ -45,6 +45,8 @@ This creates dynamic, exciting tests where even desperate situations can turn ar
 
 ## System Features
 
+**[0.0.38]**: UI Localization & CSS Cleanup! Hidden redundant English subtitles when system language is English (dialogs, character sheets, NPC sheets). Reorganized CSS structure: moved attack-dialog.css, spellcasting-dialog.css, and stamina-spend-dialog.css to styles/partials/ and imported in conan.css. Fixed modifier slider colors in attack dialog. Added missing flexDie localization key to English. Improved CSS organization and maintainability. See CHANGELOG.md for full details.
+
 **[0.0.37]**: Stamina Tactical Spend! Added dedicated button on character sheet to spend Stamina on tactical options. New dialog offers 3 choices (1 Stamina each): extra movement action, increase thrown weapon range (+1 level or +2 zones), or ignore encumbrance for 1 round. Icon-only button with tooltip for compact display. Complete ApplicationV2 dialog implementation with stamina-spend-dialog.mjs/hbs/css. Streamlined chat messages with highlighted character name. Fixed deprecated FormDataExtended (now foundry.applications.ux.FormDataExtended). Fixed radio button icon alignment. Yellow color scheme with black text-shadow for better contrast. 14 new localization keys (PL/EN/FR). See CHANGELOG.md for full details.
 
 **[0.0.36]**: Release infrastructure update! Updated manifest and download URLs to use GitHub's `/latest/` endpoint for automatic version detection. Added Known Issues documentation for Poisoned status. Improved release workflow alignment with Foundry VTT best practices.
@@ -526,7 +528,6 @@ conan-the-hyborian-age/
 │   ├── actor-armor.css
 │   ├── actor-npc.css
 │   ├── actor-weapon.css
-│   ├── attack-dialog.css
 │   ├── character-creation-dialog.css
 │   ├── conan.css
 │   ├── flex-dialog.css
@@ -535,15 +536,16 @@ conan-the-hyborian-age/
 │   ├── item-weapon.css
 │   ├── roll-chat.css
 │   ├── roll-dialog.css
-│   ├── spellcasting-dialog.css
 │   ├── stamina-effects.css
-│   ├── stamina-spend-dialog.css
 │   ├── starting-skills.css
 │   └── partials/
 │       ├── actor-spell.css
+│       ├── attack-dialog.css
 │       ├── combat-tracker.css
 │       ├── damage-dialog.css
-│       └── poisoned-effects.css
+│       ├── poisoned-effects.css
+│       ├── spellcasting-dialog.css
+│       └── stamina-spend-dialog.css
 ├── system.json
 ├── template.json
 └── templates/

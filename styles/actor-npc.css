@@ -87,6 +87,12 @@
   color: #666;
 }
 
+/* Hide English subtitles when language is English */
+html[lang="en"] .conan.sheet.actor.minion .actor-type-label .subtitle-label,
+html[lang="en"] .conan.sheet.actor.antagonist .actor-type-label .subtitle-label {
+  display: none;
+}
+
 .conan.sheet.actor.minion .creature-type-field,
 .conan.sheet.actor.antagonist .creature-type-field {
   display: flex;
@@ -113,6 +119,11 @@
   font-size: 11px;
   font-style: italic;
   color: #666;
+}
+
+html[lang="en"] .conan.sheet.actor.minion .creature-type-field .subtitle-label,
+html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-label {
+  display: none;
 }
 
 .conan.sheet.actor.minion .creature-type-field select,
@@ -695,6 +706,10 @@
   color: #8b4513;
 }
 
+html[lang="en"] .conan.sheet.actor.minion .defense-box.wounded-box .wounded-label .subtitle-label {
+  display: none;
+}
+
 /* Wounded box active state */
 .conan.sheet.actor.minion .defense-box.wounded-box.active {
   background: rgba(220, 20, 60, 0.15);
@@ -708,6 +723,10 @@
 
 .conan.sheet.actor.minion .defense-box.wounded-box.active .wounded-label .subtitle-label {
   color: #dc143c;
+}
+
+html[lang="en"] .conan.sheet.actor.minion .defense-box.wounded-box.active .wounded-label .subtitle-label {
+  display: none;
 }
 
 /* Wounded icon */
@@ -806,6 +825,11 @@
   font-size: 10px;
   font-style: italic;
   color: #8b4513;
+}
+
+html[lang="en"] .conan.sheet.actor.minion .damage-row-header .subtitle-label,
+html[lang="en"] .conan.sheet.actor.antagonist .damage-row-header .subtitle-label {
+  display: none;
 }
 
 /* NPC Attack Button */
@@ -1007,6 +1031,11 @@
   font-size: 10px;
   font-style: italic;
   color: #8b4513;
+}
+
+html[lang="en"] .conan.sheet.actor.minion .action-field .subtitle-label,
+html[lang="en"] .conan.sheet.actor.antagonist .action-field .subtitle-label {
+  display: none;
 }
 
 .conan.sheet.actor.minion .action-value,

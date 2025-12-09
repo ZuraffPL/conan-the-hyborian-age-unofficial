@@ -145,6 +145,12 @@
   text-transform: none;
 }
 
+/* Hide English subtitles when language is English */
+html[lang="en"] .conan.damage .subtitle-label,
+html[lang="en"] .conan.damage .subtitle {
+  display: none;
+}
+
 /* Radio Options */
 .conan.damage .damage-type-options {
   display: flex;
