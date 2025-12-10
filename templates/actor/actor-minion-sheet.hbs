@@ -133,7 +133,7 @@
 
         <div class="defense-box wounded-box">
           <label class="wounded-checkbox">
-            <input type="checkbox" name="system.wounded" {{#if system.wounded}}checked{{/if}} data-dtype="Boolean" />
+            <input type="checkbox" name="system.wounded" {{#if system.wounded}}checked{{/if}} data-dtype="Boolean" data-action="toggleWounded" />
             <span class="wounded-label">
               <span class="primary-label">{{localize "CONAN.NPC.wounded"}}</span>
               <span class="subtitle-label">Wounded</span>

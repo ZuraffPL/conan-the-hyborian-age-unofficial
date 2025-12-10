@@ -68,41 +68,16 @@ Hooks.once("init", async function() {
   // Preload Handlebars templates
   await preloadHandlebarsTemplates();
 
-  // Register Handlebars helpers (global Handlebars is still correct for helpers)
-  Handlebars.registerHelper("concat", function(...args) {
-    args.pop(); // Remove the options object
-    return args.join("");
-  });
-
+  // Foundry VTT v13+ provides these built-in Handlebars helpers:
+  // - concat, eq, ne, gt, gte, lt, lte, and, or, not, select
+  // We only register custom helpers that Foundry doesn't provide
+  
   Handlebars.registerHelper("times", function(n, block) {
     let accum = "";
     for(let i = 0; i < n; ++i) {
       accum += block.fn(i);
     }
     return accum;
-  });
-
-  Handlebars.registerHelper("eq", function(a, b) {
-    return a === b;
-  });
-
-  Handlebars.registerHelper("ne", function(a, b) {
-    return a !== b;
-  });
-
-  Handlebars.registerHelper("gt", function(a, b) {
-    return a > b;
-  });
-
-  Handlebars.registerHelper("lt", function(a, b) {
-    return a < b;
-  });
-
-  Handlebars.registerHelper("select", function(selected, options) {
-    const escapedValue = RegExp.escape(Handlebars.escapeExpression(selected));
-    const rgx = new RegExp(' value=[\"\']' + escapedValue + '[\"\']');
-    const html = options.fn(this);
-    return html.replace(rgx, "$& selected");
   });
   
   // Initialize stamina effects system EARLY (before ChatLog instances are created)
@@ -121,8 +96,6 @@ Hooks.once("ready", async function() {
   ConanSocket.initialize();
   
   // Override Combat.rollInitiative to use custom Edge-based initiative
-  const originalCombatRollInitiative = CONFIG.Combat.documentClass.prototype.rollInitiative;
-  
   CONFIG.Combat.documentClass.prototype.rollInitiative = async function(ids, options = {}) {
     // Get combatant IDs
     const combatantIds = typeof ids === "string" ? [ids] : ids;

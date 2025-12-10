@@ -71,7 +71,8 @@ export class ConanMinionSheet extends ConanActorSheet {
       npcDamage: ConanMinionSheet._onNPCDamage,
       toggleDefence: ConanMinionSheet._onToggleDefence,
       toggleImmobilized: ConanMinionSheet._onToggleImmobilized,
-      togglePoisoned: ConanMinionSheet._onTogglePoisoned
+      togglePoisoned: ConanMinionSheet._onTogglePoisoned,
+      toggleWounded: ConanMinionSheet._onToggleWounded
     }
   };
 
@@ -88,7 +89,8 @@ export class ConanMinionSheet extends ConanActorSheet {
   /** @override */
   static PARTS = {
     form: {
-      template: "systems/conan-the-hyborian-age/templates/actor/actor-minion-sheet.hbs"
+      template: "systems/conan-the-hyborian-age/templates/actor/actor-minion-sheet.hbs",
+      submitOnChange: false
     }
   };
 
@@ -144,35 +146,28 @@ export class ConanMinionSheet extends ConanActorSheet {
       });
     });
     
-    // Handle N/A checkboxes for damage types
-    setupNACheckboxes(this.element);
-    
-    // Handle wounded checkbox highlighting
-    const woundedCheckbox = this.element.querySelector('input[name="system.wounded"]');
-    if (woundedCheckbox) {
-      const woundedBox = woundedCheckbox.closest('.defense-box.wounded-box');
-      
-      // Set initial state
-      if (woundedCheckbox.checked && woundedBox) {
-        woundedBox.classList.add('active');
-      }
-      
-      // Listen for changes
-      woundedCheckbox.addEventListener('change', (event) => {
-        if (woundedBox) {
-          if (event.target.checked) {
-            woundedBox.classList.add('active');
-          } else {
-            woundedBox.classList.remove('active');
-          }
-        }
+    // Handle defense.physical changes to update basePhysical when no effects are active
+    const defenseInput = this.element.querySelector('input[name="system.defense.physical"]');
+    if (defenseInput) {
+      defenseInput.addEventListener('change', async (event) => {
+        const newPhysical = parseInt(event.target.value) || 0;
+        const defenceActive = this.baseActor.system.defenceActive || false;
+        const immobilized = this.baseActor.system.immobilized || false;
         
-        // Refresh Combat Tracker if in combat
-        if (game.combat && ui.combat) {
-          ui.combat.render();
+        // If no effects are active, update basePhysical to match
+        if (!defenceActive && !immobilized) {
+          await this.baseActor.update({
+            'system.defense.basePhysical': newPhysical
+          });
         }
       });
     }
+    
+    // Handle N/A checkboxes for damage types
+    setupNACheckboxes(this.element);
+    
+    // Update wounded box CSS based on current state
+    this._updateWoundedState();
     
     // Setup auto-resize for powers textareas
     const powersTextareas = this.element.querySelectorAll('textarea.auto-resize-powers');
@@ -256,12 +251,17 @@ export class ConanMinionSheet extends ConanActorSheet {
       newPhysical = basePhysical + 2;
     }
     
-    // Update actor
-    await this.baseActor.update({
+    // Update actor - only set basePhysical if it doesn't exist yet
+    const updateData = {
       "system.defenceActive": newDefence,
-      "system.defense.basePhysical": basePhysical,
       "system.defense.physical": newPhysical
-    });
+    };
+    
+    if (this.baseActor.system.defense.basePhysical === undefined) {
+      updateData["system.defense.basePhysical"] = basePhysical;
+    }
+    
+    await this.baseActor.update(updateData);
     
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {
@@ -279,9 +279,13 @@ export class ConanMinionSheet extends ConanActorSheet {
     const basePhysical = this.baseActor.system.defense.basePhysical ?? this.baseActor.system.defense.physical;
     
     const updateData = {
-      "system.immobilized": newImmobilized,
-      "system.defense.basePhysical": basePhysical
+      "system.immobilized": newImmobilized
     };
+    
+    // Only set basePhysical if it doesn't exist yet
+    if (this.baseActor.system.defense.basePhysical === undefined) {
+      updateData["system.defense.basePhysical"] = basePhysical;
+    }
     
     if (newImmobilized) {
       // When immobilized, set defense to 0 and disable Defence
@@ -327,6 +331,51 @@ export class ConanMinionSheet extends ConanActorSheet {
       dialog.render(true);
     }
   }
+
+  /**
+   * Update wounded box CSS based on current actor state
+   */
+  _updateWoundedState() {
+    const woundedCheckbox = this.element.querySelector('input[name="system.wounded"]');
+    if (woundedCheckbox) {
+      const woundedBox = woundedCheckbox.closest('.defense-box.wounded-box');
+      
+      if (woundedBox) {
+        if (woundedCheckbox.checked) {
+          woundedBox.classList.add('active');
+        } else {
+          woundedBox.classList.remove('active');
+        }
+      }
+    }
+  }
+
+  /**
+   * Toggle wounded status
+   */
+  static async _onToggleWounded(event, target) {
+    const newWounded = target.checked;
+    
+    // Update CSS immediately for instant visual feedback
+    const woundedBox = target.closest('.defense-box.wounded-box');
+    if (woundedBox) {
+      if (newWounded) {
+        woundedBox.classList.add('active');
+      } else {
+        woundedBox.classList.remove('active');
+      }
+    }
+    
+    // Update actor data asynchronously (no await - don't block UI)
+    this.baseActor.update({
+      'system.wounded': newWounded
+    }).then(() => {
+      // Refresh Combat Tracker after update completes
+      if (game.combat && ui.combat) {
+        ui.combat.render();
+      }
+    });
+  }
 }
 
 /**
@@ -371,7 +420,8 @@ export class ConanAntagonistSheet extends ConanActorSheet {
   /** @override */
   static PARTS = {
     form: {
-      template: "systems/conan-the-hyborian-age/templates/actor/actor-antagonist-sheet.hbs"
+      template: "systems/conan-the-hyborian-age/templates/actor/actor-antagonist-sheet.hbs",
+      submitOnChange: false
     }
   };
 
@@ -426,6 +476,23 @@ export class ConanAntagonistSheet extends ConanActorSheet {
         }
       });
     });
+    
+    // Handle defense.physical changes to update basePhysical when no effects are active
+    const defenseInput = this.element.querySelector('input[name="system.defense.physical"]');
+    if (defenseInput) {
+      defenseInput.addEventListener('change', async (event) => {
+        const newPhysical = parseInt(event.target.value) || 0;
+        const defenceActive = this.baseActor.system.defenceActive || false;
+        const immobilized = this.baseActor.system.immobilized || false;
+        
+        // If no effects are active, update basePhysical to match
+        if (!defenceActive && !immobilized) {
+          await this.baseActor.update({
+            'system.defense.basePhysical': newPhysical
+          });
+        }
+      });
+    }
     
     // Handle N/A checkboxes for damage types
     setupNACheckboxes(this.element);
@@ -512,12 +579,17 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       newPhysical = basePhysical + 2;
     }
     
-    // Update actor
-    await this.baseActor.update({
+    // Update actor - only set basePhysical if it doesn't exist yet
+    const updateData = {
       "system.defenceActive": newDefence,
-      "system.defense.basePhysical": basePhysical,
       "system.defense.physical": newPhysical
-    });
+    };
+    
+    if (this.baseActor.system.defense.basePhysical === undefined) {
+      updateData["system.defense.basePhysical"] = basePhysical;
+    }
+    
+    await this.baseActor.update(updateData);
     
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {
@@ -535,9 +607,13 @@ export class ConanAntagonistSheet extends ConanActorSheet {
     const basePhysical = this.baseActor.system.defense.basePhysical ?? this.baseActor.system.defense.physical;
     
     const updateData = {
-      "system.immobilized": newImmobilized,
-      "system.defense.basePhysical": basePhysical
+      "system.immobilized": newImmobilized
     };
+    
+    // Only set basePhysical if it doesn't exist yet
+    if (this.baseActor.system.defense.basePhysical === undefined) {
+      updateData["system.defense.basePhysical"] = basePhysical;
+    }
     
     if (newImmobilized) {
       // When immobilized, set defense to 0 and disable Defence

@@ -1,3 +1,25 @@
+# [0.0.40] - 2025-12-10
+### Fixed
+- Fixed NPC defense value synchronization bug: basePhysical now properly updates when defense value is manually edited on NPC sheet (both Minion and Antagonist).
+- Fixed NPC sheet freezing issues: disabled ApplicationV2 auto-submit (`submitOnChange: false`) to prevent UI blocking during field edits.
+- Fixed NPC (Minion) wounded checkbox freezing issue: replaced event listener approach with dedicated action handler, removed blocking `await` on update.
+- Removed conflicting Handlebars helpers that were overriding Foundry VTT v13 built-in helpers (`concat`, `eq`, `ne`, `gt`, `lt`, `select`).
+- Removed unused variable `originalCombatRollInitiative` in combat override code.
+
+### Changed
+- NPC defense.physical field now includes listener to sync basePhysical when no effects (Defence/Immobilized) are active.
+- Wounded checkbox in Minion sheet now uses `data-action="toggleWounded"` with dedicated handler instead of relying on ApplicationV2 auto-submit.
+- Wounded checkbox update now asynchronous (non-blocking) with immediate CSS feedback and deferred Combat Tracker refresh.
+- NPC sheets (Minion and Antagonist) now use `submitOnChange: false` for smooth editing without UI freezes.
+- Handlebars helpers reduced to only custom implementations: `times` and `includes` (all others now use Foundry's built-in versions).
+
+### Technical
+- Improved NPC defense management: Defence and Immobilized toggles only set basePhysical on first use (no longer overwrite existing value).
+- Eliminated event listener multiplication in NPC wounded checkbox handling.
+- Disabled ApplicationV2 auto-submit for NPC sheets to prevent re-render on every field change.
+- Optimized wounded toggle: CSS update immediate, actor update non-blocking, combat tracker refresh deferred to `.then()`.
+- Better compatibility with Foundry VTT v13+ by using built-in Handlebars helpers.
+
 # [0.0.38] - 2025-12-09
 ### Added
 - Added missing `flexDie` localization key to English translation.
