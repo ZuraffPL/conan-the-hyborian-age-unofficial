@@ -1,7 +1,6 @@
 /* === Character Creation Dialog === */
 .character-creation {
-  background: url("../ui/parchment.jpg") repeat;
-  background-size: 400px 400px;
+  background-color: #f5deab;
 }
 
 .character-creation .window-content {

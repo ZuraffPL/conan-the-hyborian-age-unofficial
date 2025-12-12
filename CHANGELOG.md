@@ -1,3 +1,27 @@
+# [0.0.42] - 2025-12-12
+### Fixed
+- Fixed permission errors preventing players from dealing damage to enemies during combat
+- Fixed "User lacks permission to update Token" errors for Player and Trusted Player roles
+- Fixed "User lacks permission to update Combatant" errors when marking enemies as defeated
+- Fixed 404 errors for missing parchment background images in CSS files
+
+### Changed
+- Token and Combatant updates now use socket system to allow GM to execute updates on behalf of players
+- Removed references to non-existent parchment.webp and parchment.jpg background images from CSS
+
+### Added
+- Added `requestTokenUpdate()` socket method for players to update enemy tokens through GM
+- Added `requestCombatantUpdate()` socket method for players to update combat tracker through GM
+- Added `_handleTokenUpdate()` socket handler (GM-only) to process token update requests
+- Added `_handleCombatantUpdate()` socket handler (GM-only) to process combatant update requests
+- Added `tokenUpdateComplete` event handler to prevent console warnings
+
+### Technical
+- All `targetToken.update()` calls in damage application now use `ConanSocket.requestTokenUpdate()`
+- All `combatant.update()` calls now use `ConanSocket.requestCombatantUpdate()`
+- Players can now deal damage from chat messages and Flex Effects (Massive Damage) without permission errors
+- Socket system automatically routes player requests to GM for privileged operations
+
 # [0.0.40] - 2025-12-10
 ### Fixed
 - Fixed NPC defense value synchronization bug: basePhysical now properly updates when defense value is manually edited on NPC sheet (both Minion and Antagonist).

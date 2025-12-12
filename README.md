@@ -43,16 +43,16 @@ This creates dynamic, exciting tests where even desperate situations can turn ar
 
 ## System Features
 
-### Latest Version: [0.0.40] - 2025-12-10
+### Latest Version: [0.0.42] - 2025-12-12
 
-**NPC Defense Synchronization & Performance Improvements**
-- **Fixed**: NPC defense value synchronization bug - basePhysical now properly updates when defense is manually edited on NPC sheets (Minion and Antagonist)
-- **Fixed**: NPC sheet freezing issues - disabled ApplicationV2 auto-submit to prevent UI blocking during field edits (attributes, defense, armor, threshold, weapon names, action count)
-- **Fixed**: NPC (Minion) wounded checkbox freezing - replaced event listeners with dedicated action handler, removed blocking awaits for instant response
-- **Fixed**: Removed conflicting Handlebars helpers overriding Foundry VTT v13 built-ins (`concat`, `eq`, `ne`, `gt`, `lt`, `select`)
-- **Improved**: Smooth NPC sheet editing without freezes - changes save automatically in background
-- **Improved**: Better compatibility with Foundry VTT v13+ by using built-in Handlebars helpers
-- **Optimized**: Eliminated event listener multiplication and UI-blocking updates for better performance
+**Multiplayer Permission Fixes**
+- **Fixed**: Permission errors preventing players from dealing damage to enemies during combat
+- **Fixed**: "User lacks permission to update Token" errors for Player and Trusted Player roles
+- **Fixed**: "User lacks permission to update Combatant" errors when marking enemies as defeated
+- **Fixed**: 404 errors for missing parchment background images in CSS files
+- **Added**: Socket system for GM delegation of privileged operations
+- **Improved**: Players can now deal damage from chat messages and Flex Effects without permission errors
+- **Technical**: All token and combatant updates now use socket system to route player requests through GM
 
 ### Key Features Summary
 

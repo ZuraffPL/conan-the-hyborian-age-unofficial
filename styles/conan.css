@@ -23,7 +23,6 @@
 }
 
 .conan .window-content {
-  background: url("../ui/parchment.webp") repeat;
   background-color: #f4e8d8;
   font-size: 13px;
   padding: 0;
@@ -396,12 +395,14 @@ html[lang="en"] .conan .life-value-container .subtitle-label {
   border-radius: 4px;
   padding: 5px;
   background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a !important;
 }
 
 .conan .life-value-container input.life-injured {
   background: rgba(255, 100, 100, 0.3);
   border-color: #d32f2f;
   box-shadow: 0 0 8px rgba(211, 47, 47, 0.4);
+  color: #1a1a1a !important;
 }
 
 .conan .life-value-container .life-label {
@@ -522,6 +523,7 @@ html[lang="en"] .conan .defense-field .subtitle-label {
   border-radius: 4px;
   padding: 5px;
   background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a !important;
 }
 
 /* Defence Toggle Button */

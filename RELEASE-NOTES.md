@@ -1,3 +1,61 @@
+# Release v0.0.42 - Multiplayer Permission Fixes
+
+## 🔧 Critical Fixes
+
+### Fixed Permission Errors for Players
+- **Token Updates**: Players with "Player" or "Trusted Player" roles can now deal damage to enemies without "User lacks permission to update Token" errors
+- **Combat Tracker**: Players can now mark enemies as defeated in combat tracker without "User lacks permission to update Combatant" errors
+- **Flex Effects**: "Massive Damage" and other Flex Effects now work properly for players
+- **404 Errors**: Removed references to missing parchment background images that caused console errors
+
+## 🆕 What's New
+
+### Socket System Enhancement
+- Added automatic GM delegation for privileged operations
+- Players' damage dealing actions are now routed through GM via socket system
+- Seamless multiplayer experience - players don't need elevated permissions
+
+### Technical Improvements
+- `ConanSocket.requestTokenUpdate()` - New method for token updates through GM
+- `ConanSocket.requestCombatantUpdate()` - New method for combat tracker updates through GM
+- Socket handlers for GM-side execution of player-initiated updates
+- Removed non-existent background image references from CSS files
+
+## 📦 Installation
+
+### Via Foundry VTT (Recommended)
+1. Open Foundry VTT → **Game Systems** tab
+2. Click **Install System**
+3. Paste manifest URL:
+   ```
+   https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/latest/download/system.json
+   ```
+4. Click **Install**
+
+### Manual Installation
+1. Download `conan-the-hyborian-age-v0.0.42.zip` from this release
+2. Extract to your Foundry `Data/systems` directory
+3. Restart Foundry VTT
+4. Create new world with **Conan: The Hyborian Age** system
+
+## 🔧 System Requirements
+
+- **Foundry VTT**: Version 13+ (tested on v13.350)
+- **Multiplayer**: Requires at least one GM online for player damage dealing
+- **Recommended Module**: Dice So Nice (for 3D dice animations)
+
+## 📝 Full Changelog
+
+See [CHANGELOG.md](https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/blob/main/CHANGELOG.md) for complete version history.
+
+## 🎮 Recent Features
+
+**Multiplayer Compatibility**: Players can now fully participate in combat without permission errors
+- Deal damage from attack rolls
+- Apply damage from Flex Effects
+- Mark enemies as defeated
+- All privileged operations automatically handled by GM through socket system
+
 # Release v0.0.36 - Release Infrastructure Improvements
 
 ## 🔧 What's New

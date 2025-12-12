@@ -35,6 +35,15 @@ export class ConanSocket {
       case "syncActorUpdate":
         this._handleSyncActorUpdate(data);
         break;
+      case "updateToken":
+        this._handleTokenUpdate(data);
+        break;
+      case "tokenUpdateComplete":
+        // Optional: handle confirmation of token update
+        break;
+      case "updateCombatant":
+        this._handleCombatantUpdate(data);
+        break;
       case "notification":
         this._handleNotification(data);
         break;
@@ -111,6 +120,74 @@ export class ConanSocket {
   }
 
   /**
+   * Handle token update events (GM only)
+   * @param {Object} data - The token update data
+   */
+  static async _handleTokenUpdate(data) {
+    // Only GM can execute token updates
+    if (!game.user.isGM) {
+      return;
+    }
+
+    if (!data.sceneId || !data.tokenId || !data.updateData) {
+      console.warn("Conan | Invalid token update data", data);
+      return;
+    }
+
+    try {
+      const scene = game.scenes.get(data.sceneId);
+      if (!scene) {
+        console.warn(`Conan | Scene not found: ${data.sceneId}`);
+        return;
+      }
+
+      const token = scene.tokens.get(data.tokenId);
+      if (!token) {
+        console.warn(`Conan | Token not found: ${data.tokenId}`);
+        return;
+      }
+
+      await token.update(data.updateData);
+    } catch (error) {
+      console.error("Conan | Error updating token:", error);
+    }
+  }
+
+  /**
+   * Handle combatant update events (GM only)
+   * @param {Object} data - The combatant update data
+   */
+  static async _handleCombatantUpdate(data) {
+    // Only GM can execute combatant updates
+    if (!game.user.isGM) {
+      return;
+    }
+
+    if (!data.combatantId || !data.updateData) {
+      console.warn("Conan | Invalid combatant update data", data);
+      return;
+    }
+
+    try {
+      const combat = game.combat || game.combats.get(data.combatId);
+      if (!combat) {
+        console.warn(`Conan | Combat not found`);
+        return;
+      }
+
+      const combatant = combat.combatants.get(data.combatantId);
+      if (!combatant) {
+        console.warn(`Conan | Combatant not found: ${data.combatantId}`);
+        return;
+      }
+
+      await combatant.update(data.updateData);
+    } catch (error) {
+      console.error("Conan | Error updating combatant:", error);
+    }
+  }
+
+  /**
    * Handle notification events
    * @param {Object} data - The notification data
    */
@@ -163,5 +240,69 @@ export class ConanSocket {
       message: message,
       level: level
     });
+  }
+
+  /**
+   * Request token update through GM (for players without token update permissions)
+   * @param {string} sceneId - The scene ID
+   * @param {string} tokenId - The token ID
+   * @param {Object} updateData - The update data
+   * @returns {Promise<void>}
+   */
+  static async requestTokenUpdate(sceneId, tokenId, updateData) {
+    // If user is GM, update directly
+    if (game.user.isGM) {
+      const scene = game.scenes.get(sceneId);
+      if (!scene) {
+        throw new Error(`Scene not found: ${sceneId}`);
+      }
+      const token = scene.tokens.get(tokenId);
+      if (!token) {
+        throw new Error(`Token not found: ${tokenId}`);
+      }
+      return await token.update(updateData);
+    }
+
+    // Otherwise, send request to GM via socket
+    this.emit("updateToken", {
+      sceneId: sceneId,
+      tokenId: tokenId,
+      updateData: updateData
+    });
+
+    // Wait a bit to allow GM to process the request
+    return new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  /**
+   * Request combatant update through GM (for players without combatant update permissions)
+   * @param {string} combatantId - The combatant ID
+   * @param {Object} updateData - The update data
+   * @param {string} combatId - Optional combat ID (uses active combat if not provided)
+   * @returns {Promise<void>}
+   */
+  static async requestCombatantUpdate(combatantId, updateData, combatId = null) {
+    // If user is GM, update directly
+    if (game.user.isGM) {
+      const combat = combatId ? game.combats.get(combatId) : game.combat;
+      if (!combat) {
+        throw new Error(`Combat not found`);
+      }
+      const combatant = combat.combatants.get(combatantId);
+      if (!combatant) {
+        throw new Error(`Combatant not found: ${combatantId}`);
+      }
+      return await combatant.update(updateData);
+    }
+
+    // Otherwise, send request to GM via socket
+    this.emit("updateCombatant", {
+      combatId: combatId,
+      combatantId: combatantId,
+      updateData: updateData
+    });
+
+    // Wait a bit to allow GM to process the request
+    return new Promise(resolve => setTimeout(resolve, 100));
   }
 }

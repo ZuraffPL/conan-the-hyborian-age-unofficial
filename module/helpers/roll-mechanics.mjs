@@ -1065,9 +1065,11 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
     // Update token if unlinked, otherwise actor
     if (isToken && !targetToken.actorLink) {
       // For unlinked tokens in v13, use delta.system path
-      await targetToken.update({
-        "delta.system.lifePoints": newLP
-      });
+      await ConanSocket.requestTokenUpdate(
+        targetToken.parent.id,
+        targetToken.id,
+        { "delta.system.lifePoints": newLP }
+      );
     } else {
       await target.update({
         "system.lifePoints": newLP
@@ -1085,13 +1087,15 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
       defeated = true;
       // Mark as defeated in combat tracker and add dead overlay
       if (isToken) {
-        await targetToken.update({
-          "overlayEffect": CONFIG.controlIcons.defeated
-        });
+        await ConanSocket.requestTokenUpdate(
+          targetToken.parent.id,
+          targetToken.id,
+          { "overlayEffect": CONFIG.controlIcons.defeated }
+        );
       }
       const combatant = game.combat?.combatants.find(c => c.tokenId === targetToken.id);
       if (combatant) {
-        await combatant.update({ defeated: true });
+        await ConanSocket.requestCombatantUpdate(combatant.id, { defeated: true });
       }
     }
     
@@ -1111,24 +1115,30 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
       
       // Mark minion as defeated (update token if unlinked, otherwise actor)
       if (isToken && !targetToken.actorLink) {
-        await targetToken.update({
-          "delta.system.defeated": true,
-          "overlayEffect": CONFIG.controlIcons.defeated
-        });
+        await ConanSocket.requestTokenUpdate(
+          targetToken.parent.id,
+          targetToken.id,
+          {
+            "delta.system.defeated": true,
+            "overlayEffect": CONFIG.controlIcons.defeated
+          }
+        );
       } else {
         await target.update({
           "system.defeated": true
         });
         if (isToken) {
-          await targetToken.update({
-            "overlayEffect": CONFIG.controlIcons.defeated
-          });
+          await ConanSocket.requestTokenUpdate(
+            targetToken.parent.id,
+            targetToken.id,
+            { "overlayEffect": CONFIG.controlIcons.defeated }
+          );
         }
       }
       
       const combatant = game.combat?.combatants.find(c => c.tokenId === targetToken.id);
       if (combatant) {
-        await combatant.update({ defeated: true });
+        await ConanSocket.requestCombatantUpdate(combatant.id, { defeated: true });
       }
       
     } else if (finalDamage >= threshold) {
@@ -1142,24 +1152,30 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
       
       // Mark minion as defeated (update token if unlinked, otherwise actor)
       if (isToken && !targetToken.actorLink) {
-        await targetToken.update({
-          "delta.system.defeated": true,
-          "overlayEffect": CONFIG.controlIcons.defeated
-        });
+        await ConanSocket.requestTokenUpdate(
+          targetToken.parent.id,
+          targetToken.id,
+          {
+            "delta.system.defeated": true,
+            "overlayEffect": CONFIG.controlIcons.defeated
+          }
+        );
       } else {
         await target.update({
           "system.defeated": true
         });
         if (isToken) {
-          await targetToken.update({
-            "overlayEffect": CONFIG.controlIcons.defeated
-          });
+          await ConanSocket.requestTokenUpdate(
+            targetToken.parent.id,
+            targetToken.id,
+            { "overlayEffect": CONFIG.controlIcons.defeated }
+          );
         }
       }
       
       const combatant = game.combat?.combatants.find(c => c.tokenId === targetToken.id);
       if (combatant) {
-        await combatant.update({ defeated: true });
+        await ConanSocket.requestCombatantUpdate(combatant.id, { defeated: true });
       }
       
     } else {
@@ -1168,9 +1184,11 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
       
       // Mark minion as wounded (update token if unlinked, otherwise actor)
       if (isToken && !targetToken.actorLink) {
-        await targetToken.update({
-          "delta.system.wounded": true
-        });
+        await ConanSocket.requestTokenUpdate(
+          targetToken.parent.id,
+          targetToken.id,
+          { "delta.system.wounded": true }
+        );
       } else {
         await target.update({
           "system.wounded": true
