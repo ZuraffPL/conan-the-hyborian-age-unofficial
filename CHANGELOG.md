@@ -1,3 +1,29 @@
+# [0.0.44] - 2025-01-01
+### Fixed
+- Fixed NPC sheets freezing when editing text fields (weapon names, damage, power descriptions) by implementing debounced form handling
+- Fixed textarea auto-resize issues in NPC powers/special actions - fields now respect minimum height and don't cut off last line of text
+- Fixed textarea auto-resize in skill items - effect description fields now properly expand without cutting text
+- Fixed form submission loop causing NPC sheets to become unresponsive during text input
+
+### Changed
+- NPC sheets (Minion/Antagonist) now use custom form handling with debounced text input (500ms delay) for smooth editing
+- Text fields (weapon names, descriptions) save with delay and `render: false` to prevent sheet refresh during typing
+- Numeric fields and selects save immediately on change for responsive UI
+- Textarea auto-resize logic improved: respects CSS `min-height`, adds buffer to prevent text cutoff, dynamically controls scrollbar visibility
+- Increased font size in all descriptive text fields for better readability at 1440p resolution
+
+### Added
+- Added `debounce()` utility function for delayed form updates in NPC sheets
+- Added intelligent overflow control - scrollbars appear only when content exceeds max-height
+- Font size increases: NPC powers/actions (14px→15px), player notes/biography (14px→15px), skill descriptions (13px→14px), weapon/armor stipulations (14px→15px)
+
+### Technical
+- NPC sheets bypass parent class's `submitOnChange` handler by calling grandparent `_onRender` directly
+- Form inputs tracked with `_isUpdating` flag to prevent re-render loops
+- Text inputs use 'input' event with debounce + 'blur' event for immediate save on field exit
+- Textarea auto-resize calculates height as `Math.max(minHeight, Math.min(scrollHeight + 2, maxHeight))`
+- CSS changes: textareas use `resize: none`, `overflow-y: hidden` (controlled by JS), `box-sizing: border-box`
+
 # [0.0.42] - 2025-12-12
 ### Fixed
 - Fixed permission errors preventing players from dealing damage to enemies during combat

@@ -1,3 +1,85 @@
+# Release v0.0.44 - NPC Sheet Responsiveness & UX Improvements
+
+## 🔧 Critical Fixes
+
+### Fixed NPC Sheet Freezing Issues
+- **Text Input Freeze**: NPC sheets (Minion/Antagonist) no longer freeze when typing weapon names, damage values, or power descriptions
+- **Form Responsiveness**: Eliminated form submission loop that made sheets unresponsive during text editing
+- **Textarea Auto-Resize**: Fixed textarea fields cutting off last line of text - now properly respects minimum height and expands smoothly
+- **Skill Items**: Fixed auto-resize issues in skill item effect descriptions
+
+### Improved Text Field Behavior
+- Text fields now save with 500ms delay (debounced) to prevent constant re-rendering while typing
+- Numeric fields and dropdowns save immediately for responsive feel
+- Fields no longer lose focus or flicker during editing
+- Sheet maintains scroll position when fields are updated
+
+## 🎨 Enhanced Readability
+
+### Increased Font Sizes (Better for 1440p)
+- **NPC Powers & Special Actions**: 14px → **15px**
+- **Player Biography & Notes**: 14px → **15px**
+- **Skill Descriptions**: 13px → **14px**
+- **Weapon/Armor Stipulations**: 14px → **15px**
+
+### Smarter Textarea Behavior
+- Empty or small content: maintains comfortable minimum height (80px)
+- Growing content: expands automatically without cutting text
+- Large content: shows scrollbar only when exceeding max height (300-400px)
+- No more manual resizing needed - fully automatic
+
+## 🆕 What's New
+
+### Advanced Form Handling
+- Debounced text input with intelligent save timing
+- Separate handling for text vs numeric/select fields
+- Prevention of re-render loops during editing
+- Blur event ensures save when leaving field
+
+### Technical Improvements
+- Custom `_setupNPCFormHandling()` method for NPC sheets
+- Bypasses parent class's auto-submit to avoid conflicts
+- Form update tracking with `_isUpdating` flag
+- Enhanced auto-resize algorithm with min/max height respect
+
+## 📦 Installation
+
+### Via Foundry VTT (Recommended)
+1. Open Foundry VTT → **Game Systems** tab
+2. Click **Install System**
+3. Paste manifest URL:
+   ```
+   https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/latest/download/system.json
+   ```
+4. Click **Install**
+
+### Manual Installation
+1. Download `conan-the-hyborian-age.zip` from [Releases](https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases)
+2. Extract to `FoundryVTT/Data/systems/`
+3. Restart Foundry VTT
+
+## 🎮 For Game Masters
+
+### Better NPC Management
+- Create and edit NPC sheets without frustrating freezes
+- Type weapon names and descriptions smoothly
+- Powers and special abilities auto-expand to fit content
+- All text fields more readable on high-resolution displays
+
+### Improved Workflow
+- Quick numeric adjustments (attributes, damage) save instantly
+- Text descriptions save automatically after brief pause
+- No need to manually resize text boxes
+- Focus stays in field while typing
+
+## 🐛 Known Issues
+- None reported for this release
+
+## 📝 Full Changelog
+See [CHANGELOG.md](CHANGELOG.md) for complete technical details.
+
+---
+
 # Release v0.0.42 - Multiplayer Permission Fixes
 
 ## 🔧 Critical Fixes

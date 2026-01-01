@@ -1153,11 +1153,12 @@ html[lang="en"] .conan.sheet.actor.antagonist .action-field .subtitle-label {
   background: #f5e6d3;
   color: #3d2408;
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
-  resize: vertical;
-  transition: all 0.2s;
-  overflow-y: auto;
+  resize: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  overflow-y: hidden;
+  box-sizing: border-box;
 }
 
 .conan.sheet.actor.minion .powers-section textarea:focus,

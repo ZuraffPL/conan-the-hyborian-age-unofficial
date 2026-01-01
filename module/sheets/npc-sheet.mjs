@@ -6,6 +6,24 @@ import { ConanActorSheet } from "./actor-sheet.mjs";
 import { NPCAttackDialog } from "../helpers/npc-attack-dialog.mjs";
 
 /**
+ * Debounce function to delay execution
+ * @param {Function} func - Function to debounce
+ * @param {number} wait - Milliseconds to wait
+ * @returns {Function} Debounced function
+ */
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+/**
  * Setup N/A checkbox handlers with strikethrough effect
  * @param {HTMLElement} element - The sheet element
  */
@@ -122,10 +140,17 @@ export class ConanMinionSheet extends ConanActorSheet {
 
   /** @override */
   async _onRender(context, options) {
-    await super._onRender(context, options);
+    // Call grandparent _onRender directly to avoid ConanActorSheet's form listener
+    // which is designed for character sheets with submitOnChange: true
+    await foundry.applications.api.HandlebarsApplicationMixin(
+      foundry.applications.sheets.ActorSheetV2
+    ).prototype._onRender.call(this, context, options);
     
     // Activate tabs for NPCs
     this._activateTabs();
+    
+    // Setup NPC-specific form handling with debounce for text inputs
+    this._setupNPCFormHandling();
     
     // Add validation to numeric inputs
     const inputs = this.element.querySelectorAll('input[type="number"]');
@@ -172,17 +197,30 @@ export class ConanMinionSheet extends ConanActorSheet {
     // Setup auto-resize for powers textareas
     const powersTextareas = this.element.querySelectorAll('textarea.auto-resize-powers');
     powersTextareas.forEach(textarea => {
+      // Get the CSS min-height value (default 80px)
+      const computedStyle = window.getComputedStyle(textarea);
+      const minHeight = parseInt(computedStyle.minHeight) || 80;
+      const maxHeight = 400;
+      
       const adjustHeight = () => {
+        // Temporarily set height to auto to get accurate scrollHeight
         textarea.style.height = 'auto';
-        textarea.style.height = Math.min(textarea.scrollHeight, 400) + 'px';
+        
+        // Calculate the needed height with a small buffer for line-height
+        const scrollHeight = textarea.scrollHeight;
+        
+        // Use the larger of minHeight or scrollHeight, but cap at maxHeight
+        const newHeight = Math.max(minHeight, Math.min(scrollHeight + 2, maxHeight));
+        textarea.style.height = newHeight + 'px';
+        
+        // Show/hide scrollbar based on content
+        textarea.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
       };
       
       textarea.addEventListener('input', adjustHeight);
       
-      // Initial adjustment
-      if (textarea.value) {
-        adjustHeight();
-      }
+      // Initial adjustment - always run to set proper overflow
+      adjustHeight();
     });
     
     // Validate attacks <= actions
@@ -333,6 +371,103 @@ export class ConanMinionSheet extends ConanActorSheet {
   }
 
   /**
+   * Setup form handling for NPC sheets with debounce for text inputs
+   * This prevents the sheet from freezing during text entry
+   */
+  _setupNPCFormHandling() {
+    const form = this.element.querySelector('form');
+    if (!form) return;
+    
+    // Track if we're currently updating to prevent re-render loops
+    this._isUpdating = false;
+    
+    // Create debounced update function for text inputs (500ms delay)
+    const debouncedTextUpdate = debounce(async (fieldName, fieldValue) => {
+      if (this._isUpdating) return;
+      this._isUpdating = true;
+      
+      try {
+        const updateData = {};
+        updateData[fieldName] = fieldValue;
+        await this.baseActor.update(updateData, { render: false });
+      } finally {
+        this._isUpdating = false;
+      }
+    }, 500);
+    
+    // Create immediate update function for non-text inputs
+    const immediateUpdate = async (fieldName, fieldValue, dtype) => {
+      if (this._isUpdating) return;
+      this._isUpdating = true;
+      
+      try {
+        // Parse value based on data type
+        if (dtype === "Number") {
+          fieldValue = parseInt(fieldValue) || 0;
+        } else if (dtype === "Boolean") {
+          // Already boolean from checkbox
+        }
+        
+        const updateData = {};
+        updateData[fieldName] = fieldValue;
+        await this.baseActor.update(updateData);
+      } finally {
+        this._isUpdating = false;
+      }
+    };
+    
+    // Handle text inputs with debounce (input event for real-time feel)
+    const textInputs = form.querySelectorAll('input[type="text"], textarea');
+    textInputs.forEach(input => {
+      // Use 'input' event for real-time debounced updates
+      input.addEventListener('input', (event) => {
+        const fieldName = event.target.name;
+        if (!fieldName) return;
+        debouncedTextUpdate(fieldName, event.target.value);
+      });
+      
+      // Also save on blur (when leaving the field)
+      input.addEventListener('blur', async (event) => {
+        const fieldName = event.target.name;
+        if (!fieldName || this._isUpdating) return;
+        
+        this._isUpdating = true;
+        try {
+          const updateData = {};
+          updateData[fieldName] = event.target.value;
+          await this.baseActor.update(updateData, { render: false });
+        } finally {
+          this._isUpdating = false;
+        }
+      });
+    });
+    
+    // Handle number inputs and selects with immediate update on change
+    const numberInputs = form.querySelectorAll('input[type="number"], select');
+    numberInputs.forEach(input => {
+      input.addEventListener('change', (event) => {
+        const fieldName = event.target.name;
+        if (!fieldName) return;
+        const dtype = event.target.dataset.dtype || (event.target.type === 'number' ? 'Number' : 'String');
+        immediateUpdate(fieldName, event.target.value, dtype);
+      });
+    });
+    
+    // Handle checkboxes with immediate update
+    const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+      // Skip checkboxes that have specific action handlers (like wounded, defence, etc.)
+      if (checkbox.dataset.action) return;
+      
+      checkbox.addEventListener('change', (event) => {
+        const fieldName = event.target.name;
+        if (!fieldName) return;
+        immediateUpdate(fieldName, event.target.checked, 'Boolean');
+      });
+    });
+  }
+
+  /**
    * Update wounded box CSS based on current actor state
    */
   _updateWoundedState() {
@@ -453,10 +588,17 @@ export class ConanAntagonistSheet extends ConanActorSheet {
 
   /** @override */
   async _onRender(context, options) {
-    await super._onRender(context, options);
+    // Call grandparent _onRender directly to avoid ConanActorSheet's form listener
+    // which is designed for character sheets with submitOnChange: true
+    await foundry.applications.api.HandlebarsApplicationMixin(
+      foundry.applications.sheets.ActorSheetV2
+    ).prototype._onRender.call(this, context, options);
     
     // Activate tabs for NPCs
     this._activateTabs();
+    
+    // Setup NPC-specific form handling with debounce for text inputs
+    this._setupNPCFormHandling();
     
     // Add validation to numeric inputs
     const inputs = this.element.querySelectorAll('input[type="number"]');
@@ -500,17 +642,30 @@ export class ConanAntagonistSheet extends ConanActorSheet {
     // Setup auto-resize for powers textareas
     const powersTextareas = this.element.querySelectorAll('textarea.auto-resize-powers');
     powersTextareas.forEach(textarea => {
+      // Get the CSS min-height value (default 80px)
+      const computedStyle = window.getComputedStyle(textarea);
+      const minHeight = parseInt(computedStyle.minHeight) || 80;
+      const maxHeight = 400;
+      
       const adjustHeight = () => {
+        // Temporarily set height to auto to get accurate scrollHeight
         textarea.style.height = 'auto';
-        textarea.style.height = Math.min(textarea.scrollHeight, 400) + 'px';
+        
+        // Calculate the needed height with a small buffer for line-height
+        const scrollHeight = textarea.scrollHeight;
+        
+        // Use the larger of minHeight or scrollHeight, but cap at maxHeight
+        const newHeight = Math.max(minHeight, Math.min(scrollHeight + 2, maxHeight));
+        textarea.style.height = newHeight + 'px';
+        
+        // Show/hide scrollbar based on content
+        textarea.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
       };
       
       textarea.addEventListener('input', adjustHeight);
       
-      // Initial adjustment
-      if (textarea.value) {
-        adjustHeight();
-      }
+      // Initial adjustment - always run to set proper overflow
+      adjustHeight();
     });
     
     // Validate attacks <= actions
@@ -530,6 +685,103 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       actionsInput.addEventListener('change', validateAttacks);
       attacksInput.addEventListener('change', validateAttacks);
     }
+  }
+
+  /**
+   * Setup form handling for NPC sheets with debounce for text inputs
+   * This prevents the sheet from freezing during text entry
+   */
+  _setupNPCFormHandling() {
+    const form = this.element.querySelector('form');
+    if (!form) return;
+    
+    // Track if we're currently updating to prevent re-render loops
+    this._isUpdating = false;
+    
+    // Create debounced update function for text inputs (500ms delay)
+    const debouncedTextUpdate = debounce(async (fieldName, fieldValue) => {
+      if (this._isUpdating) return;
+      this._isUpdating = true;
+      
+      try {
+        const updateData = {};
+        updateData[fieldName] = fieldValue;
+        await this.baseActor.update(updateData, { render: false });
+      } finally {
+        this._isUpdating = false;
+      }
+    }, 500);
+    
+    // Create immediate update function for non-text inputs
+    const immediateUpdate = async (fieldName, fieldValue, dtype) => {
+      if (this._isUpdating) return;
+      this._isUpdating = true;
+      
+      try {
+        // Parse value based on data type
+        if (dtype === "Number") {
+          fieldValue = parseInt(fieldValue) || 0;
+        } else if (dtype === "Boolean") {
+          // Already boolean from checkbox
+        }
+        
+        const updateData = {};
+        updateData[fieldName] = fieldValue;
+        await this.baseActor.update(updateData);
+      } finally {
+        this._isUpdating = false;
+      }
+    };
+    
+    // Handle text inputs with debounce (input event for real-time feel)
+    const textInputs = form.querySelectorAll('input[type="text"], textarea');
+    textInputs.forEach(input => {
+      // Use 'input' event for real-time debounced updates
+      input.addEventListener('input', (event) => {
+        const fieldName = event.target.name;
+        if (!fieldName) return;
+        debouncedTextUpdate(fieldName, event.target.value);
+      });
+      
+      // Also save on blur (when leaving the field)
+      input.addEventListener('blur', async (event) => {
+        const fieldName = event.target.name;
+        if (!fieldName || this._isUpdating) return;
+        
+        this._isUpdating = true;
+        try {
+          const updateData = {};
+          updateData[fieldName] = event.target.value;
+          await this.baseActor.update(updateData, { render: false });
+        } finally {
+          this._isUpdating = false;
+        }
+      });
+    });
+    
+    // Handle number inputs and selects with immediate update on change
+    const numberInputs = form.querySelectorAll('input[type="number"], select');
+    numberInputs.forEach(input => {
+      input.addEventListener('change', (event) => {
+        const fieldName = event.target.name;
+        if (!fieldName) return;
+        const dtype = event.target.dataset.dtype || (event.target.type === 'number' ? 'Number' : 'String');
+        immediateUpdate(fieldName, event.target.value, dtype);
+      });
+    });
+    
+    // Handle checkboxes with immediate update
+    const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+      // Skip checkboxes that have specific action handlers (like wounded, defence, etc.)
+      if (checkbox.dataset.action) return;
+      
+      checkbox.addEventListener('change', (event) => {
+        const fieldName = event.target.name;
+        if (!fieldName) return;
+        immediateUpdate(fieldName, event.target.checked, 'Boolean');
+      });
+    });
   }
 
   /**

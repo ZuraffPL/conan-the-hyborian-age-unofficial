@@ -249,6 +249,196 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
     // Add config data
     context.config = CONFIG.CONAN;
 
+    // Prepare select options for armor
+    if (this.item.type === "armor") {
+      context.armorTypeOptions = [
+        { value: "light", label: game.i18n.localize("CONAN.Armor.types.light") },
+        { value: "medium", label: game.i18n.localize("CONAN.Armor.types.medium") },
+        { value: "heavy", label: game.i18n.localize("CONAN.Armor.types.heavy") },
+        { value: "shield", label: game.i18n.localize("CONAN.Armor.types.shield") }
+      ];
+
+      // Specific make options based on armor type
+      const specificMakesByType = {
+        light: [
+          { value: "leather", label: game.i18n.localize("CONAN.Armor.makes.leather") },
+          { value: "hide", label: game.i18n.localize("CONAN.Armor.makes.hide") },
+          { value: "bones", label: game.i18n.localize("CONAN.Armor.makes.bones") }
+        ],
+        medium: [
+          { value: "breastplate", label: game.i18n.localize("CONAN.Armor.makes.breastplate") },
+          { value: "cuirass", label: game.i18n.localize("CONAN.Armor.makes.cuirass") },
+          { value: "hauberk", label: game.i18n.localize("CONAN.Armor.makes.hauberk") }
+        ],
+        heavy: [
+          { value: "fullPlate", label: game.i18n.localize("CONAN.Armor.makes.fullPlate") },
+          { value: "knightArmor", label: game.i18n.localize("CONAN.Armor.makes.knightArmor") }
+        ],
+        shield: [
+          { value: "wood", label: game.i18n.localize("CONAN.Armor.makes.wood") },
+          { value: "metal", label: game.i18n.localize("CONAN.Armor.makes.metal") },
+          { value: "makeshift", label: game.i18n.localize("CONAN.Armor.makes.makeshift") }
+        ]
+      };
+      context.specificMakeOptions = specificMakesByType[this.item.system.armorType] || [];
+    }
+
+    // Prepare select options for weapons
+    if (this.item.type === "weapon") {
+      context.weaponTypeOptions = [
+        { value: "melee", label: game.i18n.localize("CONAN.Weapon.types.melee") },
+        { value: "thrown", label: game.i18n.localize("CONAN.Weapon.types.thrown") },
+        { value: "ranged", label: game.i18n.localize("CONAN.Weapon.types.ranged") }
+      ];
+
+      context.handednessOptions = [
+        { value: "one-handed", label: game.i18n.localize("CONAN.Weapon.handednessOptions.oneHanded") },
+        { value: "two-handed", label: game.i18n.localize("CONAN.Weapon.handednessOptions.twoHanded") }
+      ];
+
+      // Weapon size options depend on weapon type and handedness
+      const weaponType = this.item.system.weaponType;
+      const handedness = this.item.system.handedness;
+      
+      if (weaponType === "thrown") {
+        context.weaponSizeOptions = [
+          { value: "light", label: game.i18n.localize("CONAN.Weapon.sizes.light") },
+          { value: "medium", label: game.i18n.localize("CONAN.Weapon.sizes.medium") },
+          { value: "various", label: game.i18n.localize("CONAN.Weapon.sizes.various") }
+        ];
+      } else if (weaponType === "ranged") {
+        context.weaponSizeOptions = [
+          { value: "light", label: game.i18n.localize("CONAN.Weapon.sizes.light") },
+          { value: "medium", label: game.i18n.localize("CONAN.Weapon.sizes.medium") },
+          { value: "heavy", label: game.i18n.localize("CONAN.Weapon.sizes.heavy") }
+        ];
+      } else if (handedness === "two-handed") {
+        context.weaponSizeOptions = [
+          { value: "medium", label: game.i18n.localize("CONAN.Weapon.sizes.medium") },
+          { value: "heavy", label: game.i18n.localize("CONAN.Weapon.sizes.heavy") }
+        ];
+      } else {
+        context.weaponSizeOptions = [
+          { value: "light", label: game.i18n.localize("CONAN.Weapon.sizes.light") },
+          { value: "medium", label: game.i18n.localize("CONAN.Weapon.sizes.medium") },
+          { value: "heavy", label: game.i18n.localize("CONAN.Weapon.sizes.heavy") }
+        ];
+      }
+
+      // Range options
+      if (weaponType === "melee") {
+        if (handedness === "two-handed" && this.item.system.weaponSize === "medium") {
+          context.rangeOptions = [
+            { value: "close", label: game.i18n.localize("CONAN.Weapon.ranges.close") }
+          ];
+        } else {
+          context.rangeOptions = [
+            { value: "touch", label: game.i18n.localize("CONAN.Weapon.ranges.touch") }
+          ];
+        }
+      } else if (weaponType === "thrown") {
+        context.rangeOptions = [
+          { value: "close", label: game.i18n.localize("CONAN.Weapon.ranges.close") },
+          { value: "medium3", label: game.i18n.localize("CONAN.Weapon.ranges.medium3") }
+        ];
+      } else if (weaponType === "ranged") {
+        const weaponSize = this.item.system.weaponSize;
+        if (weaponSize === "light") {
+          context.rangeOptions = [
+            { value: "medium3", label: game.i18n.localize("CONAN.Weapon.ranges.medium3") },
+            { value: "long4", label: game.i18n.localize("CONAN.Weapon.ranges.long4") }
+          ];
+        } else if (weaponSize === "medium") {
+          context.rangeOptions = [
+            { value: "medium3", label: game.i18n.localize("CONAN.Weapon.ranges.medium3") },
+            { value: "long6", label: game.i18n.localize("CONAN.Weapon.ranges.long6") }
+          ];
+        } else if (weaponSize === "heavy") {
+          context.rangeOptions = [
+            { value: "distant8", label: game.i18n.localize("CONAN.Weapon.ranges.distant8") }
+          ];
+        }
+      }
+
+      // Damage options
+      const weaponSize = this.item.system.weaponSize;
+      const improvised = this.item.system.improvised;
+
+      if (weaponType === "melee") {
+        if (handedness === "one-handed") {
+          if (weaponSize === "light") {
+            context.damageOptions = [{ value: "1d4", label: "1d4" }];
+          } else if (weaponSize === "medium") {
+            context.damageOptions = [{ value: "1d6", label: "1d6" }];
+          } else if (weaponSize === "heavy") {
+            context.damageOptions = [
+              { value: "1d6", label: "1d6" },
+              { value: "1d8", label: "1d8" }
+            ];
+          }
+        } else if (handedness === "two-handed") {
+          if (weaponSize === "medium") {
+            context.damageOptions = [{ value: "1d10", label: "1d10" }];
+          } else if (weaponSize === "heavy") {
+            context.damageOptions = [{ value: "1d12", label: "1d12" }];
+          }
+        }
+      } else if (weaponType === "thrown") {
+        if (weaponSize === "light") {
+          if (improvised) {
+            context.damageOptions = [{ value: "2", label: "2" }];
+          } else {
+            context.damageOptions = [{ value: "1d4", label: "1d4" }];
+          }
+        } else if (weaponSize === "medium") {
+          context.damageOptions = [{ value: "1d6", label: "1d6" }];
+        } else if (weaponSize === "various") {
+          context.damageOptions = [
+            { value: "1d4", label: "1d4" },
+            { value: "1d6", label: "1d6" },
+            { value: "1d8", label: "1d8" },
+            { value: "1d10", label: "1d10" },
+            { value: "1d12", label: "1d12" }
+          ];
+        }
+      } else if (weaponType === "ranged") {
+        if (weaponSize === "light") {
+          context.damageOptions = [{ value: "1d4", label: "1d4" }];
+        } else if (weaponSize === "medium") {
+          context.damageOptions = [
+            { value: "1d6", label: "1d6" },
+            { value: "1d8", label: "1d8" }
+          ];
+        } else if (weaponSize === "heavy") {
+          context.damageOptions = [
+            { value: "1d8", label: "1d8" },
+            { value: "1d10", label: "1d10" }
+          ];
+        }
+      }
+    }
+
+    // Prepare select options for skills
+    if (this.item.type === "skill") {
+      context.skillTypeOptions = [
+        { value: "origin", label: game.i18n.localize("CONAN.Skill.skillType.origin") },
+        { value: "starting", label: game.i18n.localize("CONAN.Skill.skillType.starting") },
+        { value: "legendary", label: game.i18n.localize("CONAN.Skill.skillType.legendary") },
+        { value: "advanced", label: game.i18n.localize("CONAN.Skill.skillType.advanced") }
+      ];
+    }
+
+    // Prepare select options for spells
+    if (this.item.type === "spell") {
+      context.disciplineOptions = [
+        { value: "alchemy", label: game.i18n.localize("CONAN.Spell.disciplines.alchemy") },
+        { value: "blackMagic", label: game.i18n.localize("CONAN.Spell.disciplines.blackMagic") },
+        { value: "demonicMagic", label: game.i18n.localize("CONAN.Spell.disciplines.demonicMagic") },
+        { value: "necromanticMagic", label: game.i18n.localize("CONAN.Spell.disciplines.necromanticMagic") },
+        { value: "whiteMagic", label: game.i18n.localize("CONAN.Spell.disciplines.whiteMagic") }
+      ];
+    }
+
     return context;
   }
 
@@ -334,22 +524,37 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
    * Setup auto-resize for textarea elements
    */
   _setupAutoResizeTextarea() {
-    const textareas = this.element.querySelectorAll('textarea[name="system.stipulations"], textarea[name="system.effect"], textarea[name="system.description"]');
-    
-    const autoResize = (textarea) => {
-      textarea.style.height = 'auto';
-      textarea.style.height = (textarea.scrollHeight) + 'px';
-    };
+    const textareas = this.element.querySelectorAll('textarea[name="system.stipulations"], textarea[name="system.effect"], textarea[name="system.description"], textarea.auto-resize-skill');
     
     textareas.forEach(textarea => {
+      // Get the CSS min-height value (default 80px for skills)
+      const computedStyle = window.getComputedStyle(textarea);
+      const minHeight = parseInt(computedStyle.minHeight) || 80;
+      const maxHeight = parseInt(computedStyle.maxHeight) || 300;
+      
+      const autoResize = () => {
+        // Temporarily set height to auto to get accurate scrollHeight
+        textarea.style.height = 'auto';
+        
+        // Calculate the needed height with a small buffer
+        const scrollHeight = textarea.scrollHeight;
+        
+        // Use the larger of minHeight or scrollHeight, but cap at maxHeight
+        const newHeight = Math.max(minHeight, Math.min(scrollHeight + 2, maxHeight));
+        textarea.style.height = newHeight + 'px';
+        
+        // Show/hide scrollbar based on content
+        textarea.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
+      };
+      
       // Initial resize
-      autoResize(textarea);
+      autoResize();
       
       // Resize on input
-      textarea.addEventListener('input', () => autoResize(textarea));
+      textarea.addEventListener('input', autoResize);
       
       // Resize on focus (in case content was updated programmatically)
-      textarea.addEventListener('focus', () => autoResize(textarea));
+      textarea.addEventListener('focus', autoResize);
     });
   }
 
