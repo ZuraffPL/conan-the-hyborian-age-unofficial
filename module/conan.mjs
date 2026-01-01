@@ -40,6 +40,13 @@ Hooks.once("init", async function() {
   CONFIG.Actor.documentClass = ConanActor;
   CONFIG.Item.documentClass = ConanItem;
 
+  // Add custom status effects
+  CONFIG.statusEffects.push({
+    id: "wounded",
+    name: "CONAN.NPC.wounded",
+    img: "systems/conan-the-hyborian-age/assets/icons/wounded.svg"
+  });
+
   // Register sheet application classes (ApplicationV2)
   foundry.applications.apps.DocumentSheetConfig.registerSheet(ConanActor, "conan", ConanActorSheet, {
     types: ["character"],
@@ -298,7 +305,6 @@ Hooks.on("renderCombatTracker", (app, html, data) => {
     if (actor.type === "minion") {
       const defenceActive = actor.system.defenceActive || false;
       const immobilized = actor.system.immobilized || false;
-      const wounded = actor.system.wounded || false;
       
       // Add Defence icon if active
       if (defenceActive) {
@@ -327,18 +333,7 @@ Hooks.on("renderCombatTracker", (app, html, data) => {
         tokenEffects.appendChild(immobilizedIcon);
       }
       
-      // Add Wounded icon if active
-      if (wounded) {
-        const woundedIcon = document.createElement("img");
-        woundedIcon.src = "icons/svg/blood.svg";
-        woundedIcon.classList.add("token-effect");
-        woundedIcon.title = game.i18n.localize("CONAN.NPC.wounded");
-        woundedIcon.style.border = "2px solid #dc143c";
-        woundedIcon.style.borderRadius = "3px";
-        woundedIcon.style.width = "20px";
-        woundedIcon.style.height = "20px";
-        tokenEffects.appendChild(woundedIcon);
-      }
+      // Note: Wounded icon is now displayed via status effect system
     }
     
     // Handle antagonist actors

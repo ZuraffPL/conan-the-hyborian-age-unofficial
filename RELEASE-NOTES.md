@@ -1,3 +1,35 @@
+# Release v0.0.45 - Wounded Status Effect & Origin Abilities
+
+## ✨ New Features
+
+### Wounded Status Effect for Minions
+- **Visual Status Indicator**: Minions now display a red blood drop icon when wounded
+- **Automatic Token Updates**: Checking "ranny" (wounded) on minion sheets automatically adds the status effect to their tokens
+- **Consistent Display**: Wounded icon appears on tokens, in combat tracker, and in the status effects panel
+- **Manual Control**: Can also be toggled directly from token's status effects menu (right-click → Assign Status Effects)
+
+### Origin Ability Stamina Option
+- **4th Stamina Spend Option**: Added "Activate Origin Ability" to stamina spending dialog
+- **Character Origins**: Use this option to activate special powers from your character's origin/background
+- **Full Localization**: Available in English, Polish, and French
+
+## 🎨 Visual Improvements
+
+### Status Effect Icon Colors
+- **Wounded Icon**: Displays in crimson red (#dc143c) across all UI contexts
+- **Immobilized Icon**: Now shows in black in combat tracker for better contrast and consistency
+- **No More Filter Issues**: Custom CSS ensures icons display in their intended colors
+
+## 🔧 Technical Improvements
+
+### Status Effect System Integration
+- Wounded status registered as native Foundry VTT status effect
+- Automatic synchronization between minion sheet checkbox and token status
+- Removed duplicate icon rendering in combat tracker
+- Clean integration with Foundry's built-in status effect system
+
+---
+
 # Release v0.0.44 - NPC Sheet Responsiveness & UX Improvements
 
 ## 🔧 Critical Fixes

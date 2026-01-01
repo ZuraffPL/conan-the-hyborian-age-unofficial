@@ -1,3 +1,23 @@
+# [0.0.45] - 2025-01-01
+### Added
+- Added custom "wounded" status effect with red blood drop icon for minion tokens
+- Checkbox "ranny" (wounded) on minion sheets now automatically applies/removes status effect on tokens
+- Wounded status effect displays consistently: red icon on tokens, in combat tracker, and in status effects panel
+- Added 4th stamina spend option: "Activate Origin Ability" for using character origin special powers
+- Status effect icon shows in token status effects panel and can be manually toggled
+
+### Changed
+- Wounded icon (wounded.svg) styled to display in red (#dc143c) across all UI contexts
+- Immobilized icon (paralysis.svg) now displays in black in combat tracker for better contrast
+- CSS filters disabled for wounded and immobilized icons to preserve original colors
+
+### Technical
+- Custom status effect registered in CONFIG.statusEffects during system initialization
+- `_onToggleWounded` method now calls `actor.toggleStatusEffect("wounded")` to sync token visuals
+- Added CSS rules to disable Foundry's default filters on wounded.svg and paralysis.svg
+- Removed duplicate wounded icon rendering from combat tracker hook (now uses native status effect system)
+- Localization keys added: `activateOriginAbility` and `activateOriginAbilityDesc` in EN/PL/FR
+
 # [0.0.44] - 2025-01-01
 ### Fixed
 - Fixed NPC sheets freezing when editing text fields (weapon names, damage, power descriptions) by implementing debounced form handling

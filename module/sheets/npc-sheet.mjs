@@ -504,11 +504,14 @@ export class ConanMinionSheet extends ConanActorSheet {
     // Update actor data asynchronously (no await - don't block UI)
     this.baseActor.update({
       'system.wounded': newWounded
-    }).then(() => {
+    }).then(async () => {
       // Refresh Combat Tracker after update completes
       if (game.combat && ui.combat) {
         ui.combat.render();
       }
+      
+      // Toggle wounded status effect on actor (will show on all tokens)
+      await this.baseActor.toggleStatusEffect("wounded", { active: newWounded });
     });
   }
 }

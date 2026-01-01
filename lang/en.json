@@ -604,6 +604,8 @@
       "increaseRangeDesc": "Increase thrown weapon range by 1 level or 2 zones (close→medium, medium→long)",
       "ignoreEncumbrance": "Ignore encumbrance effect",
       "ignoreEncumbranceDesc": "Ignore encumbrance effect for 1 round",
+      "activateOriginAbility": "Activate origin ability",
+      "activateOriginAbilityDesc": "Activates a character origin ability that costs Stamina",
       "boosted": "Stamina Boost",
       "damageBoosted": "Damage Boosted with Stamina",
       "massiveDamage": "Massive Damage (Stamina)",

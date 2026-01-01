@@ -1629,3 +1629,18 @@ select.value-decreased:focus {
     font-size: 11px;
   }
 }
+
+/* ================================================== */
+/*  Wounded Status Effect Styling                    */
+/* ================================================== */
+
+/* Disable filters on wounded icon to keep red color */
+img[src*="wounded.svg"] {
+  filter: none !important;
+}
+
+/* Token status effects panel */
+.effect-control[data-status-id="wounded"] img,
+.status-effects img[src*="wounded.svg"] {
+  filter: none !important;
+}

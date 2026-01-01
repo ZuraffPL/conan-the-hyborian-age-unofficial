@@ -66,6 +66,13 @@ export class StaminaSpendDialog extends foundry.applications.api.HandlebarsAppli
           label: game.i18n.localize("CONAN.Stamina.ignoreEncumbrance"),
           description: game.i18n.localize("CONAN.Stamina.ignoreEncumbranceDesc"),
           cost: 1
+        },
+        {
+          id: "activate-origin-ability",
+          icon: "fas fa-star",
+          label: game.i18n.localize("CONAN.Stamina.activateOriginAbility"),
+          description: game.i18n.localize("CONAN.Stamina.activateOriginAbilityDesc"),
+          cost: 1
         }
       ]
     };
@@ -103,13 +110,15 @@ export class StaminaSpendDialog extends foundry.applications.api.HandlebarsAppli
     const optionLabels = {
       "extra-move": game.i18n.localize("CONAN.Stamina.extraMove"),
       "increase-range": game.i18n.localize("CONAN.Stamina.increaseRange"),
-      "ignore-encumbrance": game.i18n.localize("CONAN.Stamina.ignoreEncumbrance")
+      "ignore-encumbrance": game.i18n.localize("CONAN.Stamina.ignoreEncumbrance"),
+      "activate-origin-ability": game.i18n.localize("CONAN.Stamina.activateOriginAbility")
     };
     
     const optionIcons = {
       "extra-move": "fas fa-running",
       "increase-range": "fas fa-bullseye",
-      "ignore-encumbrance": "fas fa-weight-hanging"
+      "ignore-encumbrance": "fas fa-weight-hanging",
+      "activate-origin-ability": "fas fa-star"
     };
     
     const optionLabel = optionLabels[data.option] || data.option;

@@ -603,6 +603,8 @@
       "increaseRangeDesc": "Zwiększ zasięg broni miotanej o 1 poziom lub o 2 strefy (bliski→średni, średni→daleki)",
       "ignoreEncumbrance": "Ignoruj efekt przeciążenia",
       "ignoreEncumbranceDesc": "Ignoruj efekt przeciążenia przez 1 rundę",
+      "activateOriginAbility": "Aktywuj zdolność z pochodzenia",
+      "activateOriginAbilityDesc": "Aktywuje zdolność z pochodzenia postaci, która kosztuje Wytrwałość",
       "boosted": "Wzmocnienie Wytrwałością",
       "damageBoosted": "Obrażenia Wzmocnione Wytrwałością",
       "massiveDamage": "Kolosalne Obrażenia (Wytrwałość)",

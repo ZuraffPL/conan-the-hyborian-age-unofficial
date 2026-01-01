@@ -14,3 +14,13 @@
   flex-shrink: 0;
   object-fit: contain;
 }
+
+/* Wounded status effect - keep red color, no filter */
+#combat .combatant .token-effects img.token-effect[src*="wounded.svg"] {
+  filter: none !important;
+}
+
+/* Immobilized status effect - keep black color, no filter */
+#combat .combatant .token-effects img.token-effect[src*="paralysis.svg"] {
+  filter: none !important;
+}

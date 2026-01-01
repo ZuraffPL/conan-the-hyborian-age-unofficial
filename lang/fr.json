@@ -603,6 +603,8 @@
       "increaseRangeDesc": "Augmenter la portée d'arme de jet de 1 niveau ou 2 zones (proche→moyen, moyen→long)",
       "ignoreEncumbrance": "Ignorer l'effet d'encombrement",
       "ignoreEncumbranceDesc": "Ignorer l'effet d'encombrement pendant 1 tour",
+      "activateOriginAbility": "Activer la capacité d'origine",
+      "activateOriginAbilityDesc": "Active une capacité d'origine du personnage qui coûte de l'Endurance",
       "boosted": "Augmentation d'Endurance",
       "damageBoosted": "Dégâts Augmentés par l'Endurance",
       "massiveDamage": "Dégâts Massifs (Endurance)",
