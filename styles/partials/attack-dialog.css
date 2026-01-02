@@ -24,6 +24,8 @@
   border-radius: 4px;
   font-size: 16px;
   text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a !important;
 }
 
 .attack-dialog .form-group .primary-label {
@@ -167,7 +169,7 @@ html[lang="en"] .attack-dialog .subtitle {
   text-align: center;
   font-size: 24px;
   font-weight: bold;
-  color: #8b4513;
+  color: #1a1a1a !important;
   min-height: 28px;
   display: flex;
   align-items: center;

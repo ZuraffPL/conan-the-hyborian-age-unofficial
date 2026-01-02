@@ -43,66 +43,94 @@ This creates dynamic, exciting tests where even desperate situations can turn ar
 
 ## System Features
 
-### Latest Version: [0.0.42] - 2025-12-12
+### Latest Version: [0.0.45] - 2025-01-01
 
-**Multiplayer Permission Fixes**
-- **Fixed**: Permission errors preventing players from dealing damage to enemies during combat
-- **Fixed**: "User lacks permission to update Token" errors for Player and Trusted Player roles
-- **Fixed**: "User lacks permission to update Combatant" errors when marking enemies as defeated
-- **Fixed**: 404 errors for missing parchment background images in CSS files
-- **Added**: Socket system for GM delegation of privileged operations
-- **Improved**: Players can now deal damage from chat messages and Flex Effects without permission errors
-- **Technical**: All token and combatant updates now use socket system to route player requests through GM
+**Wounded Status Effect & Origin Abilities**
+- **Added**: Custom "wounded" status effect with red blood drop icon for minion tokens
+- **Added**: Checkbox "ranny" (wounded) on minion sheets automatically applies/removes status effect on tokens
+- **Added**: Wounded status displays consistently: red icon on tokens, in combat tracker, and status effects panel
+- **Added**: 4th stamina spend option - "Activate Origin Ability" for using character origin special powers
+- **Added**: Status effect icon in token status effects panel, can be manually toggled
+- **Improved**: Icon colors - wounded displays in crimson red, immobilized in black for better contrast
+- **Technical**: Custom status effect registered in CONFIG.statusEffects, CSS filters disabled for proper color display
 
 ### Key Features Summary
+
+#### 🩸 **Status Effect System**
+- **Wounded Status**: Red blood drop icon for injured minions, syncs between sheet checkbox and token
+- **Immobilized Status**: Black paralysis icon, sets Physical Defense to 0 when active
+- **Poisoned Status**: UI toggle with 5 configurable poison effects
+- **Defeated Status**: Skull icon overlay for dead tokens (minions and antagonists)
+- **Manual Control**: Toggle status effects via token right-click menu or character sheet
+- **Combat Tracker Integration**: All status icons display in combat tracker with proper colors
 
 #### 🎲 **Complete Combat System**
 - **Damage Application**: "Deal Damage" buttons for PC and NPC damage rolls with automatic armor reduction
 - **Massive Damage**: Flex Effect option adds maximum weapon die value + modifier (or doubles fixed damage)
 - **Unlinked Token Support**: Full support for independent NPC tokens with proper data handling
 - **HP Indicator**: Visual red highlight when character is injured (actual < max HP)
-- **Dead Overlay**: Skull icon overlay for defeated tokens (minions and antagonists)
+- **Socket System**: Permission-free damage application - players can damage enemies without GM permissions
 
 #### ⚡ **Stamina Management System**
-- **Tactical Spending**: Dedicated button for tactical options (extra movement, thrown weapon range boost, ignore encumbrance)
-- **Context Menu Boosts**: Right-click on chat messages to spend 1-2 Stamina for:
-- Roll boosts (+1/+2 to attribute tests, initiative, attacks)
-- Damage boosts (+1d4/+2d4 to damage rolls)
-- Massive Damage (when exactly 1 Stamina remains)
-- **Stamina Effects**: Can stack with Flex Effect Massive Damage on same roll
+- **Tactical Options**: Dedicated button with 4 choices:
+  - Extra Move: Gain additional 2m movement
+  - Increase Range: Extend thrown weapon range by 2m
+  - Ignore Encumbrance: Negate penalties from heavy armor/equipment
+  - **Activate Origin Ability**: Use special powers from character's origin/background
+- **Context Menu Boosts**: Right-click chat messages to spend 1-2 Stamina for:
+  - Roll boosts (+1/+2 to attribute tests, initiative, attacks)
+  - Damage boosts (+1d4/+2d4 to damage rolls)
+  - Massive Damage (when exactly 1 Stamina remains)
+- **Stacking Effects**: Stamina Massive Damage can stack with Flex Effect Massive Damage
+- **Full Localization**: All options available in English, Polish, and French
 
 #### 🧙 **Complete Sorcery System**
 - **Spellcasting**: Purple "Spellcasting" button with Life Points/Stamina cost management
-- **Flex Effect Recovery**: Sorcery option in Flex Effect dialog recovers spent spell costs
-- **Three Damage Types**: Wits die, custom die, and fixed value options
+- **Flex Effect Recovery**: Sorcery option in Flex Effect dialog recovers spent spell costs (LP and Stamina)
+- **Three Damage Types**: Wits die, custom die, and fixed value options for magic damage
 - **Origin Restrictions**: 10 origins with varying magic access and discipline limits
+- **Magic Attack Rolls**: Roll vs target's Sorcery Defense with success/failure determination
+- **Visual Effects**: Purple-themed chat messages with pulsating headers for spell effects
 
 #### 🛡️ **Defense & Status Effects**
-- **Defence Toggle**: Active defense action (+2 Physical Defense, 1 Action cost)
-- **Immobilized Status**: Sets Physical Defense to 0 when active
+- **Defence Toggle**: Active defense action (+2 Physical Defense, 1 Action cost, gold highlight)
+- **Immobilized Status**: Sets Physical Defense to 0 when active (red highlight, prevents Defence)
+- **Wounded Status**: Red blood drop icon for injured minions (automatic token sync)
 - **Poisoned Status**: UI toggle with 5 configurable poison effects (full logic coming soon)
+- **Defeated Status**: Skull icon overlay automatically applied when NPCs reach 0 LP/threshold
 - **NPC Defense Sync**: Proper synchronization between basePhysical and defense values
+- **Status Panel Integration**: All effects available in token right-click menu
 
 #### 🧪 **XP & Skill Management**
-- **XP Refund**: Skills and spells refund XP cost when removed from character sheet
-- **Initial Cost Tracking**: `initialCost` flag ensures accurate refunds
+- **XP Refund**: Skills and spells automatically refund XP cost when removed from character sheet
+- **Initial Cost Tracking**: `initialCost` flag ensures accurate refunds even if item cost changes
 - **Bidirectional Sync**: Automatic synchronization between world items and character sheets
+- **Dynamic Cost Adjustment**: XP validates when editing embedded item costs
 - **Origin Skills**: Free skills based on character origin with gold badge indicators
+- **Spell Removal**: Localized notifications display refunded XP amount
 
 #### 🎯 **NPC System**
 - **Two NPC Types**: Minions (simplified) and Antagonists (full stats)
-- **Creature Types**: 6 categories (Human, Inanimate, Undead, Monstrosity, Demon, Beast)
-- **Tabbed Interface**: Statistics and Powers tabs with auto-resize textareas
+- **Creature Types**: 6 categories (Human, Ina with automatic token overlay updates
+- **Action Economy**: Track attacks, actions, and movement allowances
+- **Damage Sections**: Melee and Ranged with N/A toggles, automatic damage calculations
+- **Color-Coded Chat**: Green messages for minions, red for antagonists
+- **NPC Sheets**: Optimized 640px width with compact layouts, debounced form handling
+- **Status Synchronization**: Sheet checkboxes automatically update token status effec-resize textareas
 - **Combat Tracking**: Wounded/defeated status, action economy, damage calculations
 - **Color-Coded Chat**: Green for minions, red for antagonists
 
 #### 🌐 **Multi-Language Support**
 - **Three Languages**: English, Polish, and French (complete 611-line translation)
-- **Smart Subtitles**: English subtitles hidden when system language is English
-- **Consistent Terminology**: Proper translations for all game terms
-
-#### 🎨 **UI & UX Improvements**
-- **CSS Organization**: Modular CSS structure with partials folder
+- **Smart Subtitles**: English subtitles hidden when system langua for organized styling
+- **Responsive Design**: Optimized for 1080p and 1440p with resizable windows
+- **Visual Feedback**: Color-coded buttons, gradients, animations, status highlights
+- **Auto-Save**: Real-time change detection and persistence without sheet refresh
+- **Compact Layout**: Information-dense design maximizes screen space
+- **Font Sizing**: Increased readability - 15px for descriptions, 14px for details
+- **NPC Form Handling**: Debounced text inputs (500ms) prevent sheet freezing during typing
+- **Textarea Auto-Resize**: Respects min-height, expands smoothly, shows scrollbar only when needed
+- **Status Icons**: Custom colors preserved - red for wounded, black for immobilized
 - **Responsive Design**: Optimized for 1080p with resizable windows
 - **Visual Feedback**: Color-coded buttons, gradients, animations
 - **Auto-Save**: Real-time change detection and persistence
@@ -142,8 +170,8 @@ Each attribute has its own die (d6/d8/d10) that improves as the value increases.
 
 ### The Flex Die System
 
-The **Flex Die** (Kość Brawury) is a special d10 rolled alongside every test. When you roll a **10**, you trigger a powerful **Flex Effect**:
-
+The **Flex Die** (Kość Brawury) is a special d10 rolled alongside every test. W (purple option)
+- **Massive Damage**: Add maximum weapon die value + modifier to damage (or double fixed damage, red option
 - **Stamina Boost**: Gain +1 stamina point to keep fighting
 - **Convert to Success**: Turn a failed roll into a success
 - **Sorcery Recovery**: Restore spent Life Points and Stamina from spellcasting
@@ -200,10 +228,14 @@ The **Flex Die** (Kość Brawury) is a special d10 rolled alongside every test. 
 3. Watch the dice roll (both attribute die and Flex Die)
 4. Check the chat for results:
 - Success or Failure
-- If Flex Die shows 10, choose your Flex Effect!
-
-#### 4. Manage Combat & Resources
-
+- If Flex Die shows 10, choose your Flex Effect!, gold highlight)
+- **Immobilized Status**: Click paralysis icon if character is immobilized (sets Defense to 0, red highlight)
+- **Wounded Status (Minions)**: Check "ranny" checkbox to mark minion as wounded (red blood drop icon on token)
+- **Stamina Spending**: 
+  - Click Stamina button for tactical options (extra move, range boost, ignore encumbrance, origin ability)
+  - Right-click chat messages to boost rolls (+1/+2) or damage (+1d4/+2d4)
+- **Damage Application**: Click "Deal Damage" buttons in chat to apply damage to targets
+- **Status Effects**: Right-click tokens → Assign Status Effects to manually toggle wounded/immobilized/poisoned
 - **Defence Action**: Click shield icon to activate +2 Physical Defense bonus (costs 1 Action)
 - **Immobilized Status**: Click paralysis icon if character is immobilized (sets Defense to 0)
 - **Stamina Spending**: Use right-click context menu on chat messages to boost rolls or damage
@@ -216,18 +248,21 @@ The **Flex Die** (Kość Brawury) is a special d10 rolled alongside every test. 
 3. Select target Sorcery Defense if attacking
 4. Roll magic attack vs Sorcery Defense
 5. If successful, roll magic damage (Wits die, custom die, or fixed value)
-
+NPC Text Input**: Sheet may feel slightly laggy during text typing (500ms debounce for smooth operation)
 ## Known Issues
 
 - **Poisoned Status**: Currently UI-only - full mechanical effects not yet implemented
 - **Flex Effect Dialog**: May show incorrect options if accessed from certain roll types
 
 ## Technical Details
-
-### File Structure
-conan-the-hyborian-age/
-├── assets/
-│ └── icons/
+  ├── icons/
+│   │   ├── damage.svg
+│   │   ├── paralysis.svg
+│   │   ├── Poisoned.svg
+│   │   ├── trap.svg
+│   │   └── wounded.svg
+│   └── img/
+│       └── conan-the-hyborian-age-main.jp
 │ ├── damage.svg
 │ ├── paralysis.svg
 │ ├── Poisoned.svg
@@ -327,12 +362,15 @@ conan-the-hyborian-age/
 ### Architecture
 
 This system is built with modern Foundry VTT best practices:
-
-- **ES6 Modules**: Clean, modular JavaScript architecture
-- **ApplicationV2**: Latest Foundry application framework for sheets and dialogs
-- **HandlebarsApplicationMixin**: Efficient template rendering
-- **Native DOM**: No jQuery dependency
-- **Modern CSS**: Flexbox layouts, CSS variables, modular organization
+ with modern hooks
+- **Native DOM**: No jQuery dependency, pure JavaScript
+- **Modern CSS**: Flexbox layouts, CSS variables, modular organization with partials
+- **Auto-save**: Real-time change detection and persistence
+- **Debounced Form Handling**: NPC sheets use 500ms debounce to prevent freezing during text input
+- **Custom Status Effects**: Registered in CONFIG.statusEffects with proper color preservation
+- **Dice So Nice Integration**: Custom 3D dice with bronze Flex Die colorset
+- **Socket Synchronization**: Real-time updates, permission-free player actions via GM delegation
+- **Token Delta System**: Proper Foundry v13 unlinked token support with actorData.system path
 - **Auto-save**: Real-time change detection and persistence
 - **Dice So Nice Integration**: Custom 3D dice with bronze Flex Die
 - **Socket Synchronization**: Real-time updates between actor and token sheets
@@ -344,11 +382,13 @@ This system is built with modern Foundry VTT best practices:
 Found a bug or have a feature request? Please create an issue on the project repository with:
 - Clear description of the issue
 - Steps to reproduce
-- Expected vs actual behavior
-- System version and Foundry version
-
-### Roadmap
-
+- Expected vs actual behaviordamage/penalties
+- **Additional Status Effects**: Stunned, Blinded, Prone, and other combat conditions
+- **Advanced NPC AI**: Automated behavior patterns and tactical decision-making
+- **Campaign Tools**: Enhanced journal integration, quest tracking, campaign arc management
+- **Compendiums**: Pre-made characters, NPCs, weapons, armor, spells, and adventures
+- **Macro Support**: Custom macro library for complex actions and automation
+- **Character Sheet Variants**: Alternative layouts for different play style
 Planned features for future updates:
 - **Poisoned Status**: Full mechanical implementation with ongoing effects
 - **Advanced NPC AI**: Automated behavior and tactical decision-making
@@ -369,7 +409,7 @@ This system is provided as-is for personal use. Not affiliated with or endorsed 
 
 - **System Developer**: Zuraff (Discord: eliandir_)
 - **Game System**: Conan: The Hyborian Age RPG by Monolith Boardgames
-- **Setting**: Based on Robert E. Howard's Conan the Barbarian
+- **Setting**: Based on 5obert E. Howard's Conan the Barbarian
 - **Platform**: Foundry Virtual Tabletop v13+
 
 ## Version

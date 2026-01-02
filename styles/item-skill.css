@@ -2,6 +2,106 @@
    SKILL ITEM SHEET STYLES
    ====================================== */
 
+/* Skill item window sizing */
+.window-app.skill,
+.conan.sheet.item.skill {
+  min-height: 400px;
+  min-width: 520px;
+  max-width: 620px;
+}
+
+/* Skill header styling */
+.conan.sheet.item.skill .sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: linear-gradient(to bottom, #8b4513, #654321);
+  border-bottom: 3px solid #d4af37;
+  flex-shrink: 0;
+}
+
+.conan.sheet.item.skill .profile-img {
+  width: 80px;
+  height: 80px;
+  border: 3px solid #d4af37;
+  border-radius: 8px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.conan.sheet.item.skill .profile-img:hover {
+  transform: scale(1.05);
+}
+
+.conan.sheet.item.skill .header-fields {
+  flex: 1;
+}
+
+.conan.sheet.item.skill .charname input {
+  font-family: "Cinzel", serif;
+  font-size: 22px;
+  font-weight: bold;
+  color: #f5e6d3;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 5px;
+  width: 100%;
+}
+
+.conan.sheet.item.skill .charname input:focus {
+  border-bottom-color: #d4af37;
+  outline: none;
+}
+
+.conan.sheet.item.skill .item-subtitle {
+  font-size: 13px;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 5px;
+}
+
+/* Skill sheet body - no scrolling, auto expand */
+.conan.sheet.item.skill .sheet-body {
+  overflow-y: visible !important;
+  overflow-x: hidden;
+  padding: 15px;
+  flex: 1 1 auto;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+/* Form groups in skill sheet */
+.conan.sheet.item.skill .form-group {
+  margin-bottom: 15px;
+}
+
+.conan.sheet.item.skill .form-group label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #8b4513;
+  margin-bottom: 5px;
+}
+
+.conan.sheet.item.skill .form-group .primary-label {
+  font-size: 1em;
+  font-weight: bold;
+  color: #5e3a1a;
+}
+
+.conan.sheet.item.skill .form-group .subtitle-label {
+  font-size: 0.85em;
+  font-weight: normal;
+  color: #8b7355;
+  font-style: italic;
+  margin-top: 2px;
+}
+
 /* Skill effect textarea styling */
 .conan.item .skill-effect-group textarea.auto-resize-skill {
   width: 100%;
@@ -31,29 +131,6 @@
 .conan.item .skill-effect-group textarea.auto-resize-skill::placeholder {
   color: #999;
   font-style: italic;
-}
-
-/* Label styling to match form-group labels */
-.conan.item .sheet-body label {
-  display: flex;
-  flex-direction: column;
-  font-weight: bold;
-  margin-bottom: 3px;
-  color: #8b4513;
-}
-
-.conan.item .sheet-body label .primary-label {
-  font-size: 1em;
-  font-weight: bold;
-  color: #5e3a1a;
-}
-
-.conan.item .sheet-body label .subtitle-label {
-  font-size: 0.85em;
-  font-weight: normal;
-  color: #8b7355;
-  font-style: italic;
-  margin-top: 2px;
 }
 
 /* Disabled field styling for mutual exclusion */

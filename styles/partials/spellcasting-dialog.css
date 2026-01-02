@@ -81,6 +81,8 @@
   padding: 5px;
   border: 1px solid #8b4513;
   border-radius: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a !important;
 }
 
 /* Magic Attack Section */
@@ -127,6 +129,8 @@
   padding: 5px;
   border: 1px solid #8b4513;
   border-radius: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a !important;
 }
 
 /* Modifier Section */
@@ -156,7 +160,7 @@
   text-align: center;
   font-size: 24px;
   font-weight: bold;
-  color: #8b4513;
+  color: #1a1a1a !important;
   min-height: 28px;
   display: flex;
   align-items: center;

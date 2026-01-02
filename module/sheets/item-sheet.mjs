@@ -219,6 +219,13 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
       if (!options.position) options.position = {};
       options.position.height = 530;
     }
+    
+    // Adjust height for skill items - larger to fit all content
+    if (this.document.type === 'skill') {
+      if (!options.position) options.position = {};
+      options.position.width = 550;
+      options.position.height = 450;
+    }
   }
 
   /** @override */
@@ -452,6 +459,11 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
     // Auto-resize textarea for stipulations
     this._setupAutoResizeTextarea();
     
+    // Dynamically adjust window height for skill items
+    if (this.item.type === "skill") {
+      this._adjustSkillWindowHeight();
+    }
+    
     // Handle skill type and origin mutual exclusion UI
     if (this.item.type === "skill") {
       const skillTypeSelect = this.element.querySelector('select[data-skill-type-select]');
@@ -545,6 +557,12 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
         
         // Show/hide scrollbar based on content
         textarea.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
+        
+        // Adjust window height for skill items after textarea resize
+        if (this.item.type === "skill") {
+          // Use setTimeout to ensure DOM has updated
+          setTimeout(() => this._adjustSkillWindowHeight(), 0);
+        }
       };
       
       // Initial resize
@@ -556,6 +574,64 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
       // Resize on focus (in case content was updated programmatically)
       textarea.addEventListener('focus', autoResize);
     });
+  }
+
+  /**
+   * Dynamically adjust skill window height to fit all content
+   */
+  _adjustSkillWindowHeight() {
+    if (this.item.type !== "skill") return;
+    
+    // Clear any pending adjustments
+    if (this._adjustHeightTimeout) {
+      clearTimeout(this._adjustHeightTimeout);
+    }
+    
+    // Debounce the adjustment to avoid excessive updates
+    this._adjustHeightTimeout = setTimeout(() => {
+      const sheetBody = this.element.querySelector('.sheet-body');
+      const sheetHeader = this.element.querySelector('.sheet-header');
+      const windowElement = this.element;
+      
+      if (!sheetBody || !sheetHeader || !windowElement) return;
+      
+      // Get actual heights
+      const headerHeight = sheetHeader.offsetHeight;
+      const bodyScrollHeight = sheetBody.scrollHeight;
+      
+      // Get computed styles to account for padding/margin
+      const bodyStyles = window.getComputedStyle(sheetBody);
+      const bodyPaddingTop = parseInt(bodyStyles.paddingTop) || 0;
+      const bodyPaddingBottom = parseInt(bodyStyles.paddingBottom) || 0;
+      
+      // Calculate minimum required window height
+      // Include: header, body content, body padding, and window chrome (title bar, borders)
+      const windowChrome = 45; // Title bar and borders
+      const requiredHeight = headerHeight + bodyScrollHeight + windowChrome;
+      
+      // Get current window height - safely handle position access
+      const currentHeight = this.position?.height || 450;
+      
+      // Minimum height for skill window
+      const minHeight = 400;
+      
+      // Maximum height (90% of viewport to avoid unusable windows)
+      const maxHeight = Math.floor(window.innerHeight * 0.9);
+      
+      // Calculate new height - use required height but respect min/max bounds
+      let newHeight = Math.max(minHeight, requiredHeight);
+      newHeight = Math.min(newHeight, maxHeight);
+      
+      // Only adjust if the required height is different from current
+      // Add a small tolerance (15px) to avoid constant tiny adjustments
+      if (Math.abs(newHeight - currentHeight) > 15) {
+        try {
+          this.setPosition({ height: newHeight });
+        } catch (error) {
+          console.warn('Conan | Could not adjust skill window height:', error);
+        }
+      }
+    }, 100); // 100ms debounce
   }
 
   /**

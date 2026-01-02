@@ -1,3 +1,37 @@
+# Release v0.0.46 - Per-Actor Equipped Status
+
+## 🔧 Critical Fixes
+
+### Fixed Global Equipped Status Bug
+- **Per-Actor Equipment**: Items (weapons/armor) dropped from Items sidebar now have independent equipped status for each character
+- **No More Cross-Character Issues**: When one player equips a sword, other players with the same sword no longer see it as equipped
+- **Proper Item Isolation**: Each actor now receives an independent copy of items with separate equipped state
+
+### Improved Item Drop Behavior
+- **Automatic Copy Creation**: Weapons and armor dropped from Items sidebar automatically create independent copies for each actor
+- **Duplicate Prevention**: System now checks for existing items with same name before allowing drop
+- **Visual Feedback**: Added notification when item successfully added to character sheet
+- **Reset Equipped State**: New copies start with `equipped: false` to prevent inheriting source item's state
+
+## 🎯 Technical Improvements
+
+### Embedded Document Architecture
+- Changed `_onToggleEquipped` to use `actor.updateEmbeddedDocuments()` instead of `item.update()`
+- Ensures equipped status changes only affect the specific actor's copy
+- Modified `_onDropItem` to explicitly handle weapons/armor with copy creation logic
+- Items from same actor (reordering) continue to use default behavior
+
+### System Integrity
+- **AR Calculation Unchanged**: Armor Rating calculation continues to work correctly with embedded items
+- **Damage System Intact**: All damage and combat calculations unaffected by changes
+- **Encumbrance Tracking**: Encumbrance system properly reads equipped status from actor's items
+
+## 🌐 Localization
+- Added `CONAN.Notifications.itemAdded` in Polish, English, and French
+- Notification format: "Item {name} added to character"
+
+---
+
 # Release v0.0.45 - Wounded Status Effect & Origin Abilities
 
 ## ✨ New Features

@@ -291,6 +291,41 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
       return false; // Prevent default drop handling
     }
 
+    // Custom logic for weapons and armor - always create a copy to avoid shared equipped state
+    if (item.type === 'weapon' || item.type === 'armor') {
+      // If the item is from the same actor, allow default reordering behavior
+      if (item.parent?.id === this.baseActor.id) {
+        return super._onDropItem(event, data);
+      }
+
+      // Check if item with same name already exists
+      const existing = this.baseActor.items.find(i => 
+        i.name === item.name && 
+        i.type === item.type
+      );
+      
+      if (existing) {
+        ui.notifications.warn(game.i18n.format("CONAN.Warnings.alreadyHave", { name: item.name }));
+        return false;
+      }
+
+      // Create a new copy of the item on the actor (not a reference/link)
+      const itemData = item.toObject();
+      
+      // Ensure equipped state is reset for the new copy
+      if (itemData.system.equipped === undefined) {
+        itemData.system.equipped = false;
+      } else {
+        // Reset equipped to false when copying from another source
+        itemData.system.equipped = false;
+      }
+      
+      await this.baseActor.createEmbeddedDocuments('Item', [itemData]);
+      
+      ui.notifications.info(game.i18n.format("CONAN.Notifications.itemAdded", { name: item.name }));
+      return false; // Prevent default drop handling
+    }
+
     // For other items, use default behavior
     return super._onDropItem(event, data);
   }
@@ -903,7 +938,11 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
       }
     }
     
-    await item.update({ 'system.equipped': newEquippedState });
+    // Use updateEmbeddedDocuments to ensure we only update this actor's item instance
+    await this.baseActor.updateEmbeddedDocuments('Item', [{ 
+      _id: item.id, 
+      'system.equipped': newEquippedState 
+    }]);
   }
   
   /**

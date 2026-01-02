@@ -325,7 +325,8 @@
     "Notifications": {
       "xpAdjusted": "Punkty doświadczenia zostały skorygowane: {change} PD (pozostało: {remaining} PD)",
       "itemSyncedToWorld": "Przedmiot '{name}' został zsynchronizowany z bazą przedmiotów.",
-      "itemSyncedToActors": "Przedmiot '{name}' został zsynchronizowany na {count} kartach postaci."
+      "itemSyncedToActors": "Przedmiot '{name}' został zsynchronizowany na {count} kartach postaci.",
+      "itemAdded": "Dodano przedmiot {name} do postaci."
     },
     
     "Skill": {

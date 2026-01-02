@@ -30,7 +30,7 @@
   white-space: nowrap;
   font-size: 20px;
   font-weight: bold;
-  color: #5a2e0a;
+  color: #1a1a1a !important;
   box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
 .sorcery-die-display.magic-damage-inline {
@@ -112,7 +112,7 @@
   white-space: nowrap;
   font-size: 20px;
   font-weight: bold;
-  color: #5a2e0a;
+  color: #1a1a1a !important;
 }
 /* Damage Dialog Styling */
 .conan.damage .damage-form {
@@ -322,6 +322,7 @@ html[lang="en"] .conan.damage .subtitle {
   text-align: center;
   display: inline-block;
   white-space: nowrap;
+  color: #1a1a1a !important;
 }
 
 /* Weapon selection */
@@ -466,7 +467,7 @@ html[lang="en"] .conan.damage .subtitle {
   text-align: center;
   font-size: 24px;
   font-weight: bold;
-  color: #8b4513;
+  color: #1a1a1a !important;
   min-height: 28px;
   display: flex;
   align-items: center;
@@ -650,7 +651,7 @@ html[lang="en"] .conan.damage .subtitle {
 
 .conan.dialog.damage .modifier-value-label {
   font-size: 24px;
-  color: #8b4513;
+  color: #1a1a1a !important;
   min-width: 50px;
   text-align: center;
 }

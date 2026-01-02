@@ -325,7 +325,8 @@
     "Notifications": {
       "xpAdjusted": "Experience points adjusted: {change} XP (remaining: {remaining} XP)",
       "itemSyncedToWorld": "Item '{name}' has been synchronized to world items.",
-      "itemSyncedToActors": "Item '{name}' has been synchronized to {count} character sheets."
+      "itemSyncedToActors": "Item '{name}' has been synchronized to {count} character sheets.",
+      "itemAdded": "Item {name} added to character."
     },
     
     "Skill": {

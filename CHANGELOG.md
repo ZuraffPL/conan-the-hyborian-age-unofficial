@@ -1,3 +1,25 @@
+# [0.0.46] - 2026-01-02
+### Fixed
+- Fixed equipped status being shared globally across all actors when same item (weapon/armor) was dragged from Items sidebar
+- Fixed item equipped state affecting all characters who have that item instead of being per-actor
+
+### Changed
+- Weapons and armor dropped from Items sidebar now create independent copies for each actor (via `createEmbeddedDocuments`)
+- Items dropped from other actors or reordered within same actor continue to use default behavior
+- Equipped status reset to `false` when creating new copy to prevent inheriting equipped state from source
+- `_onToggleEquipped` now uses `actor.updateEmbeddedDocuments()` instead of `item.update()` to ensure actor-specific updates
+- Duplicate item check added for weapons/armor to prevent multiple copies with same name
+
+### Added
+- Added `CONAN.Notifications.itemAdded` localization key in PL/EN/FR for new item notifications
+- Added visual notification when weapon/armor successfully added to character sheet
+
+### Technical
+- Modified `_onDropItem` to handle weapons/armor explicitly with copy creation logic
+- Each actor now has truly independent item instances with separate equipped state
+- Item embedded document architecture ensures equipped status is per-actor, not global
+- AR (Armor Rating) and damage calculation systems unaffected - continue to work with embedded items correctly
+
 # [0.0.45] - 2025-01-01
 ### Added
 - Added custom "wounded" status effect with red blood drop icon for minion tokens
@@ -68,102 +90,64 @@
 - Players can now deal damage from chat messages and Flex Effects (Massive Damage) without permission errors
 - Socket system automatically routes player requests to GM for privileged operations
 
-# [0.0.40] - 2025-12-10
-### Fixed
-- Fixed NPC defense value synchronization bug: basePhysical now properly updates when defense value is manually edited on NPC sheet (both Minion and Antagonist).
-- Fixed NPC sheet freezing issues: disabled ApplicationV2 auto-submit (`submitOnChange: false`) to prevent UI blocking during field edits.
-- Fixed NPC (Minion) wounded checkbox freezing issue: replaced event listener approach with dedicated action handler, removed blocking `await` on update.
-- Removed conflicting Handlebars helpers that were overriding Foundry VTT v13 built-in helpers (`concat`, `eq`, `ne`, `gt`, `lt`, `select`).
-- Removed unused variable `originalCombatRollInitiative` in combat override code.
+# Versions 0.0.36 - 0.0.40 Summary (2025-12-08 to 2025-12-10)
 
-### Changed
-- NPC defense.physical field now includes listener to sync basePhysical when no effects (Defence/Immobilized) are active.
-- Wounded checkbox in Minion sheet now uses `data-action="toggleWounded"` with dedicated handler instead of relying on ApplicationV2 auto-submit.
-- Wounded checkbox update now asynchronous (non-blocking) with immediate CSS feedback and deferred Combat Tracker refresh.
-- NPC sheets (Minion and Antagonist) now use `submitOnChange: false` for smooth editing without UI freezes.
-- Handlebars helpers reduced to only custom implementations: `times` and `includes` (all others now use Foundry's built-in versions).
-
-### Technical
-- Improved NPC defense management: Defence and Immobilized toggles only set basePhysical on first use (no longer overwrite existing value).
-- Eliminated event listener multiplication in NPC wounded checkbox handling.
-- Disabled ApplicationV2 auto-submit for NPC sheets to prevent re-render on every field change.
-- Optimized wounded toggle: CSS update immediate, actor update non-blocking, combat tracker refresh deferred to `.then()`.
-- Better compatibility with Foundry VTT v13+ by using built-in Handlebars helpers.
-
-# [0.0.38] - 2025-12-09
-### Added
-- Added missing `flexDie` localization key to English translation.
-- Added CSS rules to hide redundant English subtitles when system language is set to English.
-
-### Changed
-- Reorganized CSS structure: moved dialog stylesheets to `styles/partials/` folder.
-- Moved `attack-dialog.css` to `styles/partials/` and imported in `conan.css`.
-- Moved `spellcasting-dialog.css` to `styles/partials/` and imported in `conan.css`.
-- Moved `stamina-spend-dialog.css` to `styles/partials/` and imported in `conan.css`.
-- Updated `system.json` to reflect new CSS structure (removed direct references to moved files).
-
-### Fixed
-- Fixed modifier slider colors in attack dialog (added `!important` to gradient background).
-- Hidden English subtitle labels in English language mode for:
-  - Attack and Damage dialogs (subtitle/subtitle-label)
-  - Spellcasting dialog (subtitle-label)
-  - Character sheet sections: Life Points, Defense, Armor & Encumbrance
-  - Character sheet action buttons: Initiative, Attack, Damage Roll, Spellcasting
-  - NPC sheets: Actor type, Creature type, Wounded status, Damage rows, Actions
-
-### Technical
-- CSS now uses `html[lang="en"]` selectors to conditionally hide English subtitles.
-- Improved CSS organization with partials folder for dialog-specific styles.
-- Updated README.md file structure to reflect new CSS organization.
-
-### Release
-- Bumped system version to 0.0.38 in `system.json`.
-
-# [0.0.37] - 2025-12-08
-### Added
-- Added Stamina tactical spend button to character sheet.
-- Added Stamina spend dialog with 3 tactical options (1 Stamina each):
-  - Extra movement action
+### Major Features Implemented
+- **Stamina Tactical Options System**: Complete tactical spend dialog with 3 options (1 Stamina each):
+  - Extra movement action for battlefield repositioning
   - Increase thrown weapon range by 1 level or 2 zones
   - Ignore encumbrance effect for 1 round
-- Added stamina-spend-dialog.mjs module with ApplicationV2 dialog implementation.
-- Added stamina-spend-dialog.hbs template with radio button selection UI.
-- Added stamina-spend-dialog.css with complete styling for dialog and chat messages.
-- Added 14 new localization keys for Stamina spend system (PL/EN/FR).
+  - Icon-only button on character sheet with tooltip
+  - Streamlined yellow-themed chat messages with character name highlight
+  - ApplicationV2 dialog with radio button selection UI
+- **CSS Organization & Localization**: Complete stylesheet reorganization and language-specific UI
+  - Moved dialog styles to `styles/partials/` folder (attack-dialog, spellcasting-dialog, stamina-spend-dialog)
+  - Conditional hiding of English subtitles when system language is English
+  - `html[lang="en"]` selectors for language-specific CSS rules
+  - Hidden bilingual labels in: Attack/Damage dialogs, Spellcasting, Character sheet sections, NPC sheets
+- **NPC Sheet Performance Fixes**: Complete resolution of freezing and synchronization issues
+  - Disabled ApplicationV2 auto-submit (`submitOnChange: false`) to prevent UI blocking
+  - Wounded checkbox uses dedicated action handler with non-blocking async updates
+  - Defense value synchronization: basePhysical properly updates on manual edits
+  - Immediate CSS feedback, deferred Combat Tracker refresh
+- **Release System Improvements**: Automatic version detection and deployment
+  - Manifest URL changed to `releases/latest/download/system.json`
+  - Download URL changed to `releases/latest/download/conan-the-hyborian-age.zip`
+  - Release assets include both versioned and non-versioned ZIP files
 
-### Changed
-- Icon-only Stamina spend button on character sheet with tooltip for compact display.
-- Streamlined chat message format (removed header, kept character name highlighted).
-- Updated yellow color scheme with black text-shadow for better contrast.
+### Technical Improvements
+- **Handlebars Helper Compatibility**: Removed conflicting helpers overriding Foundry VTT v13 built-ins
+  - Removed: `concat`, `eq`, `ne`, `gt`, `lt`, `select` (now using Foundry's built-in versions)
+  - Kept only custom implementations: `times` and `includes`
+  - Better compatibility with Foundry VTT v13+
+- **NPC Defense Management**: Improved basePhysical synchronization logic
+  - Defense.physical field listener syncs basePhysical when no effects active
+  - Defence/Immobilized toggles only set basePhysical on first use (no overwrite)
+  - Eliminated event listener multiplication in wounded checkbox
+- **Stamina Dialog Architecture**: Modern ApplicationV2 implementation
+  - HandlebarsApplicationMixin for template rendering
+  - Chat messages with flags for tracking spent Stamina and selected option
+  - Replaced deprecated `FormDataExtended` with `foundry.applications.ux.FormDataExtended`
+  - Button integrated into `.stamina-controls` wrapper with flexbox layout
+- **Code Cleanup**: Removed unused variables and optimized async operations
+  - Removed unused `originalCombatRollInitiative` in combat override
+  - Optimized wounded toggle: CSS immediate, actor update non-blocking, tracker deferred
+  - Fixed radio button icon alignment (no overlap)
+  - Fixed chat message cost display (hardcoded value instead of template variable)
 
-### Fixed
-- Replaced deprecated `FormDataExtended` with `foundry.applications.ux.FormDataExtended`.
-- Fixed radio button icon alignment in dialog (icons no longer overlap radio buttons).
-- Fixed chat message to display hardcoded cost value (1) instead of template variable.
+### UI/UX Improvements
+- NPC sheets now responsive without freezing during text field edits
+- Modifier slider colors fixed in attack dialog (`!important` for gradient)
+- Clean UI when using English language (no redundant subtitles)
+- Improved CSS organization with partials folder for maintainability
+- Smooth wounded checkbox toggling with visual feedback
 
-### Technical
-- Stamina spend dialog follows ApplicationV2 pattern with HandlebarsApplicationMixin.
-- Chat messages include flags for tracking spent Stamina and selected option.
-- Button integrated into `.stamina-controls` wrapper with flexbox layout.
-
-### Release
-- Bumped system version to 0.0.37 in `system.json`.
-
-# [0.0.36] - 2025-12-08
-### Changed
-- Updated manifest URL to use `releases/latest/download/system.json` for automatic latest version detection.
-- Updated download URL to use `releases/latest/download/conan-the-hyborian-age.zip` (without version number).
-- Release assets now include both versioned and non-versioned ZIP files for flexibility.
-
-### Fixed
-- Added Known Issues section documenting that Poisoned status is UI-only (full logic not yet implemented).
-
-### Technical
-- Manifest and download URLs now point to `/latest/` instead of specific version.
-- GitHub release workflow aligned with best practices from other Foundry systems.
-
-### Release
-- Bumped system version to 0.0.36 in `system.json`.
+### Documentation & Release
+- Added Known Issues section documenting Poisoned status as UI-only
+- Updated README.md file structure reflecting new CSS organization
+- GitHub release workflow aligned with Foundry system best practices
+- Added 14 new localization keys for Stamina tactical spend (PL/EN/FR)
+- System versions bumped from 0.0.36 to 0.0.40
 
 # [0.0.35] - 2025-12-08
 ### Added
@@ -176,6 +160,7 @@
   - Versions 0.0.16-0.0.21 combined into single comprehensive entry (Magic Damage System, Defence/Immobilized toggles, Poisoned status, Damage Roll System).
   - Versions 0.0.22-0.0.25 combined into single entry (Modularized Sorcery Damage, "Deal Damage" button, visual improvements, sheet synchronization).
   - Versions 0.0.26-0.0.29 combined into single entry (Complete damage application system for PC/NPC, token configuration, HP indicator).
+  - Versions 0.0.30-0.0.35 combined into single entry (Stamina Spending System, Flex Effect enhancements, Spell Cost Recovery, French translation).
 - Improved CHANGELOG structure for easier navigation and understanding of system evolution.
 
 ### Technical
@@ -186,143 +171,90 @@
 ### Release
 - Bumped system version to 0.0.35 in `system.json`.
 
-# [0.0.34] - 2025-12-08
-### Added
-- Added comprehensive Stamina spending system via right-click context menu on chat messages.
-- Added ability to spend 1-2 Stamina points to boost roll results (+1/+2) for attribute tests, initiative, and attacks.
-- Added ability to spend 1-2 Stamina points to add 1d4/2d4 damage to damage rolls.
-- Added "Massive Damage" option for spending last Stamina point (when exactly 1 point remains).
-- Massive Damage from Stamina works identically to Flex Effect Massive Damage (max die value or double fixed damage).
-- Massive Damage from Stamina can stack with Massive Damage from Flex Effect on same roll.
-- Added stamina-effects.mjs module with full context menu integration for Foundry v13.
-- Added stamina-effects.css with gradient card styling and animations.
-- Added 10+ new localization keys for Stamina system (PL/EN).
+# [0.0.30-0.0.35] - 2025-12-05 / 2025-12-09
 
-### Changed
-- Updated ChatLog integration to use v13 ApplicationV2 architecture (`ChatLog.prototype._getEntryContextOptions`).
-- Moved stamina initialization from `ready` to `init` hook to ensure proper ChatLog prototype extension.
-- Changed from deprecated `getChatLogEntryContext` hook to direct prototype override for v13 compatibility.
-- Updated button handlers to use `li.dataset.messageId` instead of jQuery `.data()` method.
-- Enhanced damage roll data extraction to parse weapon die information from chat message HTML.
+### Major Features Implemented
+- **Stamina Spending System**: Complete context menu integration for boosting rolls and damage
+  - Right-click chat messages to spend 1-2 Stamina points for +1/+2 roll boosts
+  - Add 1d4/2d4 damage dice to damage rolls by spending Stamina
+  - "Massive Damage" option when exactly 1 Stamina remains (max die value or double fixed damage)
+  - Massive Damage from Stamina stacks with Flex Effect Massive Damage
+  - Gradient card styling, animations, and 10+ localization keys (PL/EN)
+- **Flex Effect System Enhancements**: Complete magical recovery and damage options
+  - Sorcery option for recovering spell costs (Life Points and Stamina) via Flex Effect
+  - Massive Damage option for all damage rolls (adds max die value + modifier, or doubles fixed damage)
+  - Color-coded buttons: blue (stamina), green (success), purple (sorcery), red (massive)
+  - Improved header with gradient background, decorative sword elements, animated icon
+  - Dedicated `flex-dialog.css` with elegant box design and better typography
+- **Spell Cost Recovery**: Temporary storage of spell costs for Flex Effect recovery
+  - Costs stored in actor flags (`flags.conan-the-hyborian-age.lastSpellCost`)
+  - Purple-themed chat messages with detailed recovery breakdown
+  - Full integration with sorcery damage system
+- **XP Refund for Spells**: Automatic XP restoration when spells removed from character
+  - Spells store `initialCost` flag when added to track exact XP paid
+  - Localized notifications for spell removal with cost display
+  - Unified XP refund logic for both skills and spells
+- **French Translation**: Complete system localization
+  - All UI elements, dialogs, chat messages fully translated
+  - Proper terminology: Force (Might), Agilité (Edge), Résistance (Grit), Astuce (Wits)
+  - Stamina → Endurance, Flex Effect → Effet de Souplesse, Massive Damage → Dégâts Massifs
 
-### Fixed
-- **CRITICAL:** Fixed damage not being applied to antagonist NPCs - changed `actorData.system` to `delta.system` for Foundry v13 unlinked tokens.
-- Fixed minion status updates (wounded/defeated) using wrong path for unlinked tokens.
-- Fixed context menu not appearing in v13 due to deprecated hook system.
-- Fixed stamina boost preventing double-boosting via flag system.
-- Fixed damage buttons styled to be visible on dark backgrounds (red gradient instead of matching container color).
+### Combat & Token System
+- **Minion Defeated Status**: Proper combat tracker synchronization
+  - Added `defeated` field to minion template
+  - Dead overlay effect (skull icon) for defeated tokens
+  - Correct status updates after second wound
+  - Combatants found by `tokenId` for unlinked tokens
+- **Improved Damage Application**: Fixed critical issues with NPC damage
+  - Changed `actorData.system` to `delta.system` for Foundry v13 unlinked tokens
+  - Proper handling of linked vs unlinked token data structures
+  - Removed race conditions by reordering chat message updates
+  - Type safety with `parseInt()` conversions
 
-### Technical
-- Implemented `canSpendStamina()` - validates roll boost eligibility (roll type, stamina available, not already boosted).
-- Implemented `spendStaminaToBoost()` - boosts roll results, updates initiative tracker, creates styled chat message.
-- Implemented `canSpendStaminaOnDamage()` - validates damage boost eligibility.
-- Implemented `spendStaminaToDamage()` - rolls additional d4 dice, adds to damage, creates message with "Deal Damage" button.
-- Implemented `canSpendLastStaminaOnMassiveDamage()` - validates exactly 1 stamina point remaining.
-- Implemented `spendStaminaToMassiveDamage()` - applies massive damage effect, depletes stamina to 0.
-- Implemented `extractDamageRollData()` - parses damage die info from message content for bonus calculation.
-- All damage buttons (.deal-pc-damage-btn) handled by global renderChatMessage hook in conan.mjs.
-- Context menu shows 5 options: +1/+2 for rolls, +1d4/+2d4 for damage, Massive Damage for last point.
-- Foundry v13 delta system properly implemented for all token updates.
+### Technical Improvements
+- **ApplicationV2 Context Menu**: Modern ChatLog integration for Foundry v13
+  - Migrated from deprecated `getChatLogEntryContext` hook
+  - Direct prototype override: `ChatLog.prototype._getEntryContextOptions`
+  - Context menu initialization moved to `init` hook (before ChatLog instances created)
+  - Button handlers use `li.dataset.messageId` instead of jQuery `.data()`
+- **Enhanced Die Parsing**: Robust regex `/(\d*)d(\d+)/i` handles all formats ("d6", "1d6", "2d8")
+  - Proper multiple dice calculation (2d8 = 16, not 8)
+  - Fixed string concatenation bugs with `parseInt()` conversions
+  - Weapon die info passed via `rollContext` structure
+- **Damage Roll Architecture**: All functions (melee, ranged, thrown, sorcery) unified
+  - `rollContext`: `{originalDamage, weaponDie, weaponModifier, isFixedDamage, attackType}`
+  - Massive Damage logic: `(dieCount × dieSize) + weaponModifier` or double fixed
+  - Proper handling of ranged weapon variables (`weaponDice`/`weaponBonus`)
+- **Token Update System**: Correct delta system for Foundry v13
+  - Unlinked tokens: `targetToken.update({"actorData.system.*": value})`
+  - Linked tokens: `target.update({"system.*": value})` + separate overlay update
+  - Dead overlay: `{"overlayEffect": CONFIG.controlIcons.defeated}`
+- **Stamina System Implementation**: Complete validation and boost mechanics
+  - `canSpendStamina()`: validates eligibility (type, available points, not boosted)
+  - `spendStaminaToBoost()`: boosts result, updates initiative, creates styled message
+  - `canSpendStaminaOnDamage()`, `spendStaminaToDamage()`: damage dice logic
+  - `canSpendLastStaminaOnMassiveDamage()`: validates exactly 1 point remaining
+  - `extractDamageRollData()`: parses die info from message content
+  - Flag system prevents double-boosting same roll
 
-### Release
-- Bumped system version to 0.0.34 in `system.json`.
-
-# [0.0.32] - 2025-12-06
-### Added
-- Added XP refund functionality for spell items when removed from character sheet.
-- Spells now store `initialCost` flag when added to track exact XP paid.
-- Added localized notifications for spell removal (PL: "Zaklęcie usunięte, zwrócono {cost} PD", EN: "Spell removed, refunded {cost} XP").
-
-### Changed
-- Extended `_onItemDelete` handler to process both skills and spells uniformly.
-- XP refund logic now falls back to `system.xpCost` when `initialCost` flag is unavailable.
-
-### Fixed
-- Fixed spell items not refunding XP cost when deleted from Sorcery tab.
-- Fixed missing Polish translation for spell removal notification.
-
-### Technical
-- Unified XP refund logic in `_onItemDelete` for skills and spells.
-- Added `CONAN.Spells.spellRemoved` localization key in both language files.
-
-### Release
-- Bumped system version to 0.0.32 in `system.json`.
-
-# [0.0.31] - 2025-12-05
-### Added
-- Added "Massive Damage" (Kolosalne Obrażenia) Flex Effect option for all damage rolls.
-- Massive Damage adds maximum weapon die value + modifier to damage, or doubles fixed damage.
-- Added `defeated` status field to minion template for proper combat tracker synchronization.
-- Added dead overlay effect (skull icon) to defeated tokens (minions and antagonists).
-- Added red gradient button styling for Massive Damage option in Flex Effect dialog.
-- Added `.flex-massive-damage` chat message styling with damage breakdown display.
-- Added translations for Massive Damage (PL: "Kolosalne Obrażenia", EN: "Massive Damage").
-
-### Changed
-- Enhanced die parsing with regex `/(\d*)d(\d+)/i` to handle all formats: "d6", "1d6", "2d8".
-- Updated all damage roll functions (melee, ranged, thrown, sorcery) to pass `rollContext` with weapon die info.
-- Changed damage application to use `TokenDocument` instead of actor for proper unlinked token support.
-- Combatants now found by `tokenId` instead of `actorId` for correct unlinked token handling.
-- Moved `damageDealt` flag setting before `applyNPCDamage` to prevent race conditions.
-
-### Fixed
-- Fixed ranged weapon damage using wrong variable names (`weaponDamage`/`weaponMod` → `weaponDice`/`weaponBonus`).
-- Fixed die parsing failing for "1d6" format (was using `substring(1)` which gave "d6").
-- Fixed multiple dice calculation (2d8 now correctly gives 16, not 8).
-- Fixed string concatenation bug causing "961" instead of 16 by adding `parseInt()` conversions.
-- Fixed minion defeated status not updating in combat tracker after second wound.
-- Fixed unlinked token data not persisting - now updates `actorData.system` for unlinked tokens.
-- Fixed `Cannot read properties of null (reading 'querySelector')` error by reordering chat message updates.
-- Fixed `targetToken.update is not a function` error by using `targets[0].document` instead of `targets[0]`.
-- Fixed defeated tokens not showing dead overlay effect.
-
-### Technical
-- `rollContext` structure: `{originalDamage, weaponDie, weaponModifier, isFixedDamage, attackType}`.
-- Massive Damage logic: dice weapons get `(dieCount × dieSize) + weaponModifier` bonus, fixed damage doubles.
-- Unlinked tokens updated via `targetToken.update({"actorData.system.*": value})`.
-- Linked tokens updated via `target.update({"system.*": value})` + separate token overlay update.
-- Dead overlay applied via `targetToken.update({"overlayEffect": CONFIG.controlIcons.defeated})`.
-- Added type safety with `parseInt()` on `originalDamage` and `weaponModifier`.
+### Fixed Issues
+- Fixed damage not applying to antagonist NPCs (delta.system path issue)
+- Fixed minion status updates using wrong path for unlinked tokens
+- Fixed context menu not appearing in v13 (deprecated hook)
+- Fixed ranged damage using wrong variable names
+- Fixed die parsing failing for "1d6" format (substring bug)
+- Fixed string concatenation causing "961" instead of 16
+- Fixed defeated status not updating in combat tracker
+- Fixed `targetToken.update is not a function` error
+- Fixed duplicate `applySorceryEffect` method preventing recovery
+- Fixed Flex Effect CSS not applying (selector mismatch)
+- Fixed spell XP not refunding when deleted
+- Fixed missing Polish translations
 
 ### Release
-- Bumped system version to 0.0.31 in `system.json`.
+- Versions 0.0.30 through 0.0.35 released with incremental improvements.
 
-# [0.0.30] - 2025-12-05
-### Added
-- Added Sorcery option to Flex Effect dialog for magic attacks and damage rolls.
-- Sorcery option allows recovery of spell costs (Life Points and Stamina) when Flex Effect is triggered.
-- Spell costs are temporarily stored in actor flags for potential recovery via Flex Effect.
-- Added chat message for sorcery cost recovery with detailed breakdown of restored resources.
-- Added purple color-coded button for Sorcery option in Flex Effect dialog.
-- Added translations for sorcery option (PL: "Czarnoksięstwo", EN: "Sorcery").
-- Created dedicated `flex-dialog.css` file for Flex Effect dialog styling.
-- Added color-coded Flex Effect buttons: blue (stamina), green (success), purple (sorcery).
-- Added improved header styling with gradient background, decorative elements, and animated icon.
-
-### Changed
-- Updated spellcasting system to save spell costs in actor flags for Flex Effect recovery.
-- Modified all three sorcery damage functions (rollSorceryFixedDamage, rollSorceryCustomDieDamage, rollSorceryWitsDamage) to pass spell costs to FlexEffectDialog.
-- Enhanced Flex Effect dialog header with elegant box design, sword decorations, and better typography.
-- Changed magic attack "Roll Damage" button class from `deal-damage-btn` to `sorcery-damage-btn` to avoid handler conflicts.
-- Added `white-space: nowrap` to sorcery damage button to prevent text wrapping.
-- Improved sorcery recovery chat message styling with purple theme and detailed recovery information.
-
-### Fixed
-- Fixed duplicate `applySorceryEffect` method that was preventing sorcery cost recovery from working.
-- Fixed Flex Effect dialog CSS not applying due to incorrect selectors (changed from `.flex-effect-dialog` to `.flex-effect`).
-- Fixed sorcery recovery chat message header text wrapping and visibility issues.
-- Removed unused `isAttackRoll` variable from `_prepareContext` method to eliminate TypeScript warnings.
-
-### Technical
-- Added `flags.conan-the-hyborian-age.lastSpellCost` to store lifePointsCost and staminaCost.
-- Flex Effect dialog now checks for `attackType === 'sorcery'` and `hasSorceryCost` to show sorcery option.
-- `applySorceryEffect` method restores both Life Points (to max) and Stamina (to 100).
-- Added `.flex-sorcery-recovery` CSS class with purple gradient theme and detailed styling.
-- Sorcery option uses `fa-wand-sparkles` icon with purple gradient background.
-- Added `system.json` entry for `styles/flex-dialog.css`.
-
-### Release
-- Bumped system version to 0.0.30 in `system.json`.
+# [0.0.26-0.0.29] - 2025-11-28 / 2025-12-03
 
 # [0.0.26-0.0.29] - 2025-11-28 / 2025-12-03
 
