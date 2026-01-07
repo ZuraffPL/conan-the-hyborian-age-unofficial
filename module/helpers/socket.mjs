@@ -44,6 +44,9 @@ export class ConanSocket {
       case "updateCombatant":
         this._handleCombatantUpdate(data);
         break;
+      case "requestActorUpdate":
+        this._handleActorUpdateRequest(data);
+        break;
       case "notification":
         this._handleNotification(data);
         break;
@@ -96,6 +99,34 @@ export class ConanSocket {
     const actor = game.actors.get(data.actorId);
     if (actor && actor.sheet.rendered) {
       actor.sheet.render(false);
+    }
+  }
+
+  /**
+   * Handle actor update request events (GM only)
+   * @param {Object} data - The actor update data
+   */
+  static async _handleActorUpdateRequest(data) {
+    // Only GM can execute actor updates
+    if (!game.user.isGM) {
+      return;
+    }
+
+    if (!data.actorId || !data.updateData) {
+      console.warn("Conan | Invalid actor update request data", data);
+      return;
+    }
+
+    try {
+      const actor = game.actors.get(data.actorId);
+      if (!actor) {
+        console.warn(`Conan | Actor not found: ${data.actorId}`);
+        return;
+      }
+
+      await actor.update(data.updateData);
+    } catch (error) {
+      console.error("Conan | Error updating actor:", error);
     }
   }
 
@@ -299,6 +330,32 @@ export class ConanSocket {
     this.emit("updateCombatant", {
       combatId: combatId,
       combatantId: combatantId,
+      updateData: updateData
+    });
+
+    // Wait a bit to allow GM to process the request
+    return new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  /**
+   * Request actor update through GM (for players without actor update permissions)
+   * @param {string} actorId - The actor ID
+   * @param {Object} updateData - The update data
+   * @returns {Promise<void>}
+   */
+  static async requestActorUpdate(actorId, updateData) {
+    // If user is GM, update directly
+    if (game.user.isGM) {
+      const actor = game.actors.get(actorId);
+      if (!actor) {
+        throw new Error(`Actor not found: ${actorId}`);
+      }
+      return await actor.update(updateData);
+    }
+
+    // Otherwise, send request to GM via socket
+    this.emit("requestActorUpdate", {
+      actorId: actorId,
       updateData: updateData
     });
 

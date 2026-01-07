@@ -1042,9 +1042,20 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
     const currentHP = target.system.lifePoints?.actual || 0;
     const newHP = Math.max(0, currentHP - finalDamage);
     
-    await target.update({
-      "system.lifePoints.actual": newHP
-    });
+    // Update token if unlinked, otherwise actor
+    if (isToken && !targetToken.actorLink) {
+      // For unlinked tokens in v13, use delta.system path
+      await ConanSocket.requestTokenUpdate(
+        targetToken.parent.id,
+        targetToken.id,
+        { "delta.system.lifePoints.actual": newHP }
+      );
+    } else {
+      await ConanSocket.requestActorUpdate(
+        target.id,
+        { "system.lifePoints.actual": newHP }
+      );
+    }
     
     resultMessage = game.i18n.format("CONAN.Damage.characterTookDamage", {
       name: target.name,
@@ -1071,9 +1082,10 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
         { "delta.system.lifePoints": newLP }
       );
     } else {
-      await target.update({
-        "system.lifePoints": newLP
-      });
+      await ConanSocket.requestActorUpdate(
+        target.id,
+        { "system.lifePoints": newLP }
+      );
     }
     
     resultMessage = game.i18n.format("CONAN.Damage.antagonistTookDamage", {
@@ -1124,9 +1136,10 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
           }
         );
       } else {
-        await target.update({
-          "system.defeated": true
-        });
+        await ConanSocket.requestActorUpdate(
+          target.id,
+          { "system.defeated": true }
+        );
         if (isToken) {
           await ConanSocket.requestTokenUpdate(
             targetToken.parent.id,
@@ -1161,9 +1174,10 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
           }
         );
       } else {
-        await target.update({
-          "system.defeated": true
-        });
+        await ConanSocket.requestActorUpdate(
+          target.id,
+          { "system.defeated": true }
+        );
         if (isToken) {
           await ConanSocket.requestTokenUpdate(
             targetToken.parent.id,
@@ -1190,9 +1204,10 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
           { "delta.system.wounded": true }
         );
       } else {
-        await target.update({
-          "system.wounded": true
-        });
+        await ConanSocket.requestActorUpdate(
+          target.id,
+          { "system.wounded": true }
+        );
       }
       
       resultMessage = game.i18n.format("CONAN.Damage.minionWounded", {

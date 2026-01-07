@@ -514,11 +514,11 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
         return;
       }
       
-      const target = targets[0].actor;
+      const targetToken = targets[0].document;
       
       // Apply damage
       const { applyNPCDamage } = await import("./helpers/roll-mechanics.mjs");
-      await applyNPCDamage(totalDamage, target, attacker);
+      await applyNPCDamage(totalDamage, targetToken, attacker);
       
       // Mark damage as dealt and disable button
       await message.setFlag("conan-the-hyborian-age", "damageDealt", true);

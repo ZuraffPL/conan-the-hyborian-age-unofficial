@@ -1,8 +1,8 @@
-# 📋 Release Process Guide
+# Release Process Guide
 
 ## Przygotowanie do Release v0.0.35
 
-### ✅ Co zostało już zrobione:
+### Co zostało już zrobione
 
 1. ✅ Zaktualizowano wersję w `system.json` na 0.0.35
 2. ✅ Dodano wpis do `CHANGELOG.md` dla wersji 0.0.35
@@ -14,7 +14,7 @@
 5. ✅ Utworzono plik `.gitignore`
 6. ✅ Utworzono pakiet ZIP: `conan-the-hyborian-age-v0.0.35.zip`
 
-### 📝 Kroki do wykonania:
+### Kroki do wykonania
 
 #### 1. Commit i Push do GitHuba
 
@@ -44,7 +44,7 @@ git push origin v0.0.35
 
 #### 3. Utwórz Release na GitHubie
 
-1. Przejdź do: https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/new
+1. Przejdź do: <https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/new>
 
 2. Wypełnij formularz:
    - **Tag**: Wybierz `v0.0.35` z listy (lub wpisz jeśli nie ma)
@@ -65,12 +65,14 @@ git push origin v0.0.35
 Po opublikowaniu release:
 
 1. Sprawdź czy plik ZIP jest dostępny pod linkiem:
-   ```
+
+   ```text
    https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/download/v0.0.35/conan-the-hyborian-age-v0.0.35.zip
    ```
 
 2. Sprawdź czy manifest jest dostępny:
-   ```
+
+   ```text
    https://raw.githubusercontent.com/ZuraffPL/conan-the-hyborian-age-unofficial/main/system.json
    ```
 
@@ -84,11 +86,12 @@ Po opublikowaniu release:
 #### 5. Aktualizacja README.md na GitHubie (opcjonalne)
 
 Jeśli chcesz, możesz zaktualizować główny README.md repozytorium, dodając:
+
 - Badge z wersją
 - Bezpośredni link do najnowszego release
 - Screenshot systemu
 
-### 🎯 Checklist przed publikacją:
+### Checklist przed publikacją
 
 - [ ] Wszystkie zmiany są zacommitowane
 - [ ] Tag v0.0.35 został utworzony i wysłany na GitHub
@@ -98,14 +101,15 @@ Jeśli chcesz, możesz zaktualizować główny README.md repozytorium, dodając:
 - [ ] System można zainstalować z manifestu w Foundry
 - [ ] Testowo utworzony world z systemem działa poprawnie
 
-### 📞 W razie problemów:
+### W razie problemów
 
 Jeśli link do ZIP nie działa:
+
 1. Sprawdź nazwę pliku ZIP w release (musi być dokładnie: `conan-the-hyborian-age-v0.0.35.zip`)
 2. Sprawdź czy release jest opublikowany (nie draft)
 3. Odczekaj kilka minut (GitHub czasem potrzebuje chwili na propagację)
 
-### 🚀 Po sukcesie:
+### Po sukcesie
 
 - Możesz ogłosić release na Discord/forach Foundry
 - System będzie dostępny dla wszystkich użytkowników Foundry VTT
