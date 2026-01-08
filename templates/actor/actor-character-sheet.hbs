@@ -125,14 +125,19 @@
         </div>
 
         {{!-- Stamina --}}
-        <div class="resource-box">
+        <div class="resource-box {{#if (and system.poisoned system.poisonEffects.effect4)}}stamina-locked{{/if}}">
           <div class="resource-header">
             <span class="resource-name">{{localize "CONAN.Resources.stamina"}}</span>
-            <label class="resource-subtitle">Stamina</label>
+            <label class="resource-subtitle">
+              Stamina
+              {{#if (and system.poisoned system.poisonEffects.effect4)}}
+                <i class="fas fa-skull-crossbones poison-icon" title="{{localize 'CONAN.Poisoned.staminaLocked'}}" style="color: #15a20e; margin-left: 6px;"></i>
+              {{/if}}
+            </label>
           </div>
           <div class="stamina-controls">
-            <input type="number" name="system.stamina.value" value="{{system.stamina.value}}" min="0" max="100" data-dtype="Number" class="stamina-value-single {{valueChanges.stamina}}"/>
-            <button type="button" class="stamina-spend-btn" data-action="spendStamina" data-tooltip="{{localize 'CONAN.Stamina.spend'}}">
+            <input type="number" name="system.stamina.value" value="{{system.stamina.value}}" min="0" max="100" data-dtype="Number" class="stamina-value-single {{valueChanges.stamina}} {{#if (and system.poisoned system.poisonEffects.effect4)}}poisoned-locked{{/if}}" {{#if (and system.poisoned system.poisonEffects.effect4)}}disabled{{/if}}/>
+            <button type="button" class="stamina-spend-btn" data-action="spendStamina" data-tooltip="{{localize 'CONAN.Stamina.spend'}}" {{#if (and system.poisoned system.poisonEffects.effect4)}}disabled{{/if}}>
               <i class="fas fa-hand-holding-dollar"></i>
             </button>
           </div>
@@ -167,9 +172,14 @@
             <span class="subtitle-label">Max</span>
           </label>
         </div>
-        <button type="button" class="poisoned-toggle-btn {{#if system.poisoned}}active{{/if}}" data-action="togglePoisoned" title="{{localize 'CONAN.EffectTooltips.poisoned'}}" style="margin-left: 10px;">
-          <img src="systems/conan-the-hyborian-age/assets/icons/Poisoned.svg" alt="Poisoned" style="width: 28px; height: 28px;">
-        </button>
+        <div class="poisoned-toggle-container" style="position: relative; display: inline-block; margin-left: 10px;">
+          {{#if (and system.poisoned (gt activePoisonEffects 0))}}
+            <span class="poison-effect-count">{{activePoisonEffects}}</span>
+          {{/if}}
+          <button type="button" class="poisoned-toggle-btn {{#if system.poisoned}}active poison-active-pulse{{/if}}" data-action="togglePoisoned" title="{{localize 'CONAN.EffectTooltips.poisoned'}}">
+            <img src="systems/conan-the-hyborian-age/assets/icons/Poisoned.svg" alt="Poisoned" style="width: 28px; height: 28px;">
+          </button>
+        </div>
       </div>
     </div>
 

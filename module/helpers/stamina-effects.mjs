@@ -87,6 +87,11 @@ function canSpendStamina(message, cost) {
     return false;
   }
   
+  // Check if stamina is locked due to poison effect 4
+  if (actor.system.poisoned && actor.system.poisonEffects?.effect4) {
+    return false;
+  }
+  
   // Check if actor has enough Stamina
   const currentStamina = actor.system.stamina?.value || 0;
   
@@ -397,6 +402,11 @@ function canSpendStaminaOnDamage(message, cost) {
     return false;
   }
   
+  // Check if stamina is locked due to poison effect 4
+  if (actor.system.poisoned && actor.system.poisonEffects?.effect4) {
+    return false;
+  }
+  
   // Check if actor has enough Stamina
   const currentStamina = actor.system.stamina?.value || 0;
   
@@ -446,6 +456,11 @@ function canSpendLastStaminaOnMassiveDamage(message) {
   }
   
   if (!actor) {
+    return false;
+  }
+  
+  // Check if stamina is locked due to poison effect 4
+  if (actor.system.poisoned && actor.system.poisonEffects?.effect4) {
     return false;
   }
   

@@ -171,6 +171,12 @@ export class StaminaSpendDialog extends foundry.applications.api.HandlebarsAppli
    * Static helper to show the dialog
    */
   static async prompt(actor) {
+    // Check if stamina is locked due to poison effect 4
+    if (actor.system.poisoned && actor.system.poisonEffects?.effect4) {
+      ui.notifications.error(game.i18n.localize("CONAN.Poisoned.staminaLocked"));
+      return;
+    }
+    
     const dialog = new StaminaSpendDialog(actor);
     dialog.render(true);
   }

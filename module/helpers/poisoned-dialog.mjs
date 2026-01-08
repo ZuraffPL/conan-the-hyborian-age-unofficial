@@ -8,6 +8,7 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
   constructor(actor, options = {}) {
     super(options);
     this.actor = actor;
+    this.baseActor = actor;
   }
 
   /** @override */
@@ -58,8 +59,12 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
   }
 
   static async _onApply(event, target) {
-    const form = this.element.querySelector("form");
+    const form = target.closest("form");
     if (!form) return;
+    
+    // Get previous state
+    const previousPoisoned = this.baseActor.system.poisoned || false;
+    const previousEffects = this.baseActor.system.poisonEffects || {};
     
     // Get checkbox values
     const effect1 = form.querySelector('input[name="poisonEffect1"]')?.checked || false;
@@ -72,7 +77,7 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
     const anyEffectActive = effect1 || effect2 || effect3 || effect4 || effect5;
     
     // Update actor with poison effects
-    await this.actor.update({
+    await this.baseActor.update({
       'system.poisoned': anyEffectActive,
       'system.poisonEffects': {
         effect1: effect1,
@@ -83,12 +88,100 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
       }
     });
     
+    // Create chat message about poison status changes
+    await PoisonedDialog._createPoisonStatusMessage(this.baseActor, previousPoisoned, anyEffectActive, previousEffects, {
+      effect1, effect2, effect3, effect4, effect5
+    });
+    
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {
       ui.combat.render();
     }
     
     this.close();
+  }
+
+  /**
+   * Create chat message about poison status changes
+   */
+  static async _createPoisonStatusMessage(actor, wasPoisoned, isPoisoned, oldEffects, newEffects) {
+    // Determine which effects were added or removed
+    const addedEffects = [];
+    const removedEffects = [];
+    
+    const effectNames = {
+      effect1: game.i18n.localize("CONAN.Poisoned.option1.name"),
+      effect2: game.i18n.localize("CONAN.Poisoned.option2.name"),
+      effect3: game.i18n.localize("CONAN.Poisoned.option3.name"),
+      effect4: game.i18n.localize("CONAN.Poisoned.option4.name"),
+      effect5: game.i18n.localize("CONAN.Poisoned.option5.name")
+    };
+    
+    for (let key of ['effect1', 'effect2', 'effect3', 'effect4', 'effect5']) {
+      if (newEffects[key] && !oldEffects[key]) {
+        addedEffects.push(effectNames[key]);
+      } else if (!newEffects[key] && oldEffects[key]) {
+        removedEffects.push(effectNames[key]);
+      }
+    }
+    
+    // Don't create message if nothing changed
+    if (addedEffects.length === 0 && removedEffects.length === 0) {
+      return;
+    }
+    
+    // Build message content
+    let content = `<div class="conan-poison-status">`;
+    
+    if (addedEffects.length > 0) {
+      content += `
+        <div class="poison-applied">
+          <div class="poison-header">
+            <i class="fas fa-skull-crossbones" style="color: #15a20e;"></i>
+            <strong>${actor.name}</strong> ${game.i18n.localize("CONAN.Poisoned.appliedMessage")}
+          </div>
+          <div class="poison-effects-list">
+            <strong>${game.i18n.localize("CONAN.Poisoned.appliedEffects")}</strong>
+            <ul>
+              ${addedEffects.map(effect => `<li>${effect}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+    
+    if (removedEffects.length > 0) {
+      content += `
+        <div class="poison-removed">
+          <div class="poison-header">
+            <i class="fas fa-heart" style="color: #dc143c;"></i>
+            <strong>${actor.name}</strong> ${game.i18n.localize("CONAN.Poisoned.removedMessage")}
+          </div>
+          <div class="poison-effects-list">
+            <strong>${game.i18n.localize("CONAN.Poisoned.removedEffects")}</strong>
+            <ul>
+              ${removedEffects.map(effect => `<li>${effect}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+    
+    content += `</div>`;
+    
+    // Create chat message
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: actor }),
+      content: content,
+      flavor: isPoisoned ? "Zatrucie!" : "Odtrucie!",
+      flags: {
+        "conan-the-hyborian-age": {
+          poisonStatus: true,
+          addedEffects: addedEffects,
+          removedEffects: removedEffects
+        }
+      }
+    });
   }
 
   static async _onClose(event, target) {

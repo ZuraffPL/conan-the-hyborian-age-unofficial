@@ -1,5 +1,128 @@
 # Release Notes
 
+## Release v0.0.49 - Poison Effects System for Player Characters
+
+### New Feature - Comprehensive Poison System
+
+#### Poison Dialog & Effect Selection
+
+- **Poison Configuration Window**: New dialog for selecting and managing poison effects
+- **5 Poison Options**: Multiple poison effect types (currently implementing effect #4 - Stamina Lock)
+- **Easy Toggle Access**: Click poison skull button on character sheet to open configuration
+- **Effect Management**: Apply multiple effects simultaneously or remove individual effects
+
+#### Stamina Lock Implementation (Effect #4)
+
+- **Complete Stamina Blocking**: When poisoned with stamina lock, all stamina spending is prevented
+- **Comprehensive Coverage**: Blocks stamina use across ALL game mechanics:
+  - Manual stamina value editing on character sheet
+  - Stamina spend dialog (tactical options)
+  - Roll boosts via context menu
+  - Damage boosts via context menu
+  - Massive damage last stamina spending
+  - Spellcasting stamina costs
+
+#### Visual Indicators & Feedback
+
+- **Stamina Section Effects**:
+  - Grayed out appearance with animated green border glow
+  - Disabled stamina input field with special styling
+  - Disabled "Spend" button (dimmed, crossed-out icon)
+  - Pulsing skull icon next to "Stamina" subtitle with green glow
+
+- **Poison Toggle Button**:
+  - Animated green pulsing glow when any poison effect is active
+  - Badge counter showing number of active effects (1-5)
+  - Clear visual distinction between active/inactive states
+  - Smooth CSS animations for professional appearance
+
+- **Chat Notifications**:
+  - Messages when poison effects are applied or removed
+  - Green-themed background with animated border pulse
+  - Pulsing skull icon in message header
+  - Lists all active/removed effects with localized names
+
+#### User Experience
+
+- **Intuitive Controls**: Single button for all poison management
+- **Clear Feedback**: Visual indicators prevent confusion about stamina availability
+- **Informative Messages**: Chat notifications keep all players informed of status changes
+- **Error Prevention**: System blocks invalid actions with helpful error messages
+- **Multilingual Support**: Full translations in Polish, English, and French
+
+### Technical Implementation - v0.0.49
+
+#### New Components
+
+- **PoisonedDialog Class**: ApplicationV2-based dialog with HandlebarsApplicationMixin
+- **Actor System Data**: Added `poisoned` boolean and `poisonEffects` object (effect1-effect5)
+- **CSS Animations**: Professional keyframe animations for poison visual effects
+- **Template Updates**: Enhanced character sheet template with conditional poison styling
+- **Localization**: 20+ new translation keys across 3 languages
+
+#### Code Integration Points
+
+- `module/helpers/poisoned-dialog.mjs` - Main dialog implementation
+- `module/sheets/actor-sheet.mjs` - Sheet integration and poison checks
+- `module/helpers/stamina-spend-dialog.mjs` - Stamina dialog blocking
+- `module/helpers/stamina-effects.mjs` - Context menu blocking
+- `module/helpers/spellcasting-dialog.mjs` - Spell stamina blocking
+- `styles/partials/poisoned-effects.css` - All poison styling and animations
+- `templates/dialogs/poisoned-dialog.hbs` - Dialog template
+- Updated character sheet template with poison indicators
+
+#### Architecture
+
+- Socket-based chat message system for multiplayer synchronization
+- Context-aware poison effect counting in `_prepareContext()`
+- Form change listeners for preventing manual stamina editing
+- Consistent poison checks across all stamina-consuming actions
+- Clean separation of concerns with dedicated dialog class
+
+### System Requirements - v0.0.49
+
+- **Foundry VTT**: Version 13+ (tested on v13.350)
+- **Multiplayer**: Full support with socket-based notifications
+- **Recommended Module**: Dice So Nice (for 3D dice animations)
+
+### For Game Masters - v0.0.49
+
+#### Using the Poison System
+
+1. Open player character sheet
+2. Click the poison skull button (near life/power resources)
+3. Select poison effect(s) from dialog (checkbox for effect #4: Stamina Lock)
+4. Click "Apply" to activate - chat message confirms activation
+5. Player will see visual indicators and be unable to spend stamina
+6. To remove: Open dialog again, uncheck effects, click "Apply"
+
+#### Player Experience
+
+- Players with poisoned characters will see immediate visual feedback
+- Attempting to spend stamina shows error message explaining poison block
+- All stamina-related buttons and inputs become disabled
+- Clear indication of poison status prevents confusion
+
+### Migration Notes - v0.0.49
+
+- No data migration required
+- Existing characters automatically support new poison system
+- New `poisoned` and `poisonEffects` fields added to actor system data
+- Backward compatible with previous versions
+
+### Known Limitations - v0.0.49
+
+- Only poison effect #4 (Stamina Lock) is currently implemented
+- Other poison effects (attribute penalties, roll penalties, etc.) planned for future releases
+- Poison effects currently apply only to player characters (not NPCs)
+
+### Coming Soon
+
+- Additional poison effects implementation (effects #1-3, #5)
+- Poison duration tracking and automatic expiration
+- Poison severity levels
+- NPC poison support
+
 ## Release v0.0.48 - Multiplayer Permission Fixes for NPCs
 
 ### Critical Fixes - NPC Damage Permissions

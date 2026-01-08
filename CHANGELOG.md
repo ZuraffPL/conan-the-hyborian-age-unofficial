@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.0.49] - 2026-01-08
+
+### Added
+
+- Poison effects system for player characters
+- Poison dialog window for selecting poison effects (5 options)
+- Poison effect #4: Stamina lock functionality - blocks all stamina spending when active
+- Visual indicators for poisoned status with stamina lock:
+  - Grayed out stamina section with animated green glow
+  - Disabled stamina input field and "Spend" button
+  - Pulsing skull icon next to "Stamina" subtitle
+- Poison status toggle button with visual feedback:
+  - Pulsing green glow animation when poison effects are active
+  - Badge counter showing number of active poison effects (1-5)
+  - Always opens dialog for configuring effects
+- Chat notifications for poison status changes (applied/removed)
+- Comprehensive stamina spending blocks across all game mechanics:
+  - Manual stamina editing blocked
+  - Stamina spend dialog blocked
+  - Damage boosts blocked (context menu)
+  - Roll boosts blocked (context menu)
+  - Massive damage spending blocked
+  - Spellcasting stamina usage blocked
+- Full localization support (PL/EN/FR) for all poison-related UI elements
+
+### Changed
+
+- Poison toggle button now always opens configuration dialog instead of simple on/off toggle
+- Stamina section styling enhanced with conditional poison effects
+- Actor sheet template updated to show active poison indicators
+
+### Technical
+
+- Added `PoisonedDialog` class extending `ApplicationV2` with `HandlebarsApplicationMixin`
+- Added `poisoned` boolean and `poisonEffects` object (effect1-effect5) to actor system data
+- Added `_prepareContext()` enhancement to count active poison effects
+- Added comprehensive CSS animations for poison visual effects
+- Added socket-based chat message system for poison status notifications
+- Added poison checks in: `stamina-spend-dialog.mjs`, `stamina-effects.mjs`, `spellcasting-dialog.mjs`, `actor-sheet.mjs`
+- Added new CSS file: `styles/partials/poisoned-effects.css`
+- Added new template: `templates/dialogs/poisoned-dialog.hbs`
+- Added new module: `module/helpers/poisoned-dialog.mjs`
+
 ## [0.0.48] - 2026-01-07
 
 ### Fixed
@@ -54,89 +97,83 @@
 - Item embedded document architecture ensures equipped status is per-actor, not global
 - AR (Armor Rating) and damage calculation systems unaffected - continue to work with embedded items correctly
 
-## [0.0.45] - 2025-01-01
+## Versions 0.0.42 - 0.0.45 Summary (2025-12-12 to 2026-01-01)
 
-### Added
+### Major Features Implemented
 
-- Added custom "wounded" status effect with red blood drop icon for minion tokens
-- Checkbox "ranny" (wounded) on minion sheets now automatically applies/removes status effect on tokens
-- Wounded status effect displays consistently: red icon on tokens, in combat tracker, and in status effects panel
-- Added 4th stamina spend option: "Activate Origin Ability" for using character origin special powers
-- Status effect icon shows in token status effects panel and can be manually toggled
+- **Multiplayer Permission System**: Complete socket-based delegation for player actions
+  - Players can deal damage to enemies without "User lacks permission" errors
+  - Token and Combatant updates routed through GM via socket system
+  - Seamless combat experience for Player and Trusted Player roles
+  - Automatic GM delegation for privileged operations
+- **Wounded Status Effect for Minions**: Native Foundry status effect integration
+  - Custom red blood drop icon for wounded minions
+  - Automatic token synchronization when checking "ranny" checkbox on sheets
+  - Consistent display across tokens, combat tracker, and status effects panel
+  - Manual toggle available from token's status effects menu
+- **NPC Sheet Text Editing Overhaul**: Complete responsiveness restoration
+  - Fixed freezing issues when editing weapon names, damage values, power descriptions
+  - Debounced form handling (500ms delay) prevents constant re-rendering during typing
+  - Textarea auto-resize with proper min/max height respect
+  - No more text cutoff or focus loss during editing
+- **Origin Ability Stamina Option**: 4th stamina spend option for character special powers
+  - "Activate Origin Ability" added to stamina spending dialog
+  - Full localization in English, Polish, and French
+  - Integrated with existing stamina spend system
 
-### Changed
+### Technical Improvements
 
-- Wounded icon (wounded.svg) styled to display in red (#dc143c) across all UI contexts
-- Immobilized icon (paralysis.svg) now displays in black in combat tracker for better contrast
-- CSS filters disabled for wounded and immobilized icons to preserve original colors
+- **Socket System Architecture**: Unified permission delegation model
+  - `requestTokenUpdate()` - Players request token updates through GM
+  - `requestCombatantUpdate()` - Players request combatant updates through GM
+  - `_handleTokenUpdate()` - GM-only handler for token update requests
+  - `_handleCombatantUpdate()` - GM-only handler for combatant update requests
+  - All damage application now uses socket methods instead of direct updates
+- **Status Effect System Integration**: Native Foundry implementation
+  - Wounded status registered in CONFIG.statusEffects during initialization
+  - `_onToggleWounded` method uses `actor.toggleStatusEffect("wounded")`
+  - CSS filters disabled for wounded/immobilized icons to preserve colors
+  - Removed duplicate icon rendering - now uses native status effect system
+- **NPC Form Handling**: Custom ApplicationV2 form processing
+  - `_setupNPCFormHandling()` method bypasses parent's auto-submit
+  - Text inputs use 'input' event with debounce + 'blur' for immediate save on exit
+  - Numeric fields and selects save immediately for responsive feel
+  - `_isUpdating` flag prevents re-render loops during form updates
+  - Textarea auto-resize: `Math.max(minHeight, Math.min(scrollHeight + 2, maxHeight))`
+- **CSS Cleanup**: Removed non-existent background image references
+  - Fixed 404 errors for missing parchment.webp and parchment.jpg
+  - Custom icon styling for wounded (#dc143c red) and immobilized (black)
 
-### Technical
+### UI/UX Improvements
 
-- Custom status effect registered in CONFIG.statusEffects during system initialization
-- `_onToggleWounded` method now calls `actor.toggleStatusEffect("wounded")` to sync token visuals
-- Added CSS rules to disable Foundry's default filters on wounded.svg and paralysis.svg
-- Removed duplicate wounded icon rendering from combat tracker hook (now uses native status effect system)
-- Localization keys added: `activateOriginAbility` and `activateOriginAbilityDesc` in EN/PL/FR
+- **Enhanced Readability at 1440p**: Increased font sizes across NPC and character sheets
+  - NPC powers & special actions: 14px → 15px
+  - Player biography & notes: 14px → 15px
+  - Skill descriptions: 13px → 14px
+  - Weapon/armor stipulations: 14px → 15px
+- **Improved Textarea Behavior**: Intelligent overflow and resize
+  - Empty/small content maintains comfortable minimum height (80px)
+  - Growing content expands automatically without cutting text
+  - Large content shows scrollbar only when exceeding max-height (300-400px)
+  - No manual resizing needed - fully automatic
+- **Status Effect Visual Consistency**: Color-coded status icons
+  - Wounded displays in crimson red across all UI contexts
+  - Immobilized shows in black for better combat tracker contrast
+  - No more filter issues - CSS ensures intended colors display correctly
 
-## [0.0.44] - 2025-01-01
+### Bug Fixes
 
-### Fixed
+- Fixed permission errors preventing players from marking enemies as defeated
+- Fixed NPC sheets becoming unresponsive during text field editing
+- Fixed textarea fields cutting off last line of text in powers/actions
+- Fixed form submission loop causing sheet freezes
+- Fixed skill item effect description auto-resize issues
+- Fixed 404 console errors from missing background images
 
-- Fixed NPC sheets freezing when editing text fields (weapon names, damage, power descriptions) by implementing debounced form handling
-- Fixed textarea auto-resize issues in NPC powers/special actions - fields now respect minimum height and don't cut off last line of text
-- Fixed textarea auto-resize in skill items - effect description fields now properly expand without cutting text
-- Fixed form submission loop causing NPC sheets to become unresponsive during text input
+### Localization
 
-### Changed
-
-- NPC sheets (Minion/Antagonist) now use custom form handling with debounced text input (500ms delay) for smooth editing
-- Text fields (weapon names, descriptions) save with delay and `render: false` to prevent sheet refresh during typing
-- Numeric fields and selects save immediately on change for responsive UI
-- Textarea auto-resize logic improved: respects CSS `min-height`, adds buffer to prevent text cutoff, dynamically controls scrollbar visibility
-- Increased font size in all descriptive text fields for better readability at 1440p resolution
-
-### Added Items
-
-- Added `debounce()` utility function for delayed form updates in NPC sheets
-- Added intelligent overflow control - scrollbars appear only when content exceeds max-height
-- Font size increases: NPC powers/actions (14px→15px), player notes/biography (14px→15px), skill descriptions (13px→14px), weapon/armor stipulations (14px→15px)
-
-### Technical Details
-
-- NPC sheets bypass parent class's `submitOnChange` handler by calling grandparent `_onRender` directly
-- Form inputs tracked with `_isUpdating` flag to prevent re-render loops
-- Text inputs use 'input' event with debounce + 'blur' event for immediate save on field exit
-- Textarea auto-resize calculates height as `Math.max(minHeight, Math.min(scrollHeight + 2, maxHeight))`
-- CSS changes: textareas use `resize: none`, `overflow-y: hidden` (controlled by JS), `box-sizing: border-box`
-
-## [0.0.42] - 2025-12-12
-
-### Fixed
-
-- Fixed permission errors preventing players from dealing damage to enemies during combat
-- Fixed "User lacks permission to update Token" errors for Player and Trusted Player roles
-- Fixed "User lacks permission to update Combatant" errors when marking enemies as defeated
-- Fixed 404 errors for missing parchment background images in CSS files
-
-### Changed Items
-
-- Token and Combatant updates now use socket system to allow GM to execute updates on behalf of players
-- Removed references to non-existent parchment.webp and parchment.jpg background images from CSS
-
-### Added Features
-
-- Added `requestTokenUpdate()` socket method for players to update enemy tokens through GM
-- Added `requestCombatantUpdate()` socket method for players to update combat tracker through GM
-- Added `_handleTokenUpdate()` socket handler (GM-only) to process token update requests
-- Added `_handleCombatantUpdate()` socket handler (GM-only) to process combatant update requests
-- Added `tokenUpdateComplete` event handler to prevent console warnings
-
-### Technical Implementation
-
-- All `targetToken.update()` calls in damage application now use `ConanSocket.requestTokenUpdate()`
-- All `combatant.update()` calls now use `ConanSocket.requestCombatantUpdate()`
-- Players can now deal damage from chat messages and Flex Effects (Massive Damage) without permission errors
-- Socket system automatically routes player requests to GM for privileged operations
+- Added `activateOriginAbility` and `activateOriginAbilityDesc` keys in EN/PL/FR
+- Stamina spend dialog now includes origin ability option with proper translations
 
 ## Versions 0.0.36 - 0.0.40 Summary (2025-12-08 to 2025-12-10)
 

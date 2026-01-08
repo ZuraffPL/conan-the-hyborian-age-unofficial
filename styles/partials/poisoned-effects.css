@@ -189,6 +189,93 @@
   pointer-events: none;
 }
 
+/* Locked stamina box styling */
+.conan.sheet.actor .resource-box.stamina-locked {
+  background: rgba(21, 162, 14, 0.1);
+  border: 2px solid #15a20e;
+  box-shadow: 0 0 10px rgba(21, 162, 14, 0.3);
+  position: relative;
+  opacity: 0.7;
+}
+
+.conan.sheet.actor .resource-box.stamina-locked .resource-header {
+  opacity: 0.6;
+}
+
+/* Poison icon in stamina header */
+.conan.sheet.actor .resource-box .resource-subtitle .poison-icon {
+  animation: poison-icon-pulse 2s infinite;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+@keyframes poison-icon-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 2px rgba(21, 162, 14, 0.6));
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 6px rgba(21, 162, 14, 1));
+  }
+}
+
+/* Poisoned toggle button pulse animation */
+.conan.sheet.actor .poisoned-toggle-btn.poison-active-pulse {
+  animation: poison-button-pulse 2s infinite;
+}
+
+@keyframes poison-button-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(21, 162, 14, 0.6);
+    filter: drop-shadow(0 0 3px rgba(21, 162, 14, 0.8));
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(21, 162, 14, 1);
+    filter: drop-shadow(0 0 8px rgba(21, 162, 14, 1));
+  }
+}
+
+/* Poison effect counter badge */
+.conan.sheet.actor .poison-effect-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #15a20e;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 2px solid #0d6609;
+  z-index: 10;
+}
+
+/* Disabled stamina spend button */
+.conan.sheet.actor .stamina-spend-btn:disabled {
+  background: rgba(139, 0, 0, 0.2);
+  border-color: #8b0000;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.conan.sheet.actor .stamina-spend-btn:disabled:hover {
+  background: rgba(139, 0, 0, 0.2);
+  transform: none;
+  box-shadow: none;
+}
+
+.conan.sheet.actor .stamina-spend-btn:disabled i {
+  color: #8b0000;
+}
+
 /* Effect 5: Flex Die Disabled */
 .flex-die-disabled-indicator {
   display: inline-block;
@@ -228,6 +315,88 @@
 
 .conan-roll-chat .poison-indicator i {
   font-size: 14px;
+}
+
+/* Poison status chat message styling */
+.conan-poison-status {
+  padding: 15px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(21, 162, 14, 0.15) 0%, rgba(34, 139, 34, 0.1) 50%, rgba(21, 162, 14, 0.15) 100%);
+  border: 3px solid #15a20e;
+  animation: poison-border-pulse 2s infinite;
+  box-shadow: 0 0 15px rgba(21, 162, 14, 0.4), inset 0 0 20px rgba(21, 162, 14, 0.1);
+}
+
+@keyframes poison-border-pulse {
+  0%, 100% {
+    border-color: #15a20e;
+    box-shadow: 0 0 15px rgba(21, 162, 14, 0.4), inset 0 0 20px rgba(21, 162, 14, 0.1);
+  }
+  50% {
+    border-color: #1fc91a;
+    box-shadow: 0 0 25px rgba(21, 162, 14, 0.7), inset 0 0 30px rgba(21, 162, 14, 0.2);
+  }
+}
+
+.conan-poison-status .poison-applied,
+.conan-poison-status .poison-removed {
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.conan-poison-status .poison-applied:last-child,
+.conan-poison-status .poison-removed:last-child {
+  margin-bottom: 0;
+}
+
+.conan-poison-status .poison-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid rgba(139, 69, 19, 0.3);
+  font-weight: bold;
+}
+
+.conan-poison-status .poison-header i {
+  font-size: 20px;
+  animation: poison-skull-pulse 1.5s infinite;
+}
+
+@keyframes poison-skull-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 3px rgba(21, 162, 14, 0.5));
+  }
+  50% {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 8px rgba(21, 162, 14, 0.9));
+  }
+}
+
+.conan-poison-status .poison-effects-list {
+  font-size: 13px;
+  color: #654321;
+}
+
+.conan-poison-status .poison-effects-list strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #8b4513;
+}
+
+.conan-poison-status .poison-effects-list ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.conan-poison-status .poison-effects-list li {
+  margin: 2px 0;
+  color: #654321;
 }
 
 /* Minion wounded/dead from poison */

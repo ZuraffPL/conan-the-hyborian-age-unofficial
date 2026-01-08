@@ -90,6 +90,16 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
         const fieldName = target.name;
         let fieldValue = target.value;
         
+        // Block stamina changes if locked due to poison effect 4
+        if (fieldName === "system.stamina.value" && 
+            this.actor.system.poisoned && 
+            this.actor.system.poisonEffects?.effect4) {
+          ui.notifications.error(game.i18n.localize("CONAN.Poisoned.staminaLocked"));
+          // Revert to current value
+          target.value = this.actor.system.stamina?.value || 0;
+          return;
+        }
+        
         // Parse value based on data type
         const dtype = target.dataset.dtype;
         if (dtype === "Number") {
@@ -419,6 +429,19 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
 
     // Add roll data for convenience
     context.rollData = this.baseActor.getRollData();
+    
+    // Count active poison effects
+    if (context.system.poisoned && context.system.poisonEffects) {
+      context.activePoisonEffects = [
+        context.system.poisonEffects.effect1,
+        context.system.poisonEffects.effect2,
+        context.system.poisonEffects.effect3,
+        context.system.poisonEffects.effect4,
+        context.system.poisonEffects.effect5
+      ].filter(Boolean).length;
+    } else {
+      context.activePoisonEffects = 0;
+    }
 
     // Prepare character data and items
     if (this.actor.type === "character") {
@@ -767,30 +790,9 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
   }
 
   static async _onTogglePoisoned(event, target) {
-    const currentState = this.actor.system.poisoned || false;
-    
-    if (currentState) {
-      // Deactivate poisoned
-      await this.baseActor.update({
-        'system.poisoned': false,
-        'system.poisonEffects': {
-          attributePenalty: false,
-          rollPenalty: false,
-          lifeDrain: false,
-          staminaLock: false,
-          flexDieDisabled: false
-        }
-      });
-      
-      // Refresh Combat Tracker
-      if (game.combat && ui.combat) {
-        ui.combat.render();
-      }
-    } else {
-      // Open dialog to configure poison effects
-      const dialog = new PoisonedDialog(this.baseActor);
-      dialog.render(true);
-    }
+    // Always open dialog to configure poison effects
+    const dialog = new PoisonedDialog(this.baseActor);
+    dialog.render(true);
   }
 
   static async _onSpendStamina(event, target) {

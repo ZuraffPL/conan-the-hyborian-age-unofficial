@@ -17,6 +17,7 @@ import { CONAN } from "./helpers/config.mjs";
 import { preloadHandlebarsTemplates } from "./helpers/templates.mjs";
 import { ConanSocket } from "./helpers/socket.mjs";
 import { FlexEffectDialog } from "./helpers/flex-dialog.mjs";
+import { PoisonedDialog } from "./helpers/poisoned-dialog.mjs";
 import { initializeStaminaEffects } from "./helpers/stamina-effects.mjs";
 
 /**
@@ -30,6 +31,7 @@ Hooks.once("init", async function() {
     ConanActor,
     ConanItem,
     FlexEffectDialog,
+    PoisonedDialog,
     config: CONAN
   };
 

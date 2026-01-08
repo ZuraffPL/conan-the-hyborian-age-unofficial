@@ -489,7 +489,11 @@
       "lifeDrain": "traci 1 Punkt Życia przez truciznę",
       "minionWounded": "został ranny przez truciznę",
       "minionDead": "umiera od trucizny",
-      "staminaLocked": "Nie można wydawać Staminy - postać jest zatruta i stamina zablokowana!"
+      "staminaLocked": "Nie można wydawać Staminy - postać jest zatruta i stamina zablokowana!",
+      "appliedMessage": "otrzymuje zatrucie!",
+      "removedMessage": "odzyskuje zdrowie!",
+      "appliedEffects": "Nałożone efekty:",
+      "removedEffects": "Usunięte efekty trucizny:"
     },
     
     "Dialog": {

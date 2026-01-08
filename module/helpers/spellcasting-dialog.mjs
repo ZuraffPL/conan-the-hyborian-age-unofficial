@@ -103,6 +103,12 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     const isMagicAttack = formData.get("magicAttack") === "on";
     const targetDefense = parseInt(formData.get("targetDefense")) || 5;
     
+    // Check if stamina is locked due to poison effect 4
+    if (staminaCost > 0 && this.actor.system.poisoned && this.actor.system.poisonEffects?.effect4) {
+      ui.notifications.error(game.i18n.localize("CONAN.Poisoned.staminaLocked"));
+      return;
+    }
+    
     // Validate costs
     const currentLP = this.actor.system.lifePoints.actual;
     const currentStamina = this.actor.system.stamina.value;

@@ -489,7 +489,11 @@
       "lifeDrain": "suffers poison damage and loses 1 Life Point",
       "minionWounded": "is wounded by poison",
       "minionDead": "dies from poison",
-      "staminaLocked": "Cannot spend Stamina - poisoned and stamina is locked!"
+      "staminaLocked": "Cannot spend Stamina - poisoned and stamina is locked!",
+      "appliedMessage": "is poisoned!",
+      "removedMessage": "recovers from poison!",
+      "appliedEffects": "Applied effects:",
+      "removedEffects": "Removed poison effects:"
     },
     
     
