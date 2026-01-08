@@ -490,6 +490,7 @@
       "minionWounded": "został ranny przez truciznę",
       "minionDead": "umiera od trucizny",
       "staminaLocked": "Nie można wydawać Staminy - postać jest zatruta i stamina zablokowana!",
+      "flexDieLocked": "Kość Brawury jest zablokowana przez truciznę!",
       "appliedMessage": "otrzymuje zatrucie!",
       "removedMessage": "odzyskuje zdrowie!",
       "appliedEffects": "Nałożone efekty:",

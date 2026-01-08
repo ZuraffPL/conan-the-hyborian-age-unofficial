@@ -1,5 +1,109 @@
 # Release Notes
 
+## Release v0.0.50 - Flex Die Lock Poison Effect
+
+### New Feature - Poison Effect #5: Flex Die Disabled
+
+#### Flex Die Lock Implementation
+
+- **Complete Flex Die Blocking**: When poisoned with flex die lock (effect #5), flex die is completely disabled
+- **No Flex Die Roll**: Flex die is not rolled in any game mechanics when effect is active
+- **No Flex Effect**: Flex effect dialog cannot trigger when flex die is disabled
+- **Comprehensive Coverage**: Blocks flex die across ALL game mechanics:
+  - Attribute tests (rollAttribute)
+  - Initiative rolls (rollInitiative)
+  - Melee damage rolls (rollMeleeDamage)
+  - Thrown weapon damage rolls (rollThrownDamage)
+  - Ranged weapon damage rolls (rollRangedDamage)
+  - Sorcery damage rolls (all variants)
+
+#### Visual Indicators & Feedback
+
+- **Flex Die Section Effects**:
+  - Grayed out appearance with reduced grayscale filter for better color visibility
+  - Animated green gradient background (15% to 25% opacity)
+  - Enhanced green border glow with pulsing animation
+  - Disabled select dropdown with green-tinted background
+  - Pulsing skull icon next to "Flex Die" subtitle with green glow
+
+- **Consistent Design**: Matches stamina lock visual style for unified poison effects appearance
+
+#### Initiative Roll Enhancement
+
+- **Styled Initiative Messages**: New CSS styling for initiative roll chat messages
+- **Animated Orange Pulse**: Pulsing border effect with orange glow for visual attention
+- **Professional Appearance**: Gradient background, rounded corners, and shadow effects
+- **Flex Effect Indicator**: Special golden badge with pulsing star icon when flex triggers
+
+#### User Experience
+
+- **Clear Visual Feedback**: Immediate indication when flex die is disabled
+- **Informative Styling**: Initiative messages now stand out in chat
+- **Error Prevention**: System prevents flex die usage automatically
+- **Multilingual Support**: Full translations in Polish, English, and French
+
+### Technical Implementation - v0.0.50
+
+#### Code Changes
+
+- **rollAttribute**: Added `flexDieDisabled` check for `effect5`
+- **rollInitiative**: Added `flexDieDisabled` check combining NPC check and `effect5`
+- **rollMeleeDamage**: Updated `flexTriggered` logic to respect `flexDieDisabled`
+- **rollThrownDamage**: Updated `flexTriggered` logic to respect `flexDieDisabled`
+- **rollRangedDamage**: Already had proper implementation
+- **roll-sorcery-damage.mjs**: Already had proper implementation
+
+#### CSS Organization
+
+- Moved initiative roll styles from `poisoned-effects.css` to `roll-chat.css`
+- Enhanced `.flex-locked` class with gradient backgrounds and improved colors
+- Added `initiative-pulse` keyframe animation
+- Added `flex-star-pulse` keyframe animation for flex effect icons
+
+#### Localization Updates
+
+- **PL**: "Kość Brawury jest zablokowana przez truciznę!"
+- **EN**: "Flex Die is locked by poison!"
+- **FR**: "Le dé Flex est bloqué par le poison!"
+
+### System Requirements - v0.0.50
+
+- **Foundry VTT**: Version 13+ (tested on v13.350)
+- **Multiplayer**: Full support with socket-based notifications
+- **Browser**: Modern browsers with CSS animation support
+
+### For Game Masters - v0.0.50
+
+#### Using Poison Effect #5
+
+1. Open player character sheet
+2. Click the poison skull button
+3. Select "Wyłączona Kość Brawury / Flex Die Disabled" (checkbox for effect #5)
+4. Click "Apply" - chat message confirms activation
+5. Player's flex die section becomes grayed with green glow
+6. Flex die will not be rolled in any actions
+7. To remove: Open dialog again, uncheck effect #5, click "Apply"
+
+#### Visual Indicators
+
+- Flex die box shows green glow and skull icon when locked
+- Poison toggle button shows effect counter badge
+- Initiative messages display with orange pulsing border
+- All visual effects provide clear feedback to players
+
+### Known Features - v0.0.50
+
+- Poison effects #4 (Stamina Lock) and #5 (Flex Die Lock) fully implemented
+- Other poison effects (attribute penalties, roll penalties, life drain) planned for future releases
+- Poison effects currently apply only to player characters (not NPCs)
+
+### Migration Notes - v0.0.50
+
+- No data migration required
+- Existing characters automatically support flex die lock
+- Backward compatible with previous versions
+- All poison effect data structures remain unchanged
+
 ## Release v0.0.49 - Poison Effects System for Player Characters
 
 ### New Feature - Comprehensive Poison System

@@ -490,6 +490,7 @@
       "minionWounded": "is wounded by poison",
       "minionDead": "dies from poison",
       "staminaLocked": "Cannot spend Stamina - poisoned and stamina is locked!",
+      "flexDieLocked": "Flex Die is locked by poison!",
       "appliedMessage": "is poisoned!",
       "removedMessage": "recovers from poison!",
       "appliedEffects": "Applied effects:",

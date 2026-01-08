@@ -489,6 +489,7 @@
       "minionWounded": "est blessé par le poison",
       "minionDead": "meurt du poison",
       "staminaLocked": "Impossible de dépenser de l'Endurance - empoisonné et endurance bloquée !",
+      "flexDieLocked": "Le dé Flex est bloqué par le poison!",
       "appliedMessage": "est empoisonné!",
       "removedMessage": "guérit du poison!",
       "appliedEffects": "Effets appliqués :",

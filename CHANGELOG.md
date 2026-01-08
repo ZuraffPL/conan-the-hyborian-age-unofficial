@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.0.50] - 2026-01-09
+
+### Added
+
+- Poison effect #5: Flex Die Lock functionality - blocks all flex die usage when active
+- Visual indicators for poisoned status with flex die lock:
+  - Grayed out flex die section with animated green glow and gradient background
+  - Disabled flex die select with green-tinted background
+  - Pulsing skull icon next to "Flex Die" subtitle
+- Initiative roll message styling with animated orange pulse effect
+- Full localization support for flex die lock (PL/EN/FR)
+
+### Changed
+
+- Enhanced flex die locked state with more visible green coloring
+- Improved visual feedback for poison effect #5 with gradient backgrounds
+- Moved initiative roll CSS styles from poisoned-effects.css to roll-chat.css for better organization
+
+### Technical
+
+- Added flex die disabled check in all roll functions (rollAttribute, rollInitiative, rollMeleeDamage, rollThrownDamage, rollRangedDamage)
+- Flex die cannot trigger flex effect when poisoned with effect5
+- flexTriggered is always false when flexDieDisabled is true
+- Added `.flex-locked` CSS class for visual indication
+- Enhanced initiative message with orange pulsing border animation
+- Added flexDieLocked translation key in all language files
+
 ## [0.0.49] - 2026-01-08
 
 ### Added

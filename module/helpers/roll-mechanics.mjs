@@ -35,7 +35,8 @@ export async function rollAttribute(actor, attribute) {
   const attributeValue = attrData.value || 0;
   const attributeDie = attrData.die || "d6";
   const flexDie = actor.system.flexDie || "d10";
-  const flexDieDisabled = false;
+  // Check if flex die is disabled due to poison effect
+  const flexDieDisabled = actor.system.poisoned && actor.system.poisonEffects?.effect5;
   
   // Get both polish and english attribute names
   const attributeAbbr = game.i18n.localize(`CONAN.Attributes.${attribute}.abbr`);
@@ -59,7 +60,8 @@ export async function rollAttribute(actor, attribute) {
   const windsOfFate = attributeDieResult === 1;
   
   const success = windsOfFate ? false : (mainTotal >= difficulty);
-  const flexTriggered = flexResult === flexMax;
+  // Flex can only trigger if flex die is not disabled
+  const flexTriggered = flexDieDisabled ? false : (flexResult === flexMax);
 
   // Show both dice in 3D simultaneously (if Dice So Nice is active)
   let diceShown = false;
@@ -202,7 +204,8 @@ export async function rollInitiative(actor, combatant = null) {
   // Check if this is an NPC (no flex die for NPCs)
   const isNPC = actor.type === "minion" || actor.type === "antagonist";
   const flexDie = isNPC ? null : (actor.system.flexDie || "d10");
-  const flexDieDisabled = isNPC;
+  // Disable flex die for NPCs or if poisoned with effect5
+  const flexDieDisabled = isNPC || (actor.system.poisoned && actor.system.poisonEffects?.effect5);
 
   // Create roll formulas
   const formula = `1${edgeDie} + ${edgeValue}`;
@@ -562,7 +565,7 @@ export async function rollThrownDamage(actor, weapon, modifier = 0) {
   const damageTotal = mainRoll.total;
   const flexResult = flexRoll ? flexRoll.dice[0].total : 0;
   const flexMax = flexDie ? parseInt(flexDie.substring(1)) : 0;
-  const flexTriggered = flexRoll && (flexResult === flexMax);
+  const flexTriggered = flexDieDisabled ? false : (flexRoll && (flexResult === flexMax));
   
   // Show both dice in 3D simultaneously (if Dice So Nice is active)
   if (game.dice3d) {
@@ -721,7 +724,7 @@ export async function rollRangedDamage(actor, weapon, modifier = 0) {
   const damageTotal = mainRoll.total;
   const flexResult = flexRoll ? flexRoll.dice[0].total : 0;
   const flexMax = flexDie ? parseInt(flexDie.substring(1)) : 0;
-  const flexTriggered = flexRoll && (flexResult === flexMax);
+  const flexTriggered = flexDieDisabled ? false : (flexRoll && (flexResult === flexMax));
   
   // Show both dice in 3D simultaneously (if Dice So Nice is active)
   if (game.dice3d) {
