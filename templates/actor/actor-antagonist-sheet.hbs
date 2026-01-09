@@ -71,9 +71,12 @@
             </select>
           </div>
           
-          <button type="button" class="attribute-mod" data-action="rollAttribute" data-attribute="{{key}}" title="{{localize 'CONAN.Common.roll'}}">
+          <button type="button" class="attribute-mod {{#if (and @root.system.poisoned @root.system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="rollAttribute" data-attribute="{{key}}" title="{{localize 'CONAN.Common.roll'}}">
             <i class="fas fa-dice-d20"></i>
             {{localize 'CONAN.Common.roll'}}
+            {{#if (and @root.system.poisoned @root.system.poisonEffects.effect2)}}
+              <i class="fas fa-skull-crossbones poison-icon" title="{{localize 'CONAN.Poisoned.rollPenalty'}}" style="color: #15a20e; margin-left: 6px;"></i>
+            {{/if}}
           </button>
         </div>
         {{/each}}
@@ -144,11 +147,17 @@
           <div class="damage-row-header">
             <span class="primary-label">{{localize "CONAN.NPC.meleeDamage"}}</span>
             <span class="subtitle-label">Melee DMG</span>
-            <button type="button" class="npc-attack-btn" data-action="npcAttack" data-attack-type="melee" title="{{localize 'CONAN.Attack.rollAttack'}}">
+            <button type="button" class="npc-attack-btn {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="npcAttack" data-attack-type="melee" title="{{localize 'CONAN.Attack.rollAttack'}}">
               <i class="fas fa-sword"></i>
+              {{#if (and system.poisoned system.poisonEffects.effect2)}}
+                <i class="fas fa-skull-crossbones poison-icon" style="color: #15a20e; font-size: 0.8em; margin-left: 4px;"></i>
+              {{/if}}
             </button>
-            <button type="button" class="npc-damage-btn" data-action="npcDamage" data-attack-type="melee" title="{{localize 'CONAN.Damage.rollDamage'}}">
+            <button type="button" class="npc-damage-btn {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="npcDamage" data-attack-type="melee" title="{{localize 'CONAN.Damage.rollDamage'}}">
               <img src="systems/conan-the-hyborian-age/assets/icons/damage.svg" alt="{{localize 'CONAN.Damage.rollDamage'}}" />
+              {{#if (and system.poisoned system.poisonEffects.effect2)}}
+                <i class="fas fa-skull-crossbones poison-icon" style="color: #15a20e; font-size: 0.8em; margin-left: 4px;"></i>
+              {{/if}}
             </button>
           </div>
           
@@ -177,11 +186,17 @@
           <div class="damage-row-header">
             <span class="primary-label">{{localize "CONAN.NPC.rangedDamage"}}</span>
             <span class="subtitle-label">Ranged DMG</span>
-            <button type="button" class="npc-attack-btn" data-action="npcAttack" data-attack-type="ranged" title="{{localize 'CONAN.Attack.rollAttack'}}">
+            <button type="button" class="npc-attack-btn {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="npcAttack" data-attack-type="ranged" title="{{localize 'CONAN.Attack.rollAttack'}}">
               <i class="fas fa-sword"></i>
+              {{#if (and system.poisoned system.poisonEffects.effect2)}}
+                <i class="fas fa-skull-crossbones poison-icon" style="color: #15a20e; font-size: 0.8em; margin-left: 4px;"></i>
+              {{/if}}
             </button>
-            <button type="button" class="npc-damage-btn" data-action="npcDamage" data-attack-type="ranged" title="{{localize 'CONAN.Damage.rollDamage'}}">
+            <button type="button" class="npc-damage-btn {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="npcDamage" data-attack-type="ranged" title="{{localize 'CONAN.Damage.rollDamage'}}">
               <img src="systems/conan-the-hyborian-age/assets/icons/damage.svg" alt="{{localize 'CONAN.Damage.rollDamage'}}" />
+              {{#if (and system.poisoned system.poisonEffects.effect2)}}
+                <i class="fas fa-skull-crossbones poison-icon" style="color: #15a20e; font-size: 0.8em; margin-left: 4px;"></i>
+              {{/if}}
             </button>
           </div>
           
@@ -242,9 +257,14 @@
                 <img src="systems/conan-the-hyborian-age/assets/icons/paralysis.svg" alt="Immobilized" />
               </button>
               
-              <button type="button" class="poisoned-toggle-btn {{#if system.poisoned}}active{{/if}}" data-action="togglePoisoned" title="{{localize 'CONAN.EffectTooltips.poisoned'}}">
-                <img src="systems/conan-the-hyborian-age/assets/icons/Poisoned.svg" alt="Poisoned" />
-              </button>
+              <div style="position: relative; display: inline-block;">
+                {{#if (and system.poisoned (gt activePoisonEffects 0))}}
+                  <span class="poison-effect-count">{{activePoisonEffects}}</span>
+                {{/if}}
+                <button type="button" class="poisoned-toggle-btn {{#if system.poisoned}}active{{/if}}" data-action="togglePoisoned" title="{{localize 'CONAN.EffectTooltips.poisoned'}}">
+                  <img src="systems/conan-the-hyborian-age/assets/icons/Poisoned.svg" alt="Poisoned" />
+                </button>
+              </div>
             </div>
           </div>
         </div>

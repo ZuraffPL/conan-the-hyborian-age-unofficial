@@ -36,8 +36,9 @@ export class DifficultyDialog extends foundry.applications.api.HandlebarsApplica
     }
   };
 
-  constructor(options = {}) {
+  constructor(actor, options = {}) {
     super(options);
+    this.actor = actor;
     this.difficulty = null;
     this.modifier = 0;
     this.resolve = null;
@@ -46,8 +47,8 @@ export class DifficultyDialog extends foundry.applications.api.HandlebarsApplica
   /**
    * Show the dialog and return a promise that resolves with {difficulty, modifier}
    */
-  static async prompt() {
-    const dialog = new DifficultyDialog();
+  static async prompt(actor) {
+    const dialog = new DifficultyDialog(actor);
     return new Promise((resolve) => {
       dialog.resolve = resolve;
       dialog.render(true);
@@ -65,6 +66,7 @@ export class DifficultyDialog extends foundry.applications.api.HandlebarsApplica
     context.cancelLabel = game.i18n.localize("CONAN.Dialog.difficulty.cancel");
     context.defaultDifficulty = 10;
     context.modifier = this.modifier;
+    context.isPoisoned = this.actor && this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
 
     return context;
   }

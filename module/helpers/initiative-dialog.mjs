@@ -36,8 +36,9 @@ export class InitiativeDialog extends foundry.applications.api.HandlebarsApplica
     }
   };
 
-  constructor(options = {}) {
+  constructor(actor, options = {}) {
     super(options);
+    this.actor = actor;
     this.modifier = 0;
     this.resolve = null;
   }
@@ -45,8 +46,8 @@ export class InitiativeDialog extends foundry.applications.api.HandlebarsApplica
   /**
    * Show the dialog and return a promise that resolves with {modifier}
    */
-  static async prompt() {
-    const dialog = new InitiativeDialog();
+  static async prompt(actor) {
+    const dialog = new InitiativeDialog(actor);
     return new Promise((resolve) => {
       dialog.resolve = resolve;
       dialog.render(true);
@@ -66,6 +67,7 @@ export class InitiativeDialog extends foundry.applications.api.HandlebarsApplica
     context.rollLabel = game.i18n.localize("CONAN.Dialog.difficulty.roll");
     context.cancelLabel = game.i18n.localize("CONAN.Dialog.difficulty.cancel");
     context.modifier = this.modifier;
+    context.isPoisoned = this.actor && this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
 
     return context;
   }

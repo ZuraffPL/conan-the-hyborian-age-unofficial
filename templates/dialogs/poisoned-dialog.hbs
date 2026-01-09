@@ -27,11 +27,14 @@
       </label>
       
       {{!-- Option 3: Life Drain --}}
-      <label class="poison-option">
-        <input type="checkbox" name="poisonEffect3" {{#if poisonEffects.effect3}}checked{{/if}} data-dtype="Boolean">
+      <label class="poison-option {{#if isMinion}}disabled{{/if}}">
+        <input type="checkbox" name="poisonEffect3" {{#if poisonEffects.effect3}}checked{{/if}} {{#if isMinion}}disabled{{/if}} data-dtype="Boolean">
         <div class="option-info">
           <span class="option-name">{{localize "CONAN.Poisoned.option3.name"}}</span>
           <span class="option-description">{{localize "CONAN.Poisoned.option3.description"}}</span>
+          {{#if isMinion}}
+            <span class="option-warning">({{localize "CONAN.Poisoned.notAvailableMinion"}})</span>
+          {{/if}}
         </div>
       </label>
       

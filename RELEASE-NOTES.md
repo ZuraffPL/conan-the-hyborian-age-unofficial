@@ -1,5 +1,106 @@
 # Release Notes
 
+## Release v0.0.51 - Roll Penalty Poison Effect & NPC Improvements
+
+### New Feature - Poison Effect #2: Roll Penalty
+
+#### Roll Penalty System Implementation
+
+- **-1 Penalty to All Rolls**: When poisoned with roll penalty (effect #2), applies -1 to all game rolls
+- **Comprehensive Coverage**: Penalty applies to:
+  - Attribute tests (rollAttribute)
+  - Initiative rolls (rollInitiative)
+  - Attack rolls (player characters and NPCs)
+  - Damage rolls (all types: melee, thrown, ranged)
+  - All NPC rolls (minions and antagonists)
+
+#### Visual Indicators & Feedback
+
+- **Roll Button Skull Icons**: Green skull icons appear on all affected roll buttons
+  - Attribute roll buttons (characters and NPCs)
+  - Attack buttons (characters and NPCs)
+  - Damage buttons (characters and NPCs)
+  - Initiative button (characters)
+
+- **Roll Dialog Warnings**: Poison warning banners in dialogs
+  - Attack Dialog: Red warning banner with skull icon
+  - Difficulty Dialog: Red warning banner for attribute tests
+  - Initiative Dialog: Red warning banner with skull icon
+
+- **Chat Message Indicators**: Roll results show poison effects
+  - Skull icon in message header (green color)
+  - -1 penalty displayed in calculation with red color
+  - "Poisoned Roll" CSS class for special styling
+
+#### NPC Poison System Improvements
+
+- **Consistent Dialog Behavior**: NPC poison button now works like character sheet
+  - Always opens poison configuration dialog
+  - Can add/remove/modify poison effects freely
+  - No more instant deactivation on click
+
+- **Visual Effect Counter**: NPC sheets now display active poison effect count
+  - Badge shows number of active effects (1-5)
+  - Always visible (not just on hover)
+  - Matches character sheet appearance
+
+- **Minion Life Drain Restriction**: Life Drain effect disabled for Minions
+  - Effect #3 checkbox disabled for minion type actors
+  - Option grayed out with strikethrough text
+  - Warning message: "Not available for Minions"
+  - Makes sense as minions don't have life points
+
+### Technical Implementation - v0.0.51
+
+#### Code Changes
+
+- **roll-mechanics.mjs**: Added `poisonPenalty` calculation in all roll functions
+- **attack-dialog.mjs**: Added `isPoisoned` context and penalty application
+- **npc-attack-dialog.mjs**: Added `isPoisoned` context and penalty for NPC attacks
+- **difficulty-dialog.mjs**: Modified to accept actor parameter, added `isPoisoned` context
+- **initiative-dialog.mjs**: Modified to accept actor parameter, added `isPoisoned` context
+- **poisoned-dialog.mjs**: 
+  - Added `isMinion` context flag
+  - Added sheet refresh after update: `this.baseActor.sheet?.render(false)`
+- **npc-sheet.mjs**: 
+  - Fixed `_onTogglePoisoned` to always open dialog (both minion and antagonist)
+  - Added poison effect counting in `_prepareContext` for both NPC types
+
+#### Template Changes
+
+- **actor-character-sheet.hbs**: Fixed Handlebars context with `@root.system` in loops
+- **actor-minion-sheet.hbs**: 
+  - Fixed Handlebars context with `@root.system` in loops
+  - Added poison counter container with `position: relative`
+- **actor-antagonist-sheet.hbs**: 
+  - Fixed Handlebars context with `@root.system` in loops
+  - Added poison counter container with `position: relative`
+- **attack-dialog.hbs**: Added poison warning banner
+- **difficulty-dialog.hbs**: Added poison warning banner
+- **initiative-dialog.hbs**: Added poison warning banner
+- **poisoned-dialog.hbs**: Added `disabled` class and warning for minion life drain
+
+#### CSS Enhancements
+
+- **poisoned-effects.css**: 
+  - Added `.poisoned-roll` class for chat messages
+  - Added `.poison-penalty` class for penalty text (red color)
+  - Added `.disabled` state for poison options (strikethrough, grayed out)
+  - Added `.option-warning` style for restriction messages
+
+#### Translations
+
+- **PL**: Added "rollPenalty" and "notAvailableMinion" keys
+- **EN**: Added "rollPenalty" and "notAvailableMinion" keys  
+- **FR**: Added "rollPenalty" and "notAvailableMinion" keys
+
+### Bug Fixes
+
+- Fixed Handlebars context issue where `system.poisoned` was not accessible in `{{#each}}` loops
+- Fixed NPC poison button toggling issue - now properly opens dialog instead of instant deactivation
+- Fixed poison effect counter visibility on NPC sheets - now always visible
+- Fixed actor sheet not refreshing after poison dialog closes
+
 ## Release v0.0.50 - Flex Die Lock Poison Effect
 
 ### New Feature - Poison Effect #5: Flex Die Disabled

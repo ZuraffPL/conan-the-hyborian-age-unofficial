@@ -109,6 +109,9 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     
     const modifier = sliderModifier;
     
+    // Apply poison effect 2: -1 penalty to all rolls
+    const poisonPenalty = (this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2) ? -1 : 0;
+    
     const attribute = this.attackType === 'melee' ? 'might' : 'edge';
     const attributeValue = this.actor.system.attributes[attribute].value;
     const attributeDie = this.actor.system.attributes[attribute].die;
@@ -121,23 +124,24 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     // Check for Winds of Fate (1 on attribute die)
     const isWindsOfFate = attributeResult === 1;
     
-    // Calculate total
-    const total = attributeResult + attributeValue + modifier;
+    // Calculate total (with poison penalty)
+    const total = attributeResult + attributeValue + modifier + poisonPenalty;
     const isSuccess = !isWindsOfFate && (total >= targetDefense);
     
     // Prepare chat message
     const attributeLabel = game.i18n.localize(`CONAN.Attributes.${attribute}.label`);
     const attributeAbbr = game.i18n.localize(`CONAN.Attributes.${attribute}.abbr`);
     const attackTypeLabel = game.i18n.localize(this.attackType === 'melee' ? 'CONAN.Attack.melee' : 'CONAN.Attack.ranged');
+    const isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
     
     // Determine NPC type for styling
     const actorType = this.actor.type; // 'minion' or 'antagonist'
     const npcClass = actorType === 'minion' ? 'minion-roll' : 'antagonist-roll';
     
     let messageContent = `
-      <div class="conan-roll-chat npc-roll ${npcClass}">
+      <div class="conan-roll-chat npc-roll ${npcClass} ${isPoisoned ? 'poisoned-roll' : ''}">
         <div class="roll-header attack">
-          <h3>${attackTypeLabel}</h3>
+          <h3>${attackTypeLabel}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
           <div class="attribute-info">${attributeLabel} (${attributeAbbr})</div>
         </div>
         <div class="roll-details">
@@ -152,6 +156,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
             <span class="calc-operator">+</span>
             <span class="calc-part">${attributeValue}</span>
             ${modifier !== 0 ? `<span class="calc-operator">+</span><span class="calc-part">${modifier}</span>` : ''}
+            ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">1</span>` : ''}
             <span class="calc-operator">=</span>
             <span class="calc-total">${total}</span>
           </div>

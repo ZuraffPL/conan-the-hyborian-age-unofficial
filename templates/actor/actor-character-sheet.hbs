@@ -64,8 +64,11 @@
                 <option value="d10" {{#if (eq attr.die "d10")}}selected{{/if}}>k10</option>
               </select>
             </div>
-            <div class="attribute-mod rollable" data-action="rollAttribute" data-attribute="{{key}}" title="{{localize 'CONAN.Common.roll'}}">
+            <div class="attribute-mod rollable {{#if (and @root.system.poisoned @root.system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="rollAttribute" data-attribute="{{key}}" title="{{localize 'CONAN.Common.roll'}}">
               <i class="fas fa-dice-d20"></i> <span>{{localize "CONAN.Common.roll"}}</span>
+              {{#if (and @root.system.poisoned @root.system.poisonEffects.effect2)}}
+                <i class="fas fa-skull-crossbones poison-icon" title="{{localize 'CONAN.Poisoned.rollPenalty'}}" style="color: #15a20e; margin-left: 6px;"></i>
+              {{/if}}
             </div>
           </div>
           {{/each}}
@@ -73,7 +76,7 @@
         
         {{!-- Initiative, Attack, and Spellcasting Buttons --}}
         <div class="initiative-button-container">
-          <button type="button" class="initiative-button" data-action="rollInitiative">
+          <button type="button" class="initiative-button {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty-button{{/if}}" data-action="rollInitiative">
             <i class="fas fa-stopwatch"></i>
             <div class="button-labels">
               <span class="primary-label">{{localize "CONAN.Combat.initiative"}}</span>
@@ -81,7 +84,7 @@
             </div>
           </button>
           
-          <button type="button" class="attack-button" data-action="rollAttack">
+          <button type="button" class="attack-button {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty-button{{/if}}" data-action="rollAttack">
             <i class="fas fa-sword"></i>
             <div class="button-labels">
               <span class="primary-label">{{localize "CONAN.Attack.title"}}</span>
@@ -89,7 +92,7 @@
             </div>
           </button>
           
-          <button type="button" class="damage-button" data-action="rollDamage">
+          <button type="button" class="damage-button {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty-button{{/if}}" data-action="rollDamage">
             <i class="fas fa-shield-halved"></i>
             <div class="button-labels">
               <span class="primary-label">{{localize "CONAN.Damage.title"}}</span>

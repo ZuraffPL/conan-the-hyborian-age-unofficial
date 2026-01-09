@@ -491,6 +491,8 @@
       "minionDead": "umiera od trucizny",
       "staminaLocked": "Nie można wydawać Staminy - postać jest zatruta i stamina zablokowana!",
       "flexDieLocked": "Kość Brawury jest zablokowana przez truciznę!",
+      "rollPenalty": "Kara do rzutów przez truciznę",
+      "notAvailableMinion": "Niedostępne dla Sługusów",
       "appliedMessage": "otrzymuje zatrucie!",
       "removedMessage": "odzyskuje zdrowie!",
       "appliedEffects": "Nałożone efekty:",

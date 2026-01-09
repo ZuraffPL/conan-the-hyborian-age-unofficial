@@ -111,6 +111,36 @@
   background: linear-gradient(135deg, #129a0c 0%, #0f800a 100%);
 }
 
+/* Disabled poison option (for minions) */
+.conan.dialog.poisoned .poison-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(139, 69, 19, 0.1);
+}
+
+.conan.dialog.poisoned .poison-option.disabled:hover {
+  background: rgba(139, 69, 19, 0.1);
+  border-color: #8b4513;
+  box-shadow: none;
+}
+
+.conan.dialog.poisoned .poison-option.disabled .option-name,
+.conan.dialog.poisoned .poison-option.disabled .option-description {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.conan.dialog.poisoned .poison-option.disabled input[type="checkbox"] {
+  cursor: not-allowed;
+}
+
+.conan.dialog.poisoned .option-warning {
+  font-size: 11px;
+  color: #999;
+  font-style: italic;
+  margin-top: 2px;
+}
+
 /* Visual Effects for Poisoned State */
 
 /* Effect 1: Attribute Penalty (-1) */
@@ -191,15 +221,12 @@
 
 /* Locked stamina box styling */
 .conan.sheet.actor .resource-box.stamina-locked {
-  background: rgba(21, 162, 14, 0.1);
-  border: 2px solid #15a20e;
-  box-shadow: 0 0 10px rgba(21, 162, 14, 0.3);
+  filter: grayscale(0.4);
+  border: 2px solid rgba(21, 162, 14, 0.6);
+  background: linear-gradient(135deg, rgba(21, 162, 14, 0.15) 0%, rgba(21, 162, 14, 0.25) 100%);
+  box-shadow: 0 0 15px rgba(21, 162, 14, 0.4), inset 0 0 15px rgba(21, 162, 14, 0.2);
+  animation: poison-glow 2s infinite;
   position: relative;
-  opacity: 0.7;
-}
-
-.conan.sheet.actor .resource-box.stamina-locked .resource-header {
-  opacity: 0.6;
 }
 
 /* Poison icon in stamina header */
@@ -252,6 +279,15 @@
   50% {
     box-shadow: 0 0 20px rgba(21, 162, 14, 1);
     filter: drop-shadow(0 0 8px rgba(21, 162, 14, 1));
+  }
+}
+
+@keyframes poison-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(21, 162, 14, 0.4), inset 0 0 15px rgba(21, 162, 14, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(21, 162, 14, 0.6), inset 0 0 20px rgba(21, 162, 14, 0.3);
   }
 }
 
@@ -436,6 +472,93 @@
   border-color: #8b0000;
   color: #8b0000;
 }
+
+/* Poison Effect 2: Roll Penalty Styles */
+
+/* Poisoned penalty indicator on attribute roll buttons */
+.conan.sheet.actor .attribute-mod.poisoned-penalty {
+  position: relative;
+}
+
+.conan.sheet.actor .attribute-mod.poisoned-penalty .poison-icon {
+  animation: poison-icon-pulse 2s infinite;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+/* Poisoned penalty button glow */
+.conan.sheet.actor .poisoned-penalty-button {
+  position: relative;
+  animation: poison-penalty-glow 2s infinite;
+}
+
+@keyframes poison-penalty-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(21, 162, 14, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(21, 162, 14, 0.8);
+  }
+}
+
+/* Poison warning in dialogs */
+.poisoned-dialog .poison-warning {
+  background: rgba(21, 162, 14, 0.15);
+  border: 2px solid #15a20e;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  animation: poison-warning-pulse 2s infinite;
+}
+
+@keyframes poison-warning-pulse {
+  0%, 100% {
+    background: rgba(21, 162, 14, 0.15);
+    border-color: #15a20e;
+  }
+  50% {
+    background: rgba(21, 162, 14, 0.25);
+    border-color: #1bc91f;
+  }
+}
+
+.poisoned-dialog .poison-warning .poison-skull {
+  font-size: 1.5em;
+  animation: poison-skull-pulse 1.5s infinite;
+}
+
+/* Poisoned chat messages */
+.conan-roll-chat.poisoned-roll {
+  border-left: 4px solid #15a20e;
+  box-shadow: 0 0 15px rgba(21, 162, 14, 0.3);
+}
+
+.conan-roll-chat.poisoned-roll .roll-header h3 .poison-skull {
+  animation: poison-skull-pulse 1.5s infinite;
+  margin-left: 8px;
+}
+
+.conan-roll-chat .poison-penalty {
+  color: #15a20e;
+  font-weight: bold;
+  text-shadow: 0 0 4px rgba(21, 162, 14, 0.6);
+}
+
+/* Poison indicator in initiative roll */
+.conan-initiative-roll.poisoned-roll {
+  border-left: 4px solid #15a20e;
+  box-shadow: 0 0 10px rgba(21, 162, 14, 0.3);
+}
+
+.conan-initiative-roll.poisoned-roll .poison-skull {
+  animation: poison-skull-pulse 1.5s infinite;
+  margin-left: 6px;
+}
+
 
 .conan-roll-chat .dice-roll.disabled .die-result i {
   font-size: 16px;

@@ -26,11 +26,14 @@ export async function rollAttribute(actor, attribute) {
   }
 
   // Ask for difficulty and modifier
-  const result = await DifficultyDialog.prompt();
+  const result = await DifficultyDialog.prompt(actor);
   if (result === null) return null; // User cancelled
   
   const difficulty = result.difficulty;
   let modifier = result.modifier;
+  
+  // Apply poison effect 2: -1 penalty to all rolls
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
   
   const attributeValue = attrData.value || 0;
   const attributeDie = attrData.die || "d6";
@@ -51,7 +54,7 @@ export async function rollAttribute(actor, attribute) {
   const mainRoll = await new Roll(formula).evaluate();
   const flexRoll = flexDieDisabled ? null : await new Roll(flexFormula).evaluate();
 
-  const mainTotal = mainRoll.total + modifier; // Apply modifier to final result
+  const mainTotal = mainRoll.total + modifier + poisonPenalty; // Apply modifier and poison penalty to final result
   const flexResult = flexDieDisabled ? 0 : flexRoll.dice[0].total;
   const flexMax = parseInt(flexDie.substring(1)); // Get max value from "d10" -> 10
 
@@ -86,11 +89,12 @@ export async function rollAttribute(actor, attribute) {
   // Create modern chat message
   const modifierText = modifier !== 0 ? ` ${modifier >= 0 ? '+' : ''}${modifier}` : '';
   const modifierSign = modifier >= 0 ? '+' : '';
+  const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
   
   const content = `
-    <div class="conan-roll-chat">
+    <div class="conan-roll-chat ${isPoisoned ? 'poisoned-roll' : ''}">
       <div class="roll-header">
-        <h3>${game.i18n.localize('CONAN.Roll.attributeTest')}</h3>
+        <h3>${game.i18n.localize('CONAN.Roll.attributeTest')}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
         <div class="attribute-info">${displayName}</div>
       </div>
       <div class="roll-details">
@@ -117,6 +121,7 @@ export async function rollAttribute(actor, attribute) {
           <span class="calc-operator">+</span>
           <span class="calc-part">${attributeValue}</span>
           ${modifier !== 0 ? `<span class="calc-operator">${modifierSign}</span><span class="calc-part">${Math.abs(modifier)}</span>` : ''}
+          ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">1</span>` : ''}
           <span class="calc-operator">=</span>
           <span class="calc-total">${mainTotal}</span>
         </div>
@@ -193,10 +198,13 @@ export async function rollInitiative(actor, combatant = null) {
 
   // Show dialog for modifier only (no difficulty)
   const { InitiativeDialog } = await import("./initiative-dialog.mjs");
-  const result = await InitiativeDialog.prompt();
+  const result = await InitiativeDialog.prompt(actor);
   if (result === null) return null; // User cancelled
   
   let modifier = result.modifier;
+  
+  // Apply poison effect 2: -1 penalty to all rolls
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
   
   const edgeValue = edgeData.value || 0;
   const edgeDie = edgeData.die || "d6";
@@ -215,7 +223,7 @@ export async function rollInitiative(actor, combatant = null) {
   const mainRoll = await new Roll(formula).evaluate();
   const flexRoll = flexDieDisabled ? null : await new Roll(flexFormula).evaluate();
 
-  const initiativeResult = mainRoll.total + modifier;
+  const initiativeResult = mainRoll.total + modifier + poisonPenalty;
   const flexResult = flexDieDisabled ? 0 : flexRoll.dice[0].total;
   const flexMax = flexDieDisabled ? 0 : parseInt(flexDie.substring(1));
   const flexTriggered = flexDieDisabled ? false : (flexResult === flexMax);
@@ -251,12 +259,13 @@ export async function rollInitiative(actor, combatant = null) {
   const modifierText = modifier !== 0 ? ` ${modifier >= 0 ? '+' : ''}${modifier}` : '';
   const characterName = actor.name;
   const initiativeText = game.i18n.localize('CONAN.Combat.initiativeRolled');
+  const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     content: `
-      <div class="conan-initiative-roll">
-        <p><strong>${characterName}</strong> ${initiativeText}: <strong>${initiativeResult}</strong></p>
+      <div class="conan-initiative-roll ${isPoisoned ? 'poisoned-roll' : ''}">
+        <p><strong>${characterName}</strong> ${initiativeText}: <strong>${initiativeResult}</strong>${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</p>
         ${flexTriggered ? `<div class="conan-flex-effect"><i class="fas fa-star"></i> ${game.i18n.localize('CONAN.Roll.flexEffect')}</div>` : ''}
       </div>
     `,
@@ -385,8 +394,11 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
   // Get Might attribute value
   const might = actor.system.attributes.might.value;
   
-  // Build the roll formula: Might + Weapon Damage + Modifier
-  const formula = `${might} + ${weaponDamage} + ${modifier}`;
+  // Apply poison effect 2: -1 penalty to all rolls
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+  
+  // Build the roll formula: Might + Weapon Damage + Modifier + Poison Penalty
+  const formula = `${might} + ${weaponDamage} + ${modifier} + ${poisonPenalty}`;
   
   // For characters (not NPCs), also roll flex die
   const isCharacter = actor.type === "character";
@@ -421,14 +433,15 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
   
   // Prepare chat message content
   const modifierSign = modifier >= 0 ? '+' : '';
+  const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
   
   // Get weapon die result for display (if it's dice-based, not fixed)
   const weaponDieResult = !isFixedDamage && mainRoll.dice.length > 0 ? mainRoll.dice[0].total : null;
   
   const content = `
-    <div class="conan-roll-chat damage-roll">
+    <div class="conan-roll-chat damage-roll ${isPoisoned ? 'poisoned-roll' : ''}">
       <div class="roll-header melee">
-        <h3>${game.i18n.localize("CONAN.Damage.meleeDamage")}</h3>
+        <h3>${game.i18n.localize("CONAN.Damage.meleeDamage")}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
         <div class="weapon-info">${weaponName}</div>
       </div>
       <div class="roll-details">
@@ -467,6 +480,12 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
           <div class="component">
             <span class="component-label">${game.i18n.localize("CONAN.Dialog.difficulty.modifierLabel")}:</span>
             <span class="component-value">${modifierSign}${modifier}</span>
+          </div>
+          ` : ''}
+          ${poisonPenalty !== 0 ? `
+          <div class="component">
+            <span class="component-label">${game.i18n.localize("CONAN.Poisoned.title")}:</span>
+            <span class="component-value poison-penalty">-1</span>
           </div>
           ` : ''}
         </div>

@@ -48,6 +48,7 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
     const context = await super._prepareContext(options);
     context.actor = this.actor;
     context.isCharacter = this.actor.type === "character";
+    context.isMinion = this.actor.type === "minion";
     context.poisonEffects = this.actor.system.poisonEffects || {
       effect1: false,
       effect2: false,
@@ -92,6 +93,9 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
     await PoisonedDialog._createPoisonStatusMessage(this.baseActor, previousPoisoned, anyEffectActive, previousEffects, {
       effect1, effect2, effect3, effect4, effect5
     });
+    
+    // Refresh actor sheet to update UI immediately
+    this.baseActor.sheet?.render(false);
     
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {

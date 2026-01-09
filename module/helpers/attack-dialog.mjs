@@ -47,6 +47,7 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     context.actor = this.actor;
     context.might = this.actor.system.attributes.might.value;
     context.edge = this.actor.system.attributes.edge.value;
+    context.isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
     
     // Get target's Physical Defense from selected token
     const targets = Array.from(game.user.targets);
@@ -109,6 +110,9 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     let modifier = sliderModifier;
     if (focusedAttack) modifier += 2;
     
+    // Apply poison effect 2: -1 penalty to all rolls
+    const poisonPenalty = (this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2) ? -1 : 0;
+    
     const flexDie = this.actor.system.flexDie || 'd10';
     const flexDieDisabled = false;
     
@@ -121,8 +125,8 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     const flexResult = flexDieDisabled ? 0 : flexRoll.total;
     const flexMax = parseInt(flexDie.substring(1));
     
-    // Calculate total
-    const total = attributeResult + attributeValue + modifier;
+    // Calculate total (with poison penalty)
+    const total = attributeResult + attributeValue + modifier + poisonPenalty;
     
     // Check for Winds of Fate (1 on attribute die)
     const isWindsOfFate = attributeResult === 1;
@@ -142,6 +146,7 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
       attackType === 'thrown' ? 'CONAN.Attack.thrown' :
       'CONAN.Attack.sorcery'
     );
+    const isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
     
     // Determine if we should show the Deal Damage button
     let showDealDamageButton = false;
@@ -166,9 +171,9 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     }
 
     let messageContent = `
-      <div class="conan-roll-chat">
+      <div class="conan-roll-chat ${isPoisoned ? 'poisoned-roll' : ''}">
         <div class="roll-header attack">
-          <h3>${attackTypeLabel}</h3>
+          <h3>${attackTypeLabel}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
           <div class="attribute-info">${attributeLabel} (${attributeAbbr})</div>
         </div>
         <div class="roll-details">
@@ -194,6 +199,7 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
             <span class="calc-operator">+</span>
             <span class="calc-part">${attributeValue}</span>
             ${modifier !== 0 ? `<span class="calc-operator">+</span><span class="calc-part">${modifier}</span>` : ''}
+            ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">1</span>` : ''}
             <span class="calc-operator">=</span>
             <span class="calc-total">${total}</span>
           </div>

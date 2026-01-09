@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.0.51] - 2026-01-09
+
+### Added
+
+- Poison effect #2: Roll Penalty system - applies -1 penalty to all rolls when active
+  - Penalty applies to: attribute tests, initiative rolls, attack rolls, damage rolls
+  - Visual skull icons appear on all affected roll buttons
+  - Poison warning banners in roll dialogs (attack, difficulty, initiative)
+  - Chat messages display skull icon and -1 penalty in roll calculation
+- Poison effect counter badge for NPC sheets (minion and antagonist)
+- Life Drain effect (effect #3) disabled for Minions as they don't have life points
+
+### Changed
+
+- Fixed poison button behavior for NPCs - now always opens dialog like character sheet
+- Fixed Handlebars context issue - use @root.system in attribute loops for proper poison effect detection
+- NPC sheets now properly show poison effect counter badge (not just on hover)
+- Minions cannot select Life Drain poison effect (checkbox disabled and option grayed out)
+- Enhanced poison effect dialog with disabled state styling for unavailable options
+
+### Technical
+
+- Added poison penalty logic to all roll functions in roll-mechanics.mjs
+- Added isPoisoned context flag to all roll dialogs
+- Modified difficulty-dialog.mjs and initiative-dialog.mjs to accept actor parameter
+- Added debug logging removed after verification
+- Fixed _onTogglePoisoned in both minion and antagonist sheets
+- Added isMinion context flag to poisoned-dialog.mjs
+- Added CSS styles for disabled poison options with strikethrough effect
+- Added notAvailableMinion translation key in PL/EN/FR
+
 ## [0.0.50] - 2026-01-09
 
 ### Added

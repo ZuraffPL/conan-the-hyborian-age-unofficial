@@ -491,6 +491,8 @@
       "minionDead": "dies from poison",
       "staminaLocked": "Cannot spend Stamina - poisoned and stamina is locked!",
       "flexDieLocked": "Flex Die is locked by poison!",
+      "rollPenalty": "Roll penalty from poison",
+      "notAvailableMinion": "Not available for Minions",
       "appliedMessage": "is poisoned!",
       "removedMessage": "recovers from poison!",
       "appliedEffects": "Applied effects:",

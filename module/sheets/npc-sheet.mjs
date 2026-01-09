@@ -128,6 +128,19 @@ export class ConanMinionSheet extends ConanActorSheet {
 
     // Add roll data for convenience
     context.rollData = this.baseActor.getRollData();
+    
+    // Count active poison effects
+    if (context.system.poisoned && context.system.poisonEffects) {
+      context.activePoisonEffects = [
+        context.system.poisonEffects.effect1,
+        context.system.poisonEffects.effect2,
+        context.system.poisonEffects.effect3,
+        context.system.poisonEffects.effect4,
+        context.system.poisonEffects.effect5
+      ].filter(Boolean).length;
+    } else {
+      context.activePoisonEffects = 0;
+    }
 
     // Prepare NPC data and items
     this._prepareItems(context);
@@ -343,31 +356,10 @@ export class ConanMinionSheet extends ConanActorSheet {
   }
 
   static async _onTogglePoisoned(event, target) {
-    const currentState = this.baseActor.system.poisoned || false;
-    
-    if (currentState) {
-      // Deactivate poisoned
-      await this.baseActor.update({
-        'system.poisoned': false,
-        'system.poisonEffects': {
-          attributePenalty: false,
-          rollPenalty: false,
-          lifeDrain: false,
-          staminaLock: false,
-          flexDieDisabled: false
-        }
-      });
-      
-      // Refresh Combat Tracker
-      if (game.combat && ui.combat) {
-        ui.combat.render();
-      }
-    } else {
-      // Open dialog to configure poison effects
-      const { PoisonedDialog } = await import("../helpers/poisoned-dialog.mjs");
-      const dialog = new PoisonedDialog(this.baseActor);
-      dialog.render(true);
-    }
+    // Always open dialog to configure poison effects
+    const { PoisonedDialog } = await import("../helpers/poisoned-dialog.mjs");
+    const dialog = new PoisonedDialog(this.baseActor);
+    dialog.render(true);
   }
 
   /**
@@ -579,6 +571,19 @@ export class ConanAntagonistSheet extends ConanActorSheet {
 
     // Add roll data for convenience
     context.rollData = this.baseActor.getRollData();
+    
+    // Count active poison effects
+    if (context.system.poisoned && context.system.poisonEffects) {
+      context.activePoisonEffects = [
+        context.system.poisonEffects.effect1,
+        context.system.poisonEffects.effect2,
+        context.system.poisonEffects.effect3,
+        context.system.poisonEffects.effect4,
+        context.system.poisonEffects.effect5
+      ].filter(Boolean).length;
+    } else {
+      context.activePoisonEffects = 0;
+    }
 
     // Prepare NPC data and items
     this._prepareItems(context);
@@ -888,31 +893,10 @@ export class ConanAntagonistSheet extends ConanActorSheet {
   }
 
   static async _onTogglePoisoned(event, target) {
-    const currentState = this.baseActor.system.poisoned || false;
-    
-    if (currentState) {
-      // Deactivate poisoned
-      await this.baseActor.update({
-        'system.poisoned': false,
-        'system.poisonEffects': {
-          attributePenalty: false,
-          rollPenalty: false,
-          lifeDrain: false,
-          staminaLock: false,
-          flexDieDisabled: false
-        }
-      });
-      
-      // Refresh Combat Tracker
-      if (game.combat && ui.combat) {
-        ui.combat.render();
-      }
-    } else {
-      // Open dialog to configure poison effects
-      const { PoisonedDialog } = await import("../helpers/poisoned-dialog.mjs");
-      const dialog = new PoisonedDialog(this.baseActor);
-      dialog.render(true);
-    }
+    // Always open dialog to configure poison effects
+    const { PoisonedDialog } = await import("../helpers/poisoned-dialog.mjs");
+    const dialog = new PoisonedDialog(this.baseActor);
+    dialog.render(true);
   }
 }
 
