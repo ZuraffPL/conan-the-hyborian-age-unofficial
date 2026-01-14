@@ -1,5 +1,65 @@
 # Release Notes
 
+## Release v0.0.52 - Magic Attack Poison Integration
+
+### Poison Effect #2 Extended to Magic System
+
+The roll penalty poison effect has been fully integrated with the magic system, providing consistent poison mechanics across all attack and damage types.
+
+#### Magic Attack Roll Penalties
+
+- **Spellcasting Button Indicator**: Pulsing green glow on magic button when effect #2 active
+- **-1 Penalty to Magic Attacks**: Wits-based attack rolls now affected by poison
+- **Dialog Warning Banner**: Spellcasting dialog shows poison warning with skull icon
+- **Visual Feedback**: Chat messages display skull icon and -1 penalty in calculations
+
+#### Sorcery Damage Penalties
+
+All three types of sorcery damage now apply the -1 poison penalty:
+
+1. **Wits Die Damage** (rollSorceryWitsDamage)
+   - Uses caster's Wits attribute die
+   - -1 penalty applied to damage roll
+   - Poison skull icon in chat header
+
+2. **Custom Die Damage** (rollSorceryCustomDieDamage)
+   - Player-selected die (d4, d6, d8, d10, d12)
+   - -1 penalty included in formula
+   - Penalty shown in damage breakdown
+
+3. **Fixed Value Damage** (rollSorceryFixedDamage)
+   - Set damage amount
+   - -1 penalty applied to total
+   - Component section shows penalty
+
+#### Technical Implementation
+
+- **Consistent Penalty Logic**: Same `poisonPenalty` variable pattern as physical attacks
+- **Context Propagation**: `isPoisoned` flag added to spellcasting dialog context
+- **Formula Integration**: Penalty added to roll formulas: `total = base + modifier + poisonPenalty`
+- **Visual Consistency**: Same skull icon, color scheme, and styling as physical attacks
+- **Flex Die Handling**: Properly displays disabled state when effect #5 (Flex Die Lock) active
+
+#### Complete Coverage
+
+The poison effect #2 (Roll Penalty) now affects:
+- ✅ Attribute tests
+- ✅ Initiative rolls
+- ✅ Physical attacks (melee, ranged, thrown)
+- ✅ Physical damage (melee, ranged, thrown)
+- ✅ **Magic attacks** (NEW)
+- ✅ **Sorcery damage** (NEW)
+- ✅ NPC attacks and damage
+
+### System Consistency Improvements
+
+- **Unified UI/UX**: Magic attacks now match physical attack poison indicators
+- **Complete Implementation**: No gaps in poison effect coverage
+- **Player Clarity**: Consistent visual feedback across all roll types
+- **Code Quality**: Reusable patterns applied consistently throughout codebase
+
+---
+
 ## Release v0.0.51 - Roll Penalty Poison Effect & NPC Improvements
 
 ### New Feature - Poison Effect #2: Roll Penalty

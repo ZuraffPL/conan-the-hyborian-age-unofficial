@@ -100,7 +100,7 @@
             </div>
           </button>
           
-          <button type="button" class="spellcasting-button {{#unless canUseMagic}}disabled{{/unless}}" data-action="castSpell" {{#unless canUseMagic}}disabled{{/unless}}>
+          <button type="button" class="spellcasting-button {{#unless canUseMagic}}disabled{{/unless}} {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty-button{{/if}}" data-action="castSpell" {{#unless canUseMagic}}disabled{{/unless}}>
             <i class="fas fa-magic"></i>
             <div class="button-labels">
               <span class="primary-label">{{localize "CONAN.Spellcasting.title"}}</span>

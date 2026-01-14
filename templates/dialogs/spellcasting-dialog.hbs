@@ -1,5 +1,11 @@
 {{!-- Spellcasting Dialog Template --}}
-<div class="spellcasting-dialog-content">
+<div class="spellcasting-dialog-content {{#if isPoisoned}}poisoned-dialog{{/if}}">
+  {{#if isPoisoned}}
+  <div class="poison-warning">
+    <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>
+    <span>{{localize "CONAN.Poisoned.rollPenalty"}}: -1</span>
+  </div>
+  {{/if}}
   {{!-- Attribute Display --}}
   <div class="attribute-section">
     <div class="attribute-display">

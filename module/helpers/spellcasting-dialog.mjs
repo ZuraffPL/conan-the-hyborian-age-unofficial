@@ -88,6 +88,7 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     context.stamina = stamina;
     context.targetDefense = targetDefense;
     context.hasTarget = targets.length > 0;
+    context.isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
     
     return context;
   }
@@ -214,9 +215,10 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     const witsDie = wits.die || "d6";
     
     // Apply poison effect 2: -1 to all rolls
+    const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
     
     const flexDie = actor.system.flexDie || 'd10';
-    const flexDieDisabled = false;
+    const flexDieDisabled = actor.system.poisoned && actor.system.poisonEffects?.effect5;
     
     // Roll Wits die
     const witsRoll = await new Roll(`1${witsDie}`).evaluate();
@@ -228,7 +230,7 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     const flexMax = parseInt(flexDie.substring(1));
     
     // Calculate total
-    const total = witsResult + witsValue + modifier;
+    const total = witsResult + witsValue + modifier + poisonPenalty;
     
     // Check for Winds of Fate (1 on Wits die = automatic failure)
     const isWindsOfFate = witsResult === 1;
@@ -267,12 +269,13 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     const costString = costParts.join(" + ");
     
     // Create chat message
+    const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
     const messageData = {
       speaker: ChatMessage.getSpeaker({ actor: actor }),
       content: `
-        <div class="conan-roll-chat spellcasting-roll">
+        <div class="conan-roll-chat spellcasting-roll ${isPoisoned ? 'poisoned-roll' : ''}">
           <div class="roll-header">
-            <h3>${game.i18n.localize("CONAN.Spellcasting.magicAttack")}</h3>
+            <h3>${game.i18n.localize("CONAN.Spellcasting.magicAttack")}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
             <div class="attribute-info">
               ${game.i18n.localize("CONAN.Attributes.wits.label")} (${game.i18n.localize("CONAN.Attributes.wits.abbr")})
             </div>
@@ -283,16 +286,24 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
                 <div class="die-label">${game.i18n.localize("CONAN.Attributes.wits.label")}</div>
                 <div class="die-result${isWindsOfFate ? ' winds-of-fate' : ''}">${witsResult}</div>
               </div>
+              ${!flexDieDisabled ? `
               <div class="dice-roll">
                 <div class="die-label">${game.i18n.localize("CONAN.Roll.flexDie")}</div>
                 <div class="die-result${isFlexEffect ? ' flex-effect' : ''}">${flexResult}</div>
               </div>
+              ` : `
+              <div class="dice-roll disabled">
+                <div class="die-label">${game.i18n.localize("CONAN.Roll.flexDie")}</div>
+                <div class="die-result disabled"><i class="fas fa-ban"></i></div>
+              </div>
+              `}
             </div>
             <div class="calculation">
               <span class="calc-part">${witsResult}</span>
               <span class="calc-operator">+</span>
               <span class="calc-part">${witsValue}</span>
               ${modifier !== 0 ? `<span class="calc-operator">${modifier >= 0 ? '+' : ''}</span><span class="calc-part">${modifier}</span>` : ''}
+              ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">1</span>` : ''}
               <span class="calc-operator">=</span>
               <span class="calc-total">${total}</span>
             </div>

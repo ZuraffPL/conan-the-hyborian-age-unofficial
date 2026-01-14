@@ -4,7 +4,8 @@
 # Get the version from system.json
 $systemJson = Get-Content "system.json" -Raw | ConvertFrom-Json
 $version = $systemJson.version
-$zipName = "conan-the-hyborian-age-v$version.zip"
+$zipNameVersioned = "conan-the-hyborian-age-v$version.zip"
+$zipNameLatest = "conan-the-hyborian-age.zip"
 
 Write-Host "Creating release package for version $version..." -ForegroundColor Cyan
 
@@ -46,29 +47,39 @@ foreach ($item in $itemsToCopy) {
 }
 
 # Create the zip file
-Write-Host "`nCreating ZIP archive..." -ForegroundColor Yellow
-$zipPath = ".\$zipName"
+Write-Host "`nCreating ZIP archives..." -ForegroundColor Yellow
 
-# Remove existing zip if it exists
-if (Test-Path $zipPath) {
-    Remove-Item $zipPath -Force
+# Versioned zip (for GitHub release assets)
+$zipPathVersioned = ".\$zipNameVersioned"
+if (Test-Path $zipPathVersioned) {
+    Remove-Item $zipPathVersioned -Force
 }
+Compress-Archive -Path "$releaseDir\*" -DestinationPath $zipPathVersioned -Force
+Write-Host "  ✓ Created: $zipNameVersioned" -ForegroundColor Green
 
-# Create the zip
-Compress-Archive -Path "$releaseDir\*" -DestinationPath $zipPath -Force
+# Latest zip (for Foundry auto-updates)
+$zipPathLatest = ".\$zipNameLatest"
+if (Test-Path $zipPathLatest) {
+    Remove-Item $zipPathLatest -Force
+}
+Compress-Archive -Path "$releaseDir\*" -DestinationPath $zipPathLatest -Force
+Write-Host "  ✓ Created: $zipNameLatest" -ForegroundColor Green
 
 # Clean up temp directory
 Remove-Item $tempDir -Recurse -Force
 
 # Display results
-$zipSize = (Get-Item $zipPath).Length / 1MB
-Write-Host "`n✓ Release package created successfully!" -ForegroundColor Green
-Write-Host "  File: $zipName" -ForegroundColor Cyan
-Write-Host "  Size: $([math]::Round($zipSize, 2)) MB" -ForegroundColor Cyan
+$zipSizeVersioned = (Get-Item $zipPathVersioned).Length / 1MB
+$zipSizeLatest = (Get-Item $zipPathLatest).Length / 1MB
+Write-Host "`n✓ Release packages created successfully!" -ForegroundColor Green
+Write-Host "  Versioned: $zipNameVersioned ($([math]::Round($zipSizeVersioned, 2)) MB)" -ForegroundColor Cyan
+Write-Host "  Latest:    $zipNameLatest ($([math]::Round($zipSizeLatest, 2)) MB)" -ForegroundColor Cyan
 Write-Host "`nNext steps:" -ForegroundColor Yellow
 Write-Host "1. Commit and push all changes to GitHub" -ForegroundColor White
 Write-Host "2. Create a new release (tag: v$version) on GitHub" -ForegroundColor White
-Write-Host "3. Upload $zipName to the release" -ForegroundColor White
+Write-Host "3. Upload BOTH zip files to the release:" -ForegroundColor White
+Write-Host "   - $zipNameVersioned (versioned archive)" -ForegroundColor Gray
+Write-Host "   - $zipNameLatest (for Foundry auto-updates)" -ForegroundColor Gray
 Write-Host "4. Verify the download URL matches system.json" -ForegroundColor White
 Write-Host "`nGitHub Release URL:" -ForegroundColor Yellow
 Write-Host "  https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/new" -ForegroundColor Cyan

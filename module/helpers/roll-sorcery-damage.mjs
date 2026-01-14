@@ -15,9 +15,12 @@ export async function rollSorceryFixedDamage(actor, fixedValue = 0, paramModifie
   const isCharacter = actor.type === "character";
   const flexDieDisabled = isCharacter && actor.system.poisoned && actor.system.poisonEffects?.effect5;
 
+  // Apply poison effect 2: -1 penalty to damage rolls
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+
   // Sum modifiers
   const totalModifier = Number(paramModifier) + Number(sliderModifier);
-  const total = Number(fixedValue) + totalModifier;
+  const total = Number(fixedValue) + totalModifier + poisonPenalty;
 
   // Flex die roll
   const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}`).evaluate() : null;
@@ -34,10 +37,11 @@ export async function rollSorceryFixedDamage(actor, fixedValue = 0, paramModifie
 
   // Prepare chat message content
   const modifierSign = totalModifier >= 0 ? '+' : '';
+  const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
   const content = `
-    <div class="conan-roll-chat damage-roll spellcasting-roll">
+    <div class="conan-roll-chat damage-roll spellcasting-roll ${isPoisoned ? 'poisoned-roll' : ''}">
       <div class="roll-header">
-        <h3>${game.i18n.localize("CONAN.Damage.sorceryDamage")}</h3>
+        <h3>${game.i18n.localize("CONAN.Damage.sorceryDamage")}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
         <div class="weapon-info">${game.i18n.localize("CONAN.Damage.sorceryFixedValue")}</div>
       </div>
       <div class="roll-details">
@@ -67,6 +71,12 @@ export async function rollSorceryFixedDamage(actor, fixedValue = 0, paramModifie
           <div class="component">
             <span class="component-label">${game.i18n.localize("CONAN.Dialog.difficulty.modifierLabel")}</span>:
             <span class="component-value">${modifierSign}${totalModifier}</span>
+          </div>
+          ` : ''}
+          ${poisonPenalty !== 0 ? `
+          <div class="component">
+            <span class="component-label">${game.i18n.localize("CONAN.Poisoned.rollPenalty")}</span>:
+            <span class="component-value poison-penalty">-1</span>
           </div>
           ` : ''}
         </div>
@@ -153,10 +163,13 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
   const isCharacter = actor.type === "character";
   const flexDieDisabled = isCharacter && actor.system.poisoned && actor.system.poisonEffects?.effect5;
 
+  // Apply poison effect 2: -1 penalty to damage rolls
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+
   // Sum modifiers
   const totalModifier = Number(paramModifier) + Number(sliderModifier);
-  // Build the roll formula: Custom Die + total modifier
-  const formula = `1${dieType} + ${totalModifier}`;
+  // Build the roll formula: Custom Die + total modifier + poison penalty
+  const formula = `1${dieType} + ${totalModifier} + ${poisonPenalty}`;
   const mainRoll = await new Roll(formula).evaluate();
   const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}`).evaluate() : null;
 
@@ -183,11 +196,12 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
   const modifierSign = totalModifier >= 0 ? '+' : '';
   const dieResult = mainRoll.dice.length > 0 ? mainRoll.dice[0].total : null;
   const dieLabel = dieType.toUpperCase();
+  const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
 
   const content = `
-    <div class="conan-roll-chat damage-roll spellcasting-roll">
+    <div class="conan-roll-chat damage-roll spellcasting-roll ${isPoisoned ? 'poisoned-roll' : ''}">
       <div class="roll-header">
-        <h3>${game.i18n.localize("CONAN.Damage.sorceryDamage")}</h3>
+        <h3>${game.i18n.localize("CONAN.Damage.sorceryDamage")}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
         <div class="weapon-info">${game.i18n.localize("CONAN.Damage.sorceryCustomDie")}</div>
       </div>
       <div class="roll-details">
@@ -217,6 +231,12 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
           <div class="component">
             <span class="component-label">${game.i18n.localize("CONAN.Dialog.difficulty.modifierLabel")}</span>:
             <span class="component-value">${modifierSign}${totalModifier}</span>
+          </div>
+          ` : ''}
+          ${poisonPenalty !== 0 ? `
+          <div class="component">
+            <span class="component-label">${game.i18n.localize("CONAN.Poisoned.rollPenalty")}</span>:
+            <span class="component-value poison-penalty">-1</span>
           </div>
           ` : ''}
         </div>
@@ -312,10 +332,13 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
   const isCharacter = actor.type === "character";
   const flexDieDisabled = isCharacter && actor.system.poisoned && actor.system.poisonEffects?.effect5;
 
+  // Apply poison effect 2: -1 penalty to damage rolls
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+
   // Sum modifiers
   const totalModifier = Number(paramModifier) + Number(sliderModifier);
-  // Build the roll formula: Wits Die + total modifier
-  const formula = `1${witsDie} + ${totalModifier}`;
+  // Build the roll formula: Wits Die + total modifier + poison penalty
+  const formula = `1${witsDie} + ${totalModifier} + ${poisonPenalty}`;
   const mainRoll = await new Roll(formula).evaluate();
   const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}`).evaluate() : null;
 
@@ -343,11 +366,12 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
   const witsDieResult = mainRoll.dice.length > 0 ? mainRoll.dice[0].total : null;
   const witsAbbr = game.i18n.localize("CONAN.Attributes.wits.abbr");
   const witsLabel = game.i18n.localize("CONAN.Attributes.wits.label");
+  const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
 
   const content = `
-    <div class="conan-roll-chat damage-roll spellcasting-roll">
+    <div class="conan-roll-chat damage-roll spellcasting-roll ${isPoisoned ? 'poisoned-roll' : ''}">
       <div class="roll-header">
-        <h3>${game.i18n.localize("CONAN.Damage.sorceryDamage")}</h3>
+        <h3>${game.i18n.localize("CONAN.Damage.sorceryDamage")}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
         <div class="weapon-info">${game.i18n.localize("CONAN.Damage.sorceryWitsDie")}</div>
       </div>
       <div class="roll-details">
@@ -377,6 +401,12 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
           <div class="component">
             <span class="component-label">${game.i18n.localize("CONAN.Dialog.difficulty.modifierLabel")}</span>:
             <span class="component-value">${modifierSign}${totalModifier}</span>
+          </div>
+          ` : ''}
+          ${poisonPenalty !== 0 ? `
+          <div class="component">
+            <span class="component-label">${game.i18n.localize("CONAN.Poisoned.rollPenalty")}</span>:
+            <span class="component-value poison-penalty">-1</span>
           </div>
           ` : ''}
         </div>

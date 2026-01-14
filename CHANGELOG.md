@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.0.52] - 2026-01-14
+
+### Added
+
+- Poison effect #2 (Roll Penalty) support for magic attacks and sorcery damage
+  - Magic attack button shows pulsing green glow when effect #2 active
+  - Poison warning banner in spellcasting dialog with skull icon
+  - -1 penalty applied to magic attack rolls (Wits-based)
+  - -1 penalty applied to all sorcery damage rolls (Wits die, custom die, fixed value)
+  - Skull icon and penalty visualization in chat messages
+  - Flex die disabled state properly shown in magic attack/damage messages
+
+### Changed
+
+- Spellcasting dialog now displays isPoisoned context for effect #2
+- Magic attack rolls include poisonPenalty in total calculation
+- All three sorcery damage functions (rollSorceryWitsDamage, rollSorceryCustomDieDamage, rollSorceryFixedDamage) apply poison penalty
+- Chat messages for magic attacks show poison skull and penalty breakdown
+
+### Fixed
+
+- Magic attacks were missing poison effect #2 implementation (now consistent with physical attacks)
+- Sorcery damage was not affected by poison penalty (now applies -1 like other damage types)
+- Flex die disabled state not properly visualized in magic attack messages
+
+### Technical
+
+- Added poisonPenalty variable to _performMagicAttackRoll function
+- Added isPoisoned flag to spellcasting dialog context
+- Modified all three sorcery damage functions to include poison penalty
+- Added poison penalty to damage formulas: `formula = "..." + poisonPenalty`
+- Added conditional poison skull icons and penalty display in chat templates
+- Added poisoned-penalty-button class to spellcasting button in character sheet
+
 ## [0.0.51] - 2026-01-09
 
 ### Added
@@ -556,210 +590,45 @@
 - Socket-based synchronization for actor/token sheet consistency
 - BaseActor pattern for all sheet operations
 
-## [0.0.16-0.0.21] - 2025-11-12 / 2025-11-18
+## [0.0.1-0.0.21] - 2025-10-27 / 2025-11-18
 
-### Added
+### Core System Foundation (v0.0.1-0.0.4)
 
-- **Magic Damage System**: Complete sorcery damage implementation
-  - Three damage types: Wits die, Custom die, Fixed value
-  - Dynamic dialog with inline field switching (no window reload)
-  - Modifier support (cumulative with slider)
-  - Full chat integration with proper dice animation
-  - Bilingual support (Polish/English)
-- **Defence Toggle Button**: Active defense action on character sheet
-  - Shield icon (+2 to Physical Defense when active, 1 Action cost)
-  - Visual gold highlight with bonus indicator
-  - Cannot be used when Immobilized (auto-disabled)
-- **Immobilized Toggle Button**: Status effect for immobilized characters
-  - Sets Physical Defense to 0 when active
-  - Visual red highlight, automatically disables Defence
-  - Original defense crossed out and grayed when active
-- **Poisoned Status System**: Complete poison effects management
-  - Poisoned toggle button (skull icon) with interactive dialog
-  - 5 configurable poison effects
-  - Combat Tracker icon display, visual green highlight
-  - Full integration with all actor types
-- **Damage Roll System**: Complete damage calculation and chat display
-  - Damage button on character sheet with type selector (Melee/Thrown/Ranged/Sorcery)
-  - Type-specific weapon parameters with automatic detection
-  - Modifier slider (-3 to +3) for situational bonuses
-  - Beautiful chat messages with highlighted damage total (golden gradient box)
-  - Flex Die integration with 3D dice animation
+- **4-Attribute System**: Might, Edge, Grit, Wits with variable die types (d6/d8/d10)
+- **Character Creation**: Interactive wizard with 10 origins, 16-point distribution, automatic derived values
+- **Flex Die Mechanics**: d10 Flex Die with special effects and 3D dice integration
+- **Difficulty System**: Attribute testing with modifiers (-3 to +3) and Winds of Fate (1 = auto-fail)
+- **Starting Skills**: CRUD system with automatic XP tracking and origin skills
+- **Bilingual Support**: Complete Polish/English localization throughout
+- **ApplicationV2 Architecture**: Modern Foundry v13 implementation with auto-save
 
-### Changed
+### Equipment & Combat (v0.0.5-0.0.10)
 
-- **Magic Damage Architecture**: Fixed parameter passing and roll mechanics
-  - Wits die rolls now correctly use both parameter and slider modifiers
-  - Custom die and fixed value options work independently
-  - All three types properly pass sorceryDamageType and sorceryCustomDie to handler
-  - Works independently of weapons (weaponId can be null)
-- **Terminology Update**: Wits → Wits throughout system
-  - Changed all "Reason" references to "Wits" in UI and localization
-  - Wits die styled consistently in dialogs
-- **Damage Dialog Architecture**: Type-based parameter sections
-  - Radio buttons for damage type selection
-  - Dynamic section visibility, FormDataExtended compatibility
-  - Separate damage functions: rollMeleeDamage, rollThrownDamage, rollRangedDamage
-- **Weapon Detection Logic**: Type-specific weaponId extraction
-  - Melee: formData.object.weaponId (can be "unarmed")
-  - Thrown/Ranged: querySelector for hidden inputs in display:none sections
-  - Prevents melee weaponId bleeding into other damage types
-- **Flex Die Mechanics**: Fixed to use character's actual flex die type
-  - Attack/spellcasting rolls now correctly use flexDie from actor.system.flexDie (was hardcoded to d10)
-  - Flex Effect triggers on maximum value of specific die type (d10=10, d8=8, d6=6, d4=4)
-- **CSS Organization**: Improved file structure
-  - Created `styles/partials/` folder for imported CSS files
-  - Moved actor-spell.css, combat-tracker.css, poisoned-effects.css to partials/
-- **Defense Section Layout**: Redesigned visual organization
-  - Toggle buttons in vertical column on left, defense fields on right
-  - Wider spacing (30px gap) for better visual separation
+- **Armor & Weapons**: Complete management with drag & drop, equip/unequip, automatic calculations
+- **Combat Rules**: Shield restrictions, weapon combination limits, validation systems
+- **Initiative System**: Edge-based initiative with Combat Tracker integration
+- **Skills & Spells as Items**: Item-based management with XP economy
+- **Item Synchronization**: Bidirectional sync between world and embedded items
 
-### Fixed
+### NPC & Magic Systems (v0.0.11-0.0.15)
 
-- Magic damage dialog parameter passing issues
-  - Fixed custom die and Wits die options not executing rolls
-  - Fixed modifier not being included from parameters
-  - Fixed dynamic field switching and layout overflow
-- Critical JS errors in roll-mechanics.mjs (stray template code)
-- FormDataExtended not capturing fields in display:none sections
-- Ranged weapon damage modifier display (changed from damage.bonus to damageModifier)
-- weaponId always returning melee weapon (fixed with type-based conditional logic)
-- Critical syntax errors preventing sheets from rendering
-  - Fixed attack-dialog.mjs template literal syntax error
-  - Fixed npc-sheet.mjs class declaration syntax
-- Radio button double-display in attack dialog
-- Ranged weapon bonus alignment in chat (now perfectly inline with dice result)
+- **NPC Types**: Minion and Antagonist actors with separate sheets and attributes (d4-d12)
+- **Sorcery System**: Origin-based magic restrictions with 5 disciplines
+- **Spellcasting**: Complete dialog with LP/Stamina costs and magic attacks
+- **Modern Chat**: Unified roll format with visual dice display and success/failure
 
-### Technical
+### Advanced Features (v0.0.16-0.0.21)
 
-- New action handlers: toggleDefence, toggleImmobilized
-- New data fields: system.defenceActive, system.immobilized, system.defense.basePhysical
-- Poison effects stored in system.poisonEffects (5 boolean flags)
-- Flex die type dynamically determined: flexMax = parseInt(flexDie.substring(1))
-- CSS architecture: partials pattern for better organization
-- Custom SVG icons stored in assets/icons/
-- CSS classes: `.defence-toggle-btn`, `.immobilized-toggle-btn`, `.defence-bonus`, `.immobilized-indicator`
-- Defence and Immobilized states persist across sessions
-
-## Versions 0.0.11 - 0.0.15 Summary (2025-11-04 to 2025-11-07)
-
-### Major Features Implemented
-
-- **NPC System**: Complete Minion and Antagonist actor types with separate sheets, attributes (d4-d12 dice, values 1-20/1-50), NPCDifficultyDialog for tests, color-coded chat messages (green/red), tabbed interface (Statistics/Powers), damage sections (Melee/Ranged with N/A toggles), action economy tracking, Powers & Special Rules management with auto-resize textareas
-- **NPC Combat Stats**: Minion (Physical/Sorcery Defence 0-20, Threshold 1-25, Armor 0-20, Wounded checkbox), Antagonist (Physical/Sorcery Defence 0-50, Armor 0-20, Life Points 0-999 with large 80×80px input), creature type system (6 types: Human, Inanimate, Undead, Monstrosity, Demon, Beast)
-- **Sorcery System**: Origin-based magic restrictions (10 origins with varying magic access), discipline limits per origin, validation preventing forbidden spells, complete spellcasting dialog with LP/Stamina costs, magic attack rolls vs Sorcery Defense, Flex Die integration, chat message with spell cost display
-- **Modern Chat Message System**: Unified `.conan-roll-chat` format for attribute tests and magic attacks, visual dice display (50×50px), complete calculation breakdown, color-coded success/failure, special condition animations (Winds of Fate shake, Flex Effect glow), distinctive headers (brown for tests, purple for magic)
-- **Character Sheet Enhancements**: Defence toggle button (+2 Physical Defense, gold highlight, 1 Action cost), Immobilized toggle (sets Defense to 0, red highlight, prevents Defence), Notes tab with two-column layout (Biography/Notes side-by-side, auto-resize textareas), origin selector lock after creation
-- **Item Synchronization System**: Bidirectional sync between world items and embedded items, ID-based matching, loop prevention with flags, automatic propagation, dynamic XP adjustment when editing embedded item costs, validation for XP sufficiency
+- **Magic Damage**: Wits die, Custom die, and Fixed value damage options
+- **Status Effects**: Defence (+2), Immobilized (Defense = 0), Poisoned toggles
+- **Damage System**: Type selector (Melee/Thrown/Ranged/Sorcery) with chat integration
+- **CSS Organization**: Modular structure with partials folder
 
 ### Technical Achievements
 
-- **ApplicationV2 for NPCs**: Complete sheet implementation with tab management, `_onRender` for numeric validation, auto-resize textareas for Powers fields, setupNACheckboxes() helper for damage type toggles
-- **Magic System Architecture**: CONFIG.CONAN.magicRestrictions object, `_preCreateEmbeddedDocuments` validation, Sorcery tab visibility control, SpellcastingDialog (ApplicationV2 with HandlebarsApplicationMixin)
-- **Roll Mechanics Modernization**: Updated rollAttribute() to modern format, manual 3D dice invocation (prevents duplication), bronze Flex die colorset, removed deprecated `rolls` array from ChatMessage
-- **CSS Organization**: Separated NPC styles to `actor-npc.css`, class-based selectors (`.minion`, `.antagonist`), Powers tab styling with gradient separators and decorative elements
-- **Validation Systems**: NPC numeric input validation with auto-correction, attack/action validation (attacks ≤ actions), magic restriction validation, XP sufficiency checks for item cost changes
-- **Modern API Usage**: FilePicker migration to `foundry.applications.apps.FilePicker.render(true)`, deprecated API elimination, Foundry v13 best practices
-
-### UI/UX Improvements
-
-- NPC sheets optimized to 640px width with compact layouts
-- Tabbed interface with visual active state (brown underline)
-- N/A strikethrough effect for disabled damage types (50% opacity, brown line)
-- Auto-resize textareas (min 80px, max 400px) for Powers fields
-- Defense toggle buttons with visual feedback (gold/red highlights)
-- Chat messages 30% smaller for NPCs, color-coded by type
-- Bilingual labels throughout (primary + subtitle)
-- Origin selector disabled state with visual feedback
-
-## Versions 0.0.5 - 0.0.10 Summary (2025-10-31 to 2025-11-04)
-
-### Major Features Implemented
-
-- **Complete Equipment System**: Full armor and weapon management with drag & drop, equip/unequip toggles, automatic damage calculation, combat statistics tracking (AR, Encumbrance), shield restrictions, weapon combination limits, and comprehensive validation systems
-- **Weapon System Details**: Type selection (Melee/Thrown/Ranged), handedness (one-handed/two-handed), size categories (Light/Medium/Heavy), automatic damage assignment (1d4 to 1d12), range selection, improvised weapons, "Różna" (Various) option, stipulations with auto-resize, color-coded visual display
-- **Armor System Details**: Type selection (Light/Medium/Heavy/Shield), material quality (Crude/Standard/Quality/Superior), AR and Encumbrance per item, visual armor list with images, overencumbered warnings, real-time stat calculations
-- **Combat Rules Enforcement**: Shield restrictions (only one-handed melee, all thrown, light ranged), weapon combination limits (max 2 one-handed melee, max 1 melee+thrown, two-handed blocks all, heavy ranged blocks all), 9 warning messages explaining restrictions
-- **Initiative System**: Custom Edge-based initiative button, InitiativeDialog with modifier slider (-3 to +3), Edge die + value + modifier roll, Flex Die integration, Combat Tracker override replacing d20 rolls, automatic initiative updates
-- **Skills & Spells as Items**: Complete transformation to item-based management, skill item type with origin checkbox, spell item type with 5 disciplines (Alchemy, Black Magic, Demonology, Necromancy, White Magic), automatic XP validation/deduction/refund, default icons (aura.svg for skills, book.svg for spells)
-- **Sorcery System**: Origin-based magic restrictions (10 origins with different magic access), discipline limits per origin, validation preventing forbidden spells, Sorcery tab visibility control, complete spellcasting dialog with LP/Stamina costs, magic attack rolls vs Sorcery Defense
-- **Item Synchronization**: Bidirectional sync between world items and embedded items, ID-based matching, loop prevention with flags, automatic propagation of changes, notifications system
-- **Notes & Biography System**: Two-column layout with vertical separator, auto-resize textareas (min 200px), bilingual labels and placeholders, full auto-save
-
-### Technical Achievements
-
-- **ApplicationV2 Excellence**: Complete ItemSheetV2 implementation with `_onChangeForm` for auto-save, PARTS compatibility for proper rendering, modern form handling without closing windows
-- **Combat Integration**: Combat.rollInitiative override for custom initiative system, ApplicationV2 compatibility in Combat Tracker hooks (native DOM vs jQuery), proper hook usage for combat events
-- **CSS Architecture Evolution**: Separated domain-specific stylesheets (`item-armor.css`, `item-weapon.css`, `actor-armor.css`, `actor-weapon.css`), inline styles for ApplicationV2 compatibility, flexbox mastery for responsive layouts
-- **Tab Management**: Manual tab activation with click listeners, active state preservation in `this.tabGroups.primary`, prevention of unwanted tab switching on updates
-- **XP Economy System**: `_preCreateEmbeddedDocuments` for validation before adding items, `_onDeleteEmbeddedDocuments` for refunds, `_onUpdateEmbeddedDocuments` for dynamic cost adjustments, origin skill bypass logic
-- **Validation Systems**: Comprehensive rule checking (`_canEquipWeapon`, `_canUseWeaponWithShield`), overencumbered detection, magic restriction validation, XP sufficiency checks
-- **Item Type Management**: Removed unused types (Equipment, Talent), streamlined to 4 core types (Weapon, Armor, Skill, Spell), updated all system files
-- **Modern API Usage**: FilePicker migration to `foundry.applications.apps.FilePicker`, deprecated API elimination, Foundry v13 best practices
-- **Origin Lock System**: Character creation flag prevents origin changes, visual feedback for disabled state, immutable foundational data protection
-
-### UI/UX Improvements
-
-- Responsive design with resizable windows, automatic scrolling, optimized dimensions (840x1000)
-- Ultra-compact layouts maximizing information density
-- Visual weapon/armor lists with color-coding (white/yellow/green for weapons)
-- Two-row item layouts (main info + stats)
-- Expandable details for stipulations
-- Real-time stat updates (AR, Encumbrance, damage)
-- Origin selector lock with visual feedback
-- Tab organization refinements
-- Field width optimization preventing layout shifts
-- Consistent bilingual labeling throughout
-
-### Added
-
-- **Responsive Design**: Improved compatibility with different screen resolutions
-  - Window is resizable, minimizable, and maximizable
-  - Automatic scrolling when content exceeds window height
-  - Optimized for 1080p but works on smaller/larger displays
-  - Flexible layout prevents content overflow
-
-### Changed
-
-- **UI Refinements**: Further optimization of interface spacing
-  - Tab button heights reduced by 50% (2.5px padding) with perfect vertical/horizontal centering
-  - Section headers spacing reduced by 50% (7.5px margin-top)
-  - Ultra-compact layout maximizes information density
-  - Optimized window dimensions (840x1000)
-- **Polish Terminology Updates**:
-  - "Umiejętności Początkowe" (not "Startowe")
-  - "Kość Brawury" and "Efekt Brawury" (not "Flex")
-  - Consistent Polish naming throughout system
-- **Visual Improvements**:
-  - Tab labels perfectly centered with flexbox alignment
-  - Reduced gaps throughout interface (1px label spacing)
-  - Tighter integration between sections
-  - Compact, information-dense presentation
-- **CSS Architecture**: Improved flexbox layout for better responsiveness
-  - Form uses `min-height` instead of fixed `height`
-  - Sheet body has `flex: 1 1 auto` with `min-height: 0` for proper scrolling
-  - Header and tabs have `flex-shrink: 0` to prevent collapsing
-
-## Versions 0.0.1 - 0.0.4 Summary (2025-10-27 to 2025-10-30)
-
-### Major Features Implemented
-
-- **Core System Framework**: Complete 4-attribute system (Might, Edge, Grit, Wits) with variable die types (d6/d8/d10)
-- **Character Creation Wizard**: Interactive dialog with 10 origin backgrounds, 16-point attribute distribution, automatic derived value calculation (Life Points, Defense, Stamina)
-- **Flex Die Mechanics**: d10 Flex Die with special effects (Stamina recovery, bonus success) and 3D dice integration with custom bronze die
-- **Difficulty Dialog System**: Attribute testing with difficulty selection, situational modifiers (-3 to +3), color-coded gradient slider, Winds of Fate (1 = auto-fail)
-- **Starting Skills Management**: Complete CRUD system with automatic XP tracking, origin skills flagged as free, collapsible skill items with gold badges, validation preventing XP overspending
-- **Value Change Tracking**: Visual highlighting (green for increases, red for decreases) tracking initial values from creation, Life Points validation with auto-adjustment
-- **Full Bilingual Support**: Complete Polish/English localization with dual labels (primary + subtitle) throughout interface
-- **Auto-Save Architecture**: Real-time change detection and persistence, ApplicationV2 form handling with `data-dtype` auto-conversion
-- **Chat Message System**: Detailed roll results with dice visualization, attribute names in Polish with English in parentheses, success/failure determination
-
-### Technical Achievements
-
-- ApplicationV2 and HandlebarsApplicationMixin implementation
-- Dialog V1 for stable form interactions (avoiding ApplicationV2 conflicts)
-- ES6 module architecture with clean separation of concerns
+- ApplicationV2 and HandlebarsApplicationMixin throughout
+- Combat Tracker integration with custom initiative
+- Comprehensive validation systems
+- Modern CSS with flexbox layouts
 - Native DOM manipulation (no jQuery)
-- Modern CSS with flexbox layouts and CSS variables
-- Dice So Nice integration with custom Flex Die content property
-- Initial values storage system for change tracking
+- Dice So Nice integration with custom bronze Flex die
