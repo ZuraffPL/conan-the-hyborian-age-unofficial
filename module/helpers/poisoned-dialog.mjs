@@ -26,7 +26,9 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
     },
     actions: {
       apply: PoisonedDialog._onApply,
-      close: PoisonedDialog._onClose
+      close: PoisonedDialog._onClose,
+      increaseMultiplier: PoisonedDialog._onIncreaseMultiplier,
+      decreaseMultiplier: PoisonedDialog._onDecreaseMultiplier
     }
   };
 
@@ -52,11 +54,46 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
     context.poisonEffects = this.actor.system.poisonEffects || {
       effect1: false,
       effect2: false,
+      effect2Multiplier: 1,
       effect3: false,
+      effect3Multiplier: 1,
       effect4: false,
       effect5: false
     };
+    // Ensure multipliers exist
+    if (!context.poisonEffects.effect2Multiplier) context.poisonEffects.effect2Multiplier = 1;
+    if (!context.poisonEffects.effect3Multiplier) context.poisonEffects.effect3Multiplier = 1;
     return context;
+  }
+
+  static async _onIncreaseMultiplier(event, target) {
+    const effect = target.dataset.effect;
+    const currentEffects = this.actor.system.poisonEffects || {};
+    const multiplierKey = `${effect}Multiplier`;
+    const currentMultiplier = currentEffects[multiplierKey] || 1;
+    
+    // Update with increased multiplier (max 5)
+    if (currentMultiplier < 5) {
+      await this.actor.update({
+        [`system.poisonEffects.${multiplierKey}`]: currentMultiplier + 1
+      });
+      this.render(false);
+    }
+  }
+
+  static async _onDecreaseMultiplier(event, target) {
+    const effect = target.dataset.effect;
+    const currentEffects = this.actor.system.poisonEffects || {};
+    const multiplierKey = `${effect}Multiplier`;
+    const currentMultiplier = currentEffects[multiplierKey] || 1;
+    
+    // Update with decreased multiplier (min 1)
+    if (currentMultiplier > 1) {
+      await this.actor.update({
+        [`system.poisonEffects.${multiplierKey}`]: currentMultiplier - 1
+      });
+      this.render(false);
+    }
   }
 
   static async _onApply(event, target) {
@@ -74,6 +111,10 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
     const effect4 = form.querySelector('input[name="poisonEffect4"]')?.checked || false;
     const effect5 = form.querySelector('input[name="poisonEffect5"]')?.checked || false;
     
+    // Get current multipliers
+    const effect2Multiplier = previousEffects.effect2Multiplier || 1;
+    const effect3Multiplier = previousEffects.effect3Multiplier || 1;
+    
     // Check if any effect is selected
     const anyEffectActive = effect1 || effect2 || effect3 || effect4 || effect5;
     
@@ -83,7 +124,9 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
       'system.poisonEffects': {
         effect1: effect1,
         effect2: effect2,
+        effect2Multiplier: effect2 ? effect2Multiplier : 1,
         effect3: effect3,
+        effect3Multiplier: effect3 ? effect3Multiplier : 1,
         effect4: effect4,
         effect5: effect5
       }
@@ -91,7 +134,7 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
     
     // Create chat message about poison status changes
     await PoisonedDialog._createPoisonStatusMessage(this.baseActor, previousPoisoned, anyEffectActive, previousEffects, {
-      effect1, effect2, effect3, effect4, effect5
+      effect1, effect2, effect2Multiplier, effect3, effect3Multiplier, effect4, effect5
     });
     
     // Refresh actor sheet to update UI immediately

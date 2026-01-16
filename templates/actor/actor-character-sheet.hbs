@@ -156,11 +156,16 @@
   {{!-- Life Points & Defense Container --}}
   <section class="resources-bottom-container">
     {{!-- Life Points Section --}}
-    <div class="life-points-section">
+    <div class="life-points-section {{#if (and system.poisoned system.poisonEffects.effect3)}}poison-life-drain-active{{/if}}">
       <div class="section-header">
         <h3 class="section-title">
           <span class="primary-name">{{localize "CONAN.Resources.lifePoints"}}</span>
-          <label class="subtitle-name">Life Points</label>
+          <label class="subtitle-name">
+            Life Points
+            {{#if (and system.poisoned system.poisonEffects.effect3)}}
+              <i class="fas fa-skull-crossbones poison-life-drain-icon" title="{{localize 'CONAN.Poisoned.option3.name'}}"></i>
+            {{/if}}
+          </label>
         </h3>
       </div>
       <div class="life-points-display">
@@ -182,6 +187,12 @@
         <div class="poisoned-toggle-container" style="position: relative; display: inline-block; margin-left: 10px;">
           {{#if (and system.poisoned (gt activePoisonEffects 0))}}
             <span class="poison-effect-count">{{activePoisonEffects}}</span>
+          {{/if}}
+          {{#if (and system.poisoned system.poisonEffects.effect2 (gt system.poisonEffects.effect2Multiplier 1))}}
+            <span class="poison-multiplier effect2">x{{system.poisonEffects.effect2Multiplier}}</span>
+          {{/if}}
+          {{#if (and system.poisoned system.poisonEffects.effect3 (gt system.poisonEffects.effect3Multiplier 1))}}
+            <span class="poison-multiplier effect3">x{{system.poisonEffects.effect3Multiplier}}</span>
           {{/if}}
           <button type="button" class="poisoned-toggle-btn {{#if system.poisoned}}active poison-active-pulse{{/if}}" data-action="togglePoisoned" title="{{localize 'CONAN.EffectTooltips.poisoned'}}">
             <img src="systems/conan-the-hyborian-age/assets/icons/Poisoned.svg" alt="Poisoned" style="width: 28px; height: 28px;">

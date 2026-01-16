@@ -83,6 +83,8 @@ export class DamageDialog extends foundry.applications.api.HandlebarsApplication
     context.equippedMeleeWeapons = equippedMeleeWeapons;
     context.equippedThrownWeapons = equippedThrownWeapons;
     context.equippedRangedWeapons = equippedRangedWeapons;
+    context.isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    context.poisonMultiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
     return context;
   }
 

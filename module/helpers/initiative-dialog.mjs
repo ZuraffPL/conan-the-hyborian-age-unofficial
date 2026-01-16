@@ -68,6 +68,7 @@ export class InitiativeDialog extends foundry.applications.api.HandlebarsApplica
     context.cancelLabel = game.i18n.localize("CONAN.Dialog.difficulty.cancel");
     context.modifier = this.modifier;
     context.isPoisoned = this.actor && this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    context.poisonMultiplier = this.actor?.system.poisonEffects?.effect2Multiplier || 1;
 
     return context;
   }

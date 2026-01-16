@@ -1,4 +1,10 @@
-<form class="attack-form">
+<form class="attack-form {{#if isPoisoned}}poisoned-dialog{{/if}}">
+  {{#if isPoisoned}}
+  <div class="poison-warning">
+    <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>
+    <span>{{localize "CONAN.Poisoned.rollPenalty"}}: -{{poisonMultiplier}}</span>
+  </div>
+  {{/if}}
   <!-- Attack Type Display (read-only) -->
   <div class="form-group">
     <label>{{localize "CONAN.Attack.attackType"}}</label>

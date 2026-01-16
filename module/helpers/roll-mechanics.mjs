@@ -32,8 +32,9 @@ export async function rollAttribute(actor, attribute) {
   const difficulty = result.difficulty;
   let modifier = result.modifier;
   
-  // Apply poison effect 2: -1 penalty to all rolls
-  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+  // Apply poison effect 2: penalty to all rolls (multiplied)
+  const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
   
   const attributeValue = attrData.value || 0;
   const attributeDie = attrData.die || "d6";
@@ -121,7 +122,7 @@ export async function rollAttribute(actor, attribute) {
           <span class="calc-operator">+</span>
           <span class="calc-part">${attributeValue}</span>
           ${modifier !== 0 ? `<span class="calc-operator">${modifierSign}</span><span class="calc-part">${Math.abs(modifier)}</span>` : ''}
-          ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">1</span>` : ''}
+          ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">${effect2Multiplier}</span>` : ''}
           <span class="calc-operator">=</span>
           <span class="calc-total">${mainTotal}</span>
         </div>
@@ -203,8 +204,9 @@ export async function rollInitiative(actor, combatant = null) {
   
   let modifier = result.modifier;
   
-  // Apply poison effect 2: -1 penalty to all rolls
-  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+  // Apply poison effect 2: penalty to all rolls (multiplied)
+  const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
   
   const edgeValue = edgeData.value || 0;
   const edgeDie = edgeData.die || "d6";
@@ -255,18 +257,49 @@ export async function rollInitiative(actor, combatant = null) {
     }
   }
 
-  // Create simple chat message
-  const modifierText = modifier !== 0 ? ` ${modifier >= 0 ? '+' : ''}${modifier}` : '';
+  // Create chat message with calculation details
   const characterName = actor.name;
   const initiativeText = game.i18n.localize('CONAN.Combat.initiativeRolled');
   const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
+  const edgeDieResult = mainRoll.dice[0].total;
+  const modifierSign = modifier >= 0 ? '+' : '';
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     content: `
       <div class="conan-initiative-roll ${isPoisoned ? 'poisoned-roll' : ''}">
-        <p><strong>${characterName}</strong> ${initiativeText}: <strong>${initiativeResult}</strong>${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</p>
-        ${flexTriggered ? `<div class="conan-flex-effect"><i class="fas fa-star"></i> ${game.i18n.localize('CONAN.Roll.flexEffect')}</div>` : ''}
+        <div class="roll-header">
+          <h3>${game.i18n.localize('CONAN.Combat.initiative')}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
+        </div>
+        <div class="roll-details">
+          <div class="initiative-dice-line">
+            <span class="dice-label">${game.i18n.localize('CONAN.Attributes.edge.label')} (${game.i18n.localize('CONAN.Attributes.edge.abbr')})</span>
+            <span class="dice-value">${edgeDieResult}</span>
+            ${!flexDieDisabled ? `
+            <span class="dice-separator">+</span>
+            <span class="dice-label">${game.i18n.localize('CONAN.Roll.flexDie')}</span>
+            <span class="dice-value${flexTriggered ? ' flex-effect' : ''}">${flexResult}</span>
+            ` : `
+            <span class="dice-separator">+</span>
+            <span class="dice-label">${game.i18n.localize('CONAN.Attributes.edge.abbr')}</span>
+            <span class="dice-value">${edgeValue}</span>
+            `}
+          </div>
+          <div class="calculation">
+            <span class="calc-part">${edgeDieResult}</span>
+            <span class="calc-operator">+</span>
+            <span class="calc-part">${edgeValue}</span>
+            ${modifier !== 0 ? `<span class="calc-operator">${modifierSign}</span><span class="calc-part">${Math.abs(modifier)}</span>` : ''}
+            ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">${effect2Multiplier}</span>` : ''}
+            <span class="calc-operator">=</span>
+            <span class="calc-total">${initiativeResult}</span>
+          </div>
+          <div class="initiative-result">
+            <span class="result-label">${game.i18n.localize('CONAN.Combat.initiative')}:</span>
+            <span class="result-value">${initiativeResult}</span>
+          </div>
+          ${flexTriggered ? `<div class="flex-notice"><i class="fas fa-star"></i> ${game.i18n.localize('CONAN.Roll.flexEffect')}</div>` : ''}
+        </div>
       </div>
     `,
     rollMode: game.settings.get("core", "rollMode"),
@@ -394,8 +427,9 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
   // Get Might attribute value
   const might = actor.system.attributes.might.value;
   
-  // Apply poison effect 2: -1 penalty to all rolls
-  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+  // Apply poison effect 2: penalty to all rolls (multiplied)
+  const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
   
   // Build the roll formula: Might + Weapon Damage + Modifier + Poison Penalty
   const formula = `${might} + ${weaponDamage} + ${modifier} + ${poisonPenalty}`;
@@ -485,7 +519,7 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
           ${poisonPenalty !== 0 ? `
           <div class="component">
             <span class="component-label">${game.i18n.localize("CONAN.Poisoned.title")}:</span>
-            <span class="component-value poison-penalty">-1</span>
+            <span class="component-value poison-penalty">-${effect2Multiplier}</span>
           </div>
           ` : ''}
         </div>
@@ -902,6 +936,11 @@ export async function rollNPCDamage(actor, attackType) {
   const damageModifier = damageData.modifier || 0;
   const weaponName = damageData.name || game.i18n.localize("CONAN.NPC.weaponName");
   
+  // Apply poison effect 2: penalty to all rolls (multiplied)
+  const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
+  const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
+  
   // For melee attacks, add Brawn value
   let brawnValue = 0;
   if (attackType === 'melee') {
@@ -912,10 +951,10 @@ export async function rollNPCDamage(actor, attackType) {
   const damageRoll = await new Roll(`1${damageDie}`).evaluate();
   const dieResult = damageRoll.total;
   
-  // Calculate total damage
-  // Melee: Brawn + die + modifier from card + slider modifier
-  // Ranged: die + modifier from card + slider modifier
-  const totalDamage = Math.max(0, brawnValue + dieResult + damageModifier + modifier);
+  // Calculate total damage (including poison penalty)
+  // Melee: Brawn + die + modifier from card + slider modifier + poison penalty
+  // Ranged: die + modifier from card + slider modifier + poison penalty
+  const totalDamage = Math.max(0, brawnValue + dieResult + damageModifier + modifier + poisonPenalty);
   
   // Note: Don't manually show 3D dice here - ChatMessage.create with rolls: [damageRoll]
   // will automatically trigger the dice animation via Dice So Nice
@@ -940,12 +979,13 @@ export async function rollNPCDamage(actor, attackType) {
   
   const calculation = calcParts.join('<span class="calc-operator">+</span>') + 
     (modifierTotal !== 0 ? `<span class="calc-operator">${modifierSign}</span><span class="calc-part">${Math.abs(modifierTotal)}</span>` : '') +
+    (poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">${effect2Multiplier}</span>` : '') +
     `<span class="calc-operator">=</span><span class="calc-total damage-total">${totalDamage}</span>`;
   
   const content = `
-    <div class="conan-roll-chat npc-roll ${npcClass} damage-roll">
+    <div class="conan-roll-chat npc-roll ${npcClass} damage-roll ${isPoisoned ? 'poisoned-roll' : ''}">
       <div class="roll-header">
-        <h3>${game.i18n.localize('CONAN.Damage.title')}</h3>
+        <h3>${game.i18n.localize('CONAN.Damage.title')}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
         <div class="attack-type-info">${attackTypeLabel}</div>
         <div class="weapon-name">${weaponName}</div>
       </div>

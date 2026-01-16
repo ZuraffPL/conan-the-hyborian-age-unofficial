@@ -89,6 +89,7 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     context.targetDefense = targetDefense;
     context.hasTarget = targets.length > 0;
     context.isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    context.poisonMultiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
     
     return context;
   }
@@ -215,7 +216,8 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     const witsDie = wits.die || "d6";
     
     // Apply poison effect 2: -1 to all rolls
-    const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+    const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
+    const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
     
     const flexDie = actor.system.flexDie || 'd10';
     const flexDieDisabled = actor.system.poisoned && actor.system.poisonEffects?.effect5;
@@ -303,7 +305,7 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
               <span class="calc-operator">+</span>
               <span class="calc-part">${witsValue}</span>
               ${modifier !== 0 ? `<span class="calc-operator">${modifier >= 0 ? '+' : ''}</span><span class="calc-part">${modifier}</span>` : ''}
-              ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">1</span>` : ''}
+              ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">${effect2Multiplier}</span>` : ''}
               <span class="calc-operator">=</span>
               <span class="calc-total">${total}</span>
             </div>

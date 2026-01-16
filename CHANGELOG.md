@@ -1,5 +1,62 @@
 # Changelog
 
+## [0.0.53] - 2026-01-16
+
+### Added
+
+- **Poison Effect Multipliers - Stackable Poison System**
+  - Effect #2 (Roll Penalty) and Effect #3 (Life Drain) now support multipliers (x1, x2, x3, etc.)
+  - Inline multiplier controls (+/-) next to effect names in poison dialog
+  - Multiplier badges on character sheets showing current multiplier level (x2, x3, etc.)
+  - Multipliers apply correctly to all roll types: attribute tests, initiative, attacks, damage, spellcasting
+  - Visual indicators with pulsing animations for multiplied poison effects
+  
+- **Combat System Enhancements**
+  - Poison life drain automatically applied at start of each combat round (multiplied by effect #3 multiplier)
+  - "Defeated" status for antagonists reaching 0 Life Points
+  - "Fight for Life" mechanic for player characters at 0 LP (Grit test against difficulty 8)
+  - Combat tracker properly uses base actor for poison calculations (supports linked/unlinked tokens)
+  
+- **Initiative System Improvements**
+  - Initiative rolls from combat tracker now correctly apply poison penalties
+  - Initiative dialog shows poison warning with actual multiplier value
+  - Enhanced initiative chat messages with three-line layout:
+    * Line 1: Dice results (Edge die + Flex die for players, Edge die + Edge value for NPCs)
+    * Line 2: Calculation breakdown with all components including poison penalty
+    * Line 3: Final initiative result prominently displayed
+  - Dice displayed in boxes side-by-side matching other roll types
+
+### Changed
+
+- All poison penalty calculations now use actual multiplier values instead of hardcoded -1
+- All roll dialogs (difficulty, initiative, attack, damage, spellcasting) display correct multiplier in warnings
+- All chat messages show accurate poison penalty in calculations (e.g., -3 instead of -1)
+- NPCDifficultyDialog now receives actor parameter for proper poison status detection
+- Initiative dice layout uses flex-wrap for better responsiveness
+- Attack roll calculation components use flex-wrap to prevent overflow with long penalty values
+
+### Fixed
+
+- Fixed multipliers showing as -1 in all contexts (11+ locations updated)
+- Fixed poison penalty not applying in initiative rolls from combat tracker
+- Fixed NPC damage rolls not applying poison penalty correctly
+- Fixed NPC dialog not showing poison information before rolls
+- Fixed attack roll components overflowing chat window with focused attack + poison penalty
+- Fixed initiative chat message layout for better clarity and visual hierarchy
+
+### Technical
+
+- Added effect2Multiplier and effect3Multiplier to actor.system.poisonEffects
+- Updated rollAttribute, rollInitiative, rollWeaponDamage, rollNPCDamage with multiplier support
+- Updated all dialog contexts to include poisonMultiplier variable
+- Updated all Handlebars templates to display {{poisonMultiplier}} instead of hardcoded values
+- Added multiplier-controls-inline CSS for +/- buttons (24x24px, inline layout)
+- Added poison-multiplier badge styles with multiplier-pulse animation
+- Enhanced .calculation CSS with flex-wrap for responsive layout
+- Enhanced .initiative-dice-line CSS with flex-wrap and white-space: nowrap
+- Combat.rollInitiative override uses base actor: game.actors.get(combatant.actor.id) for linked tokens
+- All sorcery damage functions include poison multiplier in chat output
+
 ## [0.0.52] - 2026-01-14
 
 ### Added
@@ -65,129 +122,85 @@
 - Added CSS styles for disabled poison options with strikethrough effect
 - Added notAvailableMinion translation key in PL/EN/FR
 
-## [0.0.50] - 2026-01-09
+## Versions 0.0.46 - 0.0.50 Summary (2026-01-02 to 2026-01-09)
 
-### Added
+### Major Features Implemented
 
-- Poison effect #5: Flex Die Lock functionality - blocks all flex die usage when active
-- Visual indicators for poisoned status with flex die lock:
-  - Grayed out flex die section with animated green glow and gradient background
-  - Disabled flex die select with green-tinted background
-  - Pulsing skull icon next to "Flex Die" subtitle
-- Initiative roll message styling with animated orange pulse effect
-- Full localization support for flex die lock (PL/EN/FR)
-
-### Changed
-
-- Enhanced flex die locked state with more visible green coloring
-- Improved visual feedback for poison effect #5 with gradient backgrounds
-- Moved initiative roll CSS styles from poisoned-effects.css to roll-chat.css for better organization
-
-### Technical
-
-- Added flex die disabled check in all roll functions (rollAttribute, rollInitiative, rollMeleeDamage, rollThrownDamage, rollRangedDamage)
-- Flex die cannot trigger flex effect when poisoned with effect5
-- flexTriggered is always false when flexDieDisabled is true
-- Added `.flex-locked` CSS class for visual indication
-- Enhanced initiative message with orange pulsing border animation
-- Added flexDieLocked translation key in all language files
-
-## [0.0.49] - 2026-01-08
-
-### Added
-
-- Poison effects system for player characters
-- Poison dialog window for selecting poison effects (5 options)
-- Poison effect #4: Stamina lock functionality - blocks all stamina spending when active
-- Visual indicators for poisoned status with stamina lock:
+- **Poison Effects System**: Complete 5-effect poison system for player characters
+  - Configurable poison dialog with checkbox selection (effects 1-5)
+  - Poison status toggle button with pulsing green glow animation
+  - Badge counter showing number of active effects (1-5)
+  - Chat notifications for poison status changes
+  - Full localization support (PL/EN/FR)
+- **Poison Effect #4: Stamina Lock**: Comprehensive stamina spending prevention
   - Grayed out stamina section with animated green glow
   - Disabled stamina input field and "Spend" button
   - Pulsing skull icon next to "Stamina" subtitle
-- Poison status toggle button with visual feedback:
-  - Pulsing green glow animation when poison effects are active
-  - Badge counter showing number of active poison effects (1-5)
-  - Always opens dialog for configuring effects
-- Chat notifications for poison status changes (applied/removed)
-- Comprehensive stamina spending blocks across all game mechanics:
-  - Manual stamina editing blocked
-  - Stamina spend dialog blocked
-  - Damage boosts blocked (context menu)
-  - Roll boosts blocked (context menu)
-  - Massive damage spending blocked
-  - Spellcasting stamina usage blocked
-- Full localization support (PL/EN/FR) for all poison-related UI elements
+  - Blocks: manual editing, spend dialog, damage boosts, roll boosts, massive damage, spellcasting
+- **Poison Effect #5: Flex Die Lock**: Complete flex die usage prevention
+  - Grayed out flex die section with green gradient background
+  - Disabled flex die select with green-tinted background
+  - Pulsing skull icon next to "Flex Die" subtitle
+  - Flex die cannot trigger flex effect when locked
+  - Initiative roll messages with animated orange pulse effect
+- **Socket-Based Permission System**: Player-to-GM actor update delegation
+  - Players can deal damage to enemies without permission errors
+  - `requestActorUpdate()` socket method for privileged operations
+  - Automatic GM routing for actor updates
+  - Works for all NPC types (characters, antagonists, minions)
+- **Item Independence System**: Per-actor equipped status for weapons/armor
+  - Weapons and armor from Items sidebar create independent copies
+  - Each actor has separate equipped state for same item
+  - Prevents global equipped status sharing across characters
 
-### Changed
+### Technical Improvements
 
-- Poison toggle button now always opens configuration dialog instead of simple on/off toggle
-- Stamina section styling enhanced with conditional poison effects
-- Actor sheet template updated to show active poison indicators
+- **Poison System Architecture**:
+  - `PoisonedDialog` class extending `ApplicationV2` with `HandlebarsApplicationMixin`
+  - Added `poisoned` boolean and `poisonEffects` object (effect1-effect5) to actor data
+  - Comprehensive poison checks in stamina/spellcasting systems
+  - New files: `poisoned-dialog.mjs`, `poisoned-dialog.hbs`, `poisoned-effects.css`
+- **Socket System Enhancement**:
+  - `requestActorUpdate()` method for player-initiated actor updates
+  - `_handleActorUpdateRequest()` GM-only handler
+  - Proper token/actor distinction (`targets[0].document` vs `targets[0].actor`)
+  - Fixed duplicate case statement in socket switch
+- **Item System Refactoring**:
+  - Modified `_onDropItem` to handle weapons/armor with copy creation logic
+  - `_onToggleEquipped` uses `actor.updateEmbeddedDocuments()` for actor-specific updates
+  - Duplicate item check prevents multiple copies with same name
+  - Embedded document architecture ensures per-actor item state
 
-### Technical
+### UI/UX Improvements
 
-- Added `PoisonedDialog` class extending `ApplicationV2` with `HandlebarsApplicationMixin`
-- Added `poisoned` boolean and `poisonEffects` object (effect1-effect5) to actor system data
-- Added `_prepareContext()` enhancement to count active poison effects
-- Added comprehensive CSS animations for poison visual effects
-- Added socket-based chat message system for poison status notifications
-- Added poison checks in: `stamina-spend-dialog.mjs`, `stamina-effects.mjs`, `spellcasting-dialog.mjs`, `actor-sheet.mjs`
-- Added new CSS file: `styles/partials/poisoned-effects.css`
-- Added new template: `templates/dialogs/poisoned-dialog.hbs`
-- Added new module: `module/helpers/poisoned-dialog.mjs`
+- **Visual Poison Indicators**:
+  - Pulsing green glow animations for active poison effects
+  - Skull icons for stamina/flex die locks
+  - Animated gradient backgrounds for locked sections
+  - Badge counter on poison toggle button
+- **Improved CSS Organization**:
+  - Moved initiative roll styles from poisoned-effects.css to roll-chat.css
+  - Added `.flex-locked` CSS class for visual indication
+  - Enhanced locked state visibility with green coloring
+- **Notification System**:
+  - Item added notifications with localization
+  - Poison status change chat messages
+  - Visual feedback for system state changes
 
-## [0.0.48] - 2026-01-07
+### Bug Fixes
 
-### Fixed
+- Fixed permission errors during NPC damage application by players
+- Fixed equipped status being shared globally across actors for same item
+- Fixed "User lacks permission to update Actor" errors
+- Fixed item equipped state affecting all characters instead of per-actor
+- Fixed NPC damage application not working for owned minions
 
-- Fixed permission errors when players use owned minion NPCs to attack antagonists
-- Fixed "User lacks permission to update Actor" errors during NPC damage application
-- Players can now deal damage to enemy NPCs through their owned minions without GM intervention
+### Localization
 
-### Changed
-
-- NPC damage application now uses socket system for actor updates
-- `applyNPCDamage()` function now uses `ConanSocket.requestActorUpdate()` instead of direct `target.update()`
-- Proper token/actor distinction in damage button handlers (using `targets[0].document` instead of `targets[0].actor`)
-
-### Added
-
-- Added `requestActorUpdate()` socket method for players to update actors through GM
-- Added `_handleActorUpdateRequest()` socket handler (GM-only) to process actor update requests
-- Socket-based actor updates now work for all NPC types (characters, antagonists, minions)
-
-### Technical
-
-- All direct `target.update()` calls replaced with `ConanSocket.requestActorUpdate()` for proper permission handling
-- Fixed duplicate case statement in socket switch (renamed "updateActor" to "requestActorUpdate")
-- Socket system automatically routes player requests to GM for privileged actor operations
-- Consistent with existing socket methods (`requestTokenUpdate`, `requestCombatantUpdate`)
-
-## [0.0.46] - 2026-01-02
-
-### Fixed
-
-- Fixed equipped status being shared globally across all actors when same item (weapon/armor) was dragged from Items sidebar
-- Fixed item equipped state affecting all characters who have that item instead of being per-actor
-
-### Changed
-
-- Weapons and armor dropped from Items sidebar now create independent copies for each actor (via `createEmbeddedDocuments`)
-- Items dropped from other actors or reordered within same actor continue to use default behavior
-- Equipped status reset to `false` when creating new copy to prevent inheriting equipped state from source
-- `_onToggleEquipped` now uses `actor.updateEmbeddedDocuments()` instead of `item.update()` to ensure actor-specific updates
-- Duplicate item check added for weapons/armor to prevent multiple copies with same name
-
-### Added
-
-- Added `CONAN.Notifications.itemAdded` localization key in PL/EN/FR for new item notifications
-- Added visual notification when weapon/armor successfully added to character sheet
-
-### Technical
-
-- Modified `_onDropItem` to handle weapons/armor explicitly with copy creation logic
-- Each actor now has truly independent item instances with separate equipped state
-- Item embedded document architecture ensures equipped status is per-actor, not global
-- AR (Armor Rating) and damage calculation systems unaffected - continue to work with embedded items correctly
+- Added poison-related translation keys in PL/EN/FR
+- Added `CONAN.Notifications.itemAdded` localization key
+- Added `flexDieLocked` translation key in all languages
+- Full poison dialog and UI element translations
 
 ## Versions 0.0.42 - 0.0.45 Summary (2025-12-12 to 2026-01-01)
 

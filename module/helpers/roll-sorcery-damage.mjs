@@ -15,8 +15,9 @@ export async function rollSorceryFixedDamage(actor, fixedValue = 0, paramModifie
   const isCharacter = actor.type === "character";
   const flexDieDisabled = isCharacter && actor.system.poisoned && actor.system.poisonEffects?.effect5;
 
-  // Apply poison effect 2: -1 penalty to damage rolls
-  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+  // Apply poison effect 2: penalty to damage rolls (multiplied)
+  const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
 
   // Sum modifiers
   const totalModifier = Number(paramModifier) + Number(sliderModifier);
@@ -76,7 +77,7 @@ export async function rollSorceryFixedDamage(actor, fixedValue = 0, paramModifie
           ${poisonPenalty !== 0 ? `
           <div class="component">
             <span class="component-label">${game.i18n.localize("CONAN.Poisoned.rollPenalty")}</span>:
-            <span class="component-value poison-penalty">-1</span>
+            <span class="component-value poison-penalty">-${effect2Multiplier}</span>
           </div>
           ` : ''}
         </div>
@@ -163,8 +164,9 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
   const isCharacter = actor.type === "character";
   const flexDieDisabled = isCharacter && actor.system.poisoned && actor.system.poisonEffects?.effect5;
 
-  // Apply poison effect 2: -1 penalty to damage rolls
-  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+  // Apply poison effect 2: penalty to damage rolls (multiplied)
+  const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
 
   // Sum modifiers
   const totalModifier = Number(paramModifier) + Number(sliderModifier);
@@ -236,7 +238,7 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
           ${poisonPenalty !== 0 ? `
           <div class="component">
             <span class="component-label">${game.i18n.localize("CONAN.Poisoned.rollPenalty")}</span>:
-            <span class="component-value poison-penalty">-1</span>
+            <span class="component-value poison-penalty">-${effect2Multiplier}</span>
           </div>
           ` : ''}
         </div>
@@ -332,8 +334,9 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
   const isCharacter = actor.type === "character";
   const flexDieDisabled = isCharacter && actor.system.poisoned && actor.system.poisonEffects?.effect5;
 
-  // Apply poison effect 2: -1 penalty to damage rolls
-  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+  // Apply poison effect 2: penalty to damage rolls (multiplied)
+  const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
 
   // Sum modifiers
   const totalModifier = Number(paramModifier) + Number(sliderModifier);
@@ -406,7 +409,7 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
           ${poisonPenalty !== 0 ? `
           <div class="component">
             <span class="component-label">${game.i18n.localize("CONAN.Poisoned.rollPenalty")}</span>:
-            <span class="component-value poison-penalty">-1</span>
+            <span class="component-value poison-penalty">-${effect2Multiplier}</span>
           </div>
           ` : ''}
         </div>

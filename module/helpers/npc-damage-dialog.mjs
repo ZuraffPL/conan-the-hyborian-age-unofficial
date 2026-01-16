@@ -75,6 +75,8 @@ export class NPCDamageDialog extends foundry.applications.api.HandlebarsApplicat
     context.rollLabel = game.i18n.localize("CONAN.Dialog.difficulty.roll");
     context.cancelLabel = game.i18n.localize("CONAN.Dialog.difficulty.cancel");
     context.modifierLabel = game.i18n.localize("CONAN.Dialog.difficulty.modifierLabel");
+    context.isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    context.poisonMultiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
 
     return context;
   }

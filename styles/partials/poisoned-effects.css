@@ -141,6 +141,175 @@
   margin-top: 2px;
 }
 
+/* Optional effect styling */
+.conan.dialog.poisoned .poison-option.optional-effect {
+  background: rgba(70, 130, 180, 0.08);
+  border: 2px dashed #4682b4;
+  position: relative;
+}
+
+.conan.dialog.poisoned .poison-option.optional-effect:hover {
+  background: rgba(70, 130, 180, 0.15);
+  border-color: #5a9bd5;
+}
+
+.conan.dialog.poisoned .optional-badge {
+  display: inline-block;
+  background: #4682b4;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 6px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Stackable effect styling */
+.conan.dialog.poisoned .poison-option.stackable-effect {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* Inline multiplier controls */
+.conan.dialog.poisoned .multiplier-controls-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.conan.dialog.poisoned .multiplier-controls-inline .multiplier-btn {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #15a20e;
+  background: linear-gradient(135deg, #f5e6d3 0%, #e6d7c3 100%);
+  color: #15a20e;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 0;
+}
+
+.conan.dialog.poisoned .multiplier-controls-inline .multiplier-btn:hover {
+  background: linear-gradient(135deg, #15a20e 0%, #129a0c 100%);
+  color: white;
+  transform: scale(1.15);
+  box-shadow: 0 2px 6px rgba(21, 162, 14, 0.4);
+}
+
+.conan.dialog.poisoned .multiplier-controls-inline .multiplier-btn:active {
+  transform: scale(0.95);
+}
+
+.conan.dialog.poisoned .multiplier-controls-inline .multiplier-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: #15a20e;
+  min-width: 32px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #15a20e;
+}
+
+/* Old multiplier controls (kept for backwards compatibility) */
+.conan.dialog.poisoned .multiplier-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px;
+  background: rgba(21, 162, 14, 0.1);
+  border-radius: 4px;
+  border: 1px solid #15a20e;
+  margin-top: 5px;
+}
+
+.conan.dialog.poisoned .multiplier-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #15a20e;
+  background: linear-gradient(135deg, #f5e6d3 0%, #e6d7c3 100%);
+  color: #15a20e;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.conan.dialog.poisoned .multiplier-btn:hover {
+  background: linear-gradient(135deg, #15a20e 0%, #129a0c 100%);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(21, 162, 14, 0.4);
+}
+
+.conan.dialog.poisoned .multiplier-btn:active {
+  transform: scale(0.95);
+}
+
+.conan.dialog.poisoned .multiplier-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #15a20e;
+  min-width: 40px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 2px solid #15a20e;
+}
+
+/* Poison multiplier badges on character sheet */
+.poison-multiplier {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #15a20e;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  animation: multiplier-pulse 2s infinite;
+}
+
+.poison-multiplier.effect2 {
+  background: #ff9800;
+  right: 25px;
+}
+
+.poison-multiplier.effect3 {
+  background: #dc143c;
+}
+
+@keyframes multiplier-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 4px 8px rgba(21, 162, 14, 0.6);
+  }
+}
+
 /* Visual Effects for Poisoned State */
 
 /* Effect 1: Attribute Penalty (-1) */
@@ -562,4 +731,222 @@
 
 .conan-roll-chat .dice-roll.disabled .die-result i {
   font-size: 16px;
+}
+/* Life Drain Effect 3: Poison Life Drain Visual Effects */
+
+/* Poison life drain skull icon */
+.poison-life-drain-icon {
+  color: #15a20e;
+  font-size: 14px;
+  margin-left: 8px;
+  animation: poison-skull-pulse 1.5s infinite;
+}
+
+/* Pulsating poison glow for life points section - Character sheet */
+.conan.sheet.actor .life-points-section.poison-life-drain-active {
+  position: relative;
+  animation: poison-life-glow 2s infinite;
+  border-radius: 8px;
+}
+
+@keyframes poison-life-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(21, 162, 14, 0.3);
+    background: rgba(21, 162, 14, 0.02);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(21, 162, 14, 0.6);
+    background: rgba(21, 162, 14, 0.08);
+  }
+}
+
+/* Pulsating poison glow for life points section - Antagonist sheet */
+.conan.sheet.actor.npc .defense-box.poison-life-drain-active {
+  position: relative;
+  animation: poison-life-glow 2s infinite;
+  border-radius: 6px;
+}
+
+/* Additional emphasis for input fields when life drain is active */
+.conan.sheet.actor .life-points-section.poison-life-drain-active .life-actual,
+.conan.sheet.actor.npc .defense-box.poison-life-drain-active .defense-value {
+  border-color: #15a20e;
+  animation: poison-input-pulse 2s infinite;
+}
+
+@keyframes poison-input-pulse {
+  0%, 100% {
+    border-color: #15a20e;
+    box-shadow: inset 0 0 5px rgba(21, 162, 14, 0.2);
+  }
+  50% {
+    border-color: #1bc91f;
+    box-shadow: inset 0 0 10px rgba(21, 162, 14, 0.4);
+  }
+}
+
+/* Poison drain chat message styling */
+.conan-poison-drain {
+  background: linear-gradient(135deg, rgba(21, 162, 14, 0.1) 0%, rgba(21, 162, 14, 0.05) 100%);
+  border: 2px solid #15a20e;
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 14px;
+  color: #654321;
+  margin: 5px 0;
+}
+
+.conan-poison-drain .poison-drain-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.conan-poison-drain i {
+  font-size: 20px;
+  animation: poison-skull-pulse 1.5s infinite;
+}
+
+.conan-poison-drain strong {
+  color: #8b4513;
+}
+
+.conan-poison-drain .defeated-banner,
+.conan-poison-drain .fight-for-life-container {
+  margin-top: 10px;
+}
+
+/* Fight for Life button and messages */
+.fight-for-life-btn {
+  background: linear-gradient(135deg, #dc143c 0%, #8b0000 100%);
+  color: white;
+  border: 2px solid #8b0000;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fight-for-life-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ff1744 0%, #dc143c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 20, 60, 0.4);
+}
+
+.fight-for-life-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.fight-for-life-container {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(220, 20, 60, 0.1);
+  border: 2px solid #dc143c;
+  border-radius: 6px;
+  text-align: center;
+  animation: fight-for-life-pulse 2s infinite;
+}
+
+@keyframes fight-for-life-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(220, 20, 60, 0.3);
+    border-color: #dc143c;
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(220, 20, 60, 0.6);
+    border-color: #ff1744;
+  }
+}
+
+/* Fight for Life roll chat styling */
+.conan-roll-chat.fight-for-life-roll {
+  border-left: 4px solid #8b4513;
+  box-shadow: 0 0 15px rgba(139, 69, 19, 0.3);
+}
+
+.conan-roll-chat.fight-for-life-roll .roll-header {
+  background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+  color: white;
+  padding: 12px;
+  border-radius: 6px 6px 0 0;
+  margin: -10px -10px 10px -10px;
+}
+
+.conan-roll-chat.fight-for-life-roll .roll-header h3 {
+  color: white;
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.conan-roll-chat.fight-for-life-roll .roll-header .attribute-info {
+  color: rgba(255, 215, 0, 0.9);
+  text-align: center;
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* Layout for Fight for Life roll - dice in one row */
+.conan-roll-chat.fight-for-life-roll .dice-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+/* Roll calculation in one line */
+.conan-roll-chat.fight-for-life-roll .roll-calculation {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.conan-roll-chat.fight-for-life-roll .roll-calculation .calc-component,
+.conan-roll-chat.fight-for-life-roll .roll-calculation .calc-operator,
+.conan-roll-chat.fight-for-life-roll .roll-calculation .calc-total {
+  display: inline-block;
+}
+
+.conan-roll-chat.fight-for-life-roll .roll-calculation .calc-total {
+  background: #ffd700;
+  color: #654321;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 20px;
+  border: 2px solid #8b4513;
+}
+
+.conan-roll-chat.fight-for-life-roll .outcome-result.success {
+  color: #2e7d32;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 8px;
+  background: rgba(46, 125, 50, 0.1);
+  border: 2px solid #2e7d32;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.conan-roll-chat.fight-for-life-roll .outcome-result.failure {
+  color: #8b0000;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 8px;
+  background: rgba(139, 0, 0, 0.1);
+  border: 2px solid #8b0000;
+  border-radius: 6px;
+  margin-top: 10px;
 }

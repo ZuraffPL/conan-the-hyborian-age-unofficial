@@ -465,6 +465,7 @@
       "configure": "Sélectionnez les effets de poison actifs :",
       "apply": "Appliquer",
       "close": "Fermer",
+      "optional": "Optionnel",
       "option1": {
         "name": "Pénalité d'Attribut",
         "description": "-1 à tous les Attributs"
@@ -625,8 +626,16 @@
       "boostedNotification": "Résultat du jet augmenté de +{boost} (dépensé {cost} Endurance)",
       "massiveDamageNotification": "Dégâts Massifs ! +{bonus} aux dégâts (dernier point d'Endurance dépensé)",
       "damageIncrease": "Dégâts Supplémentaires",
-      "totalDamageAfterBoost": "Dégâts Totaux Après Augmentation"
-    }
+      "totalDamageAfterBoost": "Dégâts Totaux Après Augmentation"    },
+    
+    "FightForLife": {
+      "title": "Combat pour la Vie",
+      "button": "Combat pour la Vie",
+      "warning": "Points de Vie à 0 - Combat pour la Vie!",
+      "rolling": "Lancement...",
+      "unconscious": "Personnage Inconscient - Survit",
+      "death": "Le Personnage Meurt",
+      "description": "Lorsque les Points de Vie atteignent 0, effectuez un test de Résistance (Difficulté 8). Le succès signifie l'inconscience, l'échec signifie la mort. Vous pouvez utiliser l'Effet Flex ou dépenser de l'Endurance pour améliorer le résultat."    }
   }
 }
 

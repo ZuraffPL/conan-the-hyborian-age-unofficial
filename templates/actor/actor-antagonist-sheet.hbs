@@ -125,10 +125,15 @@
           <input type="number" name="system.armor" value="{{system.armor}}" min="0" max="20" data-dtype="Number" class="defense-value" />
         </div>
 
-        <div class="defense-box">
+        <div class="defense-box {{#if (and system.poisoned system.poisonEffects.effect3)}}poison-life-drain-active{{/if}}">
           <div class="defense-header">
             <span class="defense-abbr">{{localize "CONAN.NPC.lifePoints"}}</span>
-            <span class="defense-label">Life Points</span>
+            <span class="defense-label">
+              Life Points
+              {{#if (and system.poisoned system.poisonEffects.effect3)}}
+                <i class="fas fa-skull-crossbones poison-life-drain-icon" title="{{localize 'CONAN.Poisoned.option3.name'}}"></i>
+              {{/if}}
+            </span>
           </div>
           
           <input type="number" name="system.lifePoints" value="{{system.lifePoints}}" min="0" max="999" data-dtype="Number" class="defense-value" />
@@ -260,6 +265,12 @@
               <div style="position: relative; display: inline-block;">
                 {{#if (and system.poisoned (gt activePoisonEffects 0))}}
                   <span class="poison-effect-count">{{activePoisonEffects}}</span>
+                {{/if}}
+                {{#if (and system.poisoned system.poisonEffects.effect2 (gt system.poisonEffects.effect2Multiplier 1))}}
+                  <span class="poison-multiplier effect2">x{{system.poisonEffects.effect2Multiplier}}</span>
+                {{/if}}
+                {{#if (and system.poisoned system.poisonEffects.effect3 (gt system.poisonEffects.effect3Multiplier 1))}}
+                  <span class="poison-multiplier effect3">x{{system.poisonEffects.effect3Multiplier}}</span>
                 {{/if}}
                 <button type="button" class="poisoned-toggle-btn {{#if system.poisoned}}active{{/if}}" data-action="togglePoisoned" title="{{localize 'CONAN.EffectTooltips.poisoned'}}">
                   <img src="systems/conan-the-hyborian-age/assets/icons/Poisoned.svg" alt="Poisoned" />

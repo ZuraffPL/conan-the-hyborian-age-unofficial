@@ -115,8 +115,10 @@ Hooks.once("ready", async function() {
       
       if (combatant?.actor) {
         const { rollInitiative } = await import("./helpers/roll-mechanics.mjs");
+        // Use base actor for linked tokens to ensure poison effects are up to date
+        const actor = combatant.actor.prototypeToken?.actorLink ? game.actors.get(combatant.actor.id) : combatant.actor;
         // Pass the combatant to properly identify token-based actors
-        await rollInitiative(combatant.actor, combatant);
+        await rollInitiative(actor, combatant);
       }
     }
     
@@ -375,9 +377,7 @@ Hooks.on("renderCombatTracker", (app, html, data) => {
 
 /**
  * Combat hook: End of round - apply poison life drain effect
- * TEMPORARILY DISABLED FOR DEBUGGING
  */
-/*
 Hooks.on("combatRound", async (combat, updateData, updateOptions) => {
   // Only run on the GM's client to avoid duplicate processing
   if (!game.user.isGM) return;
@@ -393,67 +393,95 @@ Hooks.on("combatRound", async (combat, updateData, updateOptions) => {
     if (actor.system.poisoned && actor.system.poisonEffects?.effect3) {
       console.log(`Conan | Applying poison life drain to ${actor.name}`);
       
-      // Handle differently based on actor type
+      // Handle only characters and antagonists (only they have life points)
       if (actor.type === "character" || actor.type === "antagonist") {
-        // Characters and antagonists: lose 1 life point
+        // Get multiplier for life drain effect
+        const multiplier = actor.system.poisonEffects?.effect3Multiplier || 1;
+        
+        // Characters: lose multiplier * 1 actual life points; Antagonists: lose multiplier * 1 from life points pool
         const currentLife = actor.type === "character" ? actor.system.lifePoints.actual : actor.system.lifePoints;
-        const newLife = Math.max(0, currentLife - 1);
+        const lifeLoss = multiplier;
+        const newLife = Math.max(0, currentLife - lifeLoss);
         
         const updatePath = actor.type === "character" ? "system.lifePoints.actual" : "system.lifePoints";
         await actor.update({ [updatePath]: newLife });
         
+        // Build chat message content
+        let chatContent = `
+          <div class="conan-poison-drain">
+            <div class="poison-drain-info">
+              <i class="fas fa-skull-crossbones" style="color: #15a20e;"></i>
+              <strong>${actor.name}</strong> ${game.i18n.localize('CONAN.Poisoned.lifeDrain')} 
+              ${multiplier > 1 ? `(x${multiplier}) ` : ''}(${currentLife} → ${newLife})
+            </div>
+        `;
+        
+        // Check if life points reached 0
+        if (newLife === 0) {
+          if (actor.type === "antagonist") {
+            // Antagonist defeated
+            chatContent += `
+            <div class="defeated-banner" style="margin-top: 10px; padding: 8px; background: linear-gradient(135deg, #8b0000 0%, #dc143c 100%); border-radius: 6px; text-align: center;">
+              <i class="fas fa-skull" style="color: white; font-size: 18px;"></i>
+              <strong style="color: white; font-size: 16px; display: block; margin-top: 5px;">${game.i18n.localize('CONAN.Damage.defeated').toUpperCase()}</strong>
+            </div>
+            `;
+            
+            // Mark as defeated in combat tracker
+            const token = combatant.token?.object;
+            if (token) {
+              await ConanSocket.requestTokenUpdate(
+                token.document.parent.id,
+                token.document.id,
+                { "overlayEffect": CONFIG.controlIcons.defeated }
+              );
+            }
+            await ConanSocket.requestCombatantUpdate(combatant.id, { defeated: true });
+            
+          } else if (actor.type === "character") {
+            // Character - fight for life
+            chatContent += `
+            <div class="fight-for-life-container" style="margin-top: 10px; padding: 10px; background: rgba(220, 20, 60, 0.1); border: 2px solid #dc143c; border-radius: 6px; text-align: center;">
+              <div style="margin-bottom: 8px; color: #8b0000; font-weight: bold;">
+                <i class="fas fa-heart-broken" style="color: #dc143c;"></i> ${game.i18n.localize('CONAN.FightForLife.warning')}
+              </div>
+              <button class="fight-for-life-btn" 
+                data-actor-id="${actor.id}"
+                style="background: linear-gradient(135deg, #dc143c 0%, #8b0000 100%); 
+                       color: white; 
+                       border: 2px solid #8b0000; 
+                       border-radius: 6px; 
+                       padding: 8px 16px; 
+                       font-weight: bold; 
+                       cursor: pointer; 
+                       transition: all 0.2s;">
+                <i class="fas fa-dice-d20"></i> ${game.i18n.localize('CONAN.FightForLife.button')}
+              </button>
+            </div>
+            `;
+          }
+        }
+        
+        chatContent += `</div>`;
+        
         // Notify in chat
         await ChatMessage.create({
           speaker: ChatMessage.getSpeaker({ actor: actor }),
-          content: `
-            <div class="conan-poison-drain">
-              <i class="fas fa-skull-crossbones" style="color: #15a20e;"></i>
-              <strong>${actor.name}</strong> ${game.i18n.localize('CONAN.Poisoned.lifeDrain')} 
-              (${currentLife} → ${newLife})
-            </div>
-          `,
-          whisper: [game.user.id]
+          content: chatContent,
+          flavor: game.i18n.localize('CONAN.Poisoned.title')
         });
         
-      } else if (actor.type === "minion") {
-        // Minions: if not wounded, become wounded; if already wounded, die
-        const currentlyWounded = actor.system.wounded || false;
+        // Refresh actor sheet to update UI immediately
+        actor.sheet?.render(false);
         
-        if (!currentlyWounded) {
-          // Become wounded
-          await actor.update({ "system.wounded": true });
-          
-          await ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor: actor }),
-            content: `
-              <div class="conan-poison-drain minion-wounded">
-                <i class="fas fa-skull-crossbones" style="color: #15a20e;"></i>
-                <strong>${actor.name}</strong> ${game.i18n.localize('CONAN.Poisoned.minionWounded')}
-              </div>
-            `,
-            whisper: [game.user.id]
-          });
-        } else {
-          // Already wounded - minion dies, remove from combat
-          await ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor: actor }),
-            content: `
-              <div class="conan-poison-drain minion-dead">
-                <i class="fas fa-skull" style="color: #8b0000;"></i>
-                <strong>${actor.name}</strong> ${game.i18n.localize('CONAN.Poisoned.minionDead')}
-              </div>
-            `,
-            whisper: [game.user.id]
-          });
-          
-          // Remove combatant from combat
-          await combat.deleteEmbeddedDocuments("Combatant", [combatant.id]);
+        // Refresh Combat Tracker if in combat
+        if (ui.combat) {
+          ui.combat.render();
         }
       }
     }
   }
 });
-*/
 
 /**
  * Handle deal damage button clicks in chat
@@ -527,6 +555,190 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       button.disabled = true;
       button.classList.add("disabled");
       button.innerHTML = `<i class="fas fa-check"></i> ${game.i18n.localize('CONAN.Damage.damageDealt')}`;
+    });
+  }
+  
+  // Add click handler for "Fight for Life" button
+  const fightForLifeBtn = html.querySelector(".fight-for-life-btn");
+  if (fightForLifeBtn) {
+    fightForLifeBtn.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      const actorId = button.dataset.actorId;
+      
+      const actor = game.actors.get(actorId);
+      if (!actor) {
+        ui.notifications.error("Actor not found!");
+        return;
+      }
+      
+      // Import rollAttribute function
+      const { rollAttribute } = await import("./helpers/roll-mechanics.mjs");
+      
+      // Disable button to prevent multiple clicks
+      button.disabled = true;
+      button.style.opacity = "0.5";
+      button.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${game.i18n.localize('CONAN.FightForLife.rolling')}`;
+      
+      // Show difficulty dialog pre-filled with difficulty 8 for Grit test
+      const { DifficultyDialog } = await import("./helpers/difficulty-dialog.mjs");
+      const result = await DifficultyDialog.prompt(actor, { defaultDifficulty: 8 });
+      
+      if (result === null) {
+        // User cancelled - re-enable button
+        button.disabled = false;
+        button.style.opacity = "1";
+        button.innerHTML = `<i class="fas fa-dice-d20"></i> ${game.i18n.localize('CONAN.FightForLife.button')}`;
+        return;
+      }
+      
+      // Perform Grit roll
+      const gritData = actor.system.attributes.grit;
+      if (!gritData) {
+        ui.notifications.error("Grit attribute not found");
+        return;
+      }
+      
+      const difficulty = result.difficulty || 8; // Default to 8
+      let modifier = result.modifier || 0;
+      
+      // Apply poison effect 2: penalty to all rolls (multiplied)
+      const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
+      const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
+      
+      const gritValue = gritData.value || 0;
+      const gritDie = gritData.die || "d6";
+      const flexDie = actor.system.flexDie || "d10";
+      const flexDieDisabled = actor.system.poisoned && actor.system.poisonEffects?.effect5;
+      
+      // Roll formulas
+      const formula = `1${gritDie} + ${gritValue}`;
+      const flexFormula = flexDieDisabled ? null : `1${flexDie}`;
+      
+      // Evaluate rolls
+      const mainRoll = await new Roll(formula).evaluate();
+      const flexRoll = flexDieDisabled ? null : await new Roll(flexFormula).evaluate();
+      
+      const mainTotal = mainRoll.total + modifier + poisonPenalty;
+      const flexResult = flexDieDisabled ? 0 : flexRoll.dice[0].total;
+      const flexMax = flexDieDisabled ? 0 : parseInt(flexDie.substring(1));
+      
+      // Check for Winds of Fate
+      const gritDieResult = mainRoll.dice[0].total;
+      const windsOfFate = gritDieResult === 1;
+      
+      const success = windsOfFate ? false : (mainTotal >= difficulty);
+      const flexTriggered = flexDieDisabled ? false : (flexResult === flexMax);
+      
+      // Show dice in 3D
+      if (game.dice3d) {
+        const promises = [];
+        promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
+        if (!flexDieDisabled) {
+          promises.push(game.dice3d.showForRoll(flexRoll, game.user, false, null, false, null, {
+            appearance: { colorset: "bronze" }
+          }));
+        }
+        await Promise.all(promises);
+      }
+      
+      // Prepare chat message
+      const gritLabel = game.i18n.localize("CONAN.Attributes.grit.label");
+      const gritAbbr = game.i18n.localize("CONAN.Attributes.grit.abbr");
+      const displayName = game.i18n.lang === "pl" ? `${gritAbbr} (${gritLabel})` : gritLabel;
+      const modifierText = modifier !== 0 ? ` ${modifier >= 0 ? '+' : ''}${modifier}` : '';
+      const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
+      
+      let outcomeText = "";
+      let outcomeClass = "";
+      
+      if (success) {
+        outcomeText = game.i18n.localize('CONAN.FightForLife.unconscious');
+        outcomeClass = "success";
+      } else {
+        outcomeText = game.i18n.localize('CONAN.FightForLife.death');
+        outcomeClass = "failure";
+      }
+      
+      const chatContent = `
+        <div class="conan-roll-chat fight-for-life-roll ${isPoisoned ? 'poisoned-roll' : ''}">
+          <div class="roll-header">
+            <h3>
+              <i class="fas fa-heart-broken" style="color: #dc143c;"></i>
+              ${game.i18n.localize('CONAN.FightForLife.title')}
+              ${isPoisoned ? '<i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}
+            </h3>
+            <div class="attribute-info">${displayName}</div>
+          </div>
+          <div class="roll-details">
+            <div class="dice-section">
+              <div class="dice-roll attribute-die">
+                <div class="die-label">${game.i18n.localize('CONAN.Roll.attributeDie')}</div>
+                <div class="die-result">${gritDieResult}</div>
+                ${windsOfFate ? `<div class="winds-of-fate"><i class="fas fa-wind"></i> ${game.i18n.localize('CONAN.Roll.windsOfFate')}</div>` : ''}
+              </div>
+              ${!flexDieDisabled ? `
+              <div class="dice-roll flex-die ${flexTriggered ? 'flex-triggered' : ''}">
+                <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
+                <div class="die-result ${flexTriggered ? 'flex-max' : ''}">${flexResult}</div>
+                ${flexTriggered ? `<div class="flex-effect-notice"><i class="fas fa-star"></i> ${game.i18n.localize('CONAN.Roll.flexEffect')}</div>` : ''}
+              </div>
+              ` : ''}
+            </div>
+            <div class="roll-calculation">
+              <span class="calc-component">${gritDieResult}</span>
+              <span class="calc-operator">+</span>
+              <span class="calc-component">${gritValue}</span>
+              ${modifierText ? `<span class="calc-operator">+</span><span class="calc-component modifier">${modifierText}</span>` : ''}
+              ${isPoisoned ? `<span class="calc-operator">-</span><span class="calc-component poison-penalty">1 <i class="fas fa-skull-crossbones"></i></span>` : ''}
+              <span class="calc-operator">=</span>
+              <span class="calc-total">${mainTotal}</span>
+            </div>
+            <div class="roll-outcome">
+              <div class="difficulty-info">
+                <span class="component-label">${game.i18n.localize('CONAN.Roll.targetDifficulty')}:</span>
+                <span class="component-value">${difficulty}</span>
+              </div>
+              <div class="outcome-result ${outcomeClass}">
+                ${outcomeText}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: actor }),
+        content: chatContent,
+        flavor: game.i18n.localize('CONAN.FightForLife.title'),
+        flags: {
+          "conan-the-hyborian-age": {
+            rollType: "fightForLife",
+            success: success
+          }
+        }
+      });
+      
+      // If flex triggered, show flex dialog
+      if (flexTriggered) {
+        const { FlexEffectDialog } = await import("./helpers/flex-dialog.mjs");
+        const dialog = new FlexEffectDialog(actor, { mainRoll, flexRoll, success, isDamageRoll: false }, {
+          rollContext: {
+            isAttackRoll: false,
+            isFightForLife: true,
+            attributeLabel: gritLabel,
+            attributeAbbr: gritAbbr,
+            displayName: displayName,
+            attributeResult: gritDieResult,
+            attributeValue: gritValue,
+            modifier: modifier,
+            difficulty: difficulty,
+            total: mainTotal,
+            flexResult: flexResult,
+            flexMax: flexMax
+          }
+        });
+        dialog.render(true);
+      }
     });
   }
   

@@ -8,29 +8,58 @@
     <p class="poison-instructions">{{localize "CONAN.Poisoned.configure"}}</p>
     
     <div class="poison-options">
-      {{!-- Option 1: Attribute Penalty --}}
-      <label class="poison-option">
+      {{!-- Option 1: Attribute Penalty (Optional) --}}
+      <label class="poison-option optional-effect">
         <input type="checkbox" name="poisonEffect1" {{#if poisonEffects.effect1}}checked{{/if}} data-dtype="Boolean">
         <div class="option-info">
-          <span class="option-name">{{localize "CONAN.Poisoned.option1.name"}}</span>
+          <span class="option-name">
+            {{localize "CONAN.Poisoned.option1.name"}}
+            <span class="optional-badge">{{localize "CONAN.Poisoned.optional"}}</span>
+          </span>
           <span class="option-description">{{localize "CONAN.Poisoned.option1.description"}}</span>
         </div>
       </label>
       
-      {{!-- Option 2: Roll Penalty --}}
-      <label class="poison-option">
+      {{!-- Option 2: Roll Penalty (Stackable) --}}
+      <label class="poison-option stackable-effect">
         <input type="checkbox" name="poisonEffect2" {{#if poisonEffects.effect2}}checked{{/if}} data-dtype="Boolean">
         <div class="option-info">
-          <span class="option-name">{{localize "CONAN.Poisoned.option2.name"}}</span>
+          <span class="option-name">
+            {{localize "CONAN.Poisoned.option2.name"}}
+            {{#if poisonEffects.effect2}}
+              <span class="multiplier-controls-inline">
+                <button type="button" class="multiplier-btn minus" data-effect="effect2" data-action="decreaseMultiplier">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <span class="multiplier-value">x{{poisonEffects.effect2Multiplier}}</span>
+                <button type="button" class="multiplier-btn plus" data-effect="effect2" data-action="increaseMultiplier">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </span>
+            {{/if}}
+          </span>
           <span class="option-description">{{localize "CONAN.Poisoned.option2.description"}}</span>
         </div>
       </label>
       
-      {{!-- Option 3: Life Drain --}}
-      <label class="poison-option {{#if isMinion}}disabled{{/if}}">
+      {{!-- Option 3: Life Drain (Stackable) --}}
+      <label class="poison-option stackable-effect {{#if isMinion}}disabled{{/if}}">
         <input type="checkbox" name="poisonEffect3" {{#if poisonEffects.effect3}}checked{{/if}} {{#if isMinion}}disabled{{/if}} data-dtype="Boolean">
         <div class="option-info">
-          <span class="option-name">{{localize "CONAN.Poisoned.option3.name"}}</span>
+          <span class="option-name">
+            {{localize "CONAN.Poisoned.option3.name"}}
+            {{#if (and poisonEffects.effect3 (not isMinion))}}
+              <span class="multiplier-controls-inline">
+                <button type="button" class="multiplier-btn minus" data-effect="effect3" data-action="decreaseMultiplier">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <span class="multiplier-value">x{{poisonEffects.effect3Multiplier}}</span>
+                <button type="button" class="multiplier-btn plus" data-effect="effect3" data-action="increaseMultiplier">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </span>
+            {{/if}}
+          </span>
           <span class="option-description">{{localize "CONAN.Poisoned.option3.description"}}</span>
           {{#if isMinion}}
             <span class="option-warning">({{localize "CONAN.Poisoned.notAvailableMinion"}})</span>

@@ -466,6 +466,7 @@
       "configure": "Select active poison effects:",
       "apply": "Apply",
       "close": "Close",
+      "optional": "Optional",
       "option1": {
         "name": "Attribute Penalty",
         "description": "-1 to all Attributes"
@@ -629,6 +630,16 @@
       "massiveDamageNotification": "Massive Damage! +{bonus} to damage (spent last Stamina point)",
       "damageIncrease": "Additional Damage",
       "totalDamageAfterBoost": "Total Damage After Boost"
+    },
+    
+    "FightForLife": {
+      "title": "Fight for Life",
+      "button": "Fight for Life",
+      "warning": "Life Points at 0 - Fight for Life!",
+      "rolling": "Rolling...",
+      "unconscious": "Character Unconscious - Survives",
+      "death": "Character Dies",
+      "description": "When Life Points reach 0, make a Grit test (Difficulty 8). Success means unconsciousness, failure means death. You can use Flex Effect or spend Stamina to improve the result."
     }
   }
 }

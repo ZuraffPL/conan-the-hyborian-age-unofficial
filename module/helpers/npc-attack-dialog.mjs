@@ -67,6 +67,9 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
       context.targetDefense = 5;
     }
     
+    context.isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    context.poisonMultiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
+    
     return context;
   }
 
@@ -109,8 +112,9 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     
     const modifier = sliderModifier;
     
-    // Apply poison effect 2: -1 penalty to all rolls
-    const poisonPenalty = (this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2) ? -1 : 0;
+    // Apply poison effect 2: penalty to all rolls (multiplied)
+    const effect2Multiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
+    const poisonPenalty = (this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
     
     const attribute = this.attackType === 'melee' ? 'might' : 'edge';
     const attributeValue = this.actor.system.attributes[attribute].value;
@@ -156,7 +160,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
             <span class="calc-operator">+</span>
             <span class="calc-part">${attributeValue}</span>
             ${modifier !== 0 ? `<span class="calc-operator">+</span><span class="calc-part">${modifier}</span>` : ''}
-            ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">1</span>` : ''}
+            ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">${effect2Multiplier}</span>` : ''}
             <span class="calc-operator">=</span>
             <span class="calc-total">${total}</span>
           </div>

@@ -39,16 +39,19 @@ export class DifficultyDialog extends foundry.applications.api.HandlebarsApplica
   constructor(actor, options = {}) {
     super(options);
     this.actor = actor;
-    this.difficulty = null;
+    this.difficulty = options.defaultDifficulty || null;
     this.modifier = 0;
     this.resolve = null;
   }
 
   /**
    * Show the dialog and return a promise that resolves with {difficulty, modifier}
+   * @param {Actor} actor - The actor performing the roll
+   * @param {Object} options - Optional configuration
+   * @param {Number} options.defaultDifficulty - Default difficulty value (default: 10)
    */
-  static async prompt(actor) {
-    const dialog = new DifficultyDialog(actor);
+  static async prompt(actor, options = {}) {
+    const dialog = new DifficultyDialog(actor, options);
     return new Promise((resolve) => {
       dialog.resolve = resolve;
       dialog.render(true);
@@ -64,9 +67,10 @@ export class DifficultyDialog extends foundry.applications.api.HandlebarsApplica
     context.modifierLabel = game.i18n.localize("CONAN.Dialog.difficulty.modifierLabel");
     context.rollLabel = game.i18n.localize("CONAN.Dialog.difficulty.roll");
     context.cancelLabel = game.i18n.localize("CONAN.Dialog.difficulty.cancel");
-    context.defaultDifficulty = 10;
+    context.defaultDifficulty = this.difficulty || 10;
     context.modifier = this.modifier;
     context.isPoisoned = this.actor && this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    context.poisonMultiplier = this.actor?.system.poisonEffects?.effect2Multiplier || 1;
 
     return context;
   }

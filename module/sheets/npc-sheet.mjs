@@ -936,15 +936,16 @@ class NPCDifficultyDialog extends foundry.applications.api.HandlebarsApplication
     }
   };
 
-  constructor(options = {}) {
+  constructor(actor, options = {}) {
     super(options);
+    this.actor = actor;
     this.difficulty = null;
     this.modifier = 0;
     this.resolve = null;
   }
 
-  static async prompt() {
-    const dialog = new NPCDifficultyDialog();
+  static async prompt(actor) {
+    const dialog = new NPCDifficultyDialog(actor);
     return new Promise((resolve) => {
       dialog.resolve = resolve;
       dialog.render(true);
@@ -962,6 +963,8 @@ class NPCDifficultyDialog extends foundry.applications.api.HandlebarsApplication
     context.cancelLabel = game.i18n.localize("CONAN.Dialog.difficulty.cancel");
     context.defaultDifficulty = 10;
     context.modifier = this.modifier;
+    context.isPoisoned = this.actor && this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    context.poisonMultiplier = this.actor?.system.poisonEffects?.effect2Multiplier || 1;
 
     return context;
   }
@@ -1077,14 +1080,15 @@ async function rollNPCAttribute(actor, attribute) {
   const displayName = game.i18n.lang === "pl" ? `${attrAbbr} (${attrLabel})` : attrLabel;
   
   // Ask for difficulty and modifier
-  const result = await NPCDifficultyDialog.prompt();
+  const result = await NPCDifficultyDialog.prompt(actor);
   if (result === null || result === undefined) return;
   
   const difficulty = result.difficulty;
   let modifier = result.modifier;
   
   // Apply poison effect 2: -1 to all rolls
-  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -1 : 0;
+  const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
+  const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
   modifier += poisonPenalty;
   
   // Roll attribute die
