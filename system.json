@@ -2,7 +2,7 @@
   "id": "conan-the-hyborian-age",
   "title": "Conan: The Hyborian Age",
   "description": "Unofficial system for playing Conan: The Hyborian Age RPG by Monolith Boardgames",
-  "version": "0.0.53",
+  "version": "0.0.54",
   "compatibility": {
     "minimum": "13",
     "verified": "13.350",

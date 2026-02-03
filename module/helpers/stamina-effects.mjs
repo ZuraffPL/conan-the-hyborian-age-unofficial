@@ -289,7 +289,7 @@ async function spendStaminaToBoost(message, boost) {
             }
             
             const { rollWeaponDamage } = await import('./roll-mechanics.mjs');
-            await rollWeaponDamage(foundActor, weaponId, modifier);
+            await rollWeaponDamage(foundActor, weapon, modifier);
           } else {
             const { rollUnarmedDamage } = await import('./roll-mechanics.mjs');
             await rollUnarmedDamage(foundActor, modifier);

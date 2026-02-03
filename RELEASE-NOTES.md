@@ -1,8 +1,32 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.53 - Stackable Poison System & Combat Enhancements
+## Current Version: v0.0.54 - Stamina Attack Fixes
 
 ### Overview
+
+System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.54 naprawia krytyczny błąd związany z zadawaniem obrażeń po użyciu staminy do poprawienia nieudanego ataku.
+
+### Najnowsze Zmiany (v0.0.54)
+
+#### Poprawki Obrażeń po Użyciu Staminy
+
+**Problem**:
+- Gdy postać wydała punkt staminy, aby zamienić nieudany atak w sukces (np. 6→7 z +1), kliknięcie przycisku "Rzuć na Obrażenia" powodowało błąd: `Cannot read properties of undefined (reading 'damage')`
+- Wiadomości czatu z obrażeniami po użyciu staminy nie miały stylów CSS
+
+**Rozwiązanie**:
+- Naprawiono przekazywanie parametrów do funkcji `rollWeaponDamage` (obiekt weapon zamiast weaponId)
+- Dodano obsługę modyfikatora obrażeń w funkcji `rollWeaponDamage`
+- Wiadomości o obrażeniach wyświetlają się teraz w spójnym formacie z resztą systemu:
+  * Nagłówek z nazwą broni
+  * Szczegółowy breakdown (kostka obrażeń, bonus z broni, modyfikator)
+  * Wynik końcowy w wyróżnionym polu
+  * Przycisk "Zadaj Obrażenia" do aplikacji damage na cele
+  * Pełne wsparcie dla efektów trucizny (ikona czaszki)
+
+---
+
+## Previous Version: v0.0.53 - Stackable Poison System & Combat Enhancements
 
 System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.53 wprowadza wielokrotne stackowalne efekty trucizny, ulepszenia systemu walki oraz poprawki w wyświetlaniu inicjatywy i obrażeń.
 
@@ -37,11 +61,11 @@ Efekty trucizny #2 (Kara do Rzutów) i #3 (Utrata Życia) mogą teraz być wielo
 **Automatyczne Efekty Trucizny w Walce**:
 - Utrata życia od trucizny (#3) automatycznie stosowana na początku rundy
 - Wartość utraty mnoży się przez mnożnik efektu
-- Wiadomości w czacie o utracie życia z ikoną czaszki
+- Wiadomości na czacie o utracie życia z ikoną czaszki
 
 **Status Pokonany**:
 - Antagoniści osiągający 0 LP otrzymują status "Defeated"
-- Automatyczne oznaczenie tokenu ikoną czaszki
+- Automatyczne oznaczenie tokena ikoną czaszki
 - Wykluczenie z dalszej walki
 
 **Walka o Życie dla Graczy**:
@@ -49,7 +73,7 @@ Efekty trucizny #2 (Kara do Rzutów) i #3 (Utrata Życia) mogą teraz być wielo
 - Trudność: 8
 - Sukces: postać pozostaje przy życiu
 - Porażka: postać ginie
-- Animowana wiadomość w czacie z wynikiem testu
+- Animowana wiadomość na czacie z wynikiem testu
 
 #### Ulepszenia Inicjatywy
 
@@ -72,8 +96,8 @@ Efekty trucizny #2 (Kara do Rzutów) i #3 (Utrata Życia) mogą teraz być wielo
 **Obrażenia od NPC**:
 - Kara za truciznę poprawnie stosowana do rzutów obrażeń
 - Dialog obrażeń pokazuje ostrzeżenie z mnożnikiem kary (-3, -2, -1)
-- Wynik w czacie zawiera kalkulację z widoczną karą
-- Ikona czaszki w nagłówku przy aktywnej trucizny
+- Wynik na czacie zawiera kalkulację z widoczną karą
+- Ikona czaszki w nagłówku przy aktywnej truciznie
 
 #### Ulepszenia UI/UX
 
@@ -92,7 +116,7 @@ Efekty trucizny #2 (Kara do Rzutów) i #3 (Utrata Życia) mogą teraz być wielo
 
 System wprowadzony w v0.0.49-0.0.51 i rozszerzony w v0.0.53:
 
-1. **Efekt #1: Opcjonalne Obrażenia**
+1. **Efekt #1: Kara do atrybutów**
    - Oznaczenie jako "optional" (niebieska ramka przerywana)
    - Nie stackuje się
    - GM decyduje o zastosowaniu

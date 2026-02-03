@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.54] - 2026-02-03
+
+### Fixed
+
+- **Stamina-Enhanced Attack Damage Display**
+  - Fixed error when dealing damage after converting a failed attack to success using stamina
+  - Damage messages after stamina-enhanced attacks now display with proper CSS styling
+  - Added support for damage modifier parameter in `rollWeaponDamage` function
+  - Damage chat messages now show formatted components breakdown (weapon damage, bonus, modifier)
+  - Consistent styling across all damage message types with "Deal Damage" button
+  - Fixed parameter passing issue where weaponId string was sent instead of weapon object
+
 ## [0.0.53] - 2026-01-16
 
 ### Added
