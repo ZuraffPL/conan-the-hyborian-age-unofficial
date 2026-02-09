@@ -68,7 +68,7 @@ export class NPCDamageDialog extends foundry.applications.api.HandlebarsApplicat
     
     // For melee attacks, include Brawn value
     if (this.attackType === 'melee') {
-      context.brawnValue = this.actor.system.attributes.might?.value || 0;
+      context.brawnValue = this.actor.system.attributes.might?.effectiveValue || this.actor.system.attributes.might?.value || 0;
     }
     
     context.title = game.i18n.localize("CONAN.Damage.title");

@@ -294,24 +294,17 @@ export class ConanMinionSheet extends ConanActorSheet {
     }
     
     const newDefence = !currentDefence;
-    const basePhysical = this.baseActor.system.defense.basePhysical ?? this.baseActor.system.defense.physical;
     
-    // Calculate new defense value
-    let newPhysical = basePhysical;
-    if (newDefence) {
-      newPhysical = basePhysical + 2;
-    }
-    
-    // Update actor - only set basePhysical if it doesn't exist yet
+    // Store base physical defense if not already stored (needed for manual defense adjustments)
     const updateData = {
-      "system.defenceActive": newDefence,
-      "system.defense.physical": newPhysical
+      "system.defenceActive": newDefence
     };
     
     if (this.baseActor.system.defense.basePhysical === undefined) {
-      updateData["system.defense.basePhysical"] = basePhysical;
+      updateData["system.defense.basePhysical"] = this.baseActor.system.defense.physical;
     }
     
+    // Just toggle the flag - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update(updateData);
     
     // Refresh Combat Tracker if in combat
@@ -327,26 +320,21 @@ export class ConanMinionSheet extends ConanActorSheet {
     const currentImmobilized = this.baseActor.system.immobilized || false;
     const newImmobilized = !currentImmobilized;
     
-    const basePhysical = this.baseActor.system.defense.basePhysical ?? this.baseActor.system.defense.physical;
-    
     const updateData = {
       "system.immobilized": newImmobilized
     };
     
-    // Only set basePhysical if it doesn't exist yet
+    // Store base physical defense if not already stored (needed for manual defense adjustments)
     if (this.baseActor.system.defense.basePhysical === undefined) {
-      updateData["system.defense.basePhysical"] = basePhysical;
+      updateData["system.defense.basePhysical"] = this.baseActor.system.defense.physical;
     }
     
-    if (newImmobilized) {
-      // When immobilized, set defense to 0 and disable Defence
-      updateData["system.defense.physical"] = 0;
+    // Disable Defence when becoming immobilized
+    if (newImmobilized && this.baseActor.system.defenceActive) {
       updateData["system.defenceActive"] = false;
-    } else {
-      // When no longer immobilized, restore base defense
-      updateData["system.defense.physical"] = basePhysical;
     }
     
+    // Just toggle flags - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update(updateData);
     
     // Refresh Combat Tracker if in combat
@@ -831,24 +819,17 @@ export class ConanAntagonistSheet extends ConanActorSheet {
     }
     
     const newDefence = !currentDefence;
-    const basePhysical = this.baseActor.system.defense.basePhysical ?? this.baseActor.system.defense.physical;
     
-    // Calculate new defense value
-    let newPhysical = basePhysical;
-    if (newDefence) {
-      newPhysical = basePhysical + 2;
-    }
-    
-    // Update actor - only set basePhysical if it doesn't exist yet
+    // Store base physical defense if not already stored (needed for manual defense adjustments)
     const updateData = {
-      "system.defenceActive": newDefence,
-      "system.defense.physical": newPhysical
+      "system.defenceActive": newDefence
     };
     
     if (this.baseActor.system.defense.basePhysical === undefined) {
-      updateData["system.defense.basePhysical"] = basePhysical;
+      updateData["system.defense.basePhysical"] = this.baseActor.system.defense.physical;
     }
     
+    // Just toggle the flag - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update(updateData);
     
     // Refresh Combat Tracker if in combat
@@ -864,26 +845,21 @@ export class ConanAntagonistSheet extends ConanActorSheet {
     const currentImmobilized = this.baseActor.system.immobilized || false;
     const newImmobilized = !currentImmobilized;
     
-    const basePhysical = this.baseActor.system.defense.basePhysical ?? this.baseActor.system.defense.physical;
-    
     const updateData = {
       "system.immobilized": newImmobilized
     };
     
-    // Only set basePhysical if it doesn't exist yet
+    // Store base physical defense if not already stored (needed for manual defense adjustments)
     if (this.baseActor.system.defense.basePhysical === undefined) {
-      updateData["system.defense.basePhysical"] = basePhysical;
+      updateData["system.defense.basePhysical"] = this.baseActor.system.defense.physical;
     }
     
-    if (newImmobilized) {
-      // When immobilized, set defense to 0 and disable Defence
-      updateData["system.defense.physical"] = 0;
+    // Disable Defence when becoming immobilized
+    if (newImmobilized && this.baseActor.system.defenceActive) {
       updateData["system.defenceActive"] = false;
-    } else {
-      // When no longer immobilized, restore base defense
-      updateData["system.defense.physical"] = basePhysical;
     }
     
+    // Just toggle flags - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update(updateData);
     
     // Refresh Combat Tracker if in combat
@@ -964,6 +940,7 @@ class NPCDifficultyDialog extends foundry.applications.api.HandlebarsApplication
     context.defaultDifficulty = 10;
     context.modifier = this.modifier;
     context.isPoisoned = this.actor && this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    context.isPoisonedAttributes = this.actor && this.actor.system.poisoned && this.actor.system.poisonEffects?.effect1;
     context.poisonMultiplier = this.actor?.system.poisonEffects?.effect2Multiplier || 1;
 
     return context;
@@ -1071,7 +1048,7 @@ class NPCDifficultyDialog extends foundry.applications.api.HandlebarsApplication
  */
 async function rollNPCAttribute(actor, attribute) {
   const attributeData = actor.system.attributes[attribute];
-  const attributeValue = attributeData.value;
+  const attributeValue = attributeData.effectiveValue || attributeData.value;
   const attributeDie = attributeData.die;
   
   // Get attribute label
@@ -1090,6 +1067,9 @@ async function rollNPCAttribute(actor, attribute) {
   const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
   const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
   modifier += poisonPenalty;
+  
+  // Check if attribute is poisoned (effect 1)
+  const isPoisonedAttributes = actor.system.poisoned && actor.system.poisonEffects?.effect1;
   
   // Roll attribute die
   const dieRoll = new Roll(`1${attributeDie}`);
@@ -1113,11 +1093,10 @@ async function rollNPCAttribute(actor, attribute) {
   const hasPoisonPenalty = poisonPenalty !== 0;
   
   const content = `
-    <div class="conan-roll-chat npc-roll ${npcClass} ${hasPoisonPenalty ? 'poisoned' : ''}">
+    <div class="conan-roll-chat npc-roll ${npcClass} ${hasPoisonPenalty || isPoisonedAttributes ? 'poisoned-roll' : ''}">
       <div class="roll-header">
-        <h3>${game.i18n.localize('CONAN.Roll.attributeTest')}</h3>
-        <div class="attribute-info">${displayName}</div>
-        ${hasPoisonPenalty ? `<div class="poison-indicator"><i class="fas fa-skull-crossbones"></i> ${game.i18n.localize('CONAN.Poisoned.title')}</div>` : ''}
+        <h3>${game.i18n.localize('CONAN.Roll.attributeTest')}${hasPoisonPenalty || isPoisonedAttributes ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
+        <div class="attribute-info">${displayName}${isPoisonedAttributes ? ' <span style="color: #15a20e; font-size: 0.9em;">(zatruty)</span>' : ''}</div>
       </div>
       <div class="roll-details">
         <div class="dice-results">
@@ -1130,7 +1109,7 @@ async function rollNPCAttribute(actor, attribute) {
         <div class="calculation">
           <span class="calc-part">${dieResult}</span>
           <span class="calc-operator">+</span>
-          <span class="calc-part">${attributeValue}</span>
+          <span class="calc-part${isPoisonedAttributes ? ' poisoned-value' : ''}">${attributeValue}</span>
           ${modifier !== 0 ? `<span class="calc-operator">${modifierSign}</span><span class="calc-part">${Math.abs(modifier)}</span>` : ''}
           <span class="calc-operator">=</span>
           <span class="calc-total">${total}</span>

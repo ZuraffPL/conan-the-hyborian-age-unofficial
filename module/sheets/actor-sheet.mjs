@@ -735,19 +735,16 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
     const currentState = this.actor.system.defenceActive || false;
     const newState = !currentState;
     
-    // Store base physical defense if not already stored
+    // Store base physical defense if not already stored (needed for manual defense adjustments)
     if (!this.baseActor.system.defense.basePhysical) {
       await this.baseActor.update({
         'system.defense.basePhysical': this.baseActor.system.defense.physical
       });
     }
     
-    const basePhysicalDefense = this.baseActor.system.defense.basePhysical || this.baseActor.system.defense.physical;
-    const newPhysicalDefense = newState ? basePhysicalDefense + 2 : basePhysicalDefense;
-    
+    // Just toggle the flag - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update({
-      'system.defenceActive': newState,
-      'system.defense.physical': newPhysicalDefense
+      'system.defenceActive': newState
     });
     
     // Refresh Combat Tracker if in combat
@@ -760,20 +757,15 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
     const currentState = this.actor.system.immobilized || false;
     const newState = !currentState;
     
-    // Store base physical defense if not already stored
+    // Store base physical defense if not already stored (needed for manual defense adjustments)
     if (!this.baseActor.system.defense.basePhysical) {
       await this.baseActor.update({
         'system.defense.basePhysical': this.baseActor.system.defense.physical
       });
     }
     
-    const basePhysicalDefense = this.baseActor.system.defense.basePhysical || this.baseActor.system.defense.physical;
-    
-    // If becoming immobilized, disable Defence and set physical defense to 0
-    // If removing immobilized, restore base physical defense
     const updates = {
-      'system.immobilized': newState,
-      'system.defense.physical': newState ? 0 : basePhysicalDefense
+      'system.immobilized': newState
     };
     
     // Disable Defence when becoming immobilized
@@ -781,6 +773,7 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
       updates['system.defenceActive'] = false;
     }
     
+    // Just toggle flags - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update(updates);
     
     // Refresh Combat Tracker if in combat

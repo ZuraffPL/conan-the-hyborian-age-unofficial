@@ -54,10 +54,20 @@
           <div class="attribute-box" data-attribute="{{key}}">
             <div class="attribute-header">
               <span class="attribute-label">{{localize (concat "CONAN.Attributes." key ".label")}}</span>
-              <span class="attribute-abbr">{{localize (concat "CONAN.Attributes." key ".abbr")}}</span>
+              <span class="attribute-abbr">
+                {{localize (concat "CONAN.Attributes." key ".abbr")}}
+                {{#if (and @root.system.poisoned @root.system.poisonEffects.effect1)}}
+                  <i class="fas fa-skull-crossbones poison-skull-pulse" title="{{localize 'CONAN.Poisoned.attributePenalty'}}" style="color: #15a20e; margin-left: 4px; animation: pulse-poison 2s infinite;"></i>
+                {{/if}}
+              </span>
             </div>
             <div class="attribute-values">
-              <input type="number" name="system.attributes.{{key}}.value" value="{{attr.value}}" min="1" max="8" data-dtype="Number" class="attribute-value {{lookup ../valueChanges key}}"/>
+              <div class="attribute-circle-wrapper">
+                <input type="number" name="system.attributes.{{key}}.value" value="{{attr.value}}" min="1" max="8" data-dtype="Number" class="attribute-value {{lookup ../valueChanges key}} {{#if (and @root.system.poisoned @root.system.poisonEffects.effect1)}}poisoned-attribute{{/if}}"/>
+                {{#if (and @root.system.poisoned @root.system.poisonEffects.effect1)}}
+                  <span class="poison-arrow-indicator" title="{{localize 'CONAN.Poisoned.attributePenalty'}}">↓</span>
+                {{/if}}
+              </div>
               <select name="system.attributes.{{key}}.die" data-dtype="String" class="attribute-die">
                 <option value="d6" {{#if (eq attr.die "d6")}}selected{{/if}}>k6</option>
                 <option value="d8" {{#if (eq attr.die "d8")}}selected{{/if}}>k8</option>

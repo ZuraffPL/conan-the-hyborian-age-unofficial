@@ -1,5 +1,109 @@
 # Changelog
 
+## [0.0.55] - 2026-02-09
+
+### Added
+
+- **Poison Effect #1 - Attribute Penalty System**
+  - Implemented poison effect #1: -1 penalty to all four attributes (Might, Edge, Grit, Wits)
+  - All attribute-based rolls now use `effectiveValue` (base value minus poison penalty)
+  - Visual indicators on character sheets:
+    * Pulsing green skull icon next to poisoned attributes
+    * Green-tinted attribute input fields when poisoned
+    * CSS animations with poison-themed color (#15a20e)
+  - Poison warnings in roll dialogs showing attribute penalty information
+  - Chat messages highlight poisoned attribute values in calculations (green highlighting)
+  
+- **Automatic Derived Stat Recalculation**
+  - Maximum Life Points now automatically recalculate based on Grit attribute
+    * Formula: origin_base + (2 × effectiveGrit)
+    * Accounts for poison penalties (effect #1) and attribute increases from leveling
+  - Physical Defense automatically recalculates based on Edge attribute
+    * Formula: max(effectiveEdge + 2, 5)
+    * Includes Defence bonus (+2 when active)
+  - Sorcery Defense automatically recalculates based on Wits attribute
+    * Formula: max(effectiveWits + 2, 5)
+  - All derived stats update immediately when:
+    * Attributes change (character development/leveling)
+    * Poison effect #1 is activated/deactivated
+    * Defence or Immobilized status changes
+
+- **Enhanced Combat Status Integration**
+  - Defence (+2 physical defense) now integrates with automatic recalculation
+  - Immobilized (defense = 0) properly overrides all other defense modifiers
+  - Status flags (defenceActive, immobilized) now control derived data instead of direct value modification
+  - Prevents conflicts between manual adjustments and automatic calculations
+
+### Changed
+
+- **Character Data Preparation**
+  - Added `effectiveValue` field to all attributes (accounts for poison penalty)
+  - Added `isPoisonedAttributes` flag to attributes for UI indication
+  - Modified `_prepareCharacterData()` to calculate effective values first
+  - Modified `_prepareNpcData()` to support minion and antagonist types (fixed type check bug)
+  - Health max calculation updated to use Grit instead of Might
+  - Defense calculations moved from sheet handlers to `prepareDerivedData()` for consistency
+
+- **Roll Mechanics Updates**
+  - All roll functions updated to use `effectiveValue || value` pattern:
+    * `rollAttribute()` - attribute tests
+    * `rollMeleeDamage()` - melee damage rolls
+
+- **CSS Organization Improvements**
+  - Consolidated all poison effect styles into `poisoned-effects.css` for better maintainability
+  - Moved poison arrow indicator styles from `conan.css` and `actor-npc.css` to `styles/partials/poisoned-effects.css`
+  - Eliminated duplicate `@keyframes poison-arrow-pulse` definitions
+  - Centralized all poison-related visual effects (borders, backgrounds, arrows, animations) in dedicated file
+    * `rollThrownDamage()` - ranged damage rolls
+    * `rollWeaponDamage()` - weapon damage with might bonus
+  - Chat message templates enhanced with `.poisoned-value` CSS class
+  - NPC attribute test function (`rollNPCAttribute`) updated with poison support
+
+- **Dialog Context Enhancements**
+  - Attack dialog now passes `isPoisonedAttributes` to template
+  - Difficulty dialog shows attribute penalty warnings
+  - NPC attack dialog updated with effectiveValue usage
+  - NPC damage dialog uses effectiveValue for brawn calculation
+  - NPC difficulty dialog enhanced with attribute penalty warnings
+
+- **Visual Styling**
+  - Added `.poisoned-attribute` class for tinted input fields
+  - Added `.poison-skull-pulse` animation (2s cycle)
+  - Added `.poisoned-value` class for calculation highlighting in chat
+  - Added `.poison-arrow-indicator` element for down arrow (↓) inside attribute circle
+    * Implemented as real HTML `<span>` element (pseudo-elements don't work on `<input>`)
+    * Positioned with `.attribute-circle-wrapper` for proper layout
+    * Green pulsing animation matching poison theme
+  - Roll chat CSS updated with effect-specific comments:
+    * Effect #1 styles: `.calc-part.poisoned-value` (calculation highlighting only)
+    * Effect #2 styles: `.dice-roll.poisoned-attribute`, `.die-result.poisoned` (dice box highlighting)
+
+### Fixed
+
+- **NPC Type Detection Bug**
+  - Fixed `_prepareNpcData()` checking for nonexistent "npc" type instead of "minion"/"antagonist"
+  - NPC attributes now correctly calculate effectiveValue with poison penalties
+  - NPC roll mechanics now properly apply poison effect #1
+  - Visual poison indicators now work for all NPC types
+
+- **Sheet Handler Conflicts**
+  - Removed direct defense value manipulation from `_onToggleDefence()` handlers
+  - Removed direct defense value manipulation from `_onToggleImmobilized()` handlers
+  - Sheet handlers now only toggle status flags, letting `prepareDerivedData()` handle calculations
+  - Prevents defense value conflicts between different systems (poison, Defence, Immobilized, attribute changes)
+
+### Technical Details
+
+- **Architecture Changes**
+  - Centralized derived stat calculation in `prepareDerivedData()` lifecycle method
+  - Separation of concerns: sheet handlers manage flags, data preparation calculates values
+  - Consistent use of `effectiveValue` throughout codebase for poison-aware attribute access
+  - CSS organization improved with clear documentation of effect-specific styles
+
+- **Localization**
+  - Added "attributePenalty" key: "Kara do atrybutów przez truciznę" (PL), "Attribute penalty from poison" (EN), "Pénalité d'attribut du poison" (FR)
+  - Added "toAttributes" key: "do wszystkich atrybutów" (PL), "to all attributes" (EN), "à tous les attributs" (FR)
+
 ## [0.0.54] - 2026-02-03
 
 ### Fixed

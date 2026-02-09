@@ -45,9 +45,10 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     const context = await super._prepareContext(options);
     
     context.actor = this.actor;
-    context.might = this.actor.system.attributes.might.value;
-    context.edge = this.actor.system.attributes.edge.value;
+    context.might = this.actor.system.attributes.might.effectiveValue || this.actor.system.attributes.might.value;
+    context.edge = this.actor.system.attributes.edge.effectiveValue || this.actor.system.attributes.edge.value;
     context.isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    context.isPoisonedAttributes = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect1;
     context.poisonMultiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
     
     // Get target's Physical Defense from selected token

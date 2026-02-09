@@ -69,13 +69,13 @@ export class ConanActor extends Actor {
         attribute.die = "d6";
       }
       
-      // For values 1-8, modifier is simply (value - 4)
-      attribute.mod = attribute.value - 4;
-      
       // Apply poison effect 1: -1 to all attributes
-      if (systemData.poisoned && systemData.poisonEffects?.effect1) {
-        attribute.mod -= 1;
-      }
+      const attributePenalty = (systemData.poisoned && systemData.poisonEffects?.effect1) ? 1 : 0;
+      attribute.isPoisonedAttributes = attributePenalty > 0;
+      attribute.effectiveValue = Math.max(1, attribute.value - attributePenalty);
+      
+      // For values 1-8, modifier is simply (effectiveValue - 4)
+      attribute.mod = attribute.effectiveValue - 4;
     }
 
     const gritValue = systemData.attributes.grit?.value || 1;
@@ -124,9 +124,49 @@ export class ConanActor extends Actor {
 
     // Calculate derived values
     if (systemData.health) {
-      // Use might attribute for health calculation
-      const mightMod = systemData.attributes.might?.mod || 0;
-      systemData.health.max = 10 + (mightMod * (systemData.level || 1));
+      // Use grit attribute for health calculation (mod already uses effectiveValue, so poison penalty applies)
+      const gritMod = systemData.attributes.grit?.mod || 0;
+      systemData.health.max = 10 + (gritMod * (systemData.level || 1));
+    }
+
+    // Recalculate life points max based on Grit (formula: origin_base + 2×Grit)
+    // Poison effect 1 reduces Grit, so it also reduces max life points
+    if (systemData.lifePoints && systemData.attributes.grit && systemData.initial?.lifePoints && systemData.initial?.grit) {
+      const effectiveGrit = systemData.attributes.grit.effectiveValue;
+      const initialGrit = systemData.initial.grit;
+      const initialLifePoints = systemData.initial.lifePoints;
+      
+      // Calculate base from origin (initial life points minus initial grit contribution)
+      const originBase = initialLifePoints - (2 * initialGrit);
+      
+      // Recalculate max with current effective grit (accounts for poison penalty and any increases from leveling)
+      systemData.lifePoints.max = originBase + (2 * effectiveGrit);
+    }
+
+    // Recalculate defenses based on effective attribute values
+    // Physical defense: Edge + 2 (minimum 5)
+    // Sorcery defense: Wits + 2 (minimum 5)
+    // Automatically recalculated on attribute changes (e.g., leveling up or poison effect)
+    if (systemData.defense && systemData.attributes.edge && systemData.attributes.wits) {
+      const effectiveEdge = systemData.attributes.edge.effectiveValue;
+      const effectiveWits = systemData.attributes.wits.effectiveValue;
+      
+      // Calculate base defenses from attributes
+      let physicalDefense = Math.max(effectiveEdge + 2, 5);
+      const sorceryDefense = Math.max(effectiveWits + 2, 5);
+      
+      // Apply Defence modifier (+2) if active
+      if (systemData.defenceActive) {
+        physicalDefense += 2;
+      }
+      
+      // Apply Immobilized modifier (defense becomes 0)
+      if (systemData.immobilized) {
+        physicalDefense = 0;
+      }
+      
+      systemData.defense.physical = physicalDefense;
+      systemData.defense.sorcery = sorceryDefense;
     }
   }
 
@@ -134,7 +174,7 @@ export class ConanActor extends Actor {
    * Prepare NPC type specific data
    */
   _prepareNpcData(actorData) {
-    if (actorData.type !== "npc") return;
+    if (!["minion", "antagonist"].includes(actorData.type)) return;
 
     const systemData = actorData.system;
 
@@ -145,8 +185,35 @@ export class ConanActor extends Actor {
         attribute.die = "d6";
       }
       
-      // For values 1-8, modifier is simply (value - 4)
-      attribute.mod = attribute.value - 4;
+      // Apply poison effect 1: -1 to all attributes (also for NPCs)
+      const attributePenalty = (systemData.poisoned && systemData.poisonEffects?.effect1) ? 1 : 0;
+      attribute.isPoisonedAttributes = attributePenalty > 0;
+      attribute.effectiveValue = Math.max(1, attribute.value - attributePenalty);
+      
+      // For values 1-8, modifier is simply (effectiveValue - 4)
+      attribute.mod = attribute.effectiveValue - 4;
+    }
+
+    // Calculate NPC physical defense with Defence and Immobilized modifiers
+    // NPCs have manually set defense values, but Defence/Immobilized still apply
+    if (systemData.defense) {
+      // Use basePhysical if available (stored when Defence/Immobilized first activated)
+      // Otherwise use current physical defense as base
+      let basePhysical = systemData.defense.basePhysical ?? systemData.defense.physical;
+      
+      let physicalDefense = basePhysical;
+      
+      // Apply Defence modifier (+2) if active
+      if (systemData.defenceActive) {
+        physicalDefense += 2;
+      }
+      
+      // Apply Immobilized modifier (defense becomes 0) - overrides Defence
+      if (systemData.immobilized) {
+        physicalDefense = 0;
+      }
+      
+      systemData.defense.physical = physicalDefense;
     }
   }
 
@@ -186,7 +253,7 @@ export class ConanActor extends Actor {
    * Prepare NPC roll data
    */
   _getNpcRollData(data) {
-    if (this.type !== "npc") return;
+    if (!["minion", "antagonist"].includes(this.type)) return;
 
     // Add attribute modifiers
     if (data.attributes) {

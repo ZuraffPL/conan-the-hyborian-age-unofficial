@@ -1371,3 +1371,44 @@
     text-shadow: 0 0 12px rgba(218, 165, 32, 1);
   }
 }
+/* ========================================
+ * Poisoned Attribute Styling in Chat
+ * ======================================== */
+
+/* Poisoned attribute value in calculation (Effect #1: Attribute Penalty) */
+.conan-roll-chat .calc-part.poisoned-value {
+  background: rgba(21, 162, 14, 0.15) !important;
+  border-color: #15a20e !important;
+  color: #15a20e !important;
+  box-shadow: 0 0 8px rgba(21, 162, 14, 0.4);
+}
+
+/* Poisoned dice box (Effect #2: Roll Penalty) */
+.conan-roll-chat .dice-roll.poisoned-attribute {
+  background: rgba(21, 162, 14, 0.1);
+  padding: 8px;
+  border-radius: 8px;
+  border: 2px solid #15a20e;
+  box-shadow: 0 0 10px rgba(21, 162, 14, 0.3);
+}
+
+/* Poisoned die result (Effect #2: Roll Penalty) */
+.conan-roll-chat .die-result.poisoned {
+  background: rgba(21, 162, 14, 0.15) !important;
+  border-color: #15a20e !important;
+  color: #15a20e !important;
+  box-shadow: 0 0 15px rgba(21, 162, 14, 0.5) !important;
+  animation: poison-pulse-die 2s infinite;
+}
+
+/* Pulsing animation for poisoned dice */
+@keyframes poison-pulse-die {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(21, 162, 14, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(21, 162, 14, 0.8);
+    transform: scale(1.03);
+  }
+}

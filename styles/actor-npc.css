@@ -344,6 +344,13 @@ html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-lab
   margin-top: 5px;
 }
 
+/* Wrapper for attribute circle + poison arrow */
+.conan.sheet.actor.minion .attribute-circle-wrapper,
+.conan.sheet.actor.antagonist .attribute-circle-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .conan.sheet.actor.minion .attribute-value,
 .conan.sheet.actor.antagonist .attribute-value {
   width: 60px;
@@ -357,6 +364,7 @@ html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-lab
   color: #8b4513;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
+  position: relative; /* For pseudo-elements like poison arrow */
 }
 
 .conan.sheet.actor.minion .attribute-value:hover,

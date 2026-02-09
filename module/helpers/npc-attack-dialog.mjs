@@ -55,7 +55,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     // Get attribute based on attack type
     const attribute = this.attackType === 'melee' ? 'might' : 'edge';
     context.attribute = attribute;
-    context.attributeValue = this.actor.system.attributes[attribute].value;
+    context.attributeValue = this.actor.system.attributes[attribute].effectiveValue || this.actor.system.attributes[attribute].value;
     context.attributeDie = this.actor.system.attributes[attribute].die;
     
     // Get target's Physical Defense from selected token
@@ -68,6 +68,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     }
     
     context.isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    context.isPoisonedAttributes = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect1;
     context.poisonMultiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
     
     return context;
@@ -117,7 +118,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     const poisonPenalty = (this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
     
     const attribute = this.attackType === 'melee' ? 'might' : 'edge';
-    const attributeValue = this.actor.system.attributes[attribute].value;
+    const attributeValue = this.actor.system.attributes[attribute].effectiveValue || this.actor.system.attributes[attribute].value;
     const attributeDie = this.actor.system.attributes[attribute].die;
     
     // Roll attribute die
@@ -137,16 +138,17 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     const attributeAbbr = game.i18n.localize(`CONAN.Attributes.${attribute}.abbr`);
     const attackTypeLabel = game.i18n.localize(this.attackType === 'melee' ? 'CONAN.Attack.melee' : 'CONAN.Attack.ranged');
     const isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
+    const isPoisonedAttributes = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect1;
     
     // Determine NPC type for styling
     const actorType = this.actor.type; // 'minion' or 'antagonist'
     const npcClass = actorType === 'minion' ? 'minion-roll' : 'antagonist-roll';
     
     let messageContent = `
-      <div class="conan-roll-chat npc-roll ${npcClass} ${isPoisoned ? 'poisoned-roll' : ''}">
+      <div class="conan-roll-chat npc-roll ${npcClass} ${isPoisoned || isPoisonedAttributes ? 'poisoned-roll' : ''}">
         <div class="roll-header attack">
-          <h3>${attackTypeLabel}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
-          <div class="attribute-info">${attributeLabel} (${attributeAbbr})</div>
+          <h3>${attackTypeLabel}${isPoisoned || isPoisonedAttributes ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
+          <div class="attribute-info">${attributeLabel} (${attributeAbbr})${isPoisonedAttributes ? ' <span style="color: #15a20e; font-size: 0.9em;">(zatruty)</span>' : ''}</div>
         </div>
         <div class="roll-details">
           <div class="dice-results">
@@ -158,7 +160,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
           <div class="calculation">
             <span class="calc-part">${attributeResult}</span>
             <span class="calc-operator">+</span>
-            <span class="calc-part">${attributeValue}</span>
+            <span class="calc-part${isPoisonedAttributes ? ' poisoned-value' : ''}">${attributeValue}</span>
             ${modifier !== 0 ? `<span class="calc-operator">+</span><span class="calc-part">${modifier}</span>` : ''}
             ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">${effect2Multiplier}</span>` : ''}
             <span class="calc-operator">=</span>

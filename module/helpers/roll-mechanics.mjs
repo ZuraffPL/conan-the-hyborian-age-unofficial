@@ -36,7 +36,9 @@ export async function rollAttribute(actor, attribute) {
   const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
   const poisonPenalty = (actor.system.poisoned && actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
   
-  const attributeValue = attrData.value || 0;
+  // Check if attributes are poisoned (effect 1)
+  const attributePoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect1;
+  const attributeValue = attrData.effectiveValue || attrData.value || 0;
   const attributeDie = attrData.die || "d6";
   const flexDie = actor.system.flexDie || "d10";
   // Check if flex die is disabled due to poison effect
@@ -90,13 +92,15 @@ export async function rollAttribute(actor, attribute) {
   // Create modern chat message
   const modifierText = modifier !== 0 ? ` ${modifier >= 0 ? '+' : ''}${modifier}` : '';
   const modifierSign = modifier >= 0 ? '+' : '';
-  const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
+  const isPoisonedRolls = actor.system.poisoned && actor.system.poisonEffects?.effect2;
+  const isPoisonedAttributes = attributePoisoned;
+  const anyPoison = isPoisonedRolls || isPoisonedAttributes;
   
   const content = `
-    <div class="conan-roll-chat ${isPoisoned ? 'poisoned-roll' : ''}">
+    <div class="conan-roll-chat ${anyPoison ? 'poisoned-roll' : ''}">
       <div class="roll-header">
-        <h3>${game.i18n.localize('CONAN.Roll.attributeTest')}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
-        <div class="attribute-info">${displayName}</div>
+        <h3>${game.i18n.localize('CONAN.Roll.attributeTest')}${anyPoison ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
+        <div class="attribute-info">${displayName}${isPoisonedAttributes ? ' <span style="color: #15a20e; font-size: 0.9em;">(zatruty)</span>' : ''}</div>
       </div>
       <div class="roll-details">
         <div class="dice-results">
@@ -120,7 +124,7 @@ export async function rollAttribute(actor, attribute) {
         <div class="calculation">
           <span class="calc-part">${attributeDieResult}</span>
           <span class="calc-operator">+</span>
-          <span class="calc-part">${attributeValue}</span>
+          <span class="calc-part${isPoisonedAttributes ? ' poisoned-value' : ''}">${attributeValue}</span>
           ${modifier !== 0 ? `<span class="calc-operator">${modifierSign}</span><span class="calc-part">${Math.abs(modifier)}</span>` : ''}
           ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">${effect2Multiplier}</span>` : ''}
           <span class="calc-operator">=</span>
@@ -456,8 +460,8 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
   // Check if it's a fixed value (unarmed or improvised)
   const isFixedDamage = !weaponDamage.includes('d');
   
-  // Get Might attribute value
-  const might = actor.system.attributes.might.value;
+  // Get Might attribute value (with poison effect 1 applied)
+  const might = actor.system.attributes.might.effectiveValue || actor.system.attributes.might.value;
   
   // Apply poison effect 2: penalty to all rolls (multiplied)
   const effect2Multiplier = actor.system.poisonEffects?.effect2Multiplier || 1;
@@ -632,8 +636,8 @@ export async function rollThrownDamage(actor, weapon, modifier = 0) {
   // Check if it's a fixed value (light improvised thrown weapon)
   const isFixedDamage = !weaponDamage.includes('d');
   
-  // Get Might attribute value
-  const might = actor.system.attributes.might.value;
+  // Get Might attribute value (with poison effect 1 applied)
+  const might = actor.system.attributes.might.effectiveValue || actor.system.attributes.might.value;
   
   // Build the roll formula: Might + Weapon Damage + Modifier
   const formula = `${might} + ${weaponDamage} + ${modifier}`;
@@ -976,7 +980,7 @@ export async function rollNPCDamage(actor, attackType) {
   // For melee attacks, add Brawn value
   let brawnValue = 0;
   if (attackType === 'melee') {
-    brawnValue = actor.system.attributes.might?.value || 0;
+    brawnValue = actor.system.attributes.might?.effectiveValue || actor.system.attributes.might?.value || 0;
   }
   
   // Roll damage die

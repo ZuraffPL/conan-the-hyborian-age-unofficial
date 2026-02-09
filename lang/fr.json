@@ -491,7 +491,9 @@
       "minionDead": "meurt du poison",
       "staminaLocked": "Impossible de dépenser de l'Endurance - empoisonné et endurance bloquée !",
       "flexDieLocked": "Le dé Flex est bloqué par le poison!",
-      "rollPenalty": "Pénalité de jet due au poison",      "notAvailableMinion": "Non disponible pour les Minions",      "appliedMessage": "est empoisonné!",
+      "rollPenalty": "Pénalité de jet due au poison",      "attributePenalty": "Pénalité d'attribut due au poison",
+      "toAttributes": "à tous les attributs",
+      "notAvailableMinion": "Non disponible pour les Minions",      "appliedMessage": "est empoisonné!",
       "removedMessage": "guérit du poison!",
       "appliedEffects": "Effets appliqués :",
       "removedEffects": "Effets de poison retirés :"

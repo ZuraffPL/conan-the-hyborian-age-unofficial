@@ -950,3 +950,66 @@
   border-radius: 6px;
   margin-top: 10px;
 }
+/* ========================================
+ * Poisoned Attributes Effect (#1)
+ * ======================================== */
+
+/* Attribute value input with poison effect */
+.conan .attribute-value.poisoned-attribute,
+.conan.sheet.actor.minion .attribute-value.poisoned-attribute,
+.conan.sheet.actor.antagonist .attribute-value.poisoned-attribute {
+  border-color: #15a20e !important;
+  background-color: rgba(21, 162, 14, 0.1) !important;
+  color: #15a20e !important;
+  box-shadow: 0 0 8px rgba(21, 162, 14, 0.3) !important;
+}
+
+/* Poison penalty arrow indicator inside attribute circle */
+.poison-arrow-indicator {
+  position: absolute;
+  bottom: 11px;
+  right: 8px;
+  font-size: 18px;
+  color: #15a20e;
+  font-weight: bold;
+  pointer-events: none;
+  text-shadow: 0 0 4px rgba(21, 162, 14, 0.6);
+  animation: poison-arrow-pulse 2s infinite;
+  z-index: 10;
+  line-height: 1;
+}
+
+/* Pulsing animation for poison arrow */
+@keyframes poison-arrow-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(2px);
+  }
+}
+
+/* Pulsing skull animation for poisoned attributes */
+@keyframes pulse-poison {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.15);
+  }
+}
+
+.poison-skull-pulse {
+  animation: pulse-poison 2s infinite;
+  display: inline-block;
+}
+
+/* Additional warning styling for attribute poison in dialogs */
+.poison-warning.attribute-poison {
+  background: rgba(21, 162, 14, 0.15);
+  border-color: #15a20e;
+}

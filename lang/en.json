@@ -493,6 +493,8 @@
       "staminaLocked": "Cannot spend Stamina - poisoned and stamina is locked!",
       "flexDieLocked": "Flex Die is locked by poison!",
       "rollPenalty": "Roll penalty from poison",
+      "attributePenalty": "Attribute penalty from poison",
+      "toAttributes": "to all attributes",
       "notAvailableMinion": "Not available for Minions",
       "appliedMessage": "is poisoned!",
       "removedMessage": "recovers from poison!",

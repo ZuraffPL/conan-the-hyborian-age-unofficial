@@ -1,6 +1,138 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.54 - Stamina Attack Fixes
+## Current Version: v0.0.55 - Poison Attribute Penalty & Automatic Stat Recalculation
+
+### Overview
+
+System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.55 wprowadza kompletną implementację efektu zatrucia #1 (kara do atrybutów) wraz z automatycznym przeliczaniem wszystkich powiązanych statystyk, takich jak maksymalne punkty życia i obrony.
+
+### Najnowsze Zmiany (v0.0.55)
+
+#### Efekt Zatrucia #1 - Kara do Atrybutów
+
+**Mechanika**:
+- Aktywacja efektu #1 nakłada **karę -1 do wszystkich czterech atrybutów** (Krzepa, Zręczność, Hart, Spryt)
+- Wszystkie rzuty i kalkulacje używają `effectiveValue` (wartość bazowa minus kara z trucizny)
+- Kara wpływa na wszystkie testy atrybutów, ataki, obrażenia i statystyki pochodne
+
+**Wizualizacja**:
+- 💀 **Pulsująca zielona czaszka** obok zatruconych atrybutów na karcie postaci
+- 🟢 **Zielone podświetlenie** pól atrybutów objętych karą
+- ⬇️ **Zielona strzałka w dół (↓)** wewnątrz kółka atrybutu przy aktywnej karze
+- 📊 **Zielone wartości w kalkulacjach** w wiadomościach czatu
+- ⚠️ **Ostrzeżenia w dialogach** rzutów informujące o aktywnej karze
+- 🎨 Animacje CSS z tematycznym kolorem trucizny (#15a20e - zielony)
+
+**Przykład działania**:
+```
+Krzepa bazowa: 5
+Krzepa efektywna (z zatruciem #1): 4
+Test Krzepy: 1d6 + 4 (zamiast + 5)
+Obrażenia wręcz: +4 bonusu (zamiast +5)
+```
+
+#### Automatyczne Przeliczanie Statystyk Pochodnych
+
+**Maksymalne Punkty Życia (Life Points Max)**:
+- Formuła: `baza_z_pochodzenia + (2 × Hart_efektywny)`
+- Przykład:
+  * Pochodzenie Hills (baza 30) + Hart 5 = 40 LP max
+  * Z zatruciem #1: Hart efektywny 4 = 38 LP max (-2)
+  * Po rozwoju do Hart 6: 42 LP max (bez trucizny) lub 40 LP max (z trucizną)
+
+**Obrona Fizyczna (Physical Defense)**:
+- Formuła: `max(Zręczność_efektywna + 2, 5)`
+- Współpracuje z modyfikatorem Defence (+2) i Unieruchomieniem (0)
+- Przykład:
+  * Zręczność 5 = OF 7
+  * Z zatruciem #1: Zręczność efektywna 4 = OF 6
+  * Z Defence aktywną: OF 8 (bez trucizny) lub OF 7 (z trucizną)
+  * Unieruchomienie: OF 0 (nadpisuje wszystko)
+
+**Obrona przed Magią (Sorcery Defense)**:
+- Formuła: `max(Spryt_efektywny + 2, 5)`
+- Przeliczanie analogiczne do obrony fizycznej
+
+**Automatyczne aktualizacje**:
+- ✅ Zmiana atrybutu (rozwój postaci, przyrost z XP)
+- ✅ Aktywacja/deaktywacja zatrucia #1
+- ✅ Włączenie/wyłączenie Defence
+- ✅ Włączenie/wyłączenie Unieruchomienia
+
+#### Poprawki dla NPC (Miniony i Antagoniści)
+
+**Naprawiono krytyczny błąd**:
+- Funkcja `_prepareNpcData()` sprawdzała nieistniejący typ "npc" zamiast "minion" i "antagonist"
+- NPC nigdy nie otrzymywały obliczenia `effectiveValue` - trucizna nie działała
+- Efekt: kara do atrybutów z zatrucia #1 nie była stosowana dla NPC
+
+**Po naprawie**:
+- ✅ NPC (miniony i antagoniści) prawidłowo obliczają `effectiveValue`
+- ✅ Testy atrybutów NPC uwzględniają karę z trucizny
+- ✅ Ataki NPC używają obniżonych wartości atrybutów
+- ✅ Wiadomości czatu pokazują wizualne wskaźniki zatrucia
+- ✅ Dialogi ostrzegają o aktywnej karze do atrybutów
+
+#### Integracja z Efektami Walki
+
+**Defence (Obrona)**:
+- Przycisk przełącza **flagę** `defenceActive`
+- System automatycznie dodaje +2 do obrony fizycznej
+- Współpracuje z przeliczaniem na podstawie atrybutów
+- Wyłącza się automatycznie przy Unieruchomieniu
+
+**Immobilized (Unieruchomienie)**:
+- Przycisk przełącza **flagę** `immobilized`
+- System automatycznie ustawia obronę fizyczną na 0
+- Nadpisuje wszystkie inne modyfikatory (Defence, trucizna, atrybuty)
+- Wyłącza Defence automatycznie
+
+**Przykład Integracji**:
+```
+Zręczność 5, OF bazowa: 7
++ Defence: OF 9
++ Zatrucie #1: Zręczność efektywna 4, OF 6, + Defence = OF 8
++ Unieruchomienie: OF 0 (ignoruje wszystko inne)
+```
+
+#### Szczegóły Techniczne
+
+**Architektura**:
+- Centralizacja obliczeń w `prepareDerivedData()` (lifecycle Foundry)
+- Rozdzielenie odpowiedzialności: handlery zarządzają flagami, prepareDerivedData oblicza wartości
+- Spójne użycie `effectiveValue` w całym kodzie
+- Zapobieganie konfliktom między różnymi systemami (trucizna, Defence, Immobilized, rozwój)
+
+**Zmienione moduły**:
+- `actor.mjs`: dodano obliczenia effectiveValue, automatyczne przeliczanie statystyk pochodnych
+- `roll-mechanics.mjs`: aktualizacja wszystkich funkcji rzutów do użycia effectiveValue
+- `attack-dialog.mjs`, `difficulty-dialog.mjs`: dodano context isPoisonedAttributes
+- `npc-attack-dialog.mjs`, `npc-damage-dialog.mjs`: wsparcie dla effectiveValue
+- `npc-sheet.mjs`: funkcja `rollNPCAttribute` z pełnym wsparciem trucizny
+- `actor-sheet.mjs`: uproszczone handlery Defence/Immobilized (tylko flagi)
+- Wszystkie szablony Handlebars: wizualne wskaźniki trucizny
+  * `actor-character-sheet.hbs`, `actor-minion-sheet.hbs`, `actor-antagonist-sheet.hbs`: dodano `<span class="poison-arrow-indicator">` z wrapperem dla strzałki
+
+**CSS**:
+- Wszystkie style efektów trucizny scentralizowane w `styles/partials/poisoned-effects.css`
+- `.poisoned-attribute`: zielone tło pól atrybutów
+- `.poison-arrow-indicator`: strzałka w dół (↓) wewnątrz kółka atrybutu
+- `.attribute-circle-wrapper`: wrapper dla prawidłowego pozycjonowania strzałki
+- `.poison-skull-pulse`: pulsująca animacja czaszek (2s cykl)
+- `.poisoned-value`: zielone podświetlenie wartości w kalkulacjach (efekt #1)
+- `.dice-roll.poisoned-attribute`: zielony box kości (efekt #2)
+- `@keyframes poison-pulse-die`: animacja pulsowania kości
+- `@keyframes poison-arrow-pulse`: animacja strzałki kary (opacity + ruch w dół)
+- Refactoring: usunięto duplikaty kodu z `conan.css` i `actor-npc.css`
+
+**Lokalizacja**:
+- Polski: "Kara do atrybutów przez truciznę", "do wszystkich atrybutów"
+- Angielski: "Attribute penalty from poison", "to all attributes"
+- Francuski: "Pénalité d'attribut du poison", "à tous les attributs"
+
+---
+
+## Previous Version: v0.0.54 - Stamina Attack Fixes
 
 ### Overview
 
