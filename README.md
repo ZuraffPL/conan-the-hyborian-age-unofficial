@@ -45,7 +45,37 @@ This creates dynamic, exciting tests where even desperate situations can turn ar
 
 ## System Features
 
-### Latest Version: [0.0.48] - 2026-01-07
+### Latest Version: [0.0.55] - 2026-02-09
+
+#### Poison Effect #1 - Attribute Penalty System
+
+- **Attribute Penalties**: Poison effect #1 applies -1 penalty to all four attributes (Might, Edge, Grit, Wits)
+- **Effective Values**: All dice rolls use `effectiveValue` (base attribute value minus poison penalty)
+- **Visual Indicators**:
+  - 💀 Pulsing green skull icon next to poisoned attributes
+  - 🟢 Green-tinted attribute input fields with glowing border
+  - ⬇️ Green down arrow (↓) inside attribute circle showing active penalty
+  - 📊 Green highlighting of poisoned values in chat message calculations
+- **Roll Integration**: All attribute tests, attacks, and damage rolls automatically use reduced values
+- **Poison Warnings**: Dialogs display clear warnings when poison penalty is active
+
+#### Automatic Derived Stat Recalculation
+
+- **Life Points Maximum**: Automatically recalculates based on Grit attribute (origin_base + 2 × Grit)
+- **Physical Defense**: Dynamically updates based on Edge attribute with Defence bonus integration
+- **Sorcery Defense**: Dynamically updates based on Wits attribute
+- **Real-time Updates**: All derived stats recalculate immediately when:
+  - Attributes change (character development/leveling)
+  - Poison effect #1 is activated or deactivated
+  - Defence or Immobilized status changes
+
+#### Status Effect Integration
+
+- **Defence & Poison**: Defence bonus (+2) now works seamlessly with poison penalties
+- **Immobilized & Poison**: Immobilized status (Defense = 0) overrides all other modifiers including poison
+- **NPC Support Fixed**: Minions and antagonists now properly calculate `effectiveValue` (fixed type detection bug)
+
+#### Previous Release: [0.0.48] - 2026-01-07
 
 #### Multiplayer Permission Fixes for NPCs
 
@@ -69,9 +99,14 @@ This creates dynamic, exciting tests where even desperate situations can turn ar
 
 #### 🩸 Status Effect System
 
+- **Poisoned Status (Effect #1)**: Green skull icon with full mechanical implementation
+  - Applies -1 penalty to all four attributes (Might, Edge, Grit, Wits)
+  - Green visual indicators: tinted fields, skull icons, down arrow (↓) in attribute circles
+  - Affects all attribute-based rolls, attacks, damage, and derived stats
+  - Automatic recalculation of Life Points max and Defense values
+  - Poison warnings in roll dialogs and green highlighting in chat messages
 - **Wounded Status**: Red blood drop icon for injured minions, syncs between sheet checkbox and token
 - **Immobilized Status**: Black paralysis icon, sets Physical Defense to 0 when active
-- **Poisoned Status**: UI toggle with 5 configurable poison effects
 - **Defeated Status**: Skull icon overlay for dead tokens (minions and antagonists)
 - **Manual Control**: Toggle status effects via token right-click menu or character sheet
 - **Combat Tracker Integration**: All status icons display in combat tracker with proper colors
@@ -190,10 +225,15 @@ Your character is defined by four key attributes, each with values from 1-8:
 
 - **Might (Krzepa)**: Raw physical power, melee combat, feats of strength
 - **Edge (Refleks)**: Speed, agility, ranged combat, dodging
-- **Grit (Hart)**: Endurance, toughness, resisting pain and poison
+- **Grit (Hart)**: Endurance, toughness, resisting pain and poison, determines maximum Life Points
 - **Wits (Spryt)**: Intelligence, perception, cunning, sorcery resistance
 
 Each attribute has its own die (d6/d8/d10) that improves as the value increases.
+
+**Attribute Penalties**: When poisoned (Effect #1), all attributes are reduced by 1, affecting:
+- Roll modifiers (tests, attacks, damage)
+- Derived stats (Life Points max = origin_base + 2 × Grit, Defense = Edge/Wits + 2)
+- Visual indicators show the penalty with green highlighting and down arrows
 
 ### The Flex Die System
 
@@ -264,6 +304,11 @@ The **Flex Die** (Kość Brawury) is a special d10 rolled alongside every test. 
 
 - **Defence Action**: Click shield icon to activate +2 Physical Defense bonus (costs 1 Action, gold highlight)
 - **Immobilized Status**: Click paralysis icon if character is immobilized (sets Defense to 0, red highlight)
+- **Poisoned Status**: Toggle poison icon to activate poison penalties
+  - Effect #1: -1 to all attributes (Might, Edge, Grit, Wits)
+  - Visual indicators: green skull, tinted fields, down arrow (↓) in circles
+  - Automatically reduces Life Points max and Defense based on affected attributes
+  - Affects all rolls, attacks, and damage calculations
 - **Wounded Status (Minions)**: Check "ranny" checkbox to mark minion as wounded (red blood drop icon on token)
 - **Stamina Spending**:
   - Click Stamina button for tactical options (extra move, range boost, ignore encumbrance, origin ability)
@@ -283,7 +328,7 @@ The **Flex Die** (Kość Brawury) is a special d10 rolled alongside every test. 
 
 ## Known Issues
 
-- **Poisoned Status**: Currently UI-only - full mechanical effects not yet implemented
+- **Poison Effects #2-5**: Currently UI-only - full mechanical effects not yet implemented (Effect #1 is complete)
 - **Flex Effect Dialog**: May show incorrect options if accessed from certain roll types
 
 ## Technical Details
@@ -330,6 +375,7 @@ conan-the-hyborian-age/
 │   │   ├── spellcasting-dialog.mjs
 │   │   ├── stamina-effects.mjs
 │   │   ├── stamina-spend-dialog.mjs
+│   │   ├── starting-skills-dialog.mjs
 │   │   └── templates.mjs
 │   └── sheets/
 │       ├── actor-sheet.mjs
@@ -349,6 +395,7 @@ conan-the-hyborian-age/
 │   ├── roll-chat.css
 │   ├── roll-dialog.css
 │   ├── stamina-effects.css
+│   ├── starting-skills.css
 │   └── partials/
 │       ├── actor-spell.css
 │       ├── attack-dialog.css
@@ -383,14 +430,13 @@ conan-the-hyborian-age/
     │   ├── npc-damage-dialog.hbs
     │   ├── poisoned-dialog.hbs
     │   ├── spellcasting-dialog.hbs
-    │   └── stamina-spend-dialog.hbs
+    │   ├── stamina-spend-dialog.hbs
+    │   └── starting-skills-dialog.hbs
     └── item/
-        ├── item-armor-sheet.hbs
-        ├── item-skill-sheet.hbs
-        ├── item-spell-sheet.hbs
-        ├── item-weapon-sheet.hbs
+        ├── item-sheet.hbs
         └── parts/
             ├── item-description.hbs
+            ├── item-effects.hbs
             └── item-header.hbs
 ```
 
@@ -424,7 +470,7 @@ Found a bug or have a feature request? Please create an issue on the project rep
 
 Planned features for future updates:
 
-- **Poisoned Status**: Full mechanical implementation with ongoing damage/penalties
+- **Poison Effects #2-5**: Complete mechanical implementation of remaining poison effects
 - **Additional Status Effects**: Stunned, Blinded, Prone, and other combat conditions
 - **Advanced NPC AI**: Automated behavior patterns and tactical decision-making
 - **Campaign Tools**: Enhanced journal integration, quest tracking, campaign arc management
@@ -450,6 +496,6 @@ This system is provided as-is for personal use. Not affiliated with or endorsed 
 
 ## Version
 
-Current version: **0.0.48**
+Current version: **0.0.55**
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed version history and changes.
