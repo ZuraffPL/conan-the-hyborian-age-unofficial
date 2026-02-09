@@ -237,12 +237,16 @@ Each attribute has its own die (d6/d8/d10) that improves as the value increases.
 
 ### The Flex Die System
 
-The **Flex Die** (Kość Brawury) is a special d10 rolled alongside every test. When you roll a 10, choose a powerful effect:
+The **Flex Die** (Kość Brawury) is a special die rolled alongside every test that represents your character's destiny and luck. It starts as a **d10** at character creation but can degrade to **d8, d6, or even d4** as your character faces hardships and spends their destiny throughout the campaign.
+
+When you roll the **maximum value** on your current Flex Die (10 on d10, 8 on d8, 6 on d6, 4 on d4), you trigger a **Flex Effect** and choose one powerful option:
 
 - **Sorcery Recovery**: Restore spent Life Points and Stamina from spellcasting (purple option)
 - **Massive Damage**: Add maximum weapon die value + modifier to damage (or double fixed damage, red option)
 - **Stamina Boost**: Gain +1 stamina point to keep fighting
 - **Convert to Success**: Turn a failed roll into a success
+
+The degrading Flex Die mechanic creates a sense of tension and character arc - fresh heroes have fate on their side with d10, while weathered veterans running on fumes might be down to d4, making each Flex Effect trigger increasingly rare and precious.
 
 ### Equipment & Combat System
 
