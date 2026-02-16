@@ -132,27 +132,26 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
           }
         }
         
-        // Special handling for Grit change - update max life points
+        // Special handling for Grit change - adjustment stays the same, prepareData will recalculate max
         if (fieldName === "system.attributes.grit.value" && this.actor.system.origin && this.actor.system.characterCreated) {
-          const baseLifePointsMap = {
-            "hills": 30,
-            "streets": 22,
-            "steppes": 26,
-            "north": 32,
-            "wilds": 30,
-            "civilized": 22,
-            "unknown": 26,
-            "jhebbal": 28,
-            "acheron": 20,
-            "demon": 26
-          };
+          // Initialize adjustment if not set (for backward compatibility)
+          if (this.actor.system.lifePoints.adjustment === undefined) {
+            const initial = this.actor.system.initial;
+            if (initial?.lifePoints && initial?.grit) {
+              const originBase = initial.lifePoints - (2 * initial.grit);
+              const currentBase = originBase + (2 * this.actor.system.attributes.grit.value);
+              const currentAdjustment = this.actor.system.lifePoints.max - currentBase;
+              updateData["system.lifePoints.adjustment"] = currentAdjustment;
+            }
+          }
           
-          const baseLP = baseLifePointsMap[this.actor.system.origin];
-          if (baseLP) {
-            const newMaxLP = baseLP + (2 * fieldValue);
-            updateData["system.lifePoints.max"] = newMaxLP;
+          // If current actual is higher than new calculated max, cap it
+          const initial = this.actor.system.initial;
+          if (initial?.lifePoints && initial?.grit) {
+            const originBase = initial.lifePoints - (2 * initial.grit);
+            const adjustment = this.actor.system.lifePoints.adjustment || 0;
+            const newMaxLP = originBase + (2 * fieldValue) + adjustment;
             
-            // If current actual is higher than new max, cap it
             if (this.actor.system.lifePoints.actual > newMaxLP) {
               updateData["system.lifePoints.actual"] = newMaxLP;
             }
@@ -180,8 +179,21 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
           }
         }
         
-        // Special handling for max life points - adjust actual if needed
-        if (fieldName === "system.lifePoints.max") {
+        // Special handling for max life points - update adjustment and cap actual if needed
+        if (fieldName === "system.lifePoints.max" && this.actor.system.characterCreated) {
+          const initial = this.actor.system.initial;
+          if (initial?.lifePoints && initial?.grit) {
+            // Calculate what the base max would be without adjustment
+            const originBase = initial.lifePoints - (2 * initial.grit);
+            const currentGrit = this.actor.system.attributes.grit.value;
+            const calculatedBase = originBase + (2 * currentGrit);
+            
+            // Calculate new adjustment to preserve the manually set value
+            const newAdjustment = fieldValue - calculatedBase;
+            updateData["system.lifePoints.adjustment"] = newAdjustment;
+          }
+          
+          // Cap actual if needed
           const actualLP = this.actor.system.lifePoints.actual;
           if (actualLP > fieldValue) {
             updateData["system.lifePoints.actual"] = fieldValue;
@@ -592,6 +604,7 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
       wits: this._compareValue(current.attributes.wits.value, initial.wits),
       
       // Life Points
+      lifePointsActual: (current.lifePoints.actual < current.lifePoints.max) ? 'life-injured' : '',
       lifePointsMax: this._compareValue(current.lifePoints.max, initial.lifePoints),
       
       // Stamina

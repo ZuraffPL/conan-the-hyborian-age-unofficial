@@ -1,12 +1,55 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.55 - Poison Attribute Penalty & Automatic Stat Recalculation
+## Current Version: v0.0.56 - Life Points Adjustment System
 
 ### Overview
 
-System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.55 wprowadza kompletną implementację efektu zatrucia #1 (kara do atrybutów) wraz z automatycznym przeliczaniem wszystkich powiązanych statystyk, takich jak maksymalne punkty życia i obrony.
+System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.56 wprowadza system śledzenia modyfikatorów maksymalnych punktów życia, który pozwala na ręczną edycję przy jednoczesnym zachowaniu automatycznego wpływu efektów zatrucia.
 
-### Najnowsze Zmiany (v0.0.55)
+### Najnowsze Zmiany (v0.0.56)
+
+#### System Adjustment dla Punktów Życia
+
+**Mechanika**:
+- Dodano pole `lifePoints.adjustment` do śledzenia ręcznych modyfikacji
+- Formuła: **max = baza_pochodzenia + (2 × Hart_efektywny) + adjustment**
+- Umożliwia ręczną edycję max LP z zachowaniem efektów trucizny
+- Automatyczna migracja dla istniejących postaci
+
+**Przykład działania**:
+```
+1. Postać stworzona:
+   - Pochodzenie Hills (baza 32) + Hart 5 = 42 LP max
+   
+2. Wykup umiejętności (+3 LP):
+   - Ręczna zmiana: 42 → 45
+   - System zapisuje: adjustment = +3
+   
+3. Aktywacja trucizny (efekt #1):
+   - Hart efektywny: 4 (5-1)
+   - Auto-przeliczenie: 32 + 8 + 3 = 43 LP max ✅
+   
+4. Wyłączenie trucizny:
+   - Hart efektywny: 5
+   - Auto-przeliczenie: 32 + 10 + 3 = 45 LP max ✅
+   - Bonus +3 zachowany!
+```
+
+**Korzyści**:
+- ✅ Ręczna edycja max LP możliwa w każdej chwili
+- ✅ Trucizna automatycznie obniża max LP (efekt #1 → Hart -1 → LP -2)
+- ✅ Modyfikacje z umiejętności/przedmiotów są zachowane
+- ✅ Po wyłączeniu trucizny wszystko wraca do normy
+
+#### Refaktoryzacja UI
+
+**Przeniesienie logiki z Handlebars do JavaScript**:
+- Warunek `life-injured` (czerwone tło gdy actual < max) teraz w `valueChanges`
+- Template czystszy: `class="life-actual {{valueChanges.lifePointsActual}}"`
+- Cała wizualizacja zdefiniowana w CSS, logika w JavaScript
+- Lepsza organizacja kodu i łatwiejsza konserwacja
+
+### Poprzednia Wersja (v0.0.55)
 
 #### Efekt Zatrucia #1 - Kara do Atrybutów
 

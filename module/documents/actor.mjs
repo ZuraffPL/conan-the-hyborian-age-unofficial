@@ -39,6 +39,28 @@ export class ConanActor extends Actor {
    */
   prepareBaseData() {
     // Data modifications in this step occur before processing embedded documents or derived data
+    
+    // One-time migration: Initialize lifePoints.adjustment for existing characters
+    if (this.type === "character" && this.system.characterCreated) {
+      const systemData = this.system;
+      
+      // Check if adjustment needs initialization (undefined means not yet migrated)
+      if (systemData.lifePoints?.adjustment === undefined && 
+          systemData.initial?.lifePoints && 
+          systemData.initial?.grit &&
+          systemData.attributes?.grit) {
+        
+        // Calculate what adjustment should be based on current max
+        const originBase = systemData.initial.lifePoints - (2 * systemData.initial.grit);
+        const currentGrit = systemData.attributes.grit.value;
+        const expectedBase = originBase + (2 * currentGrit);
+        const currentMax = systemData.lifePoints.max;
+        const calculatedAdjustment = currentMax - expectedBase;
+        
+        // Update actor with the calculated adjustment (only once)
+        this.updateSource({ "system.lifePoints.adjustment": calculatedAdjustment });
+      }
+    }
   }
 
   /**
@@ -122,15 +144,9 @@ export class ConanActor extends Actor {
       };
     }
 
-    // Calculate derived values
-    if (systemData.health) {
-      // Use grit attribute for health calculation (mod already uses effectiveValue, so poison penalty applies)
-      const gritMod = systemData.attributes.grit?.mod || 0;
-      systemData.health.max = 10 + (gritMod * (systemData.level || 1));
-    }
-
-    // Recalculate life points max based on Grit (formula: origin_base + 2×Grit)
-    // Poison effect 1 reduces Grit, so it also reduces max life points
+    // Recalculate life points max based on effective Grit (accounts for poison penalty)
+    // Formula: origin_base + 2×effectiveGrit + adjustment
+    // Where adjustment captures manual modifications (e.g., +3 from skills)
     if (systemData.lifePoints && systemData.attributes.grit && systemData.initial?.lifePoints && systemData.initial?.grit) {
       const effectiveGrit = systemData.attributes.grit.effectiveValue;
       const initialGrit = systemData.initial.grit;
@@ -139,8 +155,13 @@ export class ConanActor extends Actor {
       // Calculate base from origin (initial life points minus initial grit contribution)
       const originBase = initialLifePoints - (2 * initialGrit);
       
-      // Recalculate max with current effective grit (accounts for poison penalty and any increases from leveling)
-      systemData.lifePoints.max = originBase + (2 * effectiveGrit);
+      // Calculate expected base with current effective grit
+      const calculatedBase = originBase + (2 * effectiveGrit);
+      
+      // Apply adjustment (captures +X from skills, items, etc.)
+      // Use || 0 for backward compatibility with existing characters
+      const adjustment = systemData.lifePoints.adjustment || 0;
+      systemData.lifePoints.max = calculatedBase + adjustment;
     }
 
     // Recalculate defenses based on effective attribute values

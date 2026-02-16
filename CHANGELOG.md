@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.0.56] - 2026-02-16
+
+### Added
+
+- **Life Points Adjustment System**
+  - Added `lifePoints.adjustment` field to track manual modifications (e.g., +3 from skills, items)
+  - Automatic calculation now uses formula: `origin_base + (2 × effectiveGrit) + adjustment`
+  - Allows manual editing of max life points while preserving poison penalty effects
+  - Backward compatibility migration for existing characters in `prepareBaseData()`
+
+### Changed
+
+- **Life Points Maximum Calculation**
+  - Restored automatic recalculation to account for poison effect #1 (Grit penalty)
+  - Manual changes now update `adjustment` field instead of directly setting max
+  - System preserves manual bonuses (e.g., from skills) while applying poison penalties
+  - Example workflow:
+    * Character created: 42 max LP (base 32 + Grit 5×2)
+    * Skill acquired: manually set to 45 → adjustment = +3
+    * Poison activated: effectiveGrit = 4 → max = 32 + 8 + 3 = 43 LP
+    * Poison removed: effectiveGrit = 5 → max = 32 + 10 + 3 = 45 LP
+
+- **UI Logic Refactoring**
+  - Moved `life-injured` condition from hardcoded Handlebars to JavaScript
+  - Added `lifePointsActual` to `valueChanges` in `_prepareValueComparisons()`
+  - Cleaner template with consistent pattern: `class="life-actual {{valueChanges.lifePointsActual}}"`
+  - All visualization logic now in CSS, presentation logic in JavaScript
+
+### Fixed
+
+- **Poison Effect #1 Integration**
+  - Fixed issue where poison attribute penalty didn't affect max life points
+  - Grit penalty (-1) now properly reduces max LP by 2 points during poisoning
+  - Manual modifications preserved across poison activation/deactivation cycles
+
 ## [0.0.55] - 2026-02-09
 
 ### Added

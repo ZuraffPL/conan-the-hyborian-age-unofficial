@@ -180,7 +180,7 @@
       </div>
       <div class="life-points-display">
         <div class="life-value-container">
-          <input type="number" name="system.lifePoints.actual" value="{{system.lifePoints.actual}}" min="0" max="50" data-dtype="Number" class="life-actual {{#if (lt system.lifePoints.actual system.lifePoints.max)}}life-injured{{/if}}" title="{{localize 'CONAN.Resources.actual'}}"/>
+          <input type="number" name="system.lifePoints.actual" value="{{system.lifePoints.actual}}" min="0" max="50" data-dtype="Number" class="life-actual {{valueChanges.lifePointsActual}}" title="{{localize 'CONAN.Resources.actual'}}"/>
           <label class="life-label">
             <span class="primary-label">{{localize "CONAN.Resources.actual"}}</span>
             <span class="subtitle-label">Actual</span>

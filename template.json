@@ -59,7 +59,8 @@
       },
       "lifePoints": {
         "actual": 10,
-        "max": 50
+        "max": 50,
+        "adjustment": 0
       },
       "defense": {
         "physical": 0,
