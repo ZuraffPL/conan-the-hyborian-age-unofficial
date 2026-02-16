@@ -23,6 +23,27 @@ export class ConanItem extends Item {
    */
   prepareData() {
     super.prepareData();
+    
+    // Migrate old range format (object) to new format (string)
+    if (this.type === "weapon" && this.system.range && typeof this.system.range === "object") {
+      // Old format was {value: 0, long: 0}, convert to default "touch" for melee
+      const weaponType = this.system.weaponType || "melee";
+      let defaultRange = "touch";
+      
+      if (weaponType === "thrown") {
+        defaultRange = "close";
+      } else if (weaponType === "ranged") {
+        const size = this.system.weaponSize || "medium";
+        if (size === "heavy") {
+          defaultRange = "distant8";
+        } else {
+          defaultRange = "medium3";
+        }
+      }
+      
+      // Update the item data with the new format
+      this.updateSource({ "system.range": defaultRange });
+    }
   }
 
   /**

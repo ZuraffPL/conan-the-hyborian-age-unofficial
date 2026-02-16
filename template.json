@@ -240,10 +240,7 @@
         "type": "slashing"
       },
       "damageModifier": 0,
-      "range": {
-        "value": 0,
-        "long": 0
-      },
+      "range": "touch",
       "stipulations": ""
     },
     "armor": {
