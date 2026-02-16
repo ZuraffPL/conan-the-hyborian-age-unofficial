@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.0.57] - 2026-02-16
+
+### Fixed
+
+- **Weapon Range Display Bug**
+  - Fixed `[object Object]` display issue for weapon range on character sheets
+  - Changed `range` field from object `{value: 0, long: 0}` to string in template.json
+  - Added automatic migration in item.mjs for existing weapons with old format
+  - Range now correctly displays localized values:
+    * Melee: "Zwarcie" (Touch)
+    * Thrown: "Bliski/1 Obszar" (Close/1 Zone)
+    * Ranged Light/Medium: "Średni/3 Obszary" (Medium/3 Zones)
+    * Ranged Heavy: "Odległy/8 Obszarów" (Distant/8 Zones)
+  - All existing weapon items automatically migrated on load
+
 ## [0.0.56] - 2026-02-16
 
 ### Added

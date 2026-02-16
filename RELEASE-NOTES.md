@@ -1,12 +1,38 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.56 - Life Points Adjustment System
+## Current Version: v0.0.57 - Weapon Range Display Fix
 
 ### Overview
 
-System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.56 wprowadza system śledzenia modyfikatorów maksymalnych punktów życia, który pozwala na ręczną edycję przy jednoczesnym zachowaniu automatycznego wpływu efektów zatrucia.
+System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.57 naprawia krytyczny błąd wyświetlania zasięgu broni, który pokazywał `[object Object]` zamiast prawidłowych wartości.
 
-### Najnowsze Zmiany (v0.0.56)
+### Najnowsze Zmiany (v0.0.57)
+
+#### Naprawa Wyświetlania Zasięgu Broni
+
+**Problem**:
+- Broń na kartach postaci pokazywała `[object Object]` w miejscu zasięgu
+- Powodowało to problemy z czytelnością i użytkowaniem systemu
+
+**Rozwiązanie**:
+- Zmieniono format pola `range` z obiektu na string w template.json
+- Dodano automatyczną migrację dla istniejących broni
+- Wszystkie bronie (nowe i stare) teraz wyświetlają zasięg poprawnie
+
+**Poprawne wyświetlanie**:
+```
+Broń biała:     "Zwarcie" / "Touch"
+Broń rzucana:   "Bliski/1 Obszar" / "Close/1 Zone"
+Broń dystansowa (lekka/średnia): "Średni/3 Obszary" / "Medium/3 Zones"
+Broń dystansowa (ciężka):        "Odległy/8 Obszarów" / "Distant/8 Zones"
+```
+
+**Migracja automatyczna**:
+- Istniejące bronie z formacie obiektu są automatycznie konwertowane przy załadowaniu
+- Nie wymaga żadnych działań ze strony użytkownika
+- Zachowana kompatybilność wsteczna
+
+### Poprzednia Wersja (v0.0.56)
 
 #### System Adjustment dla Punktów Życia
 
