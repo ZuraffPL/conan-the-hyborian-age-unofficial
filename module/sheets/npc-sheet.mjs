@@ -369,7 +369,9 @@ export class ConanMinionSheet extends ConanActorSheet {
       try {
         const updateData = {};
         updateData[fieldName] = fieldValue;
-        await this.baseActor.update(updateData, { render: false });
+        // Allow render for name field so sidebar updates immediately
+        const options = fieldName === 'name' ? {} : { render: false };
+        await this.baseActor.update(updateData, options);
       } finally {
         this._isUpdating = false;
       }
@@ -427,7 +429,8 @@ export class ConanMinionSheet extends ConanActorSheet {
         try {
           const updateData = {};
           updateData[fieldName] = event.target.value;
-          await this.baseActor.update(updateData, { render: false });
+          const options = fieldName === 'name' ? {} : { render: false };
+          await this.baseActor.update(updateData, options);
         } finally {
           this._isUpdating = false;
         }
@@ -714,7 +717,9 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       try {
         const updateData = {};
         updateData[fieldName] = fieldValue;
-        await this.baseActor.update(updateData, { render: false });
+        // Allow render for name field so sidebar updates immediately
+        const options = fieldName === 'name' ? {} : { render: false };
+        await this.baseActor.update(updateData, options);
       } finally {
         this._isUpdating = false;
       }
@@ -772,7 +777,8 @@ export class ConanAntagonistSheet extends ConanActorSheet {
         try {
           const updateData = {};
           updateData[fieldName] = event.target.value;
-          await this.baseActor.update(updateData, { render: false });
+          const options = fieldName === 'name' ? {} : { render: false };
+          await this.baseActor.update(updateData, options);
         } finally {
           this._isUpdating = false;
         }
