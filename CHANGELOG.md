@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.0.58] - 2026-02-16
+
+### Fixed
+
+- **NPC Name Validation**
+  - Fixed validation error when clearing NPC name field ("name: may not be undefined")
+  - Name field now reverts to previous value if cleared, preventing empty names
+  - Applies to both Minion and Antagonist actor sheets
+  - Changes reflected in sidebar after name update
+
 ## [0.0.57] - 2026-02-16
 
 ### Fixed

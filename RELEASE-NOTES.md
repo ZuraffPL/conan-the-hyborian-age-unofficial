@@ -1,12 +1,34 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.57 - Weapon Range Display Fix
+## Current Version: v0.0.58 - NPC Name Validation Fix
 
 ### Overview
 
-System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.57 naprawia krytyczny błąd wyświetlania zasięgu broni, który pokazywał `[object Object]` zamiast prawidłowych wartości.
+System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.58 naprawia błąd walidacji nazwy NPC, który uniemożliwiał zmianę nazwy sług i antagonistów.
 
-### Najnowsze Zmiany (v0.0.57)
+### Najnowsze Zmiany (v0.0.58)
+
+#### Naprawa Walidacji Nazwy NPC
+
+**Problem**:
+- Po skasowaniu nazwy na karcie sługusa/antagonisty pojawiał się błąd: `validation errors: name: may not be undefined`
+- Nazwa nie aktualizowała się w sidebarze po zmianie
+- Puste pole nazwy powodowało błędy walidacji modelu danych
+
+**Rozwiązanie**:
+- Dodano walidację pola nazwy dla NPC w metodzie `_setupNPCFormHandling()`
+- Puste pole nazwy jest teraz automatycznie wypełniane poprzednią wartością
+- Zmiany dotyczą zarówno arkuszy Minion jak i Antagonist
+- Nazwa aktualizuje się w sidebarze natychmiast po zmianie
+
+**Zachowanie**:
+```
+- Wpisanie nowej nazwy: Aktualizacja natychmiastowa
+- Skasowanie nazwy: Pole wraca do poprzedniej wartości
+- Zmiana widoczna w sidebarze actors po zapisaniu
+```
+
+### Poprzednia Wersja (v0.0.57)
 
 #### Naprawa Wyświetlania Zasięgu Broni
 

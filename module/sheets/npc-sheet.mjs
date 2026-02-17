@@ -403,6 +403,12 @@ export class ConanMinionSheet extends ConanActorSheet {
       input.addEventListener('input', (event) => {
         const fieldName = event.target.name;
         if (!fieldName) return;
+        
+        // Don't allow empty name field
+        if (fieldName === 'name' && !event.target.value.trim()) {
+          return;
+        }
+        
         debouncedTextUpdate(fieldName, event.target.value);
       });
       
@@ -410,6 +416,12 @@ export class ConanMinionSheet extends ConanActorSheet {
       input.addEventListener('blur', async (event) => {
         const fieldName = event.target.name;
         if (!fieldName || this._isUpdating) return;
+        
+        // Don't allow empty name field - revert to previous value
+        if (fieldName === 'name' && !event.target.value.trim()) {
+          event.target.value = this.baseActor.name || game.i18n.localize('CONAN.CharacterName');
+          return;
+        }
         
         this._isUpdating = true;
         try {
@@ -736,6 +748,12 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       input.addEventListener('input', (event) => {
         const fieldName = event.target.name;
         if (!fieldName) return;
+        
+        // Don't allow empty name field
+        if (fieldName === 'name' && !event.target.value.trim()) {
+          return;
+        }
+        
         debouncedTextUpdate(fieldName, event.target.value);
       });
       
@@ -743,6 +761,12 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       input.addEventListener('blur', async (event) => {
         const fieldName = event.target.name;
         if (!fieldName || this._isUpdating) return;
+        
+        // Don't allow empty name field - revert to previous value
+        if (fieldName === 'name' && !event.target.value.trim()) {
+          event.target.value = this.baseActor.name || game.i18n.localize('CONAN.CharacterName');
+          return;
+        }
         
         this._isUpdating = true;
         try {
