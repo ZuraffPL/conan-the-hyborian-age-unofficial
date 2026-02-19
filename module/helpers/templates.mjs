@@ -30,7 +30,9 @@ export async function preloadHandlebarsTemplates() {
     // Dialog templates
     "systems/conan-the-hyborian-age/templates/dialogs/flex-effect.hbs",
     "systems/conan-the-hyborian-age/templates/dialogs/difficulty-dialog.hbs",
-    "systems/conan-the-hyborian-age/templates/dialogs/poisoned-dialog.hbs"
+    "systems/conan-the-hyborian-age/templates/dialogs/poisoned-dialog.hbs",
+    "systems/conan-the-hyborian-age/templates/dialogs/tale-dialog.hbs",
+    "systems/conan-the-hyborian-age/templates/dialogs/tale-player-dialog.hbs"
   ];
   
   return Promise.all(templates.map(t => foundry.applications.handlebars.getTemplate(t)));

@@ -1,0 +1,47 @@
+<form class="tale-player-form">
+
+  {{!-- Nazwa opowieści --}}
+  <div class="tale-player-name-wrapper">
+    <i class="fas fa-feather-alt tale-player-name-icon"></i>
+    <span class="tale-player-name">{{taleName}}</span>
+  </div>
+
+  {{!-- Zegar --}}
+  <div class="tale-timer-wrapper">
+    <div class="tale-timer-display">{{time}}</div>
+  </div>
+
+  {{!-- Sekcja Odpoczynek – tylko własna postać gracza --}}
+  {{#if myCharacters.length}}
+  <div class="tale-recovery-section">
+    <div class="tale-section-header">
+      <i class="fas fa-bed"></i>
+      {{localize "CONAN.Tale.recoveryTitle"}}
+    </div>
+    <div class="tale-recovery-list">
+      {{#each myCharacters}}
+      <div class="tale-recovery-entry" data-actor-id="{{actorId}}">
+        <img src="{{img}}" alt="{{name}}" class="tale-recovery-avatar" />
+        <span class="tale-recovery-name">{{name}}</span>
+        <div class="tale-recovery-hp-wrapper">
+          <span class="tale-recovery-hp" data-actor-id="{{actorId}}">{{hpValue}} / {{hpMax}}</span>
+          <div class="tale-recovery-hp-bar-track" data-actor-id="{{actorId}}" style="--empty-pct: {{hpEmptyPercent}}%"></div>
+        </div>
+        <button
+          type="button"
+          class="tale-btn tale-btn-recovery"
+          data-action="taleRecovery"
+          data-actor-id="{{actorId}}"
+          title="{{localize "CONAN.Tale.recoveryBtn"}}"
+          {{#if usesExhausted}}disabled{{/if}}
+        >
+          <i class="fas fa-bed"></i>
+          <span class="tale-recovery-badge">{{usesLeft}}</span>
+        </button>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+
+</form>

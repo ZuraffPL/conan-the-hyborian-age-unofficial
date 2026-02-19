@@ -642,6 +642,22 @@
       "unconscious": "Character Unconscious - Survives",
       "death": "Character Dies",
       "description": "When Life Points reach 0, make a Grit test (Difficulty 8). Success means unconsciousness, failure means death. You can use Flex Effect or spend Stamina to improve the result."
+    },
+
+    "Tale": {
+      "title": "The Tale",
+      "button": "The Tale",
+      "nameLabel": "Story Name",
+      "namePlaceholder": "Enter the name of the tale...",
+      "btnStart": "Tale Start",
+      "btnPause": "Pause",
+      "btnStop": "Tale Stop",
+      "recoveryTitle": "Recovery",
+      "recoveryBtn": "Recovery",
+      "recoveryChatHeader": "{name} rests and regains strength",
+      "recoveryChatLP": "+{heal} Life Points",
+      "recoveryChatFullHP": "Life points already full",
+      "recoveryChatStamina": "+1 Stamina"
     }
   }
 }

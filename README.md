@@ -45,7 +45,22 @@ This creates dynamic, exciting tests where even desperate situations can turn ar
 
 ## System Features
 
-### Latest Version: [0.0.55] - 2026-02-09
+### Latest Version: [0.0.60] - 2026-02-19
+
+#### Tale Timer & Recovery System
+
+- **Tale Timer**: GM-controlled session timer (HH:MM:SS) accessible from the toolbar scroll icon
+  - Start / Pause / End Tale controls with persistent state across reloads
+  - Player read-only view opens automatically on Tale Start, closes on Tale End
+  - Timer syncs to all players every 15s via socket; drift-corrected
+- **Recovery Section**: Appears in both GM and player Tale dialogs
+  - GM sees all online players' characters; Player sees only their own character
+  - Live HP display (`actual / max`) with animated gradient health bar (green→red as HP drops)
+  - Bed icon button (🛏) with use counter badge — 2 uses per tale, resets on Tale End
+- **Recovery Mechanics**:
+  - HP < max: restores `ceil(max / 2)` Life Points (capped at max) + 1 Stamina
+  - HP = max: only +1 Stamina, no healing
+  - Styled chat message shows recovered LP and +1 Stamina with localized text (PL/EN/FR)
 
 #### Poison Effect #1 - Attribute Penalty System
 
@@ -380,6 +395,7 @@ conan-the-hyborian-age/
 │   │   ├── stamina-effects.mjs
 │   │   ├── stamina-spend-dialog.mjs
 │   │   ├── starting-skills-dialog.mjs
+│   │   ├── tale.mjs                        ← NEW (v0.0.59)
 │   │   └── templates.mjs
 │   └── sheets/
 │       ├── actor-sheet.mjs
@@ -400,6 +416,7 @@ conan-the-hyborian-age/
 │   ├── roll-dialog.css
 │   ├── stamina-effects.css
 │   ├── starting-skills.css
+│   ├── tale.css                             ← NEW (v0.0.59)
 │   └── partials/
 │       ├── actor-spell.css
 │       ├── attack-dialog.css
@@ -419,7 +436,6 @@ conan-the-hyborian-age/
     │       ├── actor-attributes.hbs
     │       ├── actor-biography.hbs
     │       ├── actor-effects.hbs
-    │       ├── actor-header.hbs
     │       ├── actor-items.hbs
     │       └── actor-skills.hbs
     ├── dialogs/
@@ -435,7 +451,9 @@ conan-the-hyborian-age/
     │   ├── poisoned-dialog.hbs
     │   ├── spellcasting-dialog.hbs
     │   ├── stamina-spend-dialog.hbs
-    │   └── starting-skills-dialog.hbs
+    │   ├── starting-skills-dialog.hbs
+    │   ├── tale-dialog.hbs                  ← NEW (v0.0.59)
+    │   └── tale-player-dialog.hbs           ← NEW (v0.0.59)
     └── item/
         ├── item-sheet.hbs
         └── parts/
@@ -500,6 +518,6 @@ This system is provided as-is for personal use. Not affiliated with or endorsed 
 
 ## Version
 
-Current version: **0.0.55**
+Current version: **0.0.60**
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed version history and changes.

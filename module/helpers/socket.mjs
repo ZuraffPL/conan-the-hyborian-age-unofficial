@@ -3,6 +3,8 @@
  * Handles communication between clients for multiplayer features
  */
 
+import { TaleDialog } from "./tale.mjs";
+
 export class ConanSocket {
   static SOCKET_NAME = "system.conan-the-hyborian-age";
 
@@ -46,6 +48,18 @@ export class ConanSocket {
         break;
       case "requestActorUpdate":
         this._handleActorUpdateRequest(data);
+        break;
+      case "taleStart":
+      case "talePause":
+      case "taleStop":
+      case "taleSync":
+      case "taleNameUpdate":
+      case "taleRecoveryUpdate":
+        TaleDialog.handleSocketEvent(data);
+        break;
+      case "taleRecoveryRequest":
+        // Gracz żąda Oddechu – tylko GM przetwarza
+        if (game.user.isGM) TaleDialog.handleRecoveryRequest(data);
         break;
       case "notification":
         this._handleNotification(data);

@@ -1,5 +1,73 @@
 # Changelog
 
+## [0.0.60] - 2026-02-19
+
+### Added
+
+- **Recovery Section in the Tale dialog**
+  - GM sees all currently connected players with their characters
+  - Player sees only their own character
+  - Bed icon button (🛏) with tooltip — 2 uses per tale, resets on Tale End
+  - Use counter displayed as a badge on the button
+- **HP Display in Recovery Section**
+  - `actual / max` text with live updates via `updateActor` hook
+  - Animated health bar: red→orange→yellow→green gradient; green shrinks first as HP drops; CSS `transition: width 0.4s ease`
+- **Recovery Mechanics**
+  - HP < max: restores `ceil(max / 2)` Life Points (capped at max) + 1 Stamina
+  - HP = max: only +1 Stamina, no healing
+  - Styled chat message with HTML: header with character name, row with recovered LP (or "full HP" info), row for `+1 Stamina`
+  - Chat message localized in PL / EN / FR
+- **Tale dialog — auto-restore on F5**
+  - GM: dialog reopens automatically after page reload if a tale was active
+  - Player: player view opens automatically and stays frozen waiting for GM's Start signal
+  - Default dialog position: `left: 15, top: 450`
+
+### Fixed
+
+- **Timer sync after F5**
+  - Player no longer starts the timer independently after F5 — always waits for `taleStart` socket from GM
+  - `taleSync` now carries a `running` flag so players joining mid-tale correctly start or stop their local ticker
+- **Multiplayer — GM dialog refresh**
+  - `userConnected` hook (replacing the incorrect `updateUser`) calls `render({ force: true })` on the GM dialog when a player joins or leaves the session
+  - `setTimeout(..., 0)` defers auto-render after `ready` until Foundry DOM is fully initialized (fixes `Cannot read properties of null (reading 'offsetWidth')`)
+- **Player dialog width**
+  - `TalePlayerDialog` widened to 400px (was 360px) — character name always fully visible
+
+### Removed
+
+- **Dead code**
+  - `health` and `power` fields removed from the base template in `template.json` (never used)
+  - `templates/actor/parts/actor-header.hbs` deleted (the only file referencing the removed fields)
+
+### New Files
+
+- `module/helpers/tale.mjs` — `TaleDialog` (GM) and `TalePlayerDialog` (player) classes with full timer and Recovery logic
+- `templates/dialogs/tale-dialog.hbs` — GM dialog template
+- `templates/dialogs/tale-player-dialog.hbs` — player dialog template
+- `styles/tale.css` — styles for both dialogs, Recovery section, and chat message
+
+---
+
+## [0.0.59] - 2026-02-18
+
+### Added
+
+- **System Opowieści (Tale Timer)**
+  - Nowe okno `Opowieść` dostępne dla GM z paska narzędzi (ikona zwoju)
+  - Licznik czasu HH:MM:SS z przyciskami Start / Pauza / Koniec Opowieści
+  - Stan timera trwały między sesjami (zapisywany w `game.settings`, world scope)
+  - Przy starcie: zapisywany epoch timestamp; backup co 5s; synchronizacja z graczami co 15s
+  - Przy pauzie/stopie: naliczone sekundy zapisane, timestamp zerowany
+- **Widok gracza – tylko do odczytu**
+  - `TalePlayerDialog` otwiera się automatycznie po otrzymaniu socketu `taleStart`
+  - Pokazuje nazwę opowieści i bieżący czas (synchronizowany z GM)
+  - Zamykany automatycznie po `taleStop`
+- **Komunikacja przez socket**
+  - Eventy: `taleStart`, `talePause`, `taleStop`, `taleSync`, `taleNameUpdate`
+  - Handler w `socket.mjs` kieruje eventy do `TaleDialog.handleSocketEvent()`
+
+---
+
 ## [0.0.58] - 2026-02-16
 
 ### Fixed
@@ -519,265 +587,45 @@
 - Added 14 new localization keys for Stamina tactical spend (PL/EN/FR)
 - System versions bumped from 0.0.36 to 0.0.40
 
-## [0.0.35] - 2025-12-08
+## [0.0.22-0.0.35] - 2025-11-21 / 2025-12-09
 
 ### Added
 
-- Added complete French translation (lang/fr.json) with 611 lines covering all system features.
-- System now supports 3 languages: English, Polish, and French.
-- Added French language registration in system.json.
+- **Modularized Sorcery Damage System**: Three independent options — Wits die, custom die, fixed value; roll logic moved to `roll-mechanics.mjs` and `roll-sorcery-damage.mjs`
+- **"Deal Damage" Button**: Chat message integration for PC, NPC, and magic attacks; flag-based one-time use; armor reduction with minimum 1 damage
+- **Complete NPC Damage System**: `NPCDamageDialog` for melee/ranged; color-coded chat messages (green for minions, red for antagonists); automatic "Roll Damage" prompt after successful hits
+- **Visual HP Indicator**: Red `.life-injured` highlight on character sheet when `actual < max`
+- **Automatic Token Configuration**: Characters get linked tokens, NPCs get unlinked by default via `_preCreate` hook
+- **Unlinked Token Support**: Token-specific data, `tokenId`/`sceneId` flags, correct actor resolution for linked vs. unlinked
+- **Stamina Spending System**: Context menu on chat messages to spend 1–2 Stamina for +1/+2 roll boosts or +1d4/+2d4 damage; "Massive Damage" option when exactly 1 Stamina remains; Stamina Massive Damage stacks with Flex Effect
+- **Flex Effect Enhancements**: Sorcery option for spell cost recovery (LP and Stamina); Massive Damage option; color-coded buttons (blue/green/purple/red); gradient header with sword elements
+- **Spell Cost Recovery**: Temporary cost storage in actor flags; purple-themed chat breakdown on recovery
+- **XP Refund for Spells**: `initialCost` flag on spell items; automatic XP restore on deletion with localized notification
+- **Minion Defeated Status**: `defeated` field in template; skull overlay on tokens; combat tracker sync by `tokenId`
+- **French Translation (v0.0.35)**: Complete `lang/fr.json` (611 lines) — Force, Agilité, Résistance, Astuce; Endurance, Effet de Souplesse, Dégâts Massifs
 
 ### Changed
 
-- Condensed CHANGELOG entries for better readability:
-  - Versions 0.0.16-0.0.21 combined into single comprehensive entry (Magic Damage System, Defence/Immobilized toggles, Poisoned status, Damage Roll System).
-  - Versions 0.0.22-0.0.25 combined into single entry (Modularized Sorcery Damage, "Deal Damage" button, visual improvements, sheet synchronization).
-  - Versions 0.0.26-0.0.29 combined into single entry (Complete damage application system for PC/NPC, token configuration, HP indicator).
-  - Versions 0.0.30-0.0.35 combined into single entry (Stamina Spending System, Flex Effect enhancements, Spell Cost Recovery, French translation).
-- Improved CHANGELOG structure for easier navigation and understanding of system evolution.
-
-### Technical
-
-- French translations include proper terminology: Force (Might), Agilité (Edge), Résistance (Grit), Astuce (Wits).
-- Stamina → Endurance, Flex Effect → Effet de Souplesse, Massive Damage → Dégâts Massifs.
-- All UI elements, dialogs, chat messages, and system features fully localized in French.
-
-### Release
-
-- Bumped system version to 0.0.35 in `system.json`.
-
-## [0.0.30-0.0.35] - 2025-12-05 / 2025-12-09
-
-### Major Features Implemented
-
-- **Stamina Spending System**: Complete context menu integration for boosting rolls and damage
-  - Right-click chat messages to spend 1-2 Stamina points for +1/+2 roll boosts
-  - Add 1d4/2d4 damage dice to damage rolls by spending Stamina
-  - "Massive Damage" option when exactly 1 Stamina remains (max die value or double fixed damage)
-  - Massive Damage from Stamina stacks with Flex Effect Massive Damage
-  - Gradient card styling, animations, and 10+ localization keys (PL/EN)
-- **Flex Effect System Enhancements**: Complete magical recovery and damage options
-  - Sorcery option for recovering spell costs (Life Points and Stamina) via Flex Effect
-  - Massive Damage option for all damage rolls (adds max die value + modifier, or doubles fixed damage)
-  - Color-coded buttons: blue (stamina), green (success), purple (sorcery), red (massive)
-  - Improved header with gradient background, decorative sword elements, animated icon
-  - Dedicated `flex-dialog.css` with elegant box design and better typography
-- **Spell Cost Recovery**: Temporary storage of spell costs for Flex Effect recovery
-  - Costs stored in actor flags (`flags.conan-the-hyborian-age.lastSpellCost`)
-  - Purple-themed chat messages with detailed recovery breakdown
-  - Full integration with sorcery damage system
-- **XP Refund for Spells**: Automatic XP restoration when spells removed from character
-  - Spells store `initialCost` flag when added to track exact XP paid
-  - Localized notifications for spell removal with cost display
-  - Unified XP refund logic for both skills and spells
-- **French Translation**: Complete system localization
-  - All UI elements, dialogs, chat messages fully translated
-  - Proper terminology: Force (Might), Agilité (Edge), Résistance (Grit), Astuce (Wits)
-  - Stamina → Endurance, Flex Effect → Effet de Souplesse, Massive Damage → Dégâts Massifs
-
-### Combat & Token System
-
-- **Minion Defeated Status**: Proper combat tracker synchronization
-  - Added `defeated` field to minion template
-  - Dead overlay effect (skull icon) for defeated tokens
-  - Correct status updates after second wound
-  - Combatants found by `tokenId` for unlinked tokens
-- **Improved Damage Application**: Fixed critical issues with NPC damage
-  - Changed `actorData.system` to `delta.system` for Foundry v13 unlinked tokens
-  - Proper handling of linked vs unlinked token data structures
-  - Removed race conditions by reordering chat message updates
-  - Type safety with `parseInt()` conversions
-
-### Technical Improvements
-
-- **ApplicationV2 Context Menu**: Modern ChatLog integration for Foundry v13
-  - Migrated from deprecated `getChatLogEntryContext` hook
-  - Direct prototype override: `ChatLog.prototype._getEntryContextOptions`
-  - Context menu initialization moved to `init` hook (before ChatLog instances created)
-  - Button handlers use `li.dataset.messageId` instead of jQuery `.data()`
-- **Enhanced Die Parsing**: Robust regex `/(\d*)d(\d+)/i` handles all formats ("d6", "1d6", "2d8")
-  - Proper multiple dice calculation (2d8 = 16, not 8)
-  - Fixed string concatenation bugs with `parseInt()` conversions
-  - Weapon die info passed via `rollContext` structure
-- **Damage Roll Architecture**: All functions (melee, ranged, thrown, sorcery) unified
-  - `rollContext`: `{originalDamage, weaponDie, weaponModifier, isFixedDamage, attackType}`
-  - Massive Damage logic: `(dieCount × dieSize) + weaponModifier` or double fixed
-  - Proper handling of ranged weapon variables (`weaponDice`/`weaponBonus`)
-- **Token Update System**: Correct delta system for Foundry v13
-  - Unlinked tokens: `targetToken.update({"actorData.system.*": value})`
-  - Linked tokens: `target.update({"system.*": value})` + separate overlay update
-  - Dead overlay: `{"overlayEffect": CONFIG.controlIcons.defeated}`
-- **Stamina System Implementation**: Complete validation and boost mechanics
-  - `canSpendStamina()`: validates eligibility (type, available points, not boosted)
-  - `spendStaminaToBoost()`: boosts result, updates initiative, creates styled message
-  - `canSpendStaminaOnDamage()`, `spendStaminaToDamage()`: damage dice logic
-  - `canSpendLastStaminaOnMassiveDamage()`: validates exactly 1 point remaining
-  - `extractDamageRollData()`: parses die info from message content
-  - Flag system prevents double-boosting same roll
-
-### Fixed Issues
-
-- Fixed damage not applying to antagonist NPCs (delta.system path issue)
-- Fixed minion status updates using wrong path for unlinked tokens
-- Fixed context menu not appearing in v13 (deprecated hook)
-- Fixed ranged damage using wrong variable names
-- Fixed die parsing failing for "1d6" format (substring bug)
-- Fixed string concatenation causing "961" instead of 16
-- Fixed defeated status not updating in combat tracker
-- Fixed `targetToken.update is not a function` error
-- Fixed duplicate `applySorceryEffect` method preventing recovery
-- Fixed Flex Effect CSS not applying (selector mismatch)
-- Fixed spell XP not refunding when deleted
-- Fixed missing Polish translations
-
-### Release
-
-- Versions 0.0.30 through 0.0.35 released with incremental improvements.
-
-## [0.0.26-0.0.29] - 2025-11-28 / 2025-12-03
-
-### Added
-
-- **Complete Damage Application System**: "Deal Damage" buttons for both PC and NPC damage rolls
-  - PC damage buttons for all types (melee, ranged, thrown, sorcery)
-  - NPC damage buttons for calculated damage application
-  - Flag-based button deactivation (one-time use, stays disabled on chat refresh)
-  - Armor reduction with minimum 1 damage on successful hit
-  - Type-specific damage mechanics for characters, antagonists, and minions
-- **NPC Damage Roll System**: Complete dialog and chat integration
-  - NPCDamageDialog for melee and ranged attacks
-  - Damage roll buttons on NPC sheets (minion and antagonist)
-  - Melee: Brawn value + weapon die + modifiers
-  - Ranged: weapon die + modifiers (no Brawn)
-  - Color-coded chat messages (green for minions, red for antagonists)
-  - damage.svg icon for NPC damage buttons
-- **"Roll Damage" Button**: Automatic damage prompts after successful attacks
-  - Appears on successful NPC attack chat messages
-  - Opens damage dialog and executes roll
-- **Visual HP Indicator**: Character sheet health status display
-  - Red highlight when character injured (actual < max HP)
-  - `.life-injured` CSS class with red background, border, and glow
-  - Conditional handlebars `{{#if (lt actual max)}}` helper
-- **Automatic Token Configuration**: Default settings based on actor type
-  - Characters: linked tokens by default (`actorLink: true`)
-  - NPCs: unlinked tokens by default (`actorLink: false`)
-  - Added `_preCreate` hook to ConanActor
-- **Unlinked Token Support**: Proper data handling for independent tokens
-  - Damage rolls use token-specific data
-  - Token ID and scene ID tracking in chat flags
-  - Correct actor instance resolution (linked vs unlinked)
-
-### Changed
-
-- **Hook Migration**: Updated to `renderChatMessageHTML` (deprecated `renderChatMessage`)
-- **PC Attack Dialog**: Button class changed from `.deal-damage-btn` to `.roll-damage-btn` to prevent handler conflicts
-- **Armor Calculation**: Improved for characters
-  - Now includes equipped armor items plus base armor value
-  - Proper calculation from all equipped armor pieces
-- **Character Sheet Updates**: Automatic refresh when HP changes from damage application
-- **NPC Damage Dialog**: Enhanced display
-  - Shows weapon information and Brawn value (melee attacks)
-  - Improved CSS with slider, scale markers, proper layout
-- **Magic Damage Animation**: Pulse effect now only applies to spellcasting rolls (not NPC damage)
-- **NPC Sheet Synchronization**: Proper token linking behavior
-  - Linked tokens sync with base actor
-  - Unlinked tokens are independent
-  - Buttons (Defence, Immobilized, Poisoned) work correctly from token sheets
-- **All PC Damage Functions**: Updated to include damage buttons with proper flags
-  - rollMeleeDamage, rollRangedDamage, rollThrownDamage
-  - rollSorceryFixedDamage, rollSorceryCustomDieDamage, rollSorceryWitsDamage
+- Magic damage chat headers: distinct purple pulsating style; melee/ranged/thrown colors restored with higher CSS specificity
+- Attribute display: `label` as main text, `abbr` as smaller caption below
+- Radio button styling in damage dialog: consistent dark center, shadow, proper alignment
+- Sheet synchronization: socket-based bidirectional sync between actor and token sheets using `baseActor` pattern
+- Hook migration: `renderChatMessage` → `renderChatMessageHTML`; context menu via direct `ChatLog.prototype._getEntryContextOptions` override (v13 compatible)
+- Die parsing: robust regex `/(\d*)d(\d+)/i` for formats `d6`, `1d6`, `2d8` with proper multi-die calculation
 
 ### Fixed
 
-- Character life points not updating after damage (changed `lifePoints.current` to `lifePoints.actual`)
+- Fixed-value magic damage always returning zero from chat
 - Antagonist life points using wrong data structure (object → number)
-- Armor not calculated from equipped items for player characters
-- Double 3D dice animation on NPC damage rolls (removed manual dice3d call)
-- Damage application not using correct actor data for unlinked tokens
-- "attackerNotFound" error from duplicate button class handlers
-- NPC attack dialog using wrong actor ID for unlinked tokens (now uses `this.actor._stats.systemId`)
-- Minion showing "DEFEATED" banner when only wounded (now correctly sets `defeated: false`)
-- rollRangedDamage returning undefined (changed `totalDamage` to `damageTotal`)
-- Character HP not updating correctly after receiving damage (actorLink issue)
-- Damage calculation ignoring pending form edits (added blur() before applying damage)
-- Defence and Immobilized buttons not working on NPC token sheets
-- NPC sheets incorrectly synchronizing when tokens not linked to actor data
-- Duplicate translation keys in language files (weaponName, damageDie, damageModifier)
-- Missing "modifier" translation in Dialog.difficulty section
-- CSS issues in NPC damage dialog (missing styles for sections and buttons)
-- Damage-result section styling in chat messages
-
-### Technical
-
-- Added `.life-injured` CSS class with rgba red background and box-shadow
-- Added `.deal-pc-damage-btn` CSS styling (red gradient matching damage theme)
-- Modified character sheet template for conditional HP class application
-- Added `dealPCDamageBtn` handler in conan.mjs renderChatMessageHTML hook
-- Chat message flags: `damageDealt`, `totalDamage`, `attackerId`, `tokenId`, `sceneId`
-- Both PC and NPC damage button handlers check `damageDealt` flag on render and after click
-- Token configuration via `_preCreate` hook
-- Improved damage application with automatic sheet re-rendering
-- Blur() mechanism to save pending form edits before damage application
-- Removed orphaned code from roll-mechanics.mjs
-
-## [0.0.22-0.0.25] - 2025-11-21 / 2025-11-25
-
-### Added
-
-- **Modularized Sorcery Damage System**: Complete refactoring with three independent options
-  - Wits die, custom die, and fixed value options
-  - Exported all roll logic to `roll-mechanics.mjs` and `roll-sorcery-damage.mjs`
-  - Full localization support (PL/EN)
-- **"Deal Damage" Button**: Chat message integration after successful attacks
-  - Works for PCs, NPCs, and magic attacks
-  - Opens damage dialog and executes the roll automatically
-  - Token-based item ID support
-
-### Changed
-
-- **Magic Damage Chat Messages**: Visual improvements
-  - Purple, pulsating header with distinct styling
-  - Darker purple for better visibility with magical effect
-  - Type-specific CSS for magic damage sections
-- **Attribute Display**: Updated character sheet layout
-  - Attribute `label` now shown as main (large) text
-  - `abbr` displayed as smaller caption below
-  - Improved visual hierarchy
-- **Chat Header Colors**: Restored distinct colors for damage types
-  - Melee, ranged, thrown, and magic each have unique colors
-  - Improved CSS specificity to prevent color override
-- **Radio Button Styling**: Enhanced damage dialog appearance
-  - Always visually aligned with dark center
-  - Visible shadow and consistent look for all states
-  - Better visual feedback
-- **Sheet Synchronization**: Socket-based bidirectional sync
-  - All changes between actor sheets (actors tab) and token sheets synchronized
-  - Always updates baseActor for data consistency
-  - Damage dialog: correct weapon preselection and parameter passing for all attack types
-- **Code Architecture**: Improved modularity and maintainability
-  - Better separation of concerns
-  - Cleaner dialog logic for parameter passing and result handling
-  - Updated all sheet actions to use baseActor
-
-### Fixed
-
-- Fixed-value magic damage from chat now uses entered value (was always zero)
-- Chat message header color for melee/ranged/thrown no longer overridden by magic purple
-- Radio button visual bugs (misaligned, wrong color, missing shadow)
-- Bidirectional sync: changes from token sheet now update main actor and vice versa
-- Dialog parameter passing for magic and ranged damage from chat
-- Parameter passing and dialog resolve logic for all three magic damage options
-- Localization key usage and added missing keys for new features
-- Chat message display and button logic for token-based item IDs
-- Pełna lokalizacja opcji stałych obrażeń magicznych (fixed value) w pl.json i en.json
-- Poprawki wyświetlania i przekazywania parametrów dla wszystkich trzech typów obrażeń magicznych
-
-### Technical
-
-- Roll logic fully exported to dedicated modules
-- CSS specificity improvements for chat message headers
-- Socket-based synchronization for actor/token sheet consistency
-- BaseActor pattern for all sheet operations
+- Character HP not updating after damage (`lifePoints.current` → `lifePoints.actual`)
+- Unlinked token damage path (`actorData.system` → `delta.system`)
+- Ranged damage returning `undefined` (`totalDamage` → `damageTotal`)
+- Duplicate `applySorceryEffect` method blocking recovery
+- Defeated banner appearing when minion only wounded
+- Context menu not shown in Foundry v13 (deprecated hook)
+- Double 3D dice animation on NPC rolls
+- `targetToken.update is not a function` error
+- Spell XP not refunding on deletion; missing Polish/English localization keys
 
 ## [0.0.1-0.0.21] - 2025-10-27 / 2025-11-18
 

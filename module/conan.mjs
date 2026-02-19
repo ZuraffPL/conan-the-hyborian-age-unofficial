@@ -19,6 +19,8 @@ import { ConanSocket } from "./helpers/socket.mjs";
 import { FlexEffectDialog } from "./helpers/flex-dialog.mjs";
 import { PoisonedDialog } from "./helpers/poisoned-dialog.mjs";
 import { initializeStaminaEffects } from "./helpers/stamina-effects.mjs";
+import { TaleDialog } from "./helpers/tale.mjs";
+import { TalePlayerDialog } from "./helpers/tale.mjs";
 
 /**
  * Initialize system
@@ -32,6 +34,8 @@ Hooks.once("init", async function() {
     ConanItem,
     FlexEffectDialog,
     PoisonedDialog,
+    TaleDialog,
+    TalePlayerDialog,
     config: CONAN
   };
 
@@ -92,6 +96,9 @@ Hooks.once("init", async function() {
   // Initialize stamina effects system EARLY (before ChatLog instances are created)
   initializeStaminaEffects();
 
+  // Rejestracja ustawień persistence dla okna Opowieści
+  TaleDialog.registerSettings();
+
   console.log("Conan: The Hyborian Age | System initialized");
 });
 
@@ -100,6 +107,12 @@ Hooks.once("init", async function() {
  */
 Hooks.once("ready", async function() {
   console.log("Conan: The Hyborian Age | System ready");
+
+  // Przywróć stan timera Opowieści (wznawia jeśli działał przed przeładowaniem)
+  TaleDialog.restoreState();
+
+  // Otwórz okno Opowieści automatycznie przy starcie (tylko GM)
+  if (game.user.isGM) TaleDialog.open();
   
   // Initialize socket handler
   ConanSocket.initialize();
@@ -849,5 +862,38 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       await applyNPCDamage(totalDamage, targetToken, attacker);
     });
   }
+});
+
+/**
+ * Dodaj przycisk "Opowieść" do paska Scene Controls (lewa kolumna Foundry).
+ *
+ * W Foundry VTT v13 controls to zwykły obiekt rekordów.
+ * Nowa grupa wymaga pola `layer` oraz `tools: {}`.
+ * Indywidualny przycisk (bez podmenu) deklarujemy wewnątrz tools z `button: true`.
+ */
+Hooks.on("getSceneControlButtons", (controls) => {
+  controls.tale = {
+    name: "tale",
+    title: game.i18n.localize("CONAN.Tale.button"),
+    icon: "fas fa-scroll",
+    layer: "tale",
+    visible: true,
+    tools: {}
+  };
+
+  controls.tale.tools.openTale = {
+    name: "openTale",
+    title: game.i18n.localize("CONAN.Tale.button"),
+    icon: "fas fa-scroll",
+    visible: true,
+    button: true,
+    onChange: () => {
+      if (game.user.isGM) {
+        TaleDialog.open();
+      } else {
+        TalePlayerDialog.open();
+      }
+    }
+  };
 });
 

@@ -1,0 +1,90 @@
+<form class="tale-form">
+
+  {{!-- Nazwa opowieści --}}
+  <div class="tale-name-group">
+    <label for="tale-name-input" class="tale-label">
+      <i class="fas fa-feather-alt"></i>
+      {{localize "CONAN.Tale.nameLabel"}}
+    </label>
+    <input
+      id="tale-name-input"
+      class="tale-name-input"
+      type="text"
+      name="taleName"
+      value="{{taleName}}"
+      placeholder="{{localize "CONAN.Tale.namePlaceholder"}}"
+      autocomplete="off"
+    />
+  </div>
+
+  {{!-- Zegar --}}
+  <div class="tale-timer-wrapper">
+    <div class="tale-timer-display">{{time}}</div>
+  </div>
+
+  {{!-- Przyciski sterowania --}}
+  <div class="tale-controls">
+    <button
+      type="button"
+      class="tale-btn tale-btn-start"
+      data-action="taleStart"
+      {{#if isRunning}}disabled{{/if}}
+    >
+      <i class="fas fa-play"></i>
+      {{localize "CONAN.Tale.btnStart"}}
+    </button>
+
+    <button
+      type="button"
+      class="tale-btn tale-btn-pause"
+      data-action="talePause"
+      {{#unless isRunning}}disabled{{/unless}}
+    >
+      <i class="fas fa-pause"></i>
+      {{localize "CONAN.Tale.btnPause"}}
+    </button>
+
+    <button
+      type="button"
+      class="tale-btn tale-btn-stop"
+      data-action="taleStop"
+    >
+      <i class="fas fa-stop"></i>
+      {{localize "CONAN.Tale.btnStop"}}
+    </button>
+  </div>
+
+  {{!-- Sekcja Odpoczynek --}}
+  {{#if recoveryChars.length}}
+  <div class="tale-recovery-section">
+    <div class="tale-section-header">
+      <i class="fas fa-bed"></i>
+      {{localize "CONAN.Tale.recoveryTitle"}}
+    </div>
+    <div class="tale-recovery-list">
+      {{#each recoveryChars}}
+      <div class="tale-recovery-entry" data-actor-id="{{actorId}}">
+        <img src="{{img}}" alt="{{name}}" class="tale-recovery-avatar" />
+        <span class="tale-recovery-name">{{name}}</span>
+        <div class="tale-recovery-hp-wrapper">
+          <span class="tale-recovery-hp" data-actor-id="{{actorId}}">{{hpValue}} / {{hpMax}}</span>
+          <div class="tale-recovery-hp-bar-track" data-actor-id="{{actorId}}" style="--empty-pct: {{hpEmptyPercent}}%"></div>
+        </div>
+        <button
+          type="button"
+          class="tale-btn tale-btn-recovery"
+          data-action="taleRecovery"
+          data-actor-id="{{actorId}}"
+          title="{{localize "CONAN.Tale.recoveryBtn"}}"
+          {{#if usesExhausted}}disabled{{/if}}
+        >
+          <i class="fas fa-bed"></i>
+          <span class="tale-recovery-badge">{{usesLeft}}</span>
+        </button>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+
+</form>

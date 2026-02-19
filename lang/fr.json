@@ -637,7 +637,24 @@
       "rolling": "Lancement...",
       "unconscious": "Personnage Inconscient - Survit",
       "death": "Le Personnage Meurt",
-      "description": "Lorsque les Points de Vie atteignent 0, effectuez un test de Résistance (Difficulté 8). Le succès signifie l'inconscience, l'échec signifie la mort. Vous pouvez utiliser l'Effet Flex ou dépenser de l'Endurance pour améliorer le résultat."    }
+      "description": "Lorsque les Points de Vie atteignent 0, effectuez un test de Résistance (Difficulté 8). Le succès signifie l'inconscience, l'échec signifie la mort. Vous pouvez utiliser l'Effet Flex ou dépenser de l'Endurance pour améliorer le résultat."
+    },
+
+    "Tale": {
+      "title": "L'Histoire",
+      "button": "L'Histoire",
+      "nameLabel": "Nom de l'histoire",
+      "namePlaceholder": "Entrez le nom de l'histoire...",
+      "btnStart": "Début de l'histoire",
+      "btnPause": "Pause",
+      "btnStop": "Fin de l'histoire",
+      "recoveryTitle": "Récupération",
+      "recoveryBtn": "Récupération",
+      "recoveryChatHeader": "{name} se repose et récupère des forces",
+      "recoveryChatLP": "+{heal} Points de Vie",
+      "recoveryChatFullHP": "Points de vie déjà au maximum",
+      "recoveryChatStamina": "+1 Endurance"
+    }
   }
 }
 

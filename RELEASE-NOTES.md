@@ -1,62 +1,57 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.58 - NPC Name Validation Fix
+## Current Version: v0.0.60 - Tale Timer & Recovery System
 
 ### Overview
 
-System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.58 naprawia błąd walidacji nazwy NPC, który uniemożliwiał zmianę nazwy sług i antagonistów.
+System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.60 wprowadza kompletny system Opowieści z timerem sesji oraz sekcją Odpoczynek dla postaci graczy.
 
-### Najnowsze Zmiany (v0.0.58)
+### What's New in v0.0.60
 
-#### Naprawa Walidacji Nazwy NPC
+#### Tale Timer — Session Timer for GM
 
-**Problem**:
-- Po skasowaniu nazwy na karcie sługusa/antagonisty pojawiał się błąd: `validation errors: name: may not be undefined`
-- Nazwa nie aktualizowała się w sidebarze po zmianie
-- Puste pole nazwy powodowało błędy walidacji modelu danych
+- New **Tale dialog** accessible from the toolbar (scroll icon) — GM only
+- HH:MM:SS countdown timer with **Start / Pause / End Tale** controls
+- Timer state is **persistent across reloads** (stored in `game.settings`, world scope)
+- Auto-restores on F5: GM dialog reopens automatically if a tale was active; player view opens frozen and waits for GM's Start signal
+- Default dialog position: left sidebar, below the toolbar
 
-**Rozwiązanie**:
-- Dodano walidację pola nazwy dla NPC w metodzie `_setupNPCFormHandling()`
-- Puste pole nazwy jest teraz automatycznie wypełniane poprzednią wartością
-- Zmiany dotyczą zarówno arkuszy Minion jak i Antagonist
-- Nazwa aktualizuje się w sidebarze natychmiast po zmianie
+#### Recovery Section
 
-**Zachowanie**:
-```
-- Wpisanie nowej nazwy: Aktualizacja natychmiastowa
-- Skasowanie nazwy: Pole wraca do poprzedniej wartości
-- Zmiana widoczna w sidebarze actors po zapisaniu
-```
+- Appears inside the Tale dialog for both GM and players
+- **GM** sees all currently connected players with their characters
+- **Player** sees only their own character
+- Live HP display (`actual / max`) with **animated gradient health bar** — green shrinks first as HP drops, revealing red
+- Bed icon button (🛏) with tooltip — **2 uses per tale**, resets on Tale End
 
-### Poprzednia Wersja (v0.0.57)
+#### Recovery Mechanics
 
-#### Naprawa Wyświetlania Zasięgu Broni
+| Condition | Effect |
+|-----------|--------|
+| HP < max  | Restore `ceil(max / 2)` Life Points (capped at max) + 1 Stamina |
+| HP = max  | +1 Stamina only, no healing |
 
-**Problem**:
-- Broń na kartach postaci pokazywała `[object Object]` w miejscu zasięgu
-- Powodowało to problemy z czytelnością i użytkowaniem systemu
+- Styled **chat message** on use: character name header, recovered LP row, +1 Stamina row
+- Fully localized in **PL / EN / FR**
 
-**Rozwiązanie**:
-- Zmieniono format pola `range` z obiektu na string w template.json
-- Dodano automatyczną migrację dla istniejących broni
-- Wszystkie bronie (nowe i stare) teraz wyświetlają zasięg poprawnie
+#### Multiplayer Reliability Fixes
 
-**Poprawne wyświetlanie**:
-```
-Broń biała:     "Zwarcie" / "Touch"
-Broń rzucana:   "Bliski/1 Obszar" / "Close/1 Zone"
-Broń dystansowa (lekka/średnia): "Średni/3 Obszary" / "Medium/3 Zones"
-Broń dystansowa (ciężka):        "Odległy/8 Obszarów" / "Distant/8 Zones"
-```
+- `userConnected` hook triggers `render({ force: true })` on GM dialog when a player joins or leaves
+- `setTimeout(..., 0)` defers auto-render after `ready` to fix `Cannot read properties of null (reading 'offsetWidth')` error
+- Player dialog widened to 400px — character name always fully visible
 
-**Migracja automatyczna**:
-- Istniejące bronie z formacie obiektu są automatycznie konwertowane przy załadowaniu
-- Nie wymaga żadnych działań ze strony użytkownika
-- Zachowana kompatybilność wsteczna
+#### Dead Code Removed
 
-### Poprzednia Wersja (v0.0.56)
+- `health` and `power` fields removed from `template.json` base template (never used)
+- `templates/actor/parts/actor-header.hbs` deleted (only file referencing removed fields)
 
-#### System Adjustment dla Punktów Życia
+### Previous Version (v0.0.59) — Tale Timer Initial Release
+
+- Tale Timer core: GM dialog, player read-only view, persistent state, socket events (`taleStart`, `talePause`, `taleStop`, `taleSync`, `taleNameUpdate`)
+
+### Previous Version (v0.0.58) — NPC Name Validation Fix
+
+#### NPC Name Validation
 
 **Mechanika**:
 - Dodano pole `lifePoints.adjustment` do śledzenia ręcznych modyfikacji

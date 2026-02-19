@@ -636,11 +636,27 @@
     "FightForLife": {
       "title": "Walka o Życie",
       "button": "Walka o Życie",
-      "warning": "Punkty Życia na 0 - Walka o Życie!",
+      "warning": "Punkty życia na 0 - Walka o życie!",
       "rolling": "Rzucanie...",
       "unconscious": "Postać Nieprzytomna - Przeżyła",
       "death": "Postać Umiera",
-      "description": "Gdy Punkty Życia spadną do 0, wykonaj test Hartu (trudność 8). Sukces oznacza nieprzytomność, porażka śmierć. Możesz użyć Efektu Brawury lub wydać Wytrwałość, aby poprawić wynik."
+      "description": "Gdy Punkty życia spadną do 0, wykonaj test Hartu (trudność 8). Sukces oznacza nieprzytomność, porażka śmierć. Możesz użyć Efektu Brawury lub wydać Wytrwałość, aby poprawić wynik."
+    },
+
+    "Tale": {
+      "title": "Opowieść",
+      "button": "Opowieść",
+      "nameLabel": "Nazwa opowieści",
+      "namePlaceholder": "Wpisz nazwę opowieści...",
+      "btnStart": "Start opowieści",
+      "btnPause": "Pauza",
+      "btnStop": "Koniec opowieści",
+      "recoveryTitle": "Odpoczynek",
+      "recoveryBtn": "Odpoczynek",
+      "recoveryChatHeader": "{name} odpoczywa i odzyskuje siły",
+      "recoveryChatLP": "+{heal} Punktów Życia",
+      "recoveryChatFullHP": "Punkty życia są pełne",
+      "recoveryChatStamina": "+1 Wytrzymałość"
     }
   }
 }
