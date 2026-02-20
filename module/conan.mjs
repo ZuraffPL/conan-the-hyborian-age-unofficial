@@ -483,8 +483,7 @@ Hooks.on("combatRound", async (combat, updateData, updateOptions) => {
           <div class="conan-poison-drain">
             <div class="poison-drain-info">
               <i class="fas fa-skull-crossbones" style="color: #15a20e;"></i>
-              <strong>${actor.name}</strong> ${game.i18n.localize('CONAN.Poisoned.lifeDrain')} 
-              ${multiplier > 1 ? `(x${multiplier}) ` : ''}(${currentLife} → ${newLife})
+              <span><strong>${actor.name}</strong> ${game.i18n.localize('CONAN.Poisoned.lifeDrain')}${multiplier > 1 ? ` (x${multiplier})` : ''} (${currentLife} → ${newLife})</span>
             </div>
         `;
         
