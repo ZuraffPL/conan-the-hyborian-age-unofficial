@@ -48,7 +48,7 @@
         "max": 100
       },
       "lifePoints": {
-        "actual": 10,
+        "value": 10,
         "max": 50,
         "adjustment": 0
       },
@@ -171,7 +171,10 @@
         "sorcery": 10
       },
       "armor": 0,
-      "lifePoints": 20,
+      "lifePoints": {
+        "value": 20,
+        "max": 20
+      },
       "damage": {
         "melee": {
           "name": "",

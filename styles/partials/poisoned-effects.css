@@ -861,6 +861,30 @@
   }
 }
 
+/* Winds of Fate banner - standalone below dice boxes */
+.conan-roll-chat .winds-of-fate-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 12px 0;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #5a1a1a 0%, #8b2a2a 100%);
+  color: #ff9999;
+  border: 2px solid #a83a3a;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 13px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(168, 58, 58, 0.4);
+  animation: windsShake 0.5s ease-in-out;
+}
+
+.conan-roll-chat .winds-of-fate-banner i {
+  font-size: 16px;
+  color: #ff6666;
+}
+
 /* Fight for Life roll chat styling */
 .conan-roll-chat.fight-for-life-roll {
   border-left: 4px solid #8b4513;

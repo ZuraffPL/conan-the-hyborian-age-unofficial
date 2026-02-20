@@ -127,7 +127,7 @@ export class CharacterCreationDialog extends foundry.applications.api.Handlebars
     
     if (baseLifePointsMap[this.selectedOrigin]) {
       updateData["system.lifePoints"] = {
-        actual: totalLifePoints,
+        value: totalLifePoints,
         max: totalLifePoints
       };
     }

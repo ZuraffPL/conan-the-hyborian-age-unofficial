@@ -1,3 +1,5 @@
+import { getFlexDieColorset } from "./dice-utils.mjs";
+
 /**
  * Dialog for making attack rolls
  */
@@ -124,7 +126,7 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     const attributeResult = attributeRoll.total;
     
     // Roll Flex die (unless disabled)
-    const flexRoll = flexDieDisabled ? null : await new Roll(`1${flexDie}`).evaluate();
+    const flexRoll = flexDieDisabled ? null : await new Roll(`1${flexDie}[${getFlexDieColorset()}]`).evaluate();
     const flexResult = flexDieDisabled ? 0 : flexRoll.total;
     const flexMax = parseInt(flexDie.substring(1));
     
@@ -331,9 +333,9 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     if (game.dice3d) {
       // Show both dice simultaneously
       game.dice3d.showForRoll(attributeRoll, game.user, true);
-      game.dice3d.showForRoll(flexRoll, game.user, true, null, false, null, { 
-        colorset: "bronze" 
-      });
+      if (flexRoll) {
+        game.dice3d.showForRoll(flexRoll, game.user, true);
+      }
     }
     
     // Handle Flex Effect

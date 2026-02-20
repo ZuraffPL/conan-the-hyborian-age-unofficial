@@ -145,7 +145,11 @@
             </span>
           </div>
           
-          <input type="number" name="system.lifePoints" value="{{system.lifePoints}}" min="0" max="999" data-dtype="Number" class="defense-value" />
+          <div style="display:flex; align-items:center; gap:4px; justify-content:center;">
+            <input type="number" name="system.lifePoints.value" value="{{system.lifePoints.value}}" min="0" max="9999" data-dtype="Number" class="defense-value" style="width:50px;" title="{{localize 'CONAN.Resources.actual'}}" />
+            <span style="color:#8b4513; font-weight:bold;">/</span>
+            <input type="number" name="system.lifePoints.max" value="{{system.lifePoints.max}}" min="0" max="9999" data-dtype="Number" class="defense-value" style="width:50px;" title="{{localize 'CONAN.Resources.max'}}" />
+          </div>
         </div>
       </div>
       </div>

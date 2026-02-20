@@ -1,10 +1,48 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.60 - Tale Timer & Recovery System
+## Current Version: v0.0.61 - Token Bars, Combat Icons & Flex Die Colorsets
 
 ### Overview
 
-System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.60 wprowadza kompletny system Opowieści z timerem sesji oraz sekcją Odpoczynek dla postaci graczy.
+System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.61 naprawia obsługę pasków HP na tokenach dla wszystkich typów aktorów, dodaje ikony stanów w trackerze walki oraz wprowadza inteligentny dobór koloru kości Flex w Dice So Nice.
+
+### What's New in v0.0.61
+
+#### Token HP Bars — Native Foundry Support
+
+- **`lifePoints.value`** — renamed from `lifePoints.actual` across the entire system; Foundry now natively recognises `{ value, max }` and renders the HP bar correctly
+- HP bar works for **characters**, **antagonists** (migrated from scalar to object), and can be manually configured in token settings
+- Existing characters and antagonists are **auto-migrated** on first load — no manual intervention needed
+- The `getBarAttribute` override hack is removed; `system.json` `primaryTokenAttribute` points to `lifePoints.value`
+
+#### Combat Tracker Status Icons
+
+| Icon | Condition | Actor Types |
+|------|-----------|-------------|
+| `wounded.svg` | Active `wounded` status effect | Minion |
+| `Poisoned.svg` | `system.poisoned === true` | All types |
+
+- Icons fully visible in both sidebar tracker and detached popout (overflow clipping fixed)
+
+#### Flex Die Dynamic Colorset (Dice So Nice)
+
+- New `dice-utils.mjs` utility reads the player's DSN background colour and picks one of two custom colorsets for the flex die:
+  - **`conan_flex_dark`** — very dark body with gold pips (for light DSN backgrounds)
+  - **`conan_flex_light`** — warm cream body with dark crimson pips (for dark DSN backgrounds)
+- Contrast is computed from relative luminance (WCAG formula) so the flex die is always visually distinct from the attribute die
+- Applied to all flex die rolls: attack, and all three sorcery damage types
+
+#### Fight for Life — Full Trigger Coverage
+
+- Fight for Life dialog now triggers when **any** source of damage (NPC attack, poison drain) reduces a character's HP to 0
+- Previously only triggered from the poison drain path; NPC damage path was missing the check
+
+#### Winds of Fate Layout Fix
+
+- "Winds of Fate" banner moved outside the dice flex row — no longer causes misaligned layout in fight-for-life chat cards
+- Styled as a standalone dark-red gradient banner below the dice section
+
+### Previous Version (v0.0.60) — Tale Timer & Recovery System
 
 ### What's New in v0.0.60
 

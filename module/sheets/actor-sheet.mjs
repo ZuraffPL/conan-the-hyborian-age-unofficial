@@ -115,16 +115,16 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
         // Special handling for origin change - set initial life points
         if (fieldName === "system.origin" && fieldValue) {
           const lifePointsMap = {
-            "hills": { actual: 30, max: 30 },
-            "streets": { actual: 22, max: 22 },
-            "steppes": { actual: 26, max: 26 },
-            "north": { actual: 32, max: 32 },
-            "wilds": { actual: 30, max: 30 },
-            "civilized": { actual: 22, max: 22 },
-            "unknown": { actual: 26, max: 26 },
-            "jhebbal": { actual: 28, max: 28 },
-            "acheron": { actual: 20, max: 20 },
-            "demon": { actual: 26, max: 26 }
+            "hills": { value: 30, max: 30 },
+            "streets": { value: 22, max: 22 },
+            "steppes": { value: 26, max: 26 },
+            "north": { value: 32, max: 32 },
+            "wilds": { value: 30, max: 30 },
+            "civilized": { value: 22, max: 22 },
+            "unknown": { value: 26, max: 26 },
+            "jhebbal": { value: 28, max: 28 },
+            "acheron": { value: 20, max: 20 },
+            "demon": { value: 26, max: 26 }
           };
           
           if (lifePointsMap[fieldValue]) {
@@ -152,8 +152,8 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
             const adjustment = this.actor.system.lifePoints.adjustment || 0;
             const newMaxLP = originBase + (2 * fieldValue) + adjustment;
             
-            if (this.actor.system.lifePoints.actual > newMaxLP) {
-              updateData["system.lifePoints.actual"] = newMaxLP;
+            if (this.actor.system.lifePoints.value > newMaxLP) {
+              updateData["system.lifePoints.value"] = newMaxLP;
             }
           }
         }
@@ -171,10 +171,10 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
         }
         
         // Special handling for actual life points - cannot exceed max
-        if (fieldName === "system.lifePoints.actual") {
+        if (fieldName === "system.lifePoints.value") {
           const maxLP = this.actor.system.lifePoints.max;
           if (fieldValue > maxLP) {
-            updateData["system.lifePoints.actual"] = maxLP;
+            updateData["system.lifePoints.value"] = maxLP;
             ui.notifications.warn(`Aktualne punkty życia nie mogą przekroczyć maksymalnych (${maxLP})`);
           }
         }
@@ -194,9 +194,9 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
           }
           
           // Cap actual if needed
-          const actualLP = this.actor.system.lifePoints.actual;
+          const actualLP = this.actor.system.lifePoints.value;
           if (actualLP > fieldValue) {
-            updateData["system.lifePoints.actual"] = fieldValue;
+            updateData["system.lifePoints.value"] = fieldValue;
           }
         }
         
@@ -604,7 +604,7 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
       wits: this._compareValue(current.attributes.wits.value, initial.wits),
       
       // Life Points
-      lifePointsActual: (current.lifePoints.actual < current.lifePoints.max) ? 'life-injured' : '',
+      lifePointsActual: (current.lifePoints.value < current.lifePoints.max) ? 'life-injured' : '',
       lifePointsMax: this._compareValue(current.lifePoints.max, initial.lifePoints),
       
       // Stamina

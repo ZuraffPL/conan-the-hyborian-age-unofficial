@@ -1,3 +1,5 @@
+import { getFlexDieColorset } from "./dice-utils.mjs";
+
 /**
  * Dialog for spellcasting rolls in Conan: The Hyborian Age
  */
@@ -112,7 +114,7 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     }
     
     // Validate costs
-    const currentLP = this.actor.system.lifePoints.actual;
+    const currentLP = this.actor.system.lifePoints.value;
     const currentStamina = this.actor.system.stamina.value;
     
     if (lifePointsCost > currentLP) {
@@ -135,7 +137,7 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     // Deduct costs
     const updates = {};
     if (lifePointsCost > 0) {
-      updates["system.lifePoints.actual"] = Math.max(0, currentLP - lifePointsCost);
+      updates["system.lifePoints.value"] = Math.max(0, currentLP - lifePointsCost);
     }
     if (staminaCost > 0) {
       updates["system.stamina.value"] = Math.max(0, currentStamina - staminaCost);
@@ -227,7 +229,7 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     const witsResult = witsRoll.total;
     
     // Roll Flex die (unless disabled)
-    const flexRoll = flexDieDisabled ? null : await new Roll(`1${flexDie}`).evaluate();
+    const flexRoll = flexDieDisabled ? null : await new Roll(`1${flexDie}[${getFlexDieColorset()}]`).evaluate();
     const flexResult = flexDieDisabled ? 0 : flexRoll.total;
     const flexMax = parseInt(flexDie.substring(1));
     
@@ -249,11 +251,7 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
       const promises = [];
       promises.push(game.dice3d.showForRoll(witsRoll, game.user, false));
       if (!flexDieDisabled) {
-        promises.push(game.dice3d.showForRoll(flexRoll, game.user, false, null, false, null, {
-          appearance: {
-            colorset: "bronze"
-          }
-        }));
+        promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
       }
       
       // Wait for both animations to complete

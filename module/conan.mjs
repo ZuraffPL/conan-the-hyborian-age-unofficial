@@ -21,6 +21,7 @@ import { PoisonedDialog } from "./helpers/poisoned-dialog.mjs";
 import { initializeStaminaEffects } from "./helpers/stamina-effects.mjs";
 import { TaleDialog } from "./helpers/tale.mjs";
 import { TalePlayerDialog } from "./helpers/tale.mjs";
+import { getFlexDieColorset } from "./helpers/dice-utils.mjs";
 
 /**
  * Initialize system
@@ -137,6 +138,38 @@ Hooks.once("ready", async function() {
     
     return this;
   };
+});
+
+/**
+ * Register two custom Dice So Nice colorsets for the flex die.
+ *   conan_flex_dark  — dark mahogany + gold pips (for players with light dice)
+ *   conan_flex_light — warm cream + dark crimson pips (for players with dark dice)
+ *
+ * dice-utils.mjs → getFlexDieColorset() picks the one that contrasts best
+ * with the player's attribute dice colour.
+ */
+Hooks.once("diceSoNiceReady", (dice3d) => {
+  dice3d.addColorset({
+    name: "conan_flex_dark",
+    description: "Conan Flex Die (Dark)",
+    category: "Conan: The Hyborian Age",
+    foreground: "#f5c840",   // gold text/pips
+    background: "#1a0800",   // very dark brownish-black
+    outline: "#c8860a",      // dark gold outline
+    texture: "none",
+    edge: "#8b4513"           // saddle brown edge
+  }, "default");
+
+  dice3d.addColorset({
+    name: "conan_flex_light",
+    description: "Conan Flex Die (Light)",
+    category: "Conan: The Hyborian Age",
+    foreground: "#8b0000",   // dark crimson text/pips
+    background: "#f5f0e0",   // warm cream / parchment
+    outline: "#6b3a2a",      // dark brown outline
+    texture: "none",
+    edge: "#d4a76a"           // tan edge
+  }, "default");
 });
 
 /**
@@ -350,7 +383,19 @@ Hooks.on("renderCombatTracker", (app, html, data) => {
         tokenEffects.appendChild(immobilizedIcon);
       }
       
-      // Note: Wounded icon is now displayed via status effect system
+      // Add Wounded icon if active
+      const wounded = actor.system.wounded || false;
+      if (wounded) {
+        const woundedIcon = document.createElement("img");
+        woundedIcon.src = "systems/conan-the-hyborian-age/assets/icons/wounded.svg";
+        woundedIcon.classList.add("token-effect");
+        woundedIcon.title = game.i18n.localize("CONAN.NPC.wounded");
+        woundedIcon.style.border = "2px solid #dc143c";
+        woundedIcon.style.borderRadius = "3px";
+        woundedIcon.style.width = "20px";
+        woundedIcon.style.height = "20px";
+        tokenEffects.appendChild(woundedIcon);
+      }
     }
     
     // Handle antagonist actors
@@ -385,6 +430,19 @@ Hooks.on("renderCombatTracker", (app, html, data) => {
         tokenEffects.appendChild(immobilizedIcon);
       }
     }
+
+    // Add Poisoned icon for ALL actor types if poisoned
+    if (actor.system.poisoned) {
+      const poisonedIcon = document.createElement("img");
+      poisonedIcon.src = "systems/conan-the-hyborian-age/assets/icons/Poisoned.svg";
+      poisonedIcon.classList.add("token-effect", "poisoned-icon");
+      poisonedIcon.title = game.i18n.localize("CONAN.Poisoned.title");
+      poisonedIcon.style.border = "2px solid #15a20e";
+      poisonedIcon.style.borderRadius = "3px";
+      poisonedIcon.style.width = "20px";
+      poisonedIcon.style.height = "20px";
+      tokenEffects.appendChild(poisonedIcon);
+    }
   });
 });
 
@@ -412,12 +470,13 @@ Hooks.on("combatRound", async (combat, updateData, updateOptions) => {
         const multiplier = actor.system.poisonEffects?.effect3Multiplier || 1;
         
         // Characters: lose multiplier * 1 actual life points; Antagonists: lose multiplier * 1 from life points pool
-        const currentLife = actor.type === "character" ? actor.system.lifePoints.actual : actor.system.lifePoints;
+        const currentLife = actor.type === "character"
+          ? actor.system.lifePoints.value
+          : (actor.system.lifePoints?.value ?? actor.system.lifePoints ?? 0);
         const lifeLoss = multiplier;
         const newLife = Math.max(0, currentLife - lifeLoss);
         
-        const updatePath = actor.type === "character" ? "system.lifePoints.actual" : "system.lifePoints";
-        await actor.update({ [updatePath]: newLife });
+        await actor.update({ "system.lifePoints.value": newLife });
         
         // Build chat message content
         let chatContent = `
@@ -625,7 +684,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       
       // Roll formulas
       const formula = `1${gritDie} + ${gritValue}`;
-      const flexFormula = flexDieDisabled ? null : `1${flexDie}`;
+      const flexFormula = flexDieDisabled ? null : `1${flexDie}[${getFlexDieColorset()}]`;
       
       // Evaluate rolls
       const mainRoll = await new Roll(formula).evaluate();
@@ -647,9 +706,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
         const promises = [];
         promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
         if (!flexDieDisabled) {
-          promises.push(game.dice3d.showForRoll(flexRoll, game.user, false, null, false, null, {
-            appearance: { colorset: "bronze" }
-          }));
+          promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
         }
         await Promise.all(promises);
       }
@@ -687,7 +744,6 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
               <div class="dice-roll attribute-die">
                 <div class="die-label">${game.i18n.localize('CONAN.Roll.attributeDie')}</div>
                 <div class="die-result">${gritDieResult}</div>
-                ${windsOfFate ? `<div class="winds-of-fate"><i class="fas fa-wind"></i> ${game.i18n.localize('CONAN.Roll.windsOfFate')}</div>` : ''}
               </div>
               ${!flexDieDisabled ? `
               <div class="dice-roll flex-die ${flexTriggered ? 'flex-triggered' : ''}">
@@ -697,6 +753,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
               </div>
               ` : ''}
             </div>
+            ${windsOfFate ? `<div class="winds-of-fate-banner"><i class="fas fa-wind"></i> ${game.i18n.localize('CONAN.Roll.windsOfFate')}</div>` : ''}
             <div class="roll-calculation">
               <span class="calc-component">${gritDieResult}</span>
               <span class="calc-operator">+</span>

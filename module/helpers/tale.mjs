@@ -235,9 +235,9 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
         usesLeft,
         usesExhausted: usesLeft <= 0,
         playerName:    user.name,
-        hpValue:        actor.system.lifePoints?.actual ?? 0,
+        hpValue:        actor.system.lifePoints?.value ?? 0,
         hpMax:          actor.system.lifePoints?.max    ?? 0,
-        hpEmptyPercent: 100 - Math.round(((actor.system.lifePoints?.actual ?? 0) / Math.max(actor.system.lifePoints?.max ?? 1, 1)) * 100)
+        hpEmptyPercent: 100 - Math.round(((actor.system.lifePoints?.value ?? 0) / Math.max(actor.system.lifePoints?.max ?? 1, 1)) * 100)
       };
     });
 
@@ -412,7 +412,7 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
     const actor = game.actors.get(actorId);
     if (actor) {
       const lpMax    = actor.system.lifePoints?.max    ?? 0;
-      const lpActual = actor.system.lifePoints?.actual ?? 0;
+      const lpActual = actor.system.lifePoints?.value ?? 0;
       const stam     = actor.system.stamina?.value     ?? 0;
 
       // Gdy HP pełne – tylko +1 stamina, bez leczenia
@@ -422,7 +422,7 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
       const newStam  = stam + 1;
 
       await actor.update({
-        "system.lifePoints.actual": newLP,
+        "system.lifePoints.value": newLP,
         "system.stamina.value":     newStam
       });
       // updateActor hook automatycznie odświeży wyświetlanie HP w dialogach
@@ -465,7 +465,7 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
    * Wywoływana przez hook updateActor.
    */
   static _refreshHPDisplay(actor) {
-    const lpActual   = actor.system.lifePoints?.actual ?? 0;
+    const lpActual   = actor.system.lifePoints?.value ?? 0;
     const lpMax      = actor.system.lifePoints?.max    ?? 0;
     const hpText     = `${lpActual} / ${lpMax}`;
     const emptyPct   = lpMax > 0 ? Math.max(0, 100 - Math.round((lpActual / lpMax) * 100)) : 100;
@@ -687,9 +687,9 @@ export class TalePlayerDialog extends foundry.applications.api.HandlebarsApplica
         img:           actor.img || "icons/svg/mystery-man.svg",
         usesLeft,
         usesExhausted: usesLeft <= 0,
-        hpValue:        actor.system.lifePoints?.actual ?? 0,
+        hpValue:        actor.system.lifePoints?.value ?? 0,
         hpMax:          actor.system.lifePoints?.max    ?? 0,
-        hpEmptyPercent: 100 - Math.round(((actor.system.lifePoints?.actual ?? 0) / Math.max(actor.system.lifePoints?.max ?? 1, 1)) * 100)
+        hpEmptyPercent: 100 - Math.round(((actor.system.lifePoints?.value ?? 0) / Math.max(actor.system.lifePoints?.max ?? 1, 1)) * 100)
       };
     });
 

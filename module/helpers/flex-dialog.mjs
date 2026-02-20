@@ -145,10 +145,10 @@ export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplica
     
     // Restore life points
     if (lifePointsCost > 0) {
-      const currentLP = this.actor.system.lifePoints.actual;
+      const currentLP = this.actor.system.lifePoints.value;
       const maxLP = this.actor.system.lifePoints.max;
       const newLP = Math.min(currentLP + lifePointsCost, maxLP);
-      updates["system.lifePoints.actual"] = newLP;
+      updates["system.lifePoints.value"] = newLP;
       restoredParts.push(`${lifePointsCost} ${game.i18n.localize("CONAN.Resources.lifePoints")}`);
       restoredDetails.push(`${game.i18n.localize("CONAN.Resources.lifePoints")}: ${currentLP} → ${newLP}`);
     }

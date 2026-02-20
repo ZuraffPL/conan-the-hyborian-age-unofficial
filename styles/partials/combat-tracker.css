@@ -2,25 +2,50 @@
 /*  Combat Tracker Status Icons                      */
 /* ================================================== */
 
-#combat .combatant .token-effects {
+#combat .combatant,
+.combat-tracker .combatant,
+#combat-popout .combatant {
+  overflow: visible !important;
+}
+
+#combat .combatant .token-effects,
+.combat-tracker .combatant .token-effects,
+#combat-popout .combatant .token-effects {
   display: flex;
   align-items: center;
   gap: 4px;
   padding: 2px 4px;
   min-height: 28px;
+  overflow: visible;
 }
 
-#combat .combatant .token-effects img.token-effect {
+#combat .combatant .token-effects img.token-effect,
+.combat-tracker .combatant .token-effects img.token-effect,
+#combat-popout .combatant .token-effects img.token-effect {
   flex-shrink: 0;
   object-fit: contain;
+  vertical-align: middle;
+  display: block;
 }
 
 /* Wounded status effect - keep red color, no filter */
-#combat .combatant .token-effects img.token-effect[src*="wounded.svg"] {
+#combat .combatant .token-effects img.token-effect[src*="wounded.svg"],
+.combat-tracker .combatant .token-effects img.token-effect[src*="wounded.svg"],
+#combat-popout .combatant .token-effects img.token-effect[src*="wounded.svg"] {
   filter: none !important;
 }
 
 /* Immobilized status effect - keep black color, no filter */
-#combat .combatant .token-effects img.token-effect[src*="paralysis.svg"] {
+#combat .combatant .token-effects img.token-effect[src*="paralysis.svg"],
+.combat-tracker .combatant .token-effects img.token-effect[src*="paralysis.svg"],
+#combat-popout .combatant .token-effects img.token-effect[src*="paralysis.svg"] {
   filter: none !important;
+}
+
+/* Poisoned status effect - keep green color, no filter */
+#combat .combatant .token-effects img.token-effect[src*="Poisoned.svg"],
+.combat-tracker .combatant .token-effects img.token-effect[src*="Poisoned.svg"],
+#combat-popout .combatant .token-effects img.token-effect[src*="Poisoned.svg"] {
+  filter: none !important;
+  background: rgba(21, 162, 14, 0.15);
 }

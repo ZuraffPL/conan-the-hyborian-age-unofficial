@@ -61,6 +61,12 @@ export class ConanActor extends Actor {
         this.updateSource({ "system.lifePoints.adjustment": calculatedAdjustment });
       }
     }
+
+    // One-time migration: Convert antagonist lifePoints from scalar to {value, max} object
+    if (this.type === "antagonist" && typeof this.system.lifePoints === "number") {
+      const scalar = this.system.lifePoints;
+      this.updateSource({ "system.lifePoints": { value: scalar, max: scalar } });
+    }
   }
 
   /**
@@ -129,10 +135,10 @@ export class ConanActor extends Actor {
     }
     
     // Ensure lifePoints field exists (for backward compatibility)
-    if (!systemData.lifePoints || systemData.lifePoints.actual === undefined) {
+    if (!systemData.lifePoints || systemData.lifePoints.value === undefined) {
       systemData.lifePoints = {
-        actual: 10,
-        max: 50
+        value: systemData.lifePoints?.actual ?? 10,
+        max: systemData.lifePoints?.max ?? 50
       };
     }
     

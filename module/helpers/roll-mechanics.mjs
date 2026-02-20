@@ -7,6 +7,7 @@ export { rollSorceryWitsDamage, rollSorceryCustomDieDamage, rollSorceryFixedDama
 import { ConanSocket } from "./socket.mjs";
 import { FlexEffectDialog } from "./flex-dialog.mjs";
 import { DifficultyDialog } from "./difficulty-dialog.mjs";
+import { getFlexDieColorset } from "./dice-utils.mjs";
 
 /**
  * Roll an attribute check
@@ -51,7 +52,7 @@ export async function rollAttribute(actor, attribute) {
 
   // Create the roll formula: 1d6 + attribute value (or d8/d10) + flex die (not added to total)
   const formula = `1${attributeDie} + ${attributeValue}`;
-  const flexFormula = `1${flexDie}`;
+  const flexFormula = `1${flexDie}[${getFlexDieColorset()}]`;
 
   // Evaluate the rolls
   const mainRoll = await new Roll(formula).evaluate();
@@ -78,11 +79,7 @@ export async function rollAttribute(actor, attribute) {
     const promises = [];
     promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
     if (!flexDieDisabled) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false, null, false, null, {
-        appearance: {
-          colorset: "bronze"
-        }
-      }));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
     }
     
     // Wait for both animations to complete
@@ -477,7 +474,7 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
   
   // Create and execute the rolls
   const mainRoll = await new Roll(formula).evaluate();
-  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}`).evaluate() : null;
+  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}[${getFlexDieColorset()}]`).evaluate() : null;
   
   const damageTotal = mainRoll.total;
   const flexResult = flexRoll ? flexRoll.dice[0].total : 0;
@@ -492,9 +489,7 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
       promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
     }
     if (flexRoll) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false, null, false, null, {
-        appearance: { colorset: "bronze" }
-      }));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
     }
     if (promises.length > 0) {
       await Promise.all(promises);
@@ -649,7 +644,7 @@ export async function rollThrownDamage(actor, weapon, modifier = 0) {
   
   // Create and execute the rolls
   const mainRoll = await new Roll(formula).evaluate();
-  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}`).evaluate() : null;
+  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}[${getFlexDieColorset()}]`).evaluate() : null;
   
   const damageTotal = mainRoll.total;
   const flexResult = flexRoll ? flexRoll.dice[0].total : 0;
@@ -664,9 +659,7 @@ export async function rollThrownDamage(actor, weapon, modifier = 0) {
       promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
     }
     if (flexRoll) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false, null, false, null, {
-        appearance: { colorset: "bronze" }
-      }));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
     }
     if (promises.length > 0) {
       await Promise.all(promises);
@@ -808,7 +801,7 @@ export async function rollRangedDamage(actor, weapon, modifier = 0) {
   
   // Create and execute the rolls
   const mainRoll = await new Roll(formula).evaluate();
-  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}`).evaluate() : null;
+  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}[${getFlexDieColorset()}]`).evaluate() : null;
   
   const damageTotal = mainRoll.total;
   const flexResult = flexRoll ? flexRoll.dice[0].total : 0;
@@ -821,9 +814,7 @@ export async function rollRangedDamage(actor, weapon, modifier = 0) {
     // Always show main roll dice for ranged weapons
     promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
     if (flexRoll) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false, null, false, null, {
-        appearance: { colorset: "bronze" }
-      }));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
     }
     if (promises.length > 0) {
       await Promise.all(promises);
@@ -1124,7 +1115,9 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
     // Player character - reduce actual HP
     // If there's an open sheet, submit any pending changes first
     if (target.sheet?.rendered && target.sheet.element) {
-      const form = target.sheet.element.find('form')[0];
+      const form = target.sheet.element.querySelector
+        ? target.sheet.element.querySelector('form')
+        : target.sheet.element.find?.('form')?.[0];
       if (form) {
         // Trigger blur on active element to save any pending edits
         const activeElement = document.activeElement;
@@ -1137,7 +1130,7 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
     }
     
     // Get current HP after potential blur/save
-    const currentHP = target.system.lifePoints?.actual || 0;
+    const currentHP = target.system.lifePoints?.value || 0;
     const newHP = Math.max(0, currentHP - finalDamage);
     
     // Update token if unlinked, otherwise actor
@@ -1146,12 +1139,12 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
       await ConanSocket.requestTokenUpdate(
         targetToken.parent.id,
         targetToken.id,
-        { "delta.system.lifePoints.actual": newHP }
+        { "delta.system.lifePoints.value": newHP }
       );
     } else {
       await ConanSocket.requestActorUpdate(
         target.id,
-        { "system.lifePoints.actual": newHP }
+        { "system.lifePoints.value": newHP }
       );
     }
     
@@ -1168,7 +1161,7 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
     
   } else if (targetType === "antagonist") {
     // Antagonist NPC - reduce life points
-    const currentLP = target.system.lifePoints || 0;
+    const currentLP = target.system.lifePoints?.value ?? target.system.lifePoints ?? 0;
     const newLP = Math.max(0, currentLP - finalDamage);
     
     // Update token if unlinked, otherwise actor
@@ -1177,12 +1170,12 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
       await ConanSocket.requestTokenUpdate(
         targetToken.parent.id,
         targetToken.id,
-        { "delta.system.lifePoints": newLP }
+        { "delta.system.lifePoints.value": newLP }
       );
     } else {
       await ConanSocket.requestActorUpdate(
         target.id,
-        { "system.lifePoints": newLP }
+        { "system.lifePoints.value": newLP }
       );
     }
     
@@ -1318,6 +1311,26 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
   }
   
   // Create chat message with result
+  const fightForLifeHtml = (defeated && targetType === "character") ? `
+    <div class="fight-for-life-container" style="margin-top: 10px; padding: 10px; background: rgba(220, 20, 60, 0.1); border: 2px solid #dc143c; border-radius: 6px; text-align: center;">
+      <div style="margin-bottom: 8px; color: #8b0000; font-weight: bold;">
+        <i class="fas fa-heart-broken" style="color: #dc143c;"></i> ${game.i18n.localize('CONAN.FightForLife.warning')}
+      </div>
+      <button class="fight-for-life-btn"
+        data-actor-id="${target.id}"
+        style="background: linear-gradient(135deg, #dc143c 0%, #8b0000 100%);
+               color: white;
+               border: 2px solid #8b0000;
+               border-radius: 6px;
+               padding: 8px 16px;
+               font-weight: bold;
+               cursor: pointer;
+               transition: all 0.2s;">
+        <i class="fas fa-dice-d20"></i> ${game.i18n.localize('CONAN.FightForLife.button')}
+      </button>
+    </div>
+  ` : '';
+
   const messageContent = `
     <div class="conan-damage-applied">
       <h3>${game.i18n.localize('CONAN.Damage.damageApplied')}</h3>
@@ -1331,7 +1344,8 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
       <div class="damage-result-text ${defeated ? 'defeated' : ''}">
         ${resultMessage}
       </div>
-      ${defeated ? `<div class="defeated-banner">${game.i18n.localize('CONAN.Damage.defeated')}</div>` : ''}
+      ${(defeated && targetType !== "character") ? `<div class="defeated-banner">${game.i18n.localize('CONAN.Damage.defeated')}</div>` : ''}
+      ${fightForLifeHtml}
     </div>
   `;
   

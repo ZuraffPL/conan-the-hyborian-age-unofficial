@@ -1,3 +1,5 @@
+import { getFlexDieColorset } from "./dice-utils.mjs";
+
 /**
  * Roll sorcery damage using a fixed value (stała wartość)
  * @param {Actor} actor - The actor dealing damage
@@ -24,16 +26,14 @@ export async function rollSorceryFixedDamage(actor, fixedValue = 0, paramModifie
   const total = Number(fixedValue) + totalModifier + poisonPenalty;
 
   // Flex die roll
-  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}`).evaluate() : null;
+  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}[${getFlexDieColorset()}]`).evaluate() : null;
   const flexResult = flexRoll ? flexRoll.dice[0].total : 0;
   const flexMax = flexDie ? parseInt(flexDie.substring(1)) : 0;
   const flexTriggered = flexRoll && (flexResult === flexMax);
 
   // Show flex die in 3D (if Dice So Nice is active)
   if (game.dice3d && flexRoll) {
-    await game.dice3d.showForRoll(flexRoll, game.user, false, null, false, null, {
-      appearance: { colorset: "bronze" }
-    });
+    await game.dice3d.showForRoll(flexRoll, game.user, false);
   }
 
   // Prepare chat message content
@@ -173,7 +173,7 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
   // Build the roll formula: Custom Die + total modifier + poison penalty
   const formula = `1${dieType} + ${totalModifier} + ${poisonPenalty}`;
   const mainRoll = await new Roll(formula).evaluate();
-  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}`).evaluate() : null;
+  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}[${getFlexDieColorset()}]`).evaluate() : null;
 
   const damageTotal = mainRoll.total;
   const flexResult = flexRoll ? flexRoll.dice[0].total : 0;
@@ -185,9 +185,7 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
     const promises = [];
     promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
     if (flexRoll) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false, null, false, null, {
-        appearance: { colorset: "bronze" }
-      }));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
     }
     if (promises.length > 0) {
       await Promise.all(promises);
@@ -343,7 +341,7 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
   // Build the roll formula: Wits Die + total modifier + poison penalty
   const formula = `1${witsDie} + ${totalModifier} + ${poisonPenalty}`;
   const mainRoll = await new Roll(formula).evaluate();
-  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}`).evaluate() : null;
+  const flexRoll = (isCharacter && !flexDieDisabled) ? await new Roll(`1${flexDie}[${getFlexDieColorset()}]`).evaluate() : null;
 
   const damageTotal = mainRoll.total;
   const flexResult = flexRoll ? flexRoll.dice[0].total : 0;
@@ -355,9 +353,7 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
     const promises = [];
     promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
     if (flexRoll) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false, null, false, null, {
-        appearance: { colorset: "bronze" }
-      }));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
     }
     if (promises.length > 0) {
       await Promise.all(promises);

@@ -1,5 +1,64 @@
 # Changelog
 
+## [0.0.61] - 2026-02-20
+
+### Added
+
+- **Flex Die Dynamic Colorset (Dice So Nice)**
+  - New `module/helpers/dice-utils.mjs` — utility for computing contrast-aware flex die colorset
+  - Two custom colorsets registered at startup: `conan_flex_dark` (dark body + gold pips) and `conan_flex_light` (cream body + crimson pips)
+  - `getFlexDieColorset()` reads the player's DSN background colour, computes relative luminance and selects whichever colorset provides the strongest contrast
+  - Applied to all flex die rolls: attack dialog, sorcery fixed/custom/wits damage
+
+- **Combat Tracker Status Icons**
+  - **Wounded** icon (`wounded.svg`) displayed in the combat tracker for all minion actors with `wounded` status
+  - **Poisoned** icon (`Poisoned.svg`) displayed for all actor types with active poison effect
+  - Both icons use distinct colour filters; overflow clipping fixed so icons are fully visible in sidebar and popout tracker
+
+### Fixed
+
+- **Token HP Bar — native Foundry support for all actor types**
+  - Renamed `lifePoints.actual` → `lifePoints.value` for character actors throughout the system
+  - Foundry now natively recognises `{ value, max }` and shows the HP bar with editable max in token configuration
+  - Removed the `getBarAttribute` override hack from `actor.mjs` (no longer needed)
+  - Backward-compat migration: existing characters with `lifePoints.actual` are automatically converted to `lifePoints.value` on first load
+  - `system.json` `primaryTokenAttribute` updated to `lifePoints.value`
+
+- **Antagonist Life Points as Object**
+  - `lifePoints` for antagonists changed from a scalar value to `{ value, max }` object in `template.json`
+  - Existing antagonists with scalar `lifePoints` are automatically migrated to the new format on load
+  - Token HP bar now works for antagonists identical to characters
+
+- **Fight for Life — triggers from NPC damage**
+  - Fight for Life dialog now correctly triggers when an NPC/antagonist attack reduces a character's HP to 0
+  - Previously only triggered via the poison drain path
+
+- **Winds of Fate layout**
+  - "Winds of Fate" message moved outside the dice flex row into a standalone `.winds-of-fate-banner` element
+  - No longer causes layout issues with the dice section in fight-for-life chat cards
+
+- **Dice So Nice flex die 3D display**
+  - Removed hardcoded `colorset: "bronze"` override passed directly to `showForRoll`
+  - Flex die colorset is now embedded in the roll formula label; 3D rendering uses the correct player-aware colorset
+  - Fixed crash when `flexRoll` was null but `showForRoll` was still called for it
+
+- **v13 Compatibility — DOM API**
+  - `target.sheet.element.find(...)` replaced with `target.sheet.element.querySelector(...)` in damage application
+  - Fixes `find is not a function` error in Foundry v13 (jQuery removed)
+
+### Changed
+
+- `module/helpers/attack-dialog.mjs` — flex die roll now uses `getFlexDieColorset()` label; removed manual `colorset` override in `dice3d.showForRoll`
+- `module/helpers/roll-sorcery-damage.mjs` — same flex die improvements across all three sorcery damage functions
+- `module/conan.mjs` — poison drain unified to single `system.lifePoints.value` path for both character and antagonist
+
+### New Files
+
+- `module/helpers/dice-utils.mjs` — Dice So Nice colour utilities: `_hexToRgb`, `_relativeLuminance`, `getFlexDieColorset`
+- `styles/partials/poisoned-effects.css` — `.winds-of-fate-banner` style (dark red gradient, standalone row below dice)
+
+---
+
 ## [0.0.60] - 2026-02-19
 
 ### Added
