@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.0.62] - 2026-02-23
+
+### Fixed
+
+- **Ranged damage dice fallback**
+  - `rollRangedDamage()` incorrectly fell through to a hardcoded `1d6` when `system.damage` is stored as a plain string (e.g. `"1d8"`) rather than an object with a `.dice` field
+  - Fixed: `weapon.system.damage?.dice || weapon.system.damage || "1d6"` — now consistent with `rollMeleeDamage` and `rollThrownDamage`
+  - Affected all ranged weapons (e.g. Long Bow showed `1d8+2` in dialog but rolled `1d6+2`)
+
+- **Double recovery on Rest (Odpoczynek)**
+  - When two users with the GM role were both active, a player's Rest request was processed twice: both GM clients satisfied `if (game.user.isGM)`, resulting in double healing, double Stamina gain and two chat messages
+  - Fixed in `socket.mjs` and `tale.mjs`: only the **first active GM** (`game.users.find(u => u.isGM && u.active)`) now executes `_decrementRecovery()`
+
+---
+
 ## [0.0.61] - 2026-02-20
 
 ### Added

@@ -457,6 +457,8 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
    */
   static async handleRecoveryRequest(data) {
     if (!game.user.isGM) return;
+    // Wykonuje tylko pierwszy aktywny GM – unika podwójnego przetwarzania gdy jest wielu GM
+    if (game.user !== game.users.find(u => u.isGM && u.active)) return;
     await TaleDialog._decrementRecovery(data.actorId);
   }
 

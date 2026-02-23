@@ -58,8 +58,8 @@ export class ConanSocket {
         TaleDialog.handleSocketEvent(data);
         break;
       case "taleRecoveryRequest":
-        // Gracz żąda Oddechu – tylko GM przetwarza
-        if (game.user.isGM) TaleDialog.handleRecoveryRequest(data);
+        // Gracz żąda Oddechu – przetwarza tylko pierwszy aktywny GM (unika duplikatów gdy jest wielu GM)
+        if (game.user.isGM && game.user === game.users.find(u => u.isGM && u.active)) TaleDialog.handleRecoveryRequest(data);
         break;
       case "notification":
         this._handleNotification(data);

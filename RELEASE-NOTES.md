@@ -1,10 +1,25 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.61 - Token Bars, Combat Icons & Flex Die Colorsets
+## Current Version: v0.0.62 - Bug Fixes (Ranged Damage & Double Recovery)
 
 ### Overview
 
-System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.61 naprawia obsługę pasków HP na tokenach dla wszystkich typów aktorów, dodaje ikony stanów w trackerze walki oraz wprowadza inteligentny dobór koloru kości Flex w Dice So Nice.
+System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.62 naprawia dwa błędy: nieprawidłową kość obrażeń broni dystansowej oraz podwójne działanie przycisku Odpoczynek gdy aktywni byli dwaj Mistrzowie Gry.
+
+### What's New in v0.0.62
+
+#### Ranged Weapon Damage Fix
+
+- Broń dystansowa (np. Długi Łuk `1d8+2`) wyświetlała poprawne obrażenia w dialogu, ale rzut wykonywała na `1d6+2`
+- Przyczyna: `rollRangedDamage()` odwoływał się do `weapon.system.damage?.dice` bez fallbacku na surowy string — gdy pole `damage` jest przechowywane jako `"1d8"`, a nie obiekt, metoda zwracała `undefined` i wpadała na hardcodowane `1d6`
+- Poprawka: `weapon.system.damage?.dice || weapon.system.damage || "1d6"` — spójne z `rollMeleeDamage` i `rollThrownDamage`
+
+#### Double Recovery Fix (Rest / Odpoczynek)
+
+- Gdy w sesji aktywnych było dwóch użytkowników z rolą GM, kliknięcie przycisku Odpoczynek przez gracza było przetwarzane dwukrotnie: podwójne HP, podwójny punkt Staminy, dwie wiadomości na czacie
+- Poprawka: żądanie `taleRecoveryRequest` obsługuje teraz tylko **pierwszy aktywny GM** (`game.users.find(u => u.isGM && u.active)`) — guard dodany zarówno w `socket.mjs` jak i `tale.mjs`
+
+---
 
 ### What's New in v0.0.61
 

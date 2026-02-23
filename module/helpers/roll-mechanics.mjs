@@ -789,7 +789,7 @@ export async function rollRangedDamage(actor, weapon, modifier = 0) {
   }
 
   // Get weapon damage (dice and modifier)
-  const weaponDice = weapon.system.damage?.dice || "1d6";
+  const weaponDice = weapon.system.damage?.dice || weapon.system.damage || "1d6";
   const weaponBonus = weapon.system.damageModifier || 0;
   // Build the roll formula: Weapon Dice + Weapon Modifier + Slider Modifier
   const formula = `${weaponDice} + ${weaponBonus} + ${modifier}`;
