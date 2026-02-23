@@ -47,6 +47,25 @@ foreach ($item in $itemsToCopy) {
 }
 
 # Create the zip file
+# Extract release notes for this version only from CHANGELOG.md
+$changelogContent = Get-Content "CHANGELOG.md" -Raw
+$versionHeader = "## [$version]"
+$startIndex = $changelogContent.IndexOf($versionHeader)
+if ($startIndex -ge 0) {
+    $afterHeader = $changelogContent.IndexOf("`n", $startIndex) + 1
+    # Find the next version header (## [) after the current one
+    $nextHeader = $changelogContent.IndexOf("`n## [", $afterHeader)
+    if ($nextHeader -ge 0) {
+        $sectionContent = $changelogContent.Substring($afterHeader, $nextHeader - $afterHeader).Trim()
+    } else {
+        $sectionContent = $changelogContent.Substring($afterHeader).Trim()
+    }
+} else {
+    $sectionContent = "Release v$version"
+}
+$releaseNotesFile = ".\temp-release-notes.md"
+Set-Content -Path $releaseNotesFile -Value $sectionContent -Encoding UTF8
+
 Write-Host "`nCreating ZIP archives..." -ForegroundColor Yellow
 
 # Versioned zip (for GitHub release assets)
@@ -85,6 +104,21 @@ Write-Host "4. Verify the download URL matches system.json" -ForegroundColor Whi
 Write-Host "`nQuick release command:" -ForegroundColor Yellow
 Write-Host "  git add -A && git commit -m 'v$version' && git push origin main" -ForegroundColor Cyan
 Write-Host "  git tag v$version && git push origin v$version" -ForegroundColor Cyan
-Write-Host "  gh release create v$version --title 'v$version' --notes-file CHANGELOG.md $zipNameVersioned $zipNameLatest system.json" -ForegroundColor Cyan
+Write-Host "  gh release create v$version --title 'v$version' --notes-file temp-release-notes.md $zipNameVersioned $zipNameLatest system.json" -ForegroundColor Cyan
+
+# Create GitHub release automatically
+Write-Host "`nCreating GitHub release v$version..." -ForegroundColor Yellow
+gh release create "v$version" --title "v$version" --notes-file $releaseNotesFile $zipPathVersioned $zipPathLatest "system.json"
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "  ✓ GitHub release created successfully!" -ForegroundColor Green
+} else {
+    Write-Host "  ✗ gh release create failed (exit code $LASTEXITCODE)" -ForegroundColor Red
+}
+
+# Clean up temp release notes file
+if (Test-Path $releaseNotesFile) {
+    Remove-Item $releaseNotesFile -Force
+}
+
 Write-Host "`nGitHub Release URL:" -ForegroundColor Yellow
-Write-Host "  https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/new" -ForegroundColor Cyan
+Write-Host "  https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/tag/v$version" -ForegroundColor Cyan
