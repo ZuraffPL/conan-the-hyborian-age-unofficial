@@ -703,9 +703,9 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       // Show dice in 3D
       if (game.dice3d) {
         const promises = [];
-        promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
+        promises.push(game.dice3d.showForRoll(mainRoll, game.user, true));
         if (!flexDieDisabled) {
-          promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
+          promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
         }
         await Promise.all(promises);
       }

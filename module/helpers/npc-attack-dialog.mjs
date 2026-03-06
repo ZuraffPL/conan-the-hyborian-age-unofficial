@@ -220,7 +220,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     
     // Show 3D dice if Dice So Nice is active
     if (game.dice3d) {
-      game.dice3d.showForRoll(attributeRoll);
+      game.dice3d.showForRoll(attributeRoll, game.user, true);
     }
     
     // Close dialog

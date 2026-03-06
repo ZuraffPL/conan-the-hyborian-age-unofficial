@@ -326,7 +326,8 @@
       "xpAdjusted": "Punkty doświadczenia zostały skorygowane: {change} PD (pozostało: {remaining} PD)",
       "itemSyncedToWorld": "Przedmiot '{name}' został zsynchronizowany z bazą przedmiotów.",
       "itemSyncedToActors": "Przedmiot '{name}' został zsynchronizowany na {count} kartach postaci.",
-      "itemAdded": "Dodano przedmiot {name} do postaci."
+      "itemAdded": "Dodano przedmiot {name} do postaci.",
+      "rolledResult": "{name} wyrzucił(a) {total}"
     },
     
     "Skill": {
@@ -653,6 +654,18 @@
       "btnStop": "Koniec opowieści",
       "recoveryTitle": "Odpoczynek",
       "recoveryBtn": "Odpoczynek",
+      "btnAddRecovery": "+1 Odpoczynek",
+      "btnRespite": "Wytchnienie",
+      "respiteChatHeader": "Wytchnienie — {name}",
+      "respiteChatLP": "Punkty życia przywrócone do maksimum ({max})",
+      "respiteChatStamina": "Wytrzymałość przywrócona do wartości Sprytu ({grit})",
+      "respiteChatDefence": "Obrona dezaktywowana",
+      "respiteChatImmobilized": "Unieruchomienie usunięte",
+      "respiteChatPoison": "Efekty trucizny wyczyszczone",
+      "respiteXpPromptTitle": "Przyznaj Punkty Doświadczenia",
+      "respiteXpPromptLabel": "PD do przyznania każdej postaci:",
+      "respiteXpConfirm": "Przyznaj PD",
+      "respiteChatXP": "+{xp} PD (łącznie: {total})",
       "recoveryChatHeader": "{name} odpoczywa i odzyskuje siły",
       "recoveryChatLP": "+{heal} Punktów Życia",
       "recoveryChatFullHP": "Punkty życia są pełne",

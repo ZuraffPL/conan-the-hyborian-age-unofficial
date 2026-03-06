@@ -249,9 +249,9 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     if (game.dice3d) {
       // Show both dice at once with different colors
       const promises = [];
-      promises.push(game.dice3d.showForRoll(witsRoll, game.user, false));
+      promises.push(game.dice3d.showForRoll(witsRoll, game.user, true));
       if (!flexDieDisabled) {
-        promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
+        promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
       }
       
       // Wait for both animations to complete

@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.0.63] - 2026-03-07
+
+### Added
+
+- **Przycisk +1 Odpoczynek w oknie GM Opowieści**
+  - Nowy przycisk w nagłówku sekcji Odpoczynek — zwiększa licznik oddechu o 1 (do maks. 2) dla wszystkich aktywnych postaci graczy jednocześnie
+  - Synchronizacja stanu przez socket do widoku graczy
+
+- **Przycisk Wytchnienie w oknie GM Opowieści**
+  - Nowy przycisk obok „+1 Odpoczynek" — wykonuje Wytchnienie dla wszystkich aktywnych postaci graczy naraz
+  - Efekty: LP → max, Wytrzymałość → Spryt, dezaktywacja Obrony, usunięcie Unieruchomienia, wyczyszczenie trucizny
+  - Wiadomość na czacie dla każdej postaci z listą wykonanych akcji
+
+- **Przyznawanie PD przy Wytchnieniu**
+  - Po kliknięciu Wytchnienia pojawia się okienko DialogV2 pytające MG o liczbę PD do przyznania
+  - Każda aktywna postać gracza otrzymuje wpisaną liczbę PD (`system.experience.value += n`)
+  - Wpis o PD pojawia się w wiadomości czatu per postać (tylko gdy PD > 0)
+  - Okienko stylizowane zgodnie z motywem okna Opowieści
+
+### Fixed
+
+- **Animacje kości (Dice So Nice) niewidoczne u MG**
+  - Gdy gracz wykonywał rzut, MG nie widział animacji 3D kości
+  - Przyczyna: trzeci argument `showForRoll()` (`synchronize`) był `false` lub pominięty we wszystkich wywołaniach
+  - Poprawka: `showForRoll(..., true)` w `roll-mechanics.mjs`, `spellcasting-dialog.mjs`, `npc-attack-dialog.mjs`, `roll-sorcery-damage.mjs`, `conan.mjs`
+
+- **Komunikat o wyniku rzutu tylko po angielsku**
+  - Niebieskie powiadomienie „X rzucił Y" u MG pojawiało się zawsze po angielsku niezależnie od języka gry
+  - Dodano klucz `CONAN.Notifications.rolledResult` do plików en/pl/fr
+  - `socket.mjs` `_handleRoll` używa teraz `game.i18n.format()`
+
+---
+
 ## [0.0.62] - 2026-02-23
 
 ### Fixed

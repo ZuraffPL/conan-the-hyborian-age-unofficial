@@ -326,7 +326,8 @@
       "xpAdjusted": "Experience points adjusted: {change} XP (remaining: {remaining} XP)",
       "itemSyncedToWorld": "Item '{name}' has been synchronized to world items.",
       "itemSyncedToActors": "Item '{name}' has been synchronized to {count} character sheets.",
-      "itemAdded": "Item {name} added to character."
+      "itemAdded": "Item {name} added to character.",
+      "rolledResult": "{name} rolled {total}"
     },
     
     "Skill": {
@@ -654,6 +655,18 @@
       "btnStop": "Tale Stop",
       "recoveryTitle": "Recovery",
       "recoveryBtn": "Recovery",
+      "btnAddRecovery": "+1 Recovery",
+      "btnRespite": "Respite",
+      "respiteChatHeader": "Respite — {name}",
+      "respiteChatLP": "Life Points restored to maximum ({max})",
+      "respiteChatStamina": "Stamina restored to Grit ({grit})",
+      "respiteChatDefence": "Defence deactivated",
+      "respiteChatImmobilized": "Immobilized removed",
+      "respiteChatPoison": "Poison effects cleared",
+      "respiteXpPromptTitle": "Award Experience Points",
+      "respiteXpPromptLabel": "XP to award to each character:",
+      "respiteXpConfirm": "Award XP",
+      "respiteChatXP": "+{xp} XP (total: {total})",
       "recoveryChatHeader": "{name} rests and regains strength",
       "recoveryChatLP": "+{heal} Life Points",
       "recoveryChatFullHP": "Life points already full",

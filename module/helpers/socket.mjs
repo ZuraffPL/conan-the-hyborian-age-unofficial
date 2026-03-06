@@ -96,7 +96,7 @@ export class ConanSocket {
     }
 
     // Display the roll result for all players
-    ui.notifications.info(`${data.actorName} rolled ${data.roll.total}`);
+    ui.notifications.info(game.i18n.format("CONAN.Notifications.rolledResult", { name: data.actorName, total: data.roll.total }));
   }
 
   /**

@@ -1,10 +1,50 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.62 - Bug Fixes (Ranged Damage & Double Recovery)
+## Current Version: v0.0.63 - Wytchnienie, +1 Odpoczynek, PD & Poprawki MG
 
 ### Overview
 
-System Conan: The Hyborian Age to nieoficjalna implementacja gry fabularnej **Conan** firmy Monolith dla Foundry VTT v13+. Wersja 0.0.62 naprawia dwa błędy: nieprawidłową kość obrażeń broni dystansowej oraz podwójne działanie przycisku Odpoczynek gdy aktywni byli dwaj Mistrzowie Gry.
+Wersja 0.0.63 rozbudowuje okno GM Opowieści o dwa nowe przyciski zbiorowe (Wytchnienie i +1 Odpoczynek), dodaje mechanizm przyznawania PD przy Wytchnieniu oraz naprawia dwa błędy widoczności po stronie MG.
+
+### What's New in v0.0.63
+
+#### Przycisk +1 Odpoczynek
+
+- Nowy przycisk w nagłówku sekcji Odpoczynek w oknie MG Opowieści
+- Jednym kliknięciem zwiększa licznik Oddechu o 1 (do maks. 2) dla **wszystkich** aktywnych postaci graczy
+- Stan jest natychmiast synchronizowany przez socket do okienek widoku gracza
+
+#### Przycisk Wytchnienie
+
+- Nowy przycisk obok „+1 Odpoczynek" w oknie MG Opowieści
+- Jednym kliknięciem wykonuje pełne Wytchnienie dla **wszystkich** aktywnych postaci graczy:
+  - LP przywrócone do maksimum
+  - Wytrzymałość przywrócona do wartości Sprytu
+  - Obrona dezaktywowana
+  - Unieruchomienie usunięte
+  - Efekty trucizny wyczyszczone
+- Dla każdej postaci generowana jest wiadomość na czacie z listą wykonanych akcji
+
+#### Przyznawanie PD przy Wytchnieniu
+
+- Po kliknięciu Wytchnienia pojawia się okienko z pytaniem o liczbę PD do przyznania
+- MG wpisuje wartość i potwierdza — każda aktywna postać gracza otrzymuje podaną liczbę PD
+- Jeśli PD > 0, wpis o przyznanym doświadczeniu pojawia się w wiadomości czatu per postać
+- Okienko stylizowane jest zgodnie z motywem wizualnym okna Opowieści
+
+#### Poprawka: Animacje kości niewidoczne u MG (Dice So Nice)
+
+- Gdy gracz wykonywał rzut, MG nie widział animacji 3D kości w Dice So Nice
+- Trzeci argument `showForRoll(roll, user, synchronize)` był wszędzie `false` lub pominięty
+- Naprawione: `true` we wszystkich wywołaniach w `roll-mechanics.mjs`, `spellcasting-dialog.mjs`, `npc-attack-dialog.mjs`, `roll-sorcery-damage.mjs`, `conan.mjs`
+
+#### Poprawka: Komunikat o rzucie tylko po angielsku
+
+- Niebieskie powiadomienie „X rolled Y" pojawiało się u MG zawsze w języku angielskim
+- Dodano klucz `CONAN.Notifications.rolledResult` do plików językowych (en/pl/fr)
+- `socket.mjs` używa teraz `game.i18n.format()` zamiast zakodowanego tekstu
+
+---
 
 ### What's New in v0.0.62
 

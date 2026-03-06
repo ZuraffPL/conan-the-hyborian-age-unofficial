@@ -412,6 +412,108 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+/* Przycisk +1 Odpoczynek (nagłówek sekcji) */
+.tale-btn-add-recovery {
+  margin-left: auto;
+  background: linear-gradient(135deg, #2e6e3a 0%, #3d8f4e 100%);
+  border-color: #1d5029;
+  color: #e8fded;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.28),
+              inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  padding: 4px 10px;
+  font-size: 0.78em;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.tale-btn-add-recovery:not(:disabled):hover {
+  background: linear-gradient(135deg, #367f44 0%, #48a55d 100%);
+  border-color: #245f32;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.32),
+              inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.tale-btn-add-recovery:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+}
+
+/* Przycisk Wytchnienie (nagłówek sekcji, obok +1 Odpoczynek) */
+.tale-btn-respite {
+  background: linear-gradient(135deg, #7a4e10 0%, #a8701e 100%);
+  border-color: #5a3410;
+  color: #fdf3df;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.28),
+              inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  padding: 4px 10px;
+  font-size: 0.78em;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.tale-btn-respite:not(:disabled):hover {
+  background: linear-gradient(135deg, #8f5c18 0%, #c08226 100%);
+  border-color: #6b3e12;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.32),
+              inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.tale-btn-respite:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+}
+
+/* ============================================================
+   Wiadomość czatu – Wytchnienie
+   ============================================================ */
+.tale-respite-chat {
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  border: 1px solid rgba(180, 130, 50, 0.45);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fdf6ec;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.tale-respite-chat-header {
+  background: linear-gradient(135deg, #7a4e10 0%, #a8701e 100%);
+  color: #fdf3df;
+  padding: 7px 11px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.tale-respite-chat-header i {
+  color: #f5e6c8;
+}
+
+.tale-respite-chat-body {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tale-respite-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.88em;
+  color: #2c1810;
+}
+
+.tale-respite-row i {
+  color: #d4af37;
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
 /* ============================================================
    Wiadomość czatu – Odpoczynek
    ============================================================ */
@@ -483,4 +585,94 @@
   font-weight: bold;
   font-family: "Courier New", monospace;
   line-height: 1;
+}
+
+/* ============================================================
+   Okienko przyznawania PD (DialogV2 – Wytchnienie)
+   ============================================================ */
+.tale-xp-prompt .window-content {
+  background-color: #f5e6d3;
+  padding: 0;
+}
+
+.tale-xp-prompt form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 16px 20px 20px;
+}
+
+.tale-xp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.tale-xp-label {
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 0.85em;
+  font-weight: bold;
+  color: #5a3410;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.tale-xp-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 1.05em;
+  color: #2c1810;
+  background: rgba(255, 255, 255, 0.85);
+  border: 2px solid #b8860b;
+  border-radius: 6px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tale-xp-input:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2),
+              0 0 6px rgba(212, 175, 55, 0.5);
+}
+
+.tale-xp-prompt .form-footer {
+  border-top: 1px solid rgba(180, 130, 50, 0.35);
+  padding-top: 12px;
+  margin-top: 0;
+  background: transparent;
+}
+
+.tale-xp-prompt .form-footer button[type="submit"] {
+  width: 100%;
+  padding: 9px 14px;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 0.88em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-radius: 8px;
+  border: 2px solid #5a3410;
+  cursor: pointer;
+  background: linear-gradient(135deg, #7a4e10 0%, #a8701e 100%);
+  color: #fdf3df;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.18s ease;
+}
+
+.tale-xp-prompt .form-footer button[type="submit"]:hover {
+  background: linear-gradient(135deg, #8f5c18 0%, #c08226 100%);
+  border-color: #6b3e12;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.tale-xp-prompt .form-footer button[type="submit"]:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }

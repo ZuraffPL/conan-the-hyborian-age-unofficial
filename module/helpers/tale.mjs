@@ -58,10 +58,12 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
       top:    450
     },
     actions: {
-      taleStart:    TaleDialog._onTaleStart,
-      talePause:    TaleDialog._onTalePause,
-      taleStop:     TaleDialog._onTaleStop,
-      taleRecovery: TaleDialog._onTaleRecovery
+      taleStart:       TaleDialog._onTaleStart,
+      talePause:       TaleDialog._onTalePause,
+      taleStop:        TaleDialog._onTaleStop,
+      taleRecovery:    TaleDialog._onTaleRecovery,
+      taleAddRecovery: TaleDialog._onTaleAddRecovery,
+      taleRespite:     TaleDialog._onTaleRespite
     }
   };
 
@@ -241,6 +243,10 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
       };
     });
 
+    // Przycisk +1 Odpoczynek: zablokowany gdy timer nie biegnie LUB wszyscy mają pełny odpoczynek
+    const allRecoveryFull = context.recoveryChars.every(c => c.usesLeft >= 2);
+    context.addRecoveryDisabled = !_state.running || allRecoveryFull;
+
     return context;
   }
 
@@ -398,6 +404,18 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
     await TaleDialog._decrementRecovery(actorId);
   }
 
+  static async _onTaleAddRecovery(event, target) {
+    if (!_state.running) return;
+    await TaleDialog._incrementRecoveryAll();
+  }
+
+  static async _onTaleRespite(event, target) {
+    if (!_state.running) return;
+    const xpAmount = await TaleDialog._promptXP();
+    if (xpAmount === null) return;
+    await TaleDialog._performRespite(xpAmount);
+  }
+
   /**
    * Dekrementuje licznik Oddechu dla aktora, zapisuje i emituje socket.
    */
@@ -463,6 +481,111 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
   }
 
   /**
+   * Inkrementuje licznik Oddechu o 1 (maks. 2) dla wszystkich aktywnych postaci graczy.
+   * Działa tylko gdy timer jest uruchomiony.
+   */
+  static async _incrementRecoveryAll() {
+    const uses = foundry.utils.duplicate(game.settings.get(NS, "tale-recovery-uses") ?? {});
+    const chars = TaleDialog.getActivePlayerCharacters();
+    const updatedUses = {};
+    for (const { actor } of chars) {
+      const current = uses[actor.id] ?? 2;
+      if (current < 2) {
+        uses[actor.id] = current + 1;
+        updatedUses[actor.id] = uses[actor.id];
+      }
+    }
+    if (Object.keys(updatedUses).length === 0) return;
+    await game.settings.set(NS, "tale-recovery-uses", uses);
+    TaleDialog._refreshRecoveryDisplay();
+    game.socket.emit("system.conan-the-hyborian-age", {
+      type: "taleRecoveryUpdate",
+      senderId: game.user.id,
+      uses: updatedUses
+    });
+  }
+
+  /**
+   * Pokazuje okienko z pytaniem o liczbę PD do przyznania.
+   * Zwraca liczbę całkowitą lub null jeśli anulowano.
+   */
+  static async _promptXP() {
+    const content = `<div class="tale-xp-field"><label class="tale-xp-label">${game.i18n.localize("CONAN.Tale.respiteXpPromptLabel")}</label><input type="number" name="xp-amount" value="0" min="0" autofocus class="tale-xp-input" /></div>`;
+    const result = await foundry.applications.api.DialogV2.prompt({
+      window: { title: game.i18n.localize("CONAN.Tale.respiteXpPromptTitle"), classes: ["tale-xp-prompt"] },
+      content,
+      ok: {
+        label: game.i18n.localize("CONAN.Tale.respiteXpConfirm"),
+        icon: "fas fa-star",
+        callback: (event, button) => parseInt(button.form.elements["xp-amount"].value) || 0
+      },
+      rejectClose: false
+    });
+    return result ?? null;
+  }
+
+  /**
+   * Wykonuje Wytchnienie dla wszystkich aktywnych postaci graczy:
+   * - LP → max, stamina → Grit, defence/immobilized = false, trucizna = clearing.
+   * Wysyła wiadomość na czat dla każdej postaci.
+   */
+  static async _performRespite(xpAmount = 0) {
+    const chars = TaleDialog.getActivePlayerCharacters();
+    for (const { actor } of chars) {
+      const sys = actor.system;
+      const lpMax   = sys.lifePoints?.max    ?? 0;
+      const grit    = sys.attributes?.grit?.value ?? 0;
+      const currentXP = sys.experience?.value ?? 0;
+      const hadDefence     = sys.defenceActive   ?? false;
+      const hadImmobilized = sys.immobilized      ?? false;
+      const hadPoison      = sys.poisoned         ?? false;
+      const hadAnyPoison   = hadPoison && Object.values(sys.poisonEffects ?? {}).some(Boolean);
+
+      const updateData = {
+        "system.lifePoints.value": lpMax,
+        "system.stamina.value":    grit,
+        "system.defenceActive":    false,
+        "system.immobilized":      false
+      };
+
+      // Wyczyść truciznę
+      if (hadPoison) {
+        updateData["system.poisoned"]                = false;
+        updateData["system.poisonEffects.effect1"]   = false;
+        updateData["system.poisonEffects.effect2"]   = false;
+        updateData["system.poisonEffects.effect3"]   = false;
+        updateData["system.poisonEffects.effect4"]   = false;
+        updateData["system.poisonEffects.effect5"]   = false;
+        updateData["system.poisonEffects.effect2Multiplier"] = 1;
+      }
+
+      if (xpAmount > 0) {
+        updateData["system.experience.value"] = currentXP + xpAmount;
+      }
+
+      await actor.update(updateData);
+
+      // Wiadomość na czat
+      const rows = [];
+      rows.push(`<div class="tale-respite-row"><i class="fas fa-heart"></i> ${game.i18n.format("CONAN.Tale.respiteChatLP", { max: lpMax })}</div>`);
+      rows.push(`<div class="tale-respite-row"><i class="fas fa-bolt"></i> ${game.i18n.format("CONAN.Tale.respiteChatStamina", { grit })}</div>`);
+      if (hadDefence)     rows.push(`<div class="tale-respite-row"><i class="fas fa-shield-alt"></i> ${game.i18n.localize("CONAN.Tale.respiteChatDefence")}</div>`);
+      if (hadImmobilized) rows.push(`<div class="tale-respite-row"><i class="fas fa-lock-open"></i> ${game.i18n.localize("CONAN.Tale.respiteChatImmobilized")}</div>`);
+      if (hadAnyPoison)   rows.push(`<div class="tale-respite-row"><i class="fas fa-vial"></i> ${game.i18n.localize("CONAN.Tale.respiteChatPoison")}</div>`);
+      if (xpAmount > 0)   rows.push(`<div class="tale-respite-row"><i class="fas fa-star"></i> ${game.i18n.format("CONAN.Tale.respiteChatXP", { xp: xpAmount, total: currentXP + xpAmount })}</div>`);
+
+      const chatContent = `<div class="tale-respite-chat"><div class="tale-respite-chat-header"><i class="fas fa-sun"></i><span>${game.i18n.format("CONAN.Tale.respiteChatHeader", { name: actor.name })}</span></div><div class="tale-respite-chat-body">${rows.join("")}</div></div>`;
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: chatContent,
+        flags: { "conan-the-hyborian-age": { taleRespite: true } }
+      });
+    }
+    // Odśwież widok
+    TaleDialog._refreshRecoveryDisplay();
+  }
+
+  /**
    * Odśwież wyniki HP dla danego aktora w otwartych dialogach (GM i gracz).
    * Wywoływana przez hook updateActor.
    */
@@ -498,6 +621,13 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
       const btn = entry.querySelector(".tale-btn-recovery");
       if (btn) btn.disabled = usesLeft <= 0;
     });
+    // Zaktualizuj stan przycisku +1 Odpoczynek
+    const addRecoveryBtn = el.querySelector("[data-action='taleAddRecovery']");
+    if (addRecoveryBtn) {
+      const chars = TaleDialog.getActivePlayerCharacters();
+      const allFull = chars.length === 0 || chars.every(({ actor }) => (uses[actor.id] ?? 2) >= 2);
+      addRecoveryBtn.disabled = !_state.running || allFull;
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -515,9 +645,11 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
 
   static _syncButtons(el) {
     if (!el) return;
-    const startBtn = el.querySelector("[data-action='taleStart']");
-    const pauseBtn = el.querySelector("[data-action='talePause']");
-    const stopBtn  = el.querySelector("[data-action='taleStop']");
+    const startBtn       = el.querySelector("[data-action='taleStart']");
+    const pauseBtn       = el.querySelector("[data-action='talePause']");
+    const stopBtn        = el.querySelector("[data-action='taleStop']");
+    const addRecoveryBtn = el.querySelector("[data-action='taleAddRecovery']");
+    const respiteBtn     = el.querySelector("[data-action='taleRespite']");
 
     if (startBtn) {
       startBtn.disabled = _state.running;
@@ -528,6 +660,15 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
     }
     if (stopBtn) {
       stopBtn.disabled = false;
+    }
+    if (addRecoveryBtn) {
+      const uses  = game.settings.get(NS, "tale-recovery-uses") ?? {};
+      const chars = TaleDialog.getActivePlayerCharacters();
+      const allFull = chars.length === 0 || chars.every(({ actor }) => (uses[actor.id] ?? 2) >= 2);
+      addRecoveryBtn.disabled = !_state.running || allFull;
+    }
+    if (respiteBtn) {
+      respiteBtn.disabled = !_state.running;
     }
   }
 
@@ -613,6 +754,11 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
         if (data.resetAll) {
           // Tale Stop – reset wszystkich odznak u gracza
           TalePlayerDialog._refreshRecoveryReset();
+        } else if (data.uses) {
+          // Bulk update (+1 Recovery przez MG)
+          for (const [actorId, usesLeft] of Object.entries(data.uses)) {
+            TalePlayerDialog._refreshRecovery(actorId, usesLeft);
+          }
         } else {
           TalePlayerDialog._refreshRecovery(data.actorId, data.usesLeft ?? 0);
         }

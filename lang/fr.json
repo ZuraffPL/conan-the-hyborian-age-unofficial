@@ -325,7 +325,8 @@
       "xpAdjusted": "Points d'expérience ajustés : {change} XP (restant : {remaining} XP)",
       "itemSyncedToWorld": "L'objet '{name}' a été synchronisé avec les objets du monde.",
       "itemSyncedToActors": "L'objet '{name}' a été synchronisé avec {count} feuilles de personnage.",
-      "itemAdded": "L'objet {name} a été ajouté au personnage."
+      "itemAdded": "L'objet {name} a été ajouté au personnage.",
+      "rolledResult": "{name} a lancé {total}"
     },
     
     "Skill": {
@@ -650,6 +651,18 @@
       "btnStop": "Fin de l'histoire",
       "recoveryTitle": "Récupération",
       "recoveryBtn": "Récupération",
+      "btnAddRecovery": "+1 Récupération",
+      "btnRespite": "Répit",
+      "respiteChatHeader": "Répit — {name}",
+      "respiteChatLP": "Points de Vie restaurés au maximum ({max})",
+      "respiteChatStamina": "Endurance restaurée à Résistance ({grit})",
+      "respiteChatDefence": "Défense désactivée",
+      "respiteChatImmobilized": "Immobilisation supprimée",
+      "respiteChatPoison": "Effets de poison effacés",
+      "respiteXpPromptTitle": "Attribuer des Points d'Expérience",
+      "respiteXpPromptLabel": "XP à attribuer à chaque personnage :",
+      "respiteXpConfirm": "Attribuer des XP",
+      "respiteChatXP": "+{xp} XP (total : {total})",
       "recoveryChatHeader": "{name} se repose et récupère des forces",
       "recoveryChatLP": "+{heal} Points de Vie",
       "recoveryChatFullHP": "Points de vie déjà au maximum",

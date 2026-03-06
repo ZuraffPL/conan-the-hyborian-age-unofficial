@@ -77,9 +77,9 @@ export async function rollAttribute(actor, attribute) {
     
     // Show both dice at once with different colors
     const promises = [];
-    promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
+    promises.push(game.dice3d.showForRoll(mainRoll, game.user, true));
     if (!flexDieDisabled) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
     }
     
     // Wait for both animations to complete
@@ -222,7 +222,7 @@ export async function rollInitiative(actor, combatant = null) {
 
   // Show dice in 3D
   if (game.dice3d) {
-    await game.dice3d.showForRoll(mainRoll, game.user, false);
+    await game.dice3d.showForRoll(mainRoll, game.user, true);
   }
 
   // Update combat tracker initiative if actor is in combat
@@ -319,18 +319,11 @@ export async function rollSkill(actor, skillName, attribute) {
 
   // Trigger 3D dice if Dice So Nice module is active
   if (game.dice3d) {
-    await game.dice3d.showForRoll(roll);
+    await game.dice3d.showForRoll(roll, game.user, true);
   }
 
   return roll;
 }
-
-/**
- * Roll weapon damage
- * @param {Actor} actor - The actor performing the roll
- * @param {Item} weapon - The weapon item
- * @param {number} modifier - The damage modifier from slider
- */
 export async function rollWeaponDamage(actor, weapon, modifier = 0) {
   if (!actor || !weapon) {
     ui.notifications.error("Invalid weapon damage parameters");
@@ -350,7 +343,7 @@ export async function rollWeaponDamage(actor, weapon, modifier = 0) {
 
   // Trigger 3D dice if Dice So Nice module is active
   if (game.dice3d) {
-    await game.dice3d.showForRoll(roll);
+    await game.dice3d.showForRoll(roll, game.user, true);
   }
 
   // Check if character is poisoned
@@ -486,10 +479,10 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
     const promises = [];
     // Only show main roll dice if it has dice to show (not for unarmed/fixed damage)
     if (!isFixedDamage) {
-      promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
+      promises.push(game.dice3d.showForRoll(mainRoll, game.user, true));
     }
     if (flexRoll) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
     }
     if (promises.length > 0) {
       await Promise.all(promises);
@@ -656,10 +649,10 @@ export async function rollThrownDamage(actor, weapon, modifier = 0) {
     const promises = [];
     // Only show main roll dice if it has dice to show (not for unarmed/fixed damage)
     if (!isFixedDamage) {
-      promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
+      promises.push(game.dice3d.showForRoll(mainRoll, game.user, true));
     }
     if (flexRoll) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
     }
     if (promises.length > 0) {
       await Promise.all(promises);
@@ -812,9 +805,9 @@ export async function rollRangedDamage(actor, weapon, modifier = 0) {
   if (game.dice3d) {
     const promises = [];
     // Always show main roll dice for ranged weapons
-    promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
+    promises.push(game.dice3d.showForRoll(mainRoll, game.user, true));
     if (flexRoll) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
     }
     if (promises.length > 0) {
       await Promise.all(promises);

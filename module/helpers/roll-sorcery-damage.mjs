@@ -33,7 +33,7 @@ export async function rollSorceryFixedDamage(actor, fixedValue = 0, paramModifie
 
   // Show flex die in 3D (if Dice So Nice is active)
   if (game.dice3d && flexRoll) {
-    await game.dice3d.showForRoll(flexRoll, game.user, false);
+    await game.dice3d.showForRoll(flexRoll, game.user, true);
   }
 
   // Prepare chat message content
@@ -183,9 +183,9 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
   // Show both dice in 3D simultaneously (if Dice So Nice is active)
   if (game.dice3d) {
     const promises = [];
-    promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
+    promises.push(game.dice3d.showForRoll(mainRoll, game.user, true));
     if (flexRoll) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
     }
     if (promises.length > 0) {
       await Promise.all(promises);
@@ -193,7 +193,7 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
   }
 
   // Prepare chat message content (inspired by melee damage)
-  const modifierSign = totalModifier >= 0 ? '+' : '';
+  const modifierSign = totalModifier >= 0 ? '+' : '-';
   const dieResult = mainRoll.dice.length > 0 ? mainRoll.dice[0].total : null;
   const dieLabel = dieType.toUpperCase();
   const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
@@ -351,9 +351,9 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
   // Show both dice in 3D simultaneously (if Dice So Nice is active)
   if (game.dice3d) {
     const promises = [];
-    promises.push(game.dice3d.showForRoll(mainRoll, game.user, false));
+    promises.push(game.dice3d.showForRoll(mainRoll, game.user, true));
     if (flexRoll) {
-      promises.push(game.dice3d.showForRoll(flexRoll, game.user, false));
+      promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
     }
     if (promises.length > 0) {
       await Promise.all(promises);
@@ -361,7 +361,7 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
   }
 
   // Prepare chat message content (inspired by melee damage)
-  const modifierSign = totalModifier >= 0 ? '+' : '';
+  const modifierSign = totalModifier >= 0 ? '+' : '-';
   const witsDieResult = mainRoll.dice.length > 0 ? mainRoll.dice[0].total : null;
   const witsAbbr = game.i18n.localize("CONAN.Attributes.wits.abbr");
   const witsLabel = game.i18n.localize("CONAN.Attributes.wits.label");
