@@ -473,10 +473,9 @@ No known issues at this time.
 
 ## Roadmap
 
-- **Additional Status Effects**: Stunned, Blinded, Prone, and other combat conditions
-- **Compendiums**: Pre-made characters, NPCs, weapons, armor, spells
-- **Macro Library**: Custom macros for complex actions and automation
-- **Campaign Tools**: Journal integration, quest tracking
+- **Additional Status Effects**: Prone, Mounted
+- **Active Skill Effects**: Each character skill will automatically apply its corresponding mechanical effect when active
+- **Fighting Styles**: Support for advanced rules fighting styles
 
 ---
 
