@@ -467,13 +467,12 @@ conan-the-hyborian-age/
 
 ## Known Issues
 
-- **Poison Effects #2–5**: Currently UI-only — Effect #1 is fully implemented; #2–5 mechanics not yet wired
+No known issues at this time.
 
 ---
 
 ## Roadmap
 
-- **Poison Effects #2–5**: Full mechanical implementation of remaining poison effects
 - **Additional Status Effects**: Stunned, Blinded, Prone, and other combat conditions
 - **Compendiums**: Pre-made characters, NPCs, weapons, armor, spells
 - **Macro Library**: Custom macros for complex actions and automation
