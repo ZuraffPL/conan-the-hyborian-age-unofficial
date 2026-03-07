@@ -4,17 +4,17 @@
 
 ### Changed
 
-- **Etykieta „Odpoczynek" przeniesiona nad przyciski w oknie Opowieści**
-  - Nagłówek sekcji oddzielono od przycisków akcji dla lepszego układu (przycisk Wytchnienie nie wychodził poza okno)
+- **"Rest" label moved above buttons in the Tale dialog**
+  - Section header (bed icon + label) is now rendered in a separate row above the "+1 Rest" and "Respite" action buttons, preventing the Respite button from overflowing the dialog window
 
-- **Wytchnienie resetuje licznik Oddechu do 2/2**
-  - Po wykonaniu Wytchnienia licznik użyć Oddechu jest przywracany do wartości maksymalnej (2) dla wszystkich aktywnych postaci graczy
-  - Zmiana rozsyłana przez socket do wszystkich klientów
+- **Respite resets Recovery uses to 2/2**
+  - After executing Respite, each active player character's Recovery use counter is restored to the maximum (2)
+  - The reset is broadcast via socket to all connected clients
 
-- **Kolory ikon w wiadomości czatu Wytchnienia**
-  - Ikona serca (LP) — czerwona, jak w wiadomości Odpoczynku
-  - Ikona błyskawicy (Wytrzymałość) — niebieska, jak w wiadomości Odpoczynku
-  - Ikona fiolki (trucizna) — zielona
+- **Chat message icon colours for Respite**
+  - Heart icon (LP restored to max) — red, consistent with the Rest chat message
+  - Bolt icon (Stamina restored to Grit) — blue, consistent with the Rest chat message
+  - Vial icon (poison effects cleared) — green
 
 ---
 
@@ -22,32 +22,32 @@
 
 ### Added
 
-- **Przycisk +1 Odpoczynek w oknie GM Opowieści**
-  - Nowy przycisk w nagłówku sekcji Odpoczynek — zwiększa licznik oddechu o 1 (do maks. 2) dla wszystkich aktywnych postaci graczy jednocześnie
-  - Synchronizacja stanu przez socket do widoku graczy
+- **"+1 Recovery" button in the GM Tale dialog**
+  - New button in the Recovery section header — increments the Recovery use counter by 1 (up to max 2) for all active player characters at once
+  - State is immediately synchronised via socket to player views
 
-- **Przycisk Wytchnienie w oknie GM Opowieści**
-  - Nowy przycisk obok „+1 Odpoczynek" — wykonuje Wytchnienie dla wszystkich aktywnych postaci graczy naraz
-  - Efekty: LP → max, Wytrzymałość → Spryt, dezaktywacja Obrony, usunięcie Unieruchomienia, wyczyszczenie trucizny
-  - Wiadomość na czacie dla każdej postaci z listą wykonanych akcji
+- **Respite button in the GM Tale dialog**
+  - New button next to "+1 Recovery" — executes a full Respite for all active player characters at once
+  - Effects: LP → max, Stamina → Grit, deactivate Defence, remove Immobilized, clear poison effects
+  - A chat message is generated per character listing all applied effects
 
-- **Przyznawanie PD przy Wytchnieniu**
-  - Po kliknięciu Wytchnienia pojawia się okienko DialogV2 pytające MG o liczbę PD do przyznania
-  - Każda aktywna postać gracza otrzymuje wpisaną liczbę PD (`system.experience.value += n`)
-  - Wpis o PD pojawia się w wiadomości czatu per postać (tylko gdy PD > 0)
-  - Okienko stylizowane zgodnie z motywem okna Opowieści
+- **XP award on Respite**
+  - Clicking Respite opens a DialogV2 prompting the GM for a number of XP to award
+  - Each active player character receives the entered XP amount (`system.experience.value += n`)
+  - An XP entry appears in the per-character chat message (only when XP > 0)
+  - The dialog is styled to match the Tale dialog theme
 
 ### Fixed
 
-- **Animacje kości (Dice So Nice) niewidoczne u MG**
-  - Gdy gracz wykonywał rzut, MG nie widział animacji 3D kości
-  - Przyczyna: trzeci argument `showForRoll()` (`synchronize`) był `false` lub pominięty we wszystkich wywołaniach
-  - Poprawka: `showForRoll(..., true)` w `roll-mechanics.mjs`, `spellcasting-dialog.mjs`, `npc-attack-dialog.mjs`, `roll-sorcery-damage.mjs`, `conan.mjs`
+- **Dice So Nice animations not visible to GM**
+  - When a player rolled, the GM did not see the 3D dice animation
+  - Cause: the third argument of `showForRoll()` (`synchronize`) was `false` or omitted in all call sites
+  - Fix: `showForRoll(..., true)` in `roll-mechanics.mjs`, `spellcasting-dialog.mjs`, `npc-attack-dialog.mjs`, `roll-sorcery-damage.mjs`, `conan.mjs`
 
-- **Komunikat o wyniku rzutu tylko po angielsku**
-  - Niebieskie powiadomienie „X rzucił Y" u MG pojawiało się zawsze po angielsku niezależnie od języka gry
-  - Dodano klucz `CONAN.Notifications.rolledResult` do plików en/pl/fr
-  - `socket.mjs` `_handleRoll` używa teraz `game.i18n.format()`
+- **Roll result notification always in English**
+  - The blue "X rolled Y" notification displayed to the GM appeared in English regardless of the game language
+  - Added `CONAN.Notifications.rolledResult` key to en/pl/fr language files
+  - `socket.mjs` `_handleRoll` now uses `game.i18n.format()`
 
 ---
 
