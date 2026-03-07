@@ -1,70 +1,70 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.64 - Poprawki UX Opowieści
+## Current Version: v0.0.64 - Tale Dialog UX Fixes
 
 ### Overview
 
-Wersja 0.0.64 poprawia układ okna Opowieści (etykieta Odpoczynek nad przyciskami), resetuje licznik Oddechu po Wytchnieniu oraz ujednolica kolory ikon w wiadomościach czatu.
+Version 0.0.64 improves the Tale dialog layout (Recovery label above buttons), resets the Recovery counter after Respite, and unifies chat message icon colours.
 
 ### What's New in v0.0.64
 
-#### Etykieta „Odpoczynek" przeniesiona nad przyciski
+#### "Recovery" label moved above buttons
 
-- Nagłówek sekcji Odpoczynek (ikona łóżka + napis) jest teraz wyświetlany w osobnym wierszu powyżej przycisków „+1 Odpoczynek" i „Wytchnienie"
-- Przyciski nie wychodzą już poza granice okna dialogowego
+- The Recovery section header (bed icon + label) is now rendered in a separate row above the "+1 Recovery" and "Respite" action buttons
+- Buttons no longer overflow the dialog window
 
-#### Wytchnienie resetuje licznik Oddechu
+#### Respite resets Recovery uses to 2/2
 
-- Po wykonaniu Wytchnienia licznik użyć Oddechu jest przywracany do 2/2 dla wszystkich aktywnych postaci graczy
-- Reset jest natychmiast synchronizowany przez socket do widoków graczy
+- After executing Respite, each active player character's Recovery use counter is restored to the maximum (2)
+- The reset is immediately synchronised via socket to all connected client views
 
-#### Kolory ikon w wiadomości czatu Wytchnienia
+#### Chat message icon colours for Respite
 
-- Ikona serca (LP przywrócone do max) — czerwona, spójna z wiadomością Odpoczynku
-- Ikona błyskawicy (Wytrzymałość przywrócona do Sprytu) — niebieska, spójna z wiadomością Odpoczynku
-- Ikona fiolki (efekty trucizny wyczyszczone) — zielona
+- Heart icon (LP restored to max) — red, consistent with the Recovery chat message
+- Bolt icon (Stamina restored to Grit) — blue, consistent with the Recovery chat message
+- Vial icon (poison effects cleared) — green
 
 ---
 
-## v0.0.63 - Wytchnienie, +1 Odpoczynek, PD & Poprawki MG
+## v0.0.63 - Respite, +1 Recovery, XP & GM Fixes
 
 ### What's New in v0.0.63
 
-#### Przycisk +1 Odpoczynek
+#### "+1 Recovery" button in the GM Tale dialog
 
-- Nowy przycisk w nagłówku sekcji Odpoczynek w oknie MG Opowieści
-- Jednym kliknięciem zwiększa licznik Oddechu o 1 (do maks. 2) dla **wszystkich** aktywnych postaci graczy
-- Stan jest natychmiast synchronizowany przez socket do okienek widoku gracza
+- New button in the Recovery section header of the GM Tale dialog
+- One click increments the Recovery use counter by 1 (up to max 2) for **all** active player characters at once
+- State is immediately synchronised via socket to player view windows
 
-#### Przycisk Wytchnienie
+#### Respite button in the GM Tale dialog
 
-- Nowy przycisk obok „+1 Odpoczynek" w oknie MG Opowieści
-- Jednym kliknięciem wykonuje pełne Wytchnienie dla **wszystkich** aktywnych postaci graczy:
-  - LP przywrócone do maksimum
-  - Wytrzymałość przywrócona do wartości Sprytu
-  - Obrona dezaktywowana
-  - Unieruchomienie usunięte
-  - Efekty trucizny wyczyszczone
-- Dla każdej postaci generowana jest wiadomość na czacie z listą wykonanych akcji
+- New button next to "+1 Recovery" in the GM Tale dialog
+- One click executes a full Respite for **all** active player characters at once:
+  - LP restored to maximum
+  - Stamina restored to Grit value
+  - Defence deactivated
+  - Immobilized removed
+  - Poison effects cleared
+- A chat message is generated per character listing all applied effects
 
-#### Przyznawanie PD przy Wytchnieniu
+#### XP award on Respite
 
-- Po kliknięciu Wytchnienia pojawia się okienko z pytaniem o liczbę PD do przyznania
-- MG wpisuje wartość i potwierdza — każda aktywna postać gracza otrzymuje podaną liczbę PD
-- Jeśli PD > 0, wpis o przyznanym doświadczeniu pojawia się w wiadomości czatu per postać
-- Okienko stylizowane jest zgodnie z motywem wizualnym okna Opowieści
+- Clicking Respite opens a dialog prompting the GM for a number of XP to award
+- The GM enters a value and confirms — each active player character receives the entered XP amount
+- If XP > 0, an XP entry appears in the per-character chat message
+- The dialog is styled to match the Tale dialog theme
 
-#### Poprawka: Animacje kości niewidoczne u MG (Dice So Nice)
+#### Fix: Dice So Nice animations not visible to GM
 
-- Gdy gracz wykonywał rzut, MG nie widział animacji 3D kości w Dice So Nice
-- Trzeci argument `showForRoll(roll, user, synchronize)` był wszędzie `false` lub pominięty
-- Naprawione: `true` we wszystkich wywołaniach w `roll-mechanics.mjs`, `spellcasting-dialog.mjs`, `npc-attack-dialog.mjs`, `roll-sorcery-damage.mjs`, `conan.mjs`
+- When a player rolled, the GM did not see the 3D dice animation in Dice So Nice
+- The third argument of `showForRoll(roll, user, synchronize)` was `false` or omitted everywhere
+- Fixed: `true` in all call sites in `roll-mechanics.mjs`, `spellcasting-dialog.mjs`, `npc-attack-dialog.mjs`, `roll-sorcery-damage.mjs`, `conan.mjs`
 
-#### Poprawka: Komunikat o rzucie tylko po angielsku
+#### Fix: Roll result notification always in English
 
-- Niebieskie powiadomienie „X rolled Y" pojawiało się u MG zawsze w języku angielskim
-- Dodano klucz `CONAN.Notifications.rolledResult` do plików językowych (en/pl/fr)
-- `socket.mjs` używa teraz `game.i18n.format()` zamiast zakodowanego tekstu
+- The blue "X rolled Y" notification shown to the GM always appeared in English regardless of game language
+- Added `CONAN.Notifications.rolledResult` key to en/pl/fr language files
+- `socket.mjs` now uses `game.i18n.format()` instead of hardcoded text
 
 ---
 
@@ -72,14 +72,14 @@ Wersja 0.0.64 poprawia układ okna Opowieści (etykieta Odpoczynek nad przyciska
 
 #### Ranged Weapon Damage Fix
 
-- Broń dystansowa (np. Długi Łuk `1d8+2`) wyświetlała poprawne obrażenia w dialogu, ale rzut wykonywała na `1d6+2`
-- Przyczyna: `rollRangedDamage()` odwoływał się do `weapon.system.damage?.dice` bez fallbacku na surowy string — gdy pole `damage` jest przechowywane jako `"1d8"`, a nie obiekt, metoda zwracała `undefined` i wpadała na hardcodowane `1d6`
-- Poprawka: `weapon.system.damage?.dice || weapon.system.damage || "1d6"` — spójne z `rollMeleeDamage` i `rollThrownDamage`
+- Ranged weapons (e.g. Long Bow `1d8+2`) displayed the correct damage in the dialog but rolled `1d6+2`
+- Cause: `rollRangedDamage()` referenced `weapon.system.damage?.dice` with no fallback for a plain string — when `damage` is stored as `"1d8"` rather than an object the method returned `undefined` and fell through to the hardcoded `1d6`
+- Fix: `weapon.system.damage?.dice || weapon.system.damage || "1d6"` — now consistent with `rollMeleeDamage` and `rollThrownDamage`
 
-#### Double Recovery Fix (Rest / Odpoczynek)
+#### Double Recovery Fix
 
-- Gdy w sesji aktywnych było dwóch użytkowników z rolą GM, kliknięcie przycisku Odpoczynek przez gracza było przetwarzane dwukrotnie: podwójne HP, podwójny punkt Staminy, dwie wiadomości na czacie
-- Poprawka: żądanie `taleRecoveryRequest` obsługuje teraz tylko **pierwszy aktywny GM** (`game.users.find(u => u.isGM && u.active)`) — guard dodany zarówno w `socket.mjs` jak i `tale.mjs`
+- When two users with the GM role were both active, a player's Rest request was processed twice: double HP, double Stamina and two chat messages
+- Fix: the `taleRecoveryRequest` is now handled only by the **first active GM** (`game.users.find(u => u.isGM && u.active)`) — guard added in both `socket.mjs` and `tale.mjs`
 
 ---
 
