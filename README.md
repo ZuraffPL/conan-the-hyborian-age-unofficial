@@ -2,7 +2,7 @@
 
 An unofficial Foundry VTT implementation of **Conan: The Hyborian Age RPG** by Monolith Boardgames. Step into the savage world of Robert E. Howard's Conan the Barbarian and forge your legend in the Hyborian Age!
 
-![Version](https://img.shields.io/badge/version-0.0.61-darkred)
+![Version](https://img.shields.io/badge/version-0.0.64-darkred)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v13%2B-orange)
 
 ## Installation
@@ -46,6 +46,66 @@ Each character has **four attributes** (Might, Edge, Grit, Wits) rated 1–8:
 ---
 
 ## System Features
+
+### v0.0.64 — Tale Dialog UX Fixes
+
+#### "Recovery" label moved above buttons
+
+- The Recovery section header (bed icon + label) is now rendered in a separate row above the "+1 Recovery" and "Respite" buttons — Respite no longer overflows the dialog window
+
+#### Respite resets Recovery uses to 2/2
+
+- After executing Respite, each active player character's Recovery counter is restored to the maximum (2) and the reset is broadcast via socket to all clients
+
+#### Chat message icon colours for Respite
+
+- Heart icon (LP restored to max) — **red**, consistent with the Recovery chat message
+- Bolt icon (Stamina restored to Grit) — **blue**, consistent with the Recovery chat message
+- Vial icon (poison effects cleared) — **green**
+
+---
+
+### v0.0.63 — Respite, +1 Recovery, XP Award & GM Fixes
+
+#### "+1 Recovery" button in the GM Tale dialog
+
+- One click increments the Recovery use counter by 1 (up to max 2) for **all** active player characters at once
+- State synchronised via socket to all player views immediately
+
+#### Respite button in the GM Tale dialog
+
+- One click executes a full Respite for **all** active player characters:
+  - LP → maximum, Stamina → Grit, Defence deactivated, Immobilized removed, poison effects cleared
+- Per-character chat message lists every applied effect
+
+#### XP award on Respite
+
+- After clicking Respite the GM is prompted for an XP amount; each active player character receives that value
+- XP entry appears in the chat message (only when XP > 0)
+
+#### Fix: Dice So Nice animations not visible to GM
+
+- `showForRoll(..., true)` added in all call sites (`roll-mechanics.mjs`, `spellcasting-dialog.mjs`, `npc-attack-dialog.mjs`, `roll-sorcery-damage.mjs`, `conan.mjs`)
+
+#### Fix: Roll result notification always in English
+
+- Added `CONAN.Notifications.rolledResult` to en/pl/fr language files; `socket.mjs` now uses `game.i18n.format()`
+
+---
+
+### v0.0.62 — Ranged Damage & Double Recovery Fixes
+
+#### Ranged weapon damage dice fix
+
+- `rollRangedDamage()` fell through to hardcoded `1d6` when `system.damage` was a plain string (e.g. `"1d8"`)
+- Fix: `weapon.system.damage?.dice || weapon.system.damage || "1d6"` — consistent with melee and thrown
+
+#### Double Recovery fix
+
+- When two GM users were active, a player's Rest request was processed twice (double healing, two chat messages)
+- Only the **first active GM** now executes `_decrementRecovery()` — guard added in `socket.mjs` and `tale.mjs`
+
+---
 
 ### v0.0.61 — Token Bars, Combat Icons & Flex Die Colorsets
 
