@@ -58,28 +58,32 @@
   {{#if recoveryChars.length}}
   <div class="tale-recovery-section">
     <div class="tale-section-header">
-      <i class="fas fa-bed"></i>
-      {{localize "CONAN.Tale.recoveryTitle"}}
-      <button
-        type="button"
-        class="tale-btn tale-btn-add-recovery"
-        data-action="taleAddRecovery"
-        title="{{localize "CONAN.Tale.btnAddRecovery"}}"
-        {{#if addRecoveryDisabled}}disabled{{/if}}
-      >
-        <i class="fas fa-plus-circle"></i>
-        {{localize "CONAN.Tale.btnAddRecovery"}}
-      </button>
-      <button
-        type="button"
-        class="tale-btn tale-btn-respite"
-        data-action="taleRespite"
-        title="{{localize "CONAN.Tale.btnRespite"}}"
-        {{#unless isRunning}}disabled{{/unless}}
-      >
-        <i class="fas fa-sun"></i>
-        {{localize "CONAN.Tale.btnRespite"}}
-      </button>
+      <div class="tale-section-title">
+        <i class="fas fa-bed"></i>
+        {{localize "CONAN.Tale.recoveryTitle"}}
+      </div>
+      <div class="tale-section-actions">
+        <button
+          type="button"
+          class="tale-btn tale-btn-add-recovery"
+          data-action="taleAddRecovery"
+          title="{{localize "CONAN.Tale.btnAddRecovery"}}"
+          {{#if addRecoveryDisabled}}disabled{{/if}}
+        >
+          <i class="fas fa-plus-circle"></i>
+          {{localize "CONAN.Tale.btnAddRecovery"}}
+        </button>
+        <button
+          type="button"
+          class="tale-btn tale-btn-respite"
+          data-action="taleRespite"
+          title="{{localize "CONAN.Tale.btnRespite"}}"
+          {{#unless isRunning}}disabled{{/unless}}
+        >
+          <i class="fas fa-sun"></i>
+          {{localize "CONAN.Tale.btnRespite"}}
+        </button>
+      </div>
     </div>
     <div class="tale-recovery-list">
       {{#each recoveryChars}}

@@ -1,10 +1,32 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.63 - Wytchnienie, +1 Odpoczynek, PD & Poprawki MG
+## Current Version: v0.0.64 - Poprawki UX Opowieści
 
 ### Overview
 
-Wersja 0.0.63 rozbudowuje okno GM Opowieści o dwa nowe przyciski zbiorowe (Wytchnienie i +1 Odpoczynek), dodaje mechanizm przyznawania PD przy Wytchnieniu oraz naprawia dwa błędy widoczności po stronie MG.
+Wersja 0.0.64 poprawia układ okna Opowieści (etykieta Odpoczynek nad przyciskami), resetuje licznik Oddechu po Wytchnieniu oraz ujednolica kolory ikon w wiadomościach czatu.
+
+### What's New in v0.0.64
+
+#### Etykieta „Odpoczynek" przeniesiona nad przyciski
+
+- Nagłówek sekcji Odpoczynek (ikona łóżka + napis) jest teraz wyświetlany w osobnym wierszu powyżej przycisków „+1 Odpoczynek" i „Wytchnienie"
+- Przyciski nie wychodzą już poza granice okna dialogowego
+
+#### Wytchnienie resetuje licznik Oddechu
+
+- Po wykonaniu Wytchnienia licznik użyć Oddechu jest przywracany do 2/2 dla wszystkich aktywnych postaci graczy
+- Reset jest natychmiast synchronizowany przez socket do widoków graczy
+
+#### Kolory ikon w wiadomości czatu Wytchnienia
+
+- Ikona serca (LP przywrócone do max) — czerwona, spójna z wiadomością Odpoczynku
+- Ikona błyskawicy (Wytrzymałość przywrócona do Sprytu) — niebieska, spójna z wiadomością Odpoczynku
+- Ikona fiolki (efekty trucizny wyczyszczone) — zielona
+
+---
+
+## v0.0.63 - Wytchnienie, +1 Odpoczynek, PD & Poprawki MG
 
 ### What's New in v0.0.63
 

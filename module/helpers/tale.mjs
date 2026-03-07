@@ -567,12 +567,12 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
 
       // Wiadomość na czat
       const rows = [];
-      rows.push(`<div class="tale-respite-row"><i class="fas fa-heart"></i> ${game.i18n.format("CONAN.Tale.respiteChatLP", { max: lpMax })}</div>`);
-      rows.push(`<div class="tale-respite-row"><i class="fas fa-bolt"></i> ${game.i18n.format("CONAN.Tale.respiteChatStamina", { grit })}</div>`);
-      if (hadDefence)     rows.push(`<div class="tale-respite-row"><i class="fas fa-shield-alt"></i> ${game.i18n.localize("CONAN.Tale.respiteChatDefence")}</div>`);
-      if (hadImmobilized) rows.push(`<div class="tale-respite-row"><i class="fas fa-lock-open"></i> ${game.i18n.localize("CONAN.Tale.respiteChatImmobilized")}</div>`);
-      if (hadAnyPoison)   rows.push(`<div class="tale-respite-row"><i class="fas fa-vial"></i> ${game.i18n.localize("CONAN.Tale.respiteChatPoison")}</div>`);
-      if (xpAmount > 0)   rows.push(`<div class="tale-respite-row"><i class="fas fa-star"></i> ${game.i18n.format("CONAN.Tale.respiteChatXP", { xp: xpAmount, total: currentXP + xpAmount })}</div>`);
+      rows.push(`<div class="tale-respite-row tale-respite-row--hp"><i class="fas fa-heart"></i> ${game.i18n.format("CONAN.Tale.respiteChatLP", { max: lpMax })}</div>`);
+      rows.push(`<div class="tale-respite-row tale-respite-row--stam"><i class="fas fa-bolt"></i> ${game.i18n.format("CONAN.Tale.respiteChatStamina", { grit })}</div>`);
+      if (hadDefence)     rows.push(`<div class="tale-respite-row tale-respite-row--defence"><i class="fas fa-shield-alt"></i> ${game.i18n.localize("CONAN.Tale.respiteChatDefence")}</div>`);
+      if (hadImmobilized) rows.push(`<div class="tale-respite-row tale-respite-row--immobilized"><i class="fas fa-lock-open"></i> ${game.i18n.localize("CONAN.Tale.respiteChatImmobilized")}</div>`);
+      if (hadAnyPoison)   rows.push(`<div class="tale-respite-row tale-respite-row--poison"><i class="fas fa-vial"></i> ${game.i18n.localize("CONAN.Tale.respiteChatPoison")}</div>`);
+      if (xpAmount > 0)   rows.push(`<div class="tale-respite-row tale-respite-row--xp"><i class="fas fa-star"></i> ${game.i18n.format("CONAN.Tale.respiteChatXP", { xp: xpAmount, total: currentXP + xpAmount })}</div>`);
 
       const chatContent = `<div class="tale-respite-chat"><div class="tale-respite-chat-header"><i class="fas fa-sun"></i><span>${game.i18n.format("CONAN.Tale.respiteChatHeader", { name: actor.name })}</span></div><div class="tale-respite-chat-body">${rows.join("")}</div></div>`;
       await ChatMessage.create({
@@ -581,6 +581,21 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
         flags: { "conan-the-hyborian-age": { taleRespite: true } }
       });
     }
+
+    // Resetuj licznik Oddechu do 2/2 dla wszystkich aktywnych postaci
+    const uses = foundry.utils.duplicate(game.settings.get(NS, "tale-recovery-uses") ?? {});
+    const resetUpdates = {};
+    for (const { actor } of chars) {
+      uses[actor.id] = 2;
+      resetUpdates[actor.id] = 2;
+    }
+    await game.settings.set(NS, "tale-recovery-uses", uses);
+    game.socket.emit("system.conan-the-hyborian-age", {
+      type: "taleRecoveryUpdate",
+      senderId: game.user.id,
+      uses: resetUpdates
+    });
+
     // Odśwież widok
     TaleDialog._refreshRecoveryDisplay();
   }

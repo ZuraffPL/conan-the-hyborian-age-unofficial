@@ -279,6 +279,13 @@
 }
 
 .tale-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.tale-section-title {
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
   font-size: 0.85em;
   font-weight: bold;
@@ -288,11 +295,15 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 10px;
 }
 
-.tale-section-header i {
+.tale-section-title i {
   color: #d4af37;
+}
+
+.tale-section-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .tale-recovery-list {
@@ -513,6 +524,10 @@
   text-align: center;
   flex-shrink: 0;
 }
+
+.tale-respite-row--hp i    { color: #c0392b; }
+.tale-respite-row--stam i  { color: #3a5c8a; }
+.tale-respite-row--poison i { color: #2e7d32; }
 
 /* ============================================================
    Wiadomość czatu – Odpoczynek

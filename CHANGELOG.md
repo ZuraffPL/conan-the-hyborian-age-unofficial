@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.0.64] - 2026-03-07
+
+### Changed
+
+- **Etykieta „Odpoczynek" przeniesiona nad przyciski w oknie Opowieści**
+  - Nagłówek sekcji oddzielono od przycisków akcji dla lepszego układu (przycisk Wytchnienie nie wychodził poza okno)
+
+- **Wytchnienie resetuje licznik Oddechu do 2/2**
+  - Po wykonaniu Wytchnienia licznik użyć Oddechu jest przywracany do wartości maksymalnej (2) dla wszystkich aktywnych postaci graczy
+  - Zmiana rozsyłana przez socket do wszystkich klientów
+
+- **Kolory ikon w wiadomości czatu Wytchnienia**
+  - Ikona serca (LP) — czerwona, jak w wiadomości Odpoczynku
+  - Ikona błyskawicy (Wytrzymałość) — niebieska, jak w wiadomości Odpoczynku
+  - Ikona fiolki (trucizna) — zielona
+
+---
+
 ## [0.0.63] - 2026-03-07
 
 ### Added
