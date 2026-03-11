@@ -4,24 +4,24 @@
 
 ### Fixed — Token Status Effects
 
-- **Ikona czaszki na tokenie** — po pokonaniu antagonisty lub sługusa `actor.toggleStatusEffect("dead")` zastąpiło bezpośrednie `token.update({ overlayEffect })`, które nie działało niezawodnie w Foundry v13 (problem warstw PIXI)
-- **Ikona krwi (wounded) na sługusach** — po otrzymaniu obrażeń poniżej progu eliminacji token otrzymuje status `wounded` przez `toggleStatusEffect`
-- **Ikony obrony / unieruchomienia / zatrucia** — trzy nowe statusy (`conan-defence`, `conan-immobilized`, `conan-poisoned`) rejestrowane w `CONFIG.statusEffects`; każde przełączenie stanu w karcie postaci, NPC oraz oknie zatrucia wywołuje `toggleStatusEffect` — ikony widoczne bezpośrednio na tokenach
-- **paralysis.svg** — usunięto deklarację XML i DOCTYPE (PIXI nie akceptował pliku); zmieniono `fill` na czarny + `stroke="#ffffff"` z `paint-order="stroke fill"` — ikona widoczna zarówno na jasnym tle karty, jak i na ciemnym tle tokena
+- **Skull icon on token** — when an antagonist or minion is defeated, `actor.toggleStatusEffect("dead")` now replaces the direct `token.update({ overlayEffect })` call, which was unreliable in Foundry v13 (PIXI layering issue)
+- **Blood (wounded) icon on minions** — when a minion takes damage below the elimination threshold the token receives the `wounded` status via `toggleStatusEffect`
+- **Defence / immobilized / poisoned icons** — three new statuses (`conan-defence`, `conan-immobilized`, `conan-poisoned`) registered in `CONFIG.statusEffects`; every toggle in the character sheet, NPC sheet and poisoned dialog calls `toggleStatusEffect` — icons now visible directly on tokens
+- **paralysis.svg** — removed XML declaration and DOCTYPE preamble (PIXI rejected the file); changed `fill` to black and added `stroke="#ffffff"` with `paint-order="stroke fill"` — icon visible on both light sheet backgrounds and dark token backgrounds
 
-### Fixed — Fight for Life (Walka o Życie)
+### Fixed — Fight for Life
 
-- **Brak ikony śmierci po nieudanym WoŻ** — po nieudanym rzucie Hartu system teraz wywołuje `toggleStatusEffect("dead", true)`, co nakłada czaszkę na token i aktualizuje combat tracker
-- **Nieudany WoŻ wywoływał się w kółko** — nieprzytomna postać (`status: unconscious`) przy kolejnym ataku nie dostaje kolejnego rzutu WoŻ; zamiast tego atak natychmiast aplikuje status `dead`
-- **Obrona nieprzytomnej postaci = 0** — obie dialogi ataku (`attack-dialog.mjs`, `npc-attack-dialog.mjs`) sprawdzają `statuses.has("unconscious")`; jeśli cel jest nieprzytomny, trudność ataku spada do 0 (każdy atak trafia automatycznie)
-- **Nieprzytomna postać nie może znów robić WoŻ** — po trafieniu nieprzytomnej postaci wiadomość na chacie wyświetla baner z czaszką zamiast przycisku WoŻ
-- **Layout wiadomości WoŻ** — `flex-effect-notice` przeniesione poza `dice-section` (poprzednio powodowało błąd layoutu CSS)
-- **Status `unconscious` po zdanym WoŻ** — po pomyślnym rzucie Hartu postać otrzymuje status nieprzytomności przez `toggleStatusEffect`
-- **Status `unconscious` po konwersji Brawury podczas WoŻ** — `FlexEffectDialog.applySuccessEffect()` sprawdza flagę `isFightForLife` i aplikuje status `unconscious`
+- **No death icon after failed Fight for Life** — after a failed Grit roll the system now calls `toggleStatusEffect("dead", true)`, applying the skull overlay on the token and updating the combat tracker
+- **Failed Fight for Life triggered repeatedly** — an unconscious character (`status: unconscious`) no longer receives another Fight for Life prompt on a subsequent hit; the attack immediately applies `dead` instead
+- **Unconscious target defence = 0** — both attack dialogs (`attack-dialog.mjs`, `npc-attack-dialog.mjs`) check `statuses.has("unconscious")`; if the target is unconscious the attack difficulty drops to 0 (every attack hits automatically)
+- **Unconscious character cannot trigger Fight for Life again** — when an unconscious character is hit the chat message shows a skull banner instead of the Fight for Life button
+- **Fight for Life chat layout** — `flex-effect-notice` moved outside `dice-section` (previously caused a CSS layout break)
+- **`unconscious` status after a successful Fight for Life** — after a successful Grit roll the character receives the unconscious status via `toggleStatusEffect`
+- **`unconscious` status after Flex conversion during Fight for Life** — `FlexEffectDialog.applySuccessEffect()` checks the `isFightForLife` flag and applies `unconscious`
 
 ### Added — ConanSocket
 
-- **`ConanSocket.requestToggleStatusEffect()`** — nowa metoda; jeśli wywołujący jest GM, działa bezpośrednio; jeśli gracz, emituje zdarzenie przez socket → GM przetwarza; obsługuje zarówno tokeny połączone, jak i niepołączone (unlinked)
+- **`ConanSocket.requestToggleStatusEffect()`** — new method; if the caller is the GM it acts directly; if a player it emits a socket event which the GM processes; supports both linked and unlinked tokens
 
 ---
 

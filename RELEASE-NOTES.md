@@ -4,32 +4,32 @@
 
 ### Overview
 
-Version 0.7.1 to wydanie naprawcze do v0.7.0. Poprawia regresję z ikonami statusów na tokenach (czaszka, wounded, obrona, unieruchomienie, zatrucie), naprawia pętlę Walki o Życie przy kolejnych atakach na nieprzytomnych postaciach oraz dodaje routing uprawnień przez socket GM dla `toggleStatusEffect`.
+Version 0.7.1 is a bugfix release for v0.7.0. It fixes a regression with status effect icons on tokens (skull, wounded, defence, immobilized, poisoned), resolves the Fight for Life loop when attacking an already-unconscious character, and adds GM socket routing for `toggleStatusEffect`.
 
 ---
 
-### Co nowego w v0.7.1
+### What's New in v0.7.1
 
-#### Ikony statusów na tokenach
+#### Token Status Icons
 
-- Czaszka (pokonanie antagonisty / sługusa) — `toggleStatusEffect("dead")`
-- Krew (wounded sługus poniżej progu) — `toggleStatusEffect("wounded")`
-- Obrona, unieruchomienie, zatrucie — trzy nowe statusy systemu widoczne bezpośrednio na tokenach
-- `paralysis.svg` naprawiony (usunięto DOCTYPE, czarny fill + biały stroke dla widoczności na obu tłach)
+- Skull (antagonist / minion defeated) — `toggleStatusEffect("dead")`
+- Blood (wounded minion below threshold) — `toggleStatusEffect("wounded")`
+- Defence, immobilized, poisoned — three new system statuses visible directly on tokens
+- `paralysis.svg` fixed (removed DOCTYPE preamble, black fill + white stroke for visibility on both light and dark backgrounds)
 
-#### Walka o Życie — naprawa pełnego cyklu
+#### Fight for Life — Full Cycle Fix
 
-| Sytuacja | Poprzednio | Teraz |
-|----------|-----------|-------|
-| Nieudany WoŻ | Brak ikony śmierci | `toggleStatusEffect("dead")` → czaszka na tokenie |
-| Kolejny atak na nieprzytomną postać | Kolejny dialog WoŻ | Brak WoŻ, od razu `dead` |
-| Trudność ataku na nieprzytomną | Normalna obrona | 0 (każdy atak trafia) |
-| Zdany WoŻ | Brak statusu | `toggleStatusEffect("unconscious")` |
-| Zdany WoŻ przez konwersję Brawury | Brak statusu | `toggleStatusEffect("unconscious")` |
+| Situation | Before | After |
+|-----------|--------|-------|
+| Failed Fight for Life | No death icon | `toggleStatusEffect("dead")` → skull on token |
+| Next attack on unconscious character | Another Fight for Life dialog | No FfL prompt, immediately applies `dead` |
+| Attack difficulty vs unconscious target | Normal defence | 0 (every attack hits automatically) |
+| Successful Fight for Life | No status applied | `toggleStatusEffect("unconscious")` |
+| Successful FfL via Flex conversion | No status applied | `toggleStatusEffect("unconscious")` |
 
-#### ConanSocket — nowa metoda
+#### ConanSocket — New Method
 
-`requestToggleStatusEffect(sceneId, tokenId, actorId, effectId, active)` — gracze bez uprawnień Owner mogą wywoływać toggle przez socket GM.
+`requestToggleStatusEffect(sceneId, tokenId, actorId, effectId, active)` — players without Owner permission can trigger status effect toggles via GM socket relay.
 
 ---
 
