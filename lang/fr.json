@@ -565,6 +565,11 @@
       }
     },
     
+    "FlexDialog": {
+      "cannotParseDieFormat": "Impossible de lire le format du dé d'arme !",
+      "missingDamageInfo": "Impossible d'appliquer les Dégâts Massifs — informations sur les dégâts manquantes !"
+    },
+    
     "StartingSkills": {
       "title": "Compétences de Départ",
       "subtitle": "Compétences de Départ",

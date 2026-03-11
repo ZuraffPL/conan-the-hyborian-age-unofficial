@@ -567,6 +567,11 @@
       }
     },
     
+    "FlexDialog": {
+      "cannotParseDieFormat": "Nie można odczytać formatu kostki broni!",
+      "missingDamageInfo": "Nie można zastosować Kolosalnych Obrażeń — brak danych o obrażeniach!"
+    },
+    
     "StartingSkills": {
       "title": "Umiejętności Początkowe",
       "subtitle": "Starting Skills",

@@ -568,6 +568,11 @@
       }
     },
     
+    "FlexDialog": {
+      "cannotParseDieFormat": "Cannot parse weapon die format!",
+      "missingDamageInfo": "Cannot apply Massive Damage - missing damage information!"
+    },
+    
     "StartingSkills": {
       "title": "Starting Skills",
       "subtitle": "Starting Skills",

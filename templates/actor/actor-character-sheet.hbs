@@ -90,7 +90,7 @@
             <i class="fas fa-stopwatch"></i>
             <div class="button-labels">
               <span class="primary-label">{{localize "CONAN.Combat.initiative"}}</span>
-              <span class="subtitle-label">(Initiative)</span>
+              <span class="subtitle-label">({{localize "CONAN.Combat.initiative"}})</span>
             </div>
           </button>
           
@@ -98,7 +98,7 @@
             <i class="fas fa-sword"></i>
             <div class="button-labels">
               <span class="primary-label">{{localize "CONAN.Attack.title"}}</span>
-              <span class="subtitle-label">(Attack)</span>
+              <span class="subtitle-label">({{localize "CONAN.Attack.title"}})</span>
             </div>
           </button>
           
@@ -106,7 +106,7 @@
             <i class="fas fa-shield-halved"></i>
             <div class="button-labels">
               <span class="primary-label">{{localize "CONAN.Damage.title"}}</span>
-              <span class="subtitle-label">(Damage)</span>
+              <span class="subtitle-label">({{localize "CONAN.Damage.title"}})</span>
             </div>
           </button>
           
@@ -114,7 +114,7 @@
             <i class="fas fa-magic"></i>
             <div class="button-labels">
               <span class="primary-label">{{localize "CONAN.Spellcasting.title"}}</span>
-              <span class="subtitle-label">(Spellcasting)</span>
+              <span class="subtitle-label">({{localize "CONAN.Spellcasting.title"}})</span>
             </div>
           </button>
         </div>
@@ -127,7 +127,7 @@
           <div class="resource-header">
             <span class="resource-name">{{localize "CONAN.Resources.flexDie"}}</span>
             <label class="resource-subtitle">
-              Flex Die
+              {{localize "CONAN.Resources.flexDie"}}
               {{#if (and system.poisoned system.poisonEffects.effect5)}}
                 <i class="fas fa-skull-crossbones poison-icon" title="{{localize 'CONAN.Poisoned.flexDieLocked'}}" style="color: #15a20e; margin-left: 6px;"></i>
               {{/if}}
@@ -146,7 +146,7 @@
           <div class="resource-header">
             <span class="resource-name">{{localize "CONAN.Resources.stamina"}}</span>
             <label class="resource-subtitle">
-              Stamina
+              {{localize "CONAN.Resources.stamina"}}
               {{#if (and system.poisoned system.poisonEffects.effect4)}}
                 <i class="fas fa-skull-crossbones poison-icon" title="{{localize 'CONAN.Poisoned.staminaLocked'}}" style="color: #15a20e; margin-left: 6px;"></i>
               {{/if}}
@@ -171,7 +171,7 @@
         <h3 class="section-title">
           <span class="primary-name">{{localize "CONAN.Resources.lifePoints"}}</span>
           <label class="subtitle-name">
-            Life Points
+            {{localize "CONAN.Resources.lifePoints"}}
             {{#if (and system.poisoned system.poisonEffects.effect3)}}
               <i class="fas fa-skull-crossbones poison-life-drain-icon" title="{{localize 'CONAN.Poisoned.option3.name'}}"></i>
             {{/if}}
@@ -183,7 +183,7 @@
           <input type="number" name="system.lifePoints.value" value="{{system.lifePoints.value}}" min="0" max="50" data-dtype="Number" class="life-actual {{valueChanges.lifePointsActual}}" title="{{localize 'CONAN.Resources.actual'}}"/>
           <label class="life-label">
             <span class="primary-label">{{localize "CONAN.Resources.actual"}}</span>
-            <span class="subtitle-label">Actual</span>
+            <span class="subtitle-label">{{localize "CONAN.Resources.actual"}}</span>
           </label>
         </div>
         <span class="separator">/</span>
@@ -191,7 +191,7 @@
           <input type="number" name="system.lifePoints.max" value="{{system.lifePoints.max}}" min="0" max="50" data-dtype="Number" class="life-max {{valueChanges.lifePointsMax}}" title="{{localize 'CONAN.Resources.max'}}"/>
           <label class="life-label">
             <span class="primary-label">{{localize "CONAN.Resources.max"}}</span>
-            <span class="subtitle-label">Max</span>
+            <span class="subtitle-label">{{localize "CONAN.Resources.max"}}</span>
           </label>
         </div>
         <div class="poisoned-toggle-container" style="position: relative; display: inline-block; margin-left: 10px;">
@@ -216,22 +216,22 @@
       <div class="section-header">
         <h3 class="section-title">
           <span class="primary-name">{{localize "CONAN.Resources.defense"}}</span>
-          <label class="subtitle-name">Defense</label>
+          <label class="subtitle-name">{{localize "CONAN.Resources.defense"}}</label>
         </h3>
       </div>
       <div class="defense-fields" style="display: flex; gap: 15px; align-items: center; justify-content: center;">
         <div style="display: flex; flex-direction: column; gap: 4px;">
-          <button type="button" class="defence-toggle-btn {{#if system.defenceActive}}active{{/if}} {{#if system.immobilized}}disabled{{/if}}" data-action="toggleDefence" title="{{localize 'CONAN.Attack.defence'}} (Defence) (1 {{localize 'CONAN.Common.Action'}})" {{#if system.immobilized}}disabled{{/if}}>
+          <button type="button" class="defence-toggle-btn {{#if system.defenceActive}}active{{/if}} {{#if system.immobilized}}disabled{{/if}}" data-action="toggleDefence" title="{{localize 'CONAN.Attack.defence'}} (1 {{localize 'CONAN.Common.Action'}})" {{#if system.immobilized}}disabled{{/if}}>
             <i class="fas fa-shield-alt"></i>
           </button>
-          <button type="button" class="immobilized-toggle-btn {{#if system.immobilized}}active{{/if}}" data-action="toggleImmobilized" title="{{localize 'CONAN.Attack.immobilized'}} (Immobilized)">
+          <button type="button" class="immobilized-toggle-btn {{#if system.immobilized}}active{{/if}}" data-action="toggleImmobilized" title="{{localize 'CONAN.Attack.immobilized'}}">
             <img src="systems/conan-the-hyborian-age/assets/icons/paralysis.svg" alt="Immobilized" style="width: 20px; height: 20px;">
           </button>
         </div>
         <div class="defense-field">
           <label>
             <span class="primary-label">{{localize "CONAN.Resources.physical"}}</span>
-            <span class="subtitle-label">Physical</span>
+            <span class="subtitle-label">{{localize "CONAN.Resources.physical"}}</span>
           </label>
           <div style="display: flex; align-items: center; gap: 6px;">
             <input type="number" name="system.defense.physical" value="{{system.defense.physical}}" min="0" max="30" data-dtype="Number" class="defense-value {{valueChanges.physicalDefense}} {{#if system.immobilized}}immobilized{{/if}}"/>
@@ -246,7 +246,7 @@
         <div class="defense-field">
           <label>
             <span class="primary-label">{{localize "CONAN.Resources.sorcery"}}</span>
-            <span class="subtitle-label">Sorcery</span>
+            <span class="subtitle-label">{{localize "CONAN.Resources.sorcery"}}</span>
           </label>
           <input type="number" name="system.defense.sorcery" value="{{system.defense.sorcery}}" min="0" max="30" data-dtype="Number" class="defense-value {{valueChanges.sorceryDefense}}"/>
         </div>

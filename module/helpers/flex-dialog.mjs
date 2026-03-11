@@ -221,11 +221,11 @@ export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplica
         bonusDamage = dieMax + weaponModifier;
         description = `${weaponDie} (max ${dieMax})${weaponModifier > 0 ? ` + ${weaponModifier}` : ''}`;
       } else {
-        ui.notifications.warn("Cannot parse weapon die format!");
+        ui.notifications.warn(game.i18n.localize("CONAN.FlexDialog.cannotParseDieFormat"));
         return;
       }
     } else {
-      ui.notifications.warn("Cannot apply Massive Damage - missing damage information!");
+      ui.notifications.warn(game.i18n.localize("CONAN.FlexDialog.missingDamageInfo"));
       return;
     }
     
