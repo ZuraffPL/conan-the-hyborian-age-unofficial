@@ -22,3 +22,6 @@ npm-debug.log*
 *.tmp
 *.bak
 *~
+
+# Copilot agent instructions
+CLAUDE.md

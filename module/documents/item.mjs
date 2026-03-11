@@ -19,34 +19,6 @@ export class ConanItem extends Item {
   }
 
   /**
-   * Augment the basic item data with additional dynamic data
-   */
-  prepareData() {
-    super.prepareData();
-    
-    // Migrate old range format (object) to new format (string)
-    if (this.type === "weapon" && this.system.range && typeof this.system.range === "object") {
-      // Old format was {value: 0, long: 0}, convert to default "touch" for melee
-      const weaponType = this.system.weaponType || "melee";
-      let defaultRange = "touch";
-      
-      if (weaponType === "thrown") {
-        defaultRange = "close";
-      } else if (weaponType === "ranged") {
-        const size = this.system.weaponSize || "medium";
-        if (size === "heavy") {
-          defaultRange = "distant8";
-        } else {
-          defaultRange = "medium3";
-        }
-      }
-      
-      // Update the item data with the new format
-      this.updateSource({ "system.range": defaultRange });
-    }
-  }
-
-  /**
    * Prepare a data object which defines the data schema used by dice roll commands
    */
   getRollData() {
@@ -70,7 +42,7 @@ export class ConanItem extends Item {
     const label = `[${item.type}] ${item.name}`;
 
     // If there's no roll data, send a chat message
-    if (!this.system.damage?.dice) {
+    if (!this.system.damage) {
       ChatMessage.create({
         speaker: speaker,
         rollMode: rollMode,
@@ -84,7 +56,7 @@ export class ConanItem extends Item {
     const rollData = this.getRollData();
 
     // Invoke the roll and submit it to chat
-    const roll = await new Roll(item.system.damage.dice + " + @attributes.strength.mod", rollData).roll();
+    const roll = await new Roll(item.system.damage, rollData).roll();
     
     roll.toMessage({
       speaker: speaker,

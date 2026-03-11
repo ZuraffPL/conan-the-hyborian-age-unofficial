@@ -420,7 +420,7 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
    * Dekrementuje licznik Oddechu dla aktora, zapisuje i emituje socket.
    */
   static async _decrementRecovery(actorId) {
-    const uses = foundry.utils.duplicate(game.settings.get(NS, "tale-recovery-uses") ?? {});
+    const uses = foundry.utils.deepClone(game.settings.get(NS, "tale-recovery-uses") ?? {});
     const current = uses[actorId] ?? 2;
     if (current <= 0) return;
     uses[actorId] = current - 1;
@@ -485,7 +485,7 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
    * Działa tylko gdy timer jest uruchomiony.
    */
   static async _incrementRecoveryAll() {
-    const uses = foundry.utils.duplicate(game.settings.get(NS, "tale-recovery-uses") ?? {});
+    const uses = foundry.utils.deepClone(game.settings.get(NS, "tale-recovery-uses") ?? {});
     const chars = TaleDialog.getActivePlayerCharacters();
     const updatedUses = {};
     for (const { actor } of chars) {
@@ -583,7 +583,7 @@ export class TaleDialog extends foundry.applications.api.HandlebarsApplicationMi
     }
 
     // Resetuj licznik Oddechu do 2/2 dla wszystkich aktywnych postaci
-    const uses = foundry.utils.duplicate(game.settings.get(NS, "tale-recovery-uses") ?? {});
+    const uses = foundry.utils.deepClone(game.settings.get(NS, "tale-recovery-uses") ?? {});
     const resetUpdates = {};
     for (const { actor } of chars) {
       uses[actor.id] = 2;

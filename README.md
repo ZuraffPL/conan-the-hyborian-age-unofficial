@@ -2,7 +2,7 @@
 
 An unofficial Foundry VTT implementation of **Conan: The Hyborian Age RPG** by Monolith Boardgames. Step into the savage world of Robert E. Howard's Conan the Barbarian and forge your legend in the Hyborian Age!
 
-![Version](https://img.shields.io/badge/version-0.0.64-darkred)
+![Version](https://img.shields.io/badge/version-0.7.0-darkred)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v13%2B-orange)
 
 ## Installation
@@ -46,6 +46,42 @@ Each character has **four attributes** (Might, Edge, Grit, Wits) rated 1–8:
 ---
 
 ## System Features
+
+### v0.7.0 — Full TypeDataModel Migration & Code Cleanup
+
+This release is a **major architecture overhaul**: every Actor and Item type is now backed by a `TypeDataModel` class, the legacy `template.json` schemas have been removed, and numerous code quality violations were resolved.
+
+#### TypeDataModel — Complete Migration
+
+- All six document types now have dedicated `TypeDataModel` classes in `module/models/`:
+  - **Items**: `WeaponModel`, `ArmorModel`, `SkillModel`, `SpellModel` (via `BaseItemModel`)
+  - **Actors**: `CharacterModel`, `MinionModel`, `AntagonistModel`
+- All derived-stat logic (`prepareDerivedData`) moved from `actor.mjs` into the respective models
+- `template.json` reduced to a minimal type declaration file — all schemas live exclusively in code
+
+#### `PoisonEffectsModel` — Shared Embedded DataModel
+
+- New `module/models/shared/poison-effects.mjs` — `PoisonEffectsModel extends DataModel`
+- Replaces three identical `SchemaField` blocks duplicated across all actor models
+- Embedded via `EmbeddedDataField(PoisonEffectsModel)` in each actor TypeDataModel
+- Exposes computed getters: `attributePenalty`, `rollPenalty`, `lifeDrain`, `staminaLocked`, `flexDieLocked`, `isAnyActive`
+
+#### Bug Fixes
+
+- **`Item.roll()` crash** — `item.mjs` accessed `this.system.damage.dice` which is now a `StringField`, not an object — fixed
+- **Weapon damage `[object Object]`** — `WeaponModel.damage` was a `SchemaField({dice,bonus,type})`; old data with a flat string caused the UI to display `[object Object]` — changed to `StringField`
+- **Might not added to melee damage** — `stamina-effects.mjs` was routing all damage through `rollWeaponDamage` (no Might adder) instead of `rollMeleeDamage`/`rollThrownDamage`/`rollRangedDamage`
+
+#### Code Cleanup
+
+- `starting-skills-dialog.mjs` — migrated from `Dialog` (V1) + jQuery `.find()` to `DialogV2.wait()` + native DOM
+- `npc-sheet.mjs` — removed local `function debounce()` implementation; replaced with `foundry.utils.debounce()`
+- `tale.mjs` — replaced 3× `foundry.utils.duplicate()` (deprecated) with `foundry.utils.deepClone()`
+- `roll-mechanics.mjs` — removed unused exported `rollWeaponDamage` function (~170 lines of dead code)
+- `actor.mjs` — removed empty `@deprecated` stub `_prepareNpcData()`
+- `damage-dialog.hbs`, `actor-character-sheet.hbs` — removed all compat-checks `{{#if weapon.system.damage.dice}}...{{else}}...{{/if}}`
+
+---
 
 ### v0.0.64 — Tale Dialog UX Fixes
 
@@ -355,8 +391,24 @@ conan-the-hyborian-age/
 ├── module/
 │   ├── conan.mjs                          ← Main entry point, hooks, socket handlers
 │   ├── documents/
-│   │   ├── actor.mjs                      ← Actor data model, migrations, derived data
+│   │   ├── actor.mjs                      ← ConanActor — token setup, XP hooks, getRollData
 │   │   └── item.mjs
+│   ├── models/                            ← NEW (v0.7.0) — TypeDataModel classes
+│   │   ├── actors/
+│   │   │   ├── character.mjs              ← CharacterModel
+│   │   │   ├── minion.mjs                 ← MinionModel
+│   │   │   ├── antagonist.mjs             ← AntagonistModel
+│   │   │   └── index.mjs
+│   │   ├── items/
+│   │   │   ├── base-item.mjs              ← BaseItemModel
+│   │   │   ├── weapon.mjs                 ← WeaponModel
+│   │   │   ├── armor.mjs                  ← ArmorModel
+│   │   │   ├── skill.mjs                  ← SkillModel
+│   │   │   ├── spell.mjs                  ← SpellModel
+│   │   │   └── index.mjs
+│   │   └── shared/
+│   │       ├── poison-effects.mjs         ← PoisonEffectsModel (EmbeddedDataField)
+│   │       └── index.mjs
 │   ├── helpers/
 │   │   ├── attack-dialog.mjs
 │   │   ├── character-creation-dialog.mjs
@@ -453,15 +505,16 @@ conan-the-hyborian-age/
 
 | Principle | Implementation |
 |-----------|---------------|
-| **ApplicationV2** | All sheets and dialogs use the modern Foundry API |
+| **ApplicationV2** | All sheets and dialogs use the modern Foundry v13 API |
+| **TypeDataModel** | All Actor (character, minion, antagonist) and Item (weapon, armor, skill, spell) types backed by `TypeDataModel`; shared sub-schemas via `EmbeddedDataField` |
 | **Native DOM** | No jQuery dependency — pure JavaScript throughout |
 | **Modern CSS** | Flexbox layouts, CSS variables, modular partials |
-| **Auto-save** | Real-time change detection with debounced form handling (500 ms for NPC sheets) |
+| **Auto-save** | Real-time change detection with `foundry.utils.debounce()` form handling (500 ms for NPC sheets) |
 | **Socket Delegation** | Permission-free player actions via GM delegation (`socket.mjs`) |
 | **Token Delta** | Proper Foundry v13 unlinked token support via `delta.system` paths |
 | **Custom Status Effects** | Registered in `CONFIG.statusEffects` with CSS filter colour preservation |
 | **Dice So Nice** | Two custom colorsets (`conan_flex_dark`, `conan_flex_light`) registered at startup; contrast-aware selection via `dice-utils.mjs` |
-| **Data Migrations** | `prepareBaseData()` auto-migrates scalar antagonist LP and character `lifePoints.actual` on first load |
+| **Data Migrations** | `migrateData()` in TypeDataModel auto-migrates legacy data formats on first load |
 
 ---
 

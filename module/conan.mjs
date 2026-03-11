@@ -7,6 +7,12 @@
 import { ConanActor } from "./documents/actor.mjs";
 import { ConanItem } from "./documents/item.mjs";
 
+// Import Item Data Models
+import { WeaponModel, ArmorModel, SkillModel, SpellModel } from "./models/items/index.mjs";
+
+// Import Actor Data Models
+import { CharacterModel, MinionModel, AntagonistModel } from "./models/actors/index.mjs";
+
 // Import Application classes
 import { ConanActorSheet } from "./sheets/actor-sheet.mjs";
 import { ConanMinionSheet, ConanAntagonistSheet } from "./sheets/npc-sheet.mjs";
@@ -46,6 +52,21 @@ Hooks.once("init", async function() {
   // Define custom Document classes
   CONFIG.Actor.documentClass = ConanActor;
   CONFIG.Item.documentClass = ConanItem;
+
+  // Register Item system data models (TypeDataModel)
+  CONFIG.Item.systemDataModels = {
+    weapon: WeaponModel,
+    armor:  ArmorModel,
+    skill:  SkillModel,
+    spell:  SpellModel
+  };
+
+  // Register Actor system data models (TypeDataModel)
+  CONFIG.Actor.systemDataModels = {
+    character:  CharacterModel,
+    minion:     MinionModel,
+    antagonist: AntagonistModel
+  };
 
   // Add custom status effects
   CONFIG.statusEffects.push({
@@ -461,20 +482,14 @@ Hooks.on("combatRound", async (combat, updateData, updateOptions) => {
     if (!actor) continue;
     
     // Check if actor has poison effect 3 active (life drain)
-    if (actor.system.poisoned && actor.system.poisonEffects?.effect3) {
+    const lifeDrain = actor.system.poisoned ? (actor.system.poisonEffects?.lifeDrain ?? 0) : 0;
+    if (lifeDrain > 0) {
       console.log(`Conan | Applying poison life drain to ${actor.name}`);
-      
+
       // Handle only characters and antagonists (only they have life points)
       if (actor.type === "character" || actor.type === "antagonist") {
-        // Get multiplier for life drain effect
-        const multiplier = actor.system.poisonEffects?.effect3Multiplier || 1;
-        
-        // Characters: lose multiplier * 1 actual life points; Antagonists: lose multiplier * 1 from life points pool
-        const currentLife = actor.type === "character"
-          ? actor.system.lifePoints.value
-          : (actor.system.lifePoints?.value ?? actor.system.lifePoints ?? 0);
-        const lifeLoss = multiplier;
-        const newLife = Math.max(0, currentLife - lifeLoss);
+        const currentLife = actor.system.lifePoints?.value ?? 0;
+        const newLife = Math.max(0, currentLife - lifeDrain);
         
         await actor.update({ "system.lifePoints.value": newLife });
         
@@ -483,7 +498,7 @@ Hooks.on("combatRound", async (combat, updateData, updateOptions) => {
           <div class="conan-poison-drain">
             <div class="poison-drain-info">
               <i class="fas fa-skull-crossbones" style="color: #15a20e;"></i>
-              <span><strong>${actor.name}</strong> ${game.i18n.localize('CONAN.Poisoned.lifeDrain')}${multiplier > 1 ? ` (x${multiplier})` : ''} (${currentLife} → ${newLife})</span>
+              <span><strong>${actor.name}</strong> ${game.i18n.localize('CONAN.Poisoned.lifeDrain')}${lifeDrain > 1 ? ` (x${lifeDrain})` : ''} (${currentLife} → ${newLife})</span>
             </div>
         `;
         

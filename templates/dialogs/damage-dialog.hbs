@@ -82,7 +82,7 @@
                 </label>
                 <select name="weaponId" id="weapon-select" class="weapon-select">
                   {{#each equippedMeleeWeapons as |weapon|}}
-                    <option value="{{weapon._id}}">{{weapon.name}} ({{#if weapon.system.damage.dice}}{{weapon.system.damage.dice}}{{else}}{{weapon.system.damage}}{{/if}})</option>
+                    <option value="{{weapon._id}}">{{weapon.name}} ({{weapon.system.damage}})</option>
                   {{/each}}
                 </select>
               </div>
@@ -93,7 +93,7 @@
                   <span class="subtitle">({{equippedMeleeWeapons.0.name}})</span>
                 </div>
                 <div class="param-value">
-                  <span class="value-display">{{#if equippedMeleeWeapons.0.system.damage.dice}}{{equippedMeleeWeapons.0.system.damage.dice}}{{else}}{{equippedMeleeWeapons.0.system.damage}}{{/if}}</span>
+                  <span class="value-display">{{equippedMeleeWeapons.0.system.damage}}</span>
                 </div>
               </div>
               <input type="hidden" name="weaponId" value="{{equippedMeleeWeapons.0._id}}" />
@@ -145,7 +145,7 @@
                 </label>
                 <select name="thrownWeaponId" id="thrown-weapon-select" class="weapon-select">
                   {{#each equippedThrownWeapons as |weapon|}}
-                    <option value="{{weapon._id}}">{{weapon.name}} ({{#if weapon.system.damage.dice}}{{weapon.system.damage.dice}}{{else}}{{weapon.system.damage}}{{/if}})</option>
+                    <option value="{{weapon._id}}">{{weapon.name}} ({{weapon.system.damage}})</option>
                   {{/each}}
                 </select>
               </div>
@@ -156,7 +156,7 @@
                   <span class="subtitle">({{equippedThrownWeapons.0.name}})</span>
                 </div>
                 <div class="param-value">
-                  <span class="value-display">{{#if equippedThrownWeapons.0.system.damage.dice}}{{equippedThrownWeapons.0.system.damage.dice}}{{else}}{{equippedThrownWeapons.0.system.damage}}{{/if}}</span>
+                  <span class="value-display">{{equippedThrownWeapons.0.system.damage}}</span>
                 </div>
               </div>
               <input type="hidden" name="thrownWeaponId" value="{{equippedThrownWeapons.0._id}}" />
@@ -191,7 +191,7 @@
                 </label>
                 <select name="rangedWeaponId" id="ranged-weapon-select" class="weapon-select">
                   {{#each equippedRangedWeapons as |weapon|}}
-                    <option value="{{weapon._id}}">{{weapon.name}} ({{weapon.system.damage.dice}}{{#if weapon.system.damageModifier}}{{#if (gt weapon.system.damageModifier 0)}}+{{/if}}{{weapon.system.damageModifier}}{{/if}})</option>
+                    <option value="{{weapon._id}}">{{weapon.name}} ({{weapon.system.damage}}{{#if weapon.system.damageModifier}}{{#if (gt weapon.system.damageModifier 0)}}+{{/if}}{{weapon.system.damageModifier}}{{/if}})</option>
                   {{/each}}
                 </select>
               </div>
@@ -203,11 +203,7 @@
                 </div>
                 <div class="param-value">
                   <span class="value-display">
-                    {{#if equippedRangedWeapons.0.system.damage.dice}}
-                      {{equippedRangedWeapons.0.system.damage.dice}}
-                    {{else}}
-                      {{equippedRangedWeapons.0.system.damage}}
-                    {{/if}}
+                    {{equippedRangedWeapons.0.system.damage}}
                     {{#if (and (not (eq equippedRangedWeapons.0.system.damageModifier null)) (not (eq equippedRangedWeapons.0.system.damageModifier undefined)) (ne equippedRangedWeapons.0.system.damageModifier 0))}}
                       {{#if (gt equippedRangedWeapons.0.system.damageModifier 0)}}+{{/if}}{{equippedRangedWeapons.0.system.damageModifier}}
                     {{/if}}

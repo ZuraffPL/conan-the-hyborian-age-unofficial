@@ -1,6 +1,83 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.0.64 - Tale Dialog UX Fixes
+## Current Version: v0.7.0 — Full TypeDataModel Migration & Code Cleanup
+
+### Overview
+
+Version 0.7.0 is a **major architecture release**. Every Actor and Item type in the system is now backed by a Foundry v13 `TypeDataModel` class, a shared `PoisonEffectsModel` eliminates duplicated schemas, and a batch of code quality issues (deprecated API usage, dead code, compat-checks) were resolved. No gameplay mechanics were changed.
+
+> ⚠️ **Note for existing worlds**: data migrations run automatically on first load via `migrateData()` in each TypeDataModel. No manual intervention is required.
+
+---
+
+### What's New in v0.7.0
+
+#### TypeDataModel — Complete Migration
+
+All six document types now have dedicated `TypeDataModel` classes registered in `CONFIG.Item/Actor.systemDataModels`:
+
+| Type | Model class | Location |
+|------|-------------|----------|
+| weapon | `WeaponModel` | `module/models/items/weapon.mjs` |
+| armor | `ArmorModel` | `module/models/items/armor.mjs` |
+| skill | `SkillModel` | `module/models/items/skill.mjs` |
+| spell | `SpellModel` | `module/models/items/spell.mjs` |
+| character | `CharacterModel` | `module/models/actors/character.mjs` |
+| minion | `MinionModel` | `module/models/actors/minion.mjs` |
+| antagonist | `AntagonistModel` | `module/models/actors/antagonist.mjs` |
+
+Each model defines its schema in `static defineSchema()` and handles data derivation in `prepareDerivedData()`. Backward-compatibility is handled by `migrateData()` static methods in each class.
+
+#### `PoisonEffectsModel` — Shared Sub-Schema
+
+New `module/models/shared/poison-effects.mjs`:
+
+- `PoisonEffectsModel extends foundry.abstract.DataModel` — embedded into every actor model via `EmbeddedDataField`
+- Schema: `effect1`–`effect5` (BooleanField), `effect2Multiplier` / `effect3Multiplier` (NumberField 1–5)
+- Computed getters eliminating duplicated logic across three actor models:
+  - `attributePenalty` — `1` if effect1, else `0`
+  - `rollPenalty` — multiplier if effect2 active
+  - `lifeDrain` — multiplier if effect3 active
+  - `staminaLocked` — `effect4`
+  - `flexDieLocked` — `effect5`
+  - `isAnyActive` — `true` if any effect is on
+
+#### `WeaponModel.damage` Field Type Change
+
+Changed from `SchemaField({ dice, bonus, type })` to `StringField({ initial: "1d6" })`:
+
+- The UI has always written flat strings like `"1d8"` — the old SchemaField caused `[object Object]` display and `1d6` fallback on every roll
+- `migrateData()` converts any legacy `{ dice: "1d8" }` object to `"1d8"` automatically
+- All HBS compat-checks `{{#if weapon.system.damage.dice}}...{{else}}...{{/if}}` removed
+
+#### `template.json` Simplified
+
+Reduced from ~260 lines to 8 lines — only `Actor.types` / `Item.types` declarations remain. All field definitions are now exclusively in TypeDataModel `defineSchema()` methods.
+
+---
+
+### Bug Fixes
+
+- **`Item.roll()` crash** — `item.mjs` accessed `.damage.dice` on a `StringField`; fixed to use `damage` directly
+- **Might not added to melee damage** (from stamina-effects) — routing fixed to call `rollMeleeDamage` / `rollThrownDamage` / `rollRangedDamage` instead of the now-removed `rollWeaponDamage`
+
+---
+
+### Code Cleanup
+
+| File | Change |
+|------|--------|
+| `starting-skills-dialog.mjs` | `new Dialog` (V1) + jQuery `.find()` → `DialogV2.wait()` + native DOM |
+| `npc-sheet.mjs` | local `function debounce()` → `foundry.utils.debounce()` |
+| `tale.mjs` | `foundry.utils.duplicate()` (3×) → `foundry.utils.deepClone()` |
+| `roll-mechanics.mjs` | removed exported `rollWeaponDamage` (never imported, ~170 lines) |
+| `actor.mjs` | removed empty `@deprecated` stub `_prepareNpcData()` |
+| `damage-dialog.hbs` | removed 6× compat-check `damage.dice` |
+| `actor-character-sheet.hbs` | removed 1× compat-check `damage.dice` |
+
+---
+
+## v0.0.64 - Tale Dialog UX Fixes
 
 ### Overview
 

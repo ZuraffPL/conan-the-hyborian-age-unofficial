@@ -6,24 +6,6 @@ import { ConanActorSheet } from "./actor-sheet.mjs";
 import { NPCAttackDialog } from "../helpers/npc-attack-dialog.mjs";
 
 /**
- * Debounce function to delay execution
- * @param {Function} func - Function to debounce
- * @param {number} wait - Milliseconds to wait
- * @returns {Function} Debounced function
- */
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-/**
  * Setup N/A checkbox handlers with strikethrough effect
  * @param {HTMLElement} element - The sheet element
  */
@@ -362,7 +344,7 @@ export class ConanMinionSheet extends ConanActorSheet {
     this._isUpdating = false;
     
     // Create debounced update function for text inputs (500ms delay)
-    const debouncedTextUpdate = debounce(async (fieldName, fieldValue) => {
+    const debouncedTextUpdate = foundry.utils.debounce(async (fieldName, fieldValue) => {
       if (this._isUpdating) return;
       this._isUpdating = true;
       
@@ -710,7 +692,7 @@ export class ConanAntagonistSheet extends ConanActorSheet {
     this._isUpdating = false;
     
     // Create debounced update function for text inputs (500ms delay)
-    const debouncedTextUpdate = debounce(async (fieldName, fieldValue) => {
+    const debouncedTextUpdate = foundry.utils.debounce(async (fieldName, fieldValue) => {
       if (this._isUpdating) return;
       this._isUpdating = true;
       

@@ -576,7 +576,7 @@
                   </span>
                   <span class="stat-separator">|</span>
                   <span class="weapon-stat">
-                    <strong>{{localize "CONAN.Weapon.damage"}}:</strong> {{#if item.system.damage.dice}}{{item.system.damage.dice}}{{else}}{{item.system.damage}}{{/if}}{{#if (and (eq item.system.weaponType "ranged") (ne item.system.damageModifier 0))}} {{#if (gt item.system.damageModifier 0)}}+{{/if}}{{item.system.damageModifier}}{{/if}}
+                    <strong>{{localize "CONAN.Weapon.damage"}}:</strong> {{item.system.damage}}{{#if (and (eq item.system.weaponType "ranged") (ne item.system.damageModifier 0))}} {{#if (gt item.system.damageModifier 0)}}+{{/if}}{{item.system.damageModifier}}{{/if}}
                   </span>
                 </div>
                 

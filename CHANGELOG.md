@@ -1,10 +1,43 @@
 # Changelog
 
+## [0.7.0] - 2026-03-11
+
+### Changed — Architecture (Breaking)
+
+- **Full TypeDataModel migration** — all six document types now have dedicated `TypeDataModel` classes in `module/models/`:
+  - Items: `WeaponModel`, `ArmorModel`, `SkillModel`, `SpellModel` (extending `BaseItemModel`)
+  - Actors: `CharacterModel`, `MinionModel`, `AntagonistModel`
+  - Registered in `CONFIG.Item.systemDataModels` / `CONFIG.Actor.systemDataModels`
+- **`PoisonEffectsModel`** — new shared `DataModel` in `module/models/shared/poison-effects.mjs`
+  - Replaces three identical `SchemaField` blocks duplicated across every actor model
+  - Embedded via `EmbeddedDataField(PoisonEffectsModel)` in each actor TypeDataModel
+  - Exposes getters: `attributePenalty`, `rollPenalty`, `lifeDrain`, `staminaLocked`, `flexDieLocked`, `isAnyActive`
+- **`template.json` reduced** — legacy per-type schemas removed; file now contains only `Actor.types` / `Item.types` declarations; all field definitions live exclusively in TypeDataModel classes
+- **`WeaponModel.damage`** changed from `SchemaField({dice, bonus, type})` to `StringField({ initial: "1d6" })` — flat string format consistent with UI and roll formulas; `migrateData()` converts old object format automatically
+- **`CharacterModel.prepareDerivedData()`** — full derivation logic moved out of `actor.mjs` into the model: attribute modifiers, effective values, LP max formula, physical/sorcery defense
+
+### Fixed
+
+- **`Item.roll()` crash** — `item.mjs` accessed `this.system.damage.dice` which is now a `StringField`; fixed to use `this.system.damage` directly
+- **Weapon damage displaying `[object Object]`** — caused by `SchemaField({dice,bonus,type})` receiving a flat string from the UI; fixed by the `StringField` migration
+- **Might not applied to melee damage from stamina-effects** — `stamina-effects.mjs` was routing all weapon damage through `rollWeaponDamage` (no Might adder); now correctly routes to `rollMeleeDamage` / `rollThrownDamage` / `rollRangedDamage`
+
+### Removed (Code Cleanup)
+
+- **`rollWeaponDamage`** — exported but never imported anywhere; removed (~170 lines of dead code)
+- **`_prepareNpcData()`** — empty `@deprecated` stub in `actor.mjs`; removed
+- **Local `debounce()` function** in `npc-sheet.mjs` — replaced with `foundry.utils.debounce()`
+- **Compat-checks `{{#if weapon.system.damage.dice}}`** in `damage-dialog.hbs` and `actor-character-sheet.hbs` — obsolete after `StringField` migration; removed
+- **`foundry.utils.duplicate()`** calls in `tale.mjs` (3×) — replaced with `foundry.utils.deepClone()`
+- **`Dialog` (V1) in `starting-skills-dialog.mjs`** — migrated to `DialogV2.wait()` + native DOM (removed jQuery `.find()` usage)
+
+---
+
 ## [0.0.64] - 2026-03-07
 
 ### Changed
 
-- **"Rest" label moved above buttons in the Tale dialog**
+- **"Recovery" label moved above buttons in the Tale dialog**
   - Section header (bed icon + label) is now rendered in a separate row above the "+1 Rest" and "Respite" action buttons, preventing the Respite button from overflowing the dialog window
 
 - **Respite resets Recovery uses to 2/2**

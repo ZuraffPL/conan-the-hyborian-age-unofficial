@@ -287,12 +287,19 @@ async function spendStaminaToBoost(message, boost) {
               ui.notifications.warn(game.i18n.localize('CONAN.DamageDialog.NoWeaponFound'));
               return;
             }
-            
-            const { rollWeaponDamage } = await import('./roll-mechanics.mjs');
-            await rollWeaponDamage(foundActor, weapon, modifier);
+            if (damageType === 'melee') {
+              const { rollMeleeDamage } = await import('./roll-mechanics.mjs');
+              await rollMeleeDamage(foundActor, weapon, modifier);
+            } else if (damageType === 'thrown') {
+              const { rollThrownDamage } = await import('./roll-mechanics.mjs');
+              await rollThrownDamage(foundActor, weapon, modifier);
+            } else {
+              const { rollRangedDamage } = await import('./roll-mechanics.mjs');
+              await rollRangedDamage(foundActor, weapon, modifier);
+            }
           } else {
-            const { rollUnarmedDamage } = await import('./roll-mechanics.mjs');
-            await rollUnarmedDamage(foundActor, modifier);
+            const { rollMeleeDamage } = await import('./roll-mechanics.mjs');
+            await rollMeleeDamage(foundActor, null, modifier);
           }
         } else if (damageType === 'sorcery') {
           const { rollSorceryWitsDamage, rollSorceryCustomDieDamage, rollSorceryFixedDamage } = await import('./roll-mechanics.mjs');
