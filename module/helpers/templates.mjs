@@ -1,6 +1,6 @@
 // Register Handlebars helpers for Conan system
 Hooks.once('init', () => {
-  Handlebars.registerHelper('includes', function(array, value) {
+  Handlebars.registerHelper('conan-includes', function(array, value) {
     if (!Array.isArray(array)) return false;
     return array.includes(value);
   });

@@ -509,7 +509,14 @@
         "modifierLabel": "Modificateur",
         "modifier": "Modificateur",
         "roll": "Lancer",
-        "cancel": "Annuler"
+        "cancel": "Annuler",
+        "levels": {
+          "mundane": "Triviale",
+          "easy": "Facile",
+          "moderate": "Modérée",
+          "tough": "Difficile",
+          "legendary": "Légendaire"
+        }
       },
       "characterCreation": {
         "title": "Création de Personnage",

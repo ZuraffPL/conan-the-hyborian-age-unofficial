@@ -328,20 +328,20 @@ async function spendStaminaToBoost(message, boost) {
  * @returns {number}
  */
 function extractTotalFromMessage(message) {
-  const html = $(message.content);
-  
+  const doc = new DOMParser().parseFromString(message.content, "text/html");
+
   // Try to find .calc-total element (for attribute tests and attacks)
-  const calcTotal = html.find('.calc-total');
-  if (calcTotal.length > 0) {
-    return parseInt(calcTotal.text()) || 0;
+  const calcTotal = doc.querySelector('.calc-total');
+  if (calcTotal) {
+    return parseInt(calcTotal.textContent) || 0;
   }
-  
+
   // For initiative rolls, look for the initiative value
   const initiativeMatch = message.content.match(/:\s*<strong>(\d+)<\/strong>/);
   if (initiativeMatch) {
     return parseInt(initiativeMatch[1]) || 0;
   }
-  
+
   return 0;
 }
 
@@ -351,14 +351,14 @@ function extractTotalFromMessage(message) {
  * @returns {number|null}
  */
 function extractDifficultyFromMessage(message) {
-  const html = $(message.content);
-  
+  const doc = new DOMParser().parseFromString(message.content, "text/html");
+
   // Try to find .difficulty-value element
-  const difficultyValue = html.find('.difficulty-value');
-  if (difficultyValue.length > 0) {
-    return parseInt(difficultyValue.text()) || null;
+  const difficultyValue = doc.querySelector('.difficulty-value');
+  if (difficultyValue) {
+    return parseInt(difficultyValue.textContent) || null;
   }
-  
+
   return null;
 }
 
@@ -745,55 +745,44 @@ async function spendStaminaToMassiveDamage(message) {
  * @returns {Object} Object containing damage die info
  */
 function extractDamageRollData(message) {
-  const html = $(message.content);
-  
-  // Check if it's fixed damage (no dice rolled)
-  const isFixedDamage = message.content.includes('Stałe obrażenia') || 
-                        message.content.includes('Fixed damage') ||
+  const doc = new DOMParser().parseFromString(message.content, "text/html");
+  const flags = message.flags?.["conan-the-hyborian-age"] || {};
+
+  // Check if it's fixed damage via flag (reliable) or legacy HTML markers
+  const isFixedDamage = flags.isFixedDamage === true ||
                         message.content.includes('unarmedDamage');
-  
+
   if (isFixedDamage) {
-    // For fixed damage, the bonus equals the original damage
-    const flags = message.flags?.["conan-the-hyborian-age"] || {};
     const originalDamage = flags.totalDamage || 0;
     return { isFixedDamage: true, maxDieValue: originalDamage };
   }
-  
-  // Try to extract die type from weapon info in damage-components
-  // Look for patterns like "1k8", "2k6", "1d8", "2d6" in component values
-  const componentValues = html.find('.component-value');
+
+  // Try to extract die type from .component-value elements
+  // Look for patterns like "1k8", "2k6", "1d8", "2d6"
+  const dicePattern = /(\d+)?[kd](\d+)/i;
   let maxDieValue = 0;
-  
-  componentValues.each(function() {
-    const text = $(this).text();
-    const dicePattern = /(\d+)?[kd](\d+)/i;
-    const match = text.match(dicePattern);
-    
+
+  for (const el of doc.querySelectorAll('.component-value')) {
+    const match = el.textContent.match(dicePattern);
     if (match) {
       const dieValue = parseInt(match[2]);
-      if (dieValue > maxDieValue) {
-        maxDieValue = dieValue;
-      }
+      if (dieValue > maxDieValue) maxDieValue = dieValue;
     }
-  });
-  
-  // If found a die value, return it
+  }
+
   if (maxDieValue > 0) {
     return { isFixedDamage: false, maxDieValue: maxDieValue };
   }
-  
-  // Try to find in damage-roll class div (for older format)
-  const damageRollDiv = html.find('.damage-roll');
-  if (damageRollDiv.length > 0) {
-    const dicePattern = /(\d+)?[kd](\d+)/i;
-    const match = damageRollDiv.html().match(dicePattern);
-    
+
+  // Try to find in .damage-roll div (older format)
+  const damageRollDiv = doc.querySelector('.damage-roll');
+  if (damageRollDiv) {
+    const match = damageRollDiv.innerHTML.match(dicePattern);
     if (match) {
-      const maxDieValue = parseInt(match[2]);
-      return { isFixedDamage: false, maxDieValue: maxDieValue };
+      return { isFixedDamage: false, maxDieValue: parseInt(match[2]) };
     }
   }
-  
+
   // Default to d8 if we can't determine (most common weapon die)
   return { isFixedDamage: false, maxDieValue: 8 };
 }

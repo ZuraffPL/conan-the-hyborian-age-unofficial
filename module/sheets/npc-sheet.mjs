@@ -990,19 +990,19 @@ class NPCDifficultyDialog extends foundry.applications.api.HandlebarsApplication
         let className = '';
         
         if (value >= 1 && value <= 3) {
-          labelText = game.i18n.lang === 'pl' ? 'Trywialna' : 'Mundane';
+          labelText = game.i18n.localize('CONAN.Dialog.difficulty.levels.mundane');
           className = 'easy';
         } else if (value >= 4 && value <= 6) {
-          labelText = game.i18n.lang === 'pl' ? 'Łatwa' : 'Easy';
+          labelText = game.i18n.localize('CONAN.Dialog.difficulty.levels.easy');
           className = 'easy';
         } else if (value >= 7 && value <= 9) {
-          labelText = game.i18n.lang === 'pl' ? 'Umiarkowana' : 'Moderate';
+          labelText = game.i18n.localize('CONAN.Dialog.difficulty.levels.moderate');
           className = 'moderate';
         } else if (value >= 10 && value <= 12) {
-          labelText = game.i18n.lang === 'pl' ? 'Wymagająca' : 'Tough';
+          labelText = game.i18n.localize('CONAN.Dialog.difficulty.levels.tough');
           className = 'tough';
         } else if (value >= 13) {
-          labelText = game.i18n.lang === 'pl' ? 'Legendarna' : 'Legendary';
+          labelText = game.i18n.localize('CONAN.Dialog.difficulty.levels.legendary');
           className = 'legendary';
         }
         

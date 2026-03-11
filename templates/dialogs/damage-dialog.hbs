@@ -11,7 +11,7 @@
     <div class="form-group">
       <label>{{localize "CONAN.Damage.damageType"}}</label>
       <div class="damage-type-options">
-        {{#if (includes allowedDamageTypes 'melee')}}
+        {{#if (conan-includes allowedDamageTypes 'melee')}}
         <div class="radio-option">
           <input type="radio" id="damage-melee" name="damageType" value="melee" {{#if (eq selectedDamageType 'melee')}}checked{{/if}}>
           <label for="damage-melee">
@@ -20,7 +20,7 @@
           </label>
         </div>
         {{/if}}
-        {{#if (includes allowedDamageTypes 'thrown')}}
+        {{#if (conan-includes allowedDamageTypes 'thrown')}}
         <div class="radio-option">
           <input type="radio" id="damage-thrown" name="damageType" value="thrown" {{#if (eq selectedDamageType 'thrown')}}checked{{/if}}>
           <label for="damage-thrown">
@@ -29,7 +29,7 @@
           </label>
         </div>
         {{/if}}
-        {{#if (includes allowedDamageTypes 'ranged')}}
+        {{#if (conan-includes allowedDamageTypes 'ranged')}}
         <div class="radio-option">
           <input type="radio" id="damage-ranged" name="damageType" value="ranged" {{#if (eq selectedDamageType 'ranged')}}checked{{/if}}>
           <label for="damage-ranged">
@@ -38,7 +38,7 @@
           </label>
         </div>
         {{/if}}
-        {{#if (includes allowedDamageTypes 'sorcery')}}
+        {{#if (conan-includes allowedDamageTypes 'sorcery')}}
         <div class="radio-option">
           <input type="radio" id="damage-sorcery" name="damageType" value="sorcery" {{#if (eq selectedDamageType 'sorcery')}}checked{{/if}}>
           <label for="damage-sorcery">

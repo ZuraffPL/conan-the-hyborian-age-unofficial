@@ -124,7 +124,7 @@ Hooks.once("init", async function() {
   // - concat, eq, ne, gt, gte, lt, lte, and, or, not, select
   // We only register custom helpers that Foundry doesn't provide
   
-  Handlebars.registerHelper("times", function(n, block) {
+  Handlebars.registerHelper("conan-times", function(n, block) {
     let accum = "";
     for(let i = 0; i < n; ++i) {
       accum += block.fn(i);

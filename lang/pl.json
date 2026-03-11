@@ -511,7 +511,14 @@
         "modifierLabel": "Modyfikator",
         "modifier": "Modyfikator",
         "roll": "Rzuć",
-        "cancel": "Anuluj"
+        "cancel": "Anuluj",
+        "levels": {
+          "mundane": "Trywialna",
+          "easy": "Łatwa",
+          "moderate": "Umiarkowana",
+          "tough": "Wymagająca",
+          "legendary": "Legendarna"
+        }
       },
       "characterCreation": {
         "title": "Kreacja Postaci",

@@ -512,7 +512,14 @@
         "modifierLabel": "Modifier",
         "modifier": "Modifier",
         "roll": "Roll",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "levels": {
+          "mundane": "Mundane",
+          "easy": "Easy",
+          "moderate": "Moderate",
+          "tough": "Tough",
+          "legendary": "Legendary"
+        }
       },
       "characterCreation": {
         "title": "Character Creation",
