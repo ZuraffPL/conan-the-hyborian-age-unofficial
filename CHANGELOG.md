@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.7.2] - 2026-03-11
+
+### Refactored — Localization & Code Quality
+
+- **Hardcoded strings in flex-dialog.mjs** — replaced 2 `ui.notifications.warn()` English strings with `game.i18n.localize()` calls; added `CONAN.FlexDialog.cannotParseDieFormat` and `CONAN.FlexDialog.missingDamageInfo` keys to all 3 language files (en/pl/fr)
+- **actor-minion-sheet.hbs** — all hardcoded English `subtitle-label`, `defense-label` and section header texts replaced with `{{localize}}` calls (Minion, Creature Type, Physical Defence, Sorcery Defence, Threshold, Armor, Wounded, Melee DMG, Ranged DMG, Actions per Round, Attacks per Round, section header `/ English` suffixes removed, creature type `<option>` suffixes removed)
+- **actor-character-sheet.hbs** — all hardcoded English `subtitle-label`/`subtitle-name` content replaced with `{{localize}}` calls (Initiative, Attack, Damage, Spellcasting, Flex Die, Stamina, Life Points, Actual, Max, Defense, Physical, Sorcery; Defence and Immobilized button title suffixes removed)
+- **CLAUDE.md** — fixed unclosed code fence in section 6 StringField example; updated Podsumowanie luk table (all rows now ✅)
+
+---
+
 ## [0.7.1] - 2026-03-11
 
 ### Fixed — Token Status Effects

@@ -1,6 +1,28 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.7.1 — Token Status Effects & Fight for Life Fixes
+## Current Version: v0.7.2 — Localization & Code Quality
+
+### Overview
+
+Version 0.7.2 is a code quality and localization refactoring release. All hardcoded English strings visible to players have been replaced with proper `game.i18n.localize()` calls, making French and Polish translations fully functional in the affected UI areas.
+
+---
+
+### What's New in v0.7.2
+
+#### Localization Fixes
+
+- **flex-dialog.mjs** — two `ui.notifications.warn()` messages were hardcoded in English; now properly localized in all 3 languages (EN/PL/FR)
+- **Minion sheet** — all subtitle labels, defense labels and section headers are now localized (Physical Defence, Sorcery Defence, Threshold, Armor, Wounded, Melee/Ranged DMG, Actions/Attacks per Round, creature type options)
+- **Character sheet** — all subtitle labels now localized (Initiative, Attack, Damage, Spellcasting, Flex Die, Stamina, Life Points, Actual, Max, Defense, Physical, Sorcery)
+
+#### Developer Documentation
+
+- **CLAUDE.md** — fixed broken code fence in section 6; updated compliance table (all items ✅)
+
+---
+
+## Previous Version: v0.7.1 — Token Status Effects & Fight for Life Fixes
 
 ### Overview
 
