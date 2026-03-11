@@ -1000,9 +1000,11 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
   const targetType = target.type;
   let resultMessage = "";
   let defeated = false;
+  let isAlreadyUnconscious = false;
   
   if (targetType === "character") {
     // Player character - reduce actual HP
+    isAlreadyUnconscious = target.statuses?.has("unconscious") ?? false;
     // If there's an open sheet, submit any pending changes first
     if (target.sheet?.rendered && target.sheet.element) {
       const form = target.sheet.element.querySelector
@@ -1047,6 +1049,13 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
     
     if (newHP === 0) {
       defeated = true;
+      if (isAlreadyUnconscious) {
+        // Nieprzytomna postać nie dostaje szansy na WoŻ – od razu ginie
+        const sceneId = isToken ? targetToken.parent?.id : null;
+        const tokenId = isToken ? targetToken.id : null;
+        await ConanSocket.requestToggleStatusEffect(sceneId, tokenId, target.id, "dead", true);
+        if (game.combat && ui.combat) ui.combat.render();
+      }
     }
     
   } else if (targetType === "antagonist") {
@@ -1078,14 +1087,14 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
     
     if (newLP === 0) {
       defeated = true;
-      // Mark as defeated in combat tracker and add dead overlay
-      if (isToken) {
-        await ConanSocket.requestTokenUpdate(
-          targetToken.parent.id,
-          targetToken.id,
-          { "overlayEffect": CONFIG.controlIcons.defeated }
-        );
-      }
+      // Mark as defeated: apply "dead" status effect (overlay handled by Foundry via Active Effect)
+      await ConanSocket.requestToggleStatusEffect(
+        targetToken.parent?.id,
+        targetToken.id,
+        target.id,
+        "dead",
+        true
+      );
       const combatant = game.combat?.combatants.find(c => c.tokenId === targetToken.id);
       if (combatant) {
         await ConanSocket.requestCombatantUpdate(combatant.id, { defeated: true });
@@ -1111,30 +1120,27 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
         await ConanSocket.requestTokenUpdate(
           targetToken.parent.id,
           targetToken.id,
-          {
-            "delta.system.defeated": true,
-            "overlayEffect": CONFIG.controlIcons.defeated
-          }
+          { "delta.system.defeated": true }
         );
       } else {
         await ConanSocket.requestActorUpdate(
           target.id,
           { "system.defeated": true }
         );
-        if (isToken) {
-          await ConanSocket.requestTokenUpdate(
-            targetToken.parent.id,
-            targetToken.id,
-            { "overlayEffect": CONFIG.controlIcons.defeated }
-          );
-        }
       }
-      
+      await ConanSocket.requestToggleStatusEffect(
+        targetToken.parent?.id,
+        targetToken.id,
+        target.id,
+        "dead",
+        true
+      );
+
       const combatant = game.combat?.combatants.find(c => c.tokenId === targetToken.id);
       if (combatant) {
         await ConanSocket.requestCombatantUpdate(combatant.id, { defeated: true });
       }
-      
+
     } else if (finalDamage >= threshold) {
       // Damage meets or exceeds threshold - instant defeat
       defeated = true;
@@ -1149,34 +1155,31 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
         await ConanSocket.requestTokenUpdate(
           targetToken.parent.id,
           targetToken.id,
-          {
-            "delta.system.defeated": true,
-            "overlayEffect": CONFIG.controlIcons.defeated
-          }
+          { "delta.system.defeated": true }
         );
       } else {
         await ConanSocket.requestActorUpdate(
           target.id,
           { "system.defeated": true }
         );
-        if (isToken) {
-          await ConanSocket.requestTokenUpdate(
-            targetToken.parent.id,
-            targetToken.id,
-            { "overlayEffect": CONFIG.controlIcons.defeated }
-          );
-        }
       }
-      
+      await ConanSocket.requestToggleStatusEffect(
+        targetToken.parent?.id,
+        targetToken.id,
+        target.id,
+        "dead",
+        true
+      );
+
       const combatant = game.combat?.combatants.find(c => c.tokenId === targetToken.id);
       if (combatant) {
         await ConanSocket.requestCombatantUpdate(combatant.id, { defeated: true });
       }
-      
+
     } else {
       // Damage below threshold - mark as wounded
       defeated = false; // Sługus przeżył, tylko ranny
-      
+
       // Mark minion as wounded (update token if unlinked, otherwise actor)
       if (isToken && !targetToken.actorLink) {
         await ConanSocket.requestTokenUpdate(
@@ -1190,7 +1193,16 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
           { "system.wounded": true }
         );
       }
-      
+      // Apply wounded status effect icon and refresh combat tracker
+      await ConanSocket.requestToggleStatusEffect(
+        targetToken.parent?.id,
+        targetToken.id,
+        target.id,
+        "wounded",
+        true
+      );
+      if (game.combat && ui.combat) ui.combat.render();
+
       resultMessage = game.i18n.format("CONAN.Damage.minionWounded", {
         name: target.name,
         damage: finalDamage,
@@ -1201,7 +1213,7 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
   }
   
   // Create chat message with result
-  const fightForLifeHtml = (defeated && targetType === "character") ? `
+  const fightForLifeHtml = (defeated && targetType === "character" && !isAlreadyUnconscious) ? `
     <div class="fight-for-life-container" style="margin-top: 10px; padding: 10px; background: rgba(220, 20, 60, 0.1); border: 2px solid #dc143c; border-radius: 6px; text-align: center;">
       <div style="margin-bottom: 8px; color: #8b0000; font-weight: bold;">
         <i class="fas fa-heart-broken" style="color: #dc143c;"></i> ${game.i18n.localize('CONAN.FightForLife.warning')}
@@ -1218,6 +1230,12 @@ export async function applyNPCDamage(totalDamage, targetToken, attacker) {
                transition: all 0.2s;">
         <i class="fas fa-dice-d20"></i> ${game.i18n.localize('CONAN.FightForLife.button')}
       </button>
+    </div>
+  ` : (defeated && targetType === "character" && isAlreadyUnconscious) ? `
+    <div class="fight-for-life-container" style="margin-top: 10px; padding: 10px; background: rgba(0, 0, 0, 0.2); border: 2px solid #4a0000; border-radius: 6px; text-align: center;">
+      <div style="color: #8b0000; font-weight: bold;">
+        <i class="fas fa-skull" style="color: #4a0000;"></i> ${game.i18n.localize('CONAN.FightForLife.killedUnconscious')}
+      </div>
     </div>
   ` : '';
 

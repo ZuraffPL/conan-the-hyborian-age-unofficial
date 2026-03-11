@@ -297,12 +297,13 @@ export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplica
 
   async applySuccessEffect() {
     const isAttackRoll = this.rollContext?.isAttackRoll ?? false;
-    
+    const isFightForLife = this.rollContext?.isFightForLife ?? false;
+
     // Show notification
     ui.notifications.info(
       `${this.actor.name}: ${game.i18n.localize("CONAN.FlexEffect.success.name")} - ${game.i18n.localize("CONAN.Roll.failure")} → ${game.i18n.localize("CONAN.Roll.success")}`
     );
-    
+
     // Generate new success message
     if (isAttackRoll && this.rollContext) {
       // For attack rolls - generate message with Roll Damage button
@@ -310,6 +311,13 @@ export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplica
     } else if (this.rollContext) {
       // For attribute tests - generate simple success message
       await this.generateAttributeSuccessMessage();
+    }
+
+    // Fight for Life converted to success → character is unconscious (not dead)
+    if (isFightForLife) {
+      const { ConanSocket } = await import('./socket.mjs');
+      await ConanSocket.requestToggleStatusEffect(null, null, this.actor.id, "unconscious", true);
+      if (game.combat && ui.combat) ui.combat.render();
     }
   }
   
@@ -549,10 +557,4 @@ export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplica
     }
   }
 
-  async applyDamageEffect() {
-    // This will be handled in damage rolls
-    ui.notifications.info(
-      `${this.actor.name}: ${game.i18n.localize("CONAN.FlexEffect.damage.name")} - ${game.i18n.localize("CONAN.FlexEffect.damage.description")}`
-    );
-  }
 }

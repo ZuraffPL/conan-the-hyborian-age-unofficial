@@ -288,7 +288,8 @@ export class ConanMinionSheet extends ConanActorSheet {
     
     // Just toggle the flag - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update(updateData);
-    
+    await this.baseActor.toggleStatusEffect("conan-defence", { active: newDefence });
+
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {
       ui.combat.render();
@@ -311,14 +312,16 @@ export class ConanMinionSheet extends ConanActorSheet {
       updateData["system.defense.basePhysical"] = this.baseActor.system.defense.physical;
     }
     
-    // Disable Defence when becoming immobilized
+    // Disable Defence when becoming immobilized — also clear defence status effect
     if (newImmobilized && this.baseActor.system.defenceActive) {
       updateData["system.defenceActive"] = false;
+      await this.baseActor.toggleStatusEffect("conan-defence", { active: false });
     }
     
     // Just toggle flags - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update(updateData);
-    
+    await this.baseActor.toggleStatusEffect("conan-immobilized", { active: newImmobilized });
+
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {
       ui.combat.render();
@@ -843,7 +846,8 @@ export class ConanAntagonistSheet extends ConanActorSheet {
     
     // Just toggle the flag - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update(updateData);
-    
+    await this.baseActor.toggleStatusEffect("conan-defence", { active: newDefence });
+
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {
       ui.combat.render();
@@ -866,14 +870,16 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       updateData["system.defense.basePhysical"] = this.baseActor.system.defense.physical;
     }
     
-    // Disable Defence when becoming immobilized
+    // Disable Defence when becoming immobilized — also clear defence status effect
     if (newImmobilized && this.baseActor.system.defenceActive) {
       updateData["system.defenceActive"] = false;
+      await this.baseActor.toggleStatusEffect("conan-defence", { active: false });
     }
     
     // Just toggle flags - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update(updateData);
-    
+    await this.baseActor.toggleStatusEffect("conan-immobilized", { active: newImmobilized });
+
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {
       ui.combat.render();

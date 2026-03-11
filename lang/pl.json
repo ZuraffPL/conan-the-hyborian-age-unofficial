@@ -641,6 +641,7 @@
       "rolling": "Rzucanie...",
       "unconscious": "Postać Nieprzytomna - Przeżyła",
       "death": "Postać Umiera",
+      "killedUnconscious": "Postać jest nieprzytomna – każdy atak trafia i zabija!",
       "description": "Gdy Punkty życia spadną do 0, wykonaj test Hartu (trudność 8). Sukces oznacza nieprzytomność, porażka śmierć. Możesz użyć Efektu Brawury lub wydać Wytrwałość, aby poprawić wynik."
     },
 

@@ -139,7 +139,10 @@ export class PoisonedDialog extends foundry.applications.api.HandlebarsApplicati
     
     // Refresh actor sheet to update UI immediately
     this.baseActor.sheet?.render(false);
-    
+
+    // Sync poisoned status effect icon on token
+    await this.baseActor.toggleStatusEffect("conan-poisoned", { active: anyEffectActive });
+
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {
       ui.combat.render();

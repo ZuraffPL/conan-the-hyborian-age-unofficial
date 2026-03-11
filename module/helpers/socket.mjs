@@ -49,6 +49,9 @@ export class ConanSocket {
       case "requestActorUpdate":
         this._handleActorUpdateRequest(data);
         break;
+      case "toggleStatusEffect":
+        this._handleToggleStatusEffect(data);
+        break;
       case "taleStart":
       case "talePause":
       case "taleStop":
@@ -113,6 +116,31 @@ export class ConanSocket {
     const actor = game.actors.get(data.actorId);
     if (actor && actor.sheet.rendered) {
       actor.sheet.render(false);
+    }
+  }
+
+  /**
+   * Handle toggle status effect events (GM only)
+   * @param {Object} data - The status effect data
+   */
+  static async _handleToggleStatusEffect(data) {
+    if (!game.user.isGM) return;
+    if (!data.effectId) return;
+
+    try {
+      let actor = null;
+      if (data.sceneId && data.tokenId) {
+        const scene = game.scenes.get(data.sceneId);
+        const tokenDoc = scene?.tokens.get(data.tokenId);
+        actor = tokenDoc?.actor;
+      }
+      if (!actor && data.actorId) {
+        actor = game.actors.get(data.actorId);
+      }
+      if (!actor) return;
+      await actor.toggleStatusEffect(data.effectId, { active: data.active });
+    } catch (error) {
+      console.error("Conan | Error toggling status effect:", error);
     }
   }
 
@@ -374,6 +402,36 @@ export class ConanSocket {
     });
 
     // Wait a bit to allow GM to process the request
+    return new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  /**
+   * Toggle a status effect on an actor/token through GM (for players without permissions)
+   * For unlinked tokens, sceneId+tokenId identify the token actor.
+   * For linked actors, actorId is used as fallback.
+   * @param {string|null} sceneId - The scene ID (for token lookup)
+   * @param {string|null} tokenId - The token ID (for token lookup)
+   * @param {string|null} actorId - The base actor ID (fallback for linked actors)
+   * @param {string} effectId - The status effect id (e.g. "dead", "wounded")
+   * @param {boolean} active - Whether to activate (true) or deactivate (false)
+   */
+  static async requestToggleStatusEffect(sceneId, tokenId, actorId, effectId, active) {
+    if (game.user.isGM) {
+      let actor = null;
+      if (sceneId && tokenId) {
+        const scene = game.scenes.get(sceneId);
+        const tokenDoc = scene?.tokens.get(tokenId);
+        actor = tokenDoc?.actor;
+      }
+      if (!actor && actorId) {
+        actor = game.actors.get(actorId);
+      }
+      if (!actor) return;
+      return await actor.toggleStatusEffect(effectId, { active });
+    }
+
+    // Otherwise, send request to GM via socket
+    this.emit("toggleStatusEffect", { sceneId, tokenId, actorId, effectId, active });
     return new Promise(resolve => setTimeout(resolve, 100));
   }
 }

@@ -59,10 +59,15 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     context.attributeDie = this.actor.system.attributes[attribute].die;
     
     // Get target's Physical Defense from selected token
+    // Nieprzytomna cel ma obronę fizyczną = 0 (każdy atak trafia)
     const targets = Array.from(game.user.targets);
     if (targets.length > 0 && targets[0].actor) {
       const targetActor = targets[0].actor;
-      context.targetDefense = targetActor.system.defense?.physical || 5;
+      if (targetActor.statuses?.has("unconscious")) {
+        context.targetDefense = 0;
+      } else {
+        context.targetDefense = targetActor.system.defense?.physical || 5;
+      }
     } else {
       context.targetDefense = 5;
     }

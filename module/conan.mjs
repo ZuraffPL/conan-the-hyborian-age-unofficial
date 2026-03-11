@@ -69,11 +69,28 @@ Hooks.once("init", async function() {
   };
 
   // Add custom status effects
-  CONFIG.statusEffects.push({
-    id: "wounded",
-    name: "CONAN.NPC.wounded",
-    img: "systems/conan-the-hyborian-age/assets/icons/wounded.svg"
-  });
+  CONFIG.statusEffects.push(
+    {
+      id: "wounded",
+      name: "CONAN.NPC.wounded",
+      img: "systems/conan-the-hyborian-age/assets/icons/wounded.svg"
+    },
+    {
+      id: "conan-defence",
+      name: "CONAN.Attack.defence",
+      img: "icons/svg/shield.svg"
+    },
+    {
+      id: "conan-immobilized",
+      name: "CONAN.Attack.immobilized",
+      img: "systems/conan-the-hyborian-age/assets/icons/paralysis.svg"
+    },
+    {
+      id: "conan-poisoned",
+      name: "CONAN.Poisoned.title",
+      img: "systems/conan-the-hyborian-age/assets/icons/Poisoned.svg"
+    }
+  );
 
   // Register sheet application classes (ApplicationV2)
   foundry.applications.apps.DocumentSheetConfig.registerSheet(ConanActor, "conan", ConanActorSheet, {
@@ -513,15 +530,15 @@ Hooks.on("combatRound", async (combat, updateData, updateOptions) => {
             </div>
             `;
             
-            // Mark as defeated in combat tracker
+            // Mark as defeated: apply "dead" status effect (overlay handled by Foundry via Active Effect)
             const token = combatant.token?.object;
-            if (token) {
-              await ConanSocket.requestTokenUpdate(
-                token.document.parent.id,
-                token.document.id,
-                { "overlayEffect": CONFIG.controlIcons.defeated }
-              );
-            }
+            await ConanSocket.requestToggleStatusEffect(
+              token?.document.parent?.id,
+              token?.document.id,
+              actor.id,
+              "dead",
+              true
+            );
             await ConanSocket.requestCombatantUpdate(combatant.id, { defeated: true });
             
           } else if (actor.type === "character") {
@@ -763,10 +780,10 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
               <div class="dice-roll flex-die ${flexTriggered ? 'flex-triggered' : ''}">
                 <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
                 <div class="die-result ${flexTriggered ? 'flex-max' : ''}">${flexResult}</div>
-                ${flexTriggered ? `<div class="flex-effect-notice"><i class="fas fa-star"></i> ${game.i18n.localize('CONAN.Roll.flexEffect')}</div>` : ''}
               </div>
               ` : ''}
             </div>
+            ${flexTriggered ? `<div class="flex-effect-notice" style="text-align:center; margin: 4px 0;"><i class="fas fa-star"></i> ${game.i18n.localize('CONAN.Roll.flexEffect')}</div>` : ''}
             ${windsOfFate ? `<div class="winds-of-fate-banner"><i class="fas fa-wind"></i> ${game.i18n.localize('CONAN.Roll.windsOfFate')}</div>` : ''}
             <div class="roll-calculation">
               <span class="calc-component">${gritDieResult}</span>
@@ -801,8 +818,18 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
           }
         }
       });
-      
-      // If flex triggered, show flex dialog
+
+      // Apply unconscious status effect on success (character survives but is knocked out)
+      if (success) {
+        await ConanSocket.requestToggleStatusEffect(null, null, actor.id, "unconscious", true);
+        if (game.combat && ui.combat) ui.combat.render();
+      } else {
+        // Postać umiera - aplikuj ikonę śmierci na tokenie i w combat trackerze
+        await ConanSocket.requestToggleStatusEffect(null, null, actor.id, "dead", true);
+        if (game.combat && ui.combat) ui.combat.render();
+      }
+
+      // If flex triggered, show flex dialog (e.g. stamina recovery)
       if (flexTriggered) {
         const { FlexEffectDialog } = await import("./helpers/flex-dialog.mjs");
         const dialog = new FlexEffectDialog(actor, { mainRoll, flexRoll, success, isDamageRoll: false }, {

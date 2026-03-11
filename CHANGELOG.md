@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.7.1] - 2026-03-11
+
+### Fixed — Token Status Effects
+
+- **Ikona czaszki na tokenie** — po pokonaniu antagonisty lub sługusa `actor.toggleStatusEffect("dead")` zastąpiło bezpośrednie `token.update({ overlayEffect })`, które nie działało niezawodnie w Foundry v13 (problem warstw PIXI)
+- **Ikona krwi (wounded) na sługusach** — po otrzymaniu obrażeń poniżej progu eliminacji token otrzymuje status `wounded` przez `toggleStatusEffect`
+- **Ikony obrony / unieruchomienia / zatrucia** — trzy nowe statusy (`conan-defence`, `conan-immobilized`, `conan-poisoned`) rejestrowane w `CONFIG.statusEffects`; każde przełączenie stanu w karcie postaci, NPC oraz oknie zatrucia wywołuje `toggleStatusEffect` — ikony widoczne bezpośrednio na tokenach
+- **paralysis.svg** — usunięto deklarację XML i DOCTYPE (PIXI nie akceptował pliku); zmieniono `fill` na czarny + `stroke="#ffffff"` z `paint-order="stroke fill"` — ikona widoczna zarówno na jasnym tle karty, jak i na ciemnym tle tokena
+
+### Fixed — Fight for Life (Walka o Życie)
+
+- **Brak ikony śmierci po nieudanym WoŻ** — po nieudanym rzucie Hartu system teraz wywołuje `toggleStatusEffect("dead", true)`, co nakłada czaszkę na token i aktualizuje combat tracker
+- **Nieudany WoŻ wywoływał się w kółko** — nieprzytomna postać (`status: unconscious`) przy kolejnym ataku nie dostaje kolejnego rzutu WoŻ; zamiast tego atak natychmiast aplikuje status `dead`
+- **Obrona nieprzytomnej postaci = 0** — obie dialogi ataku (`attack-dialog.mjs`, `npc-attack-dialog.mjs`) sprawdzają `statuses.has("unconscious")`; jeśli cel jest nieprzytomny, trudność ataku spada do 0 (każdy atak trafia automatycznie)
+- **Nieprzytomna postać nie może znów robić WoŻ** — po trafieniu nieprzytomnej postaci wiadomość na chacie wyświetla baner z czaszką zamiast przycisku WoŻ
+- **Layout wiadomości WoŻ** — `flex-effect-notice` przeniesione poza `dice-section` (poprzednio powodowało błąd layoutu CSS)
+- **Status `unconscious` po zdanym WoŻ** — po pomyślnym rzucie Hartu postać otrzymuje status nieprzytomności przez `toggleStatusEffect`
+- **Status `unconscious` po konwersji Brawury podczas WoŻ** — `FlexEffectDialog.applySuccessEffect()` sprawdza flagę `isFightForLife` i aplikuje status `unconscious`
+
+### Added — ConanSocket
+
+- **`ConanSocket.requestToggleStatusEffect()`** — nowa metoda; jeśli wywołujący jest GM, działa bezpośrednio; jeśli gracz, emituje zdarzenie przez socket → GM przetwarza; obsługuje zarówno tokeny połączone, jak i niepołączone (unlinked)
+
+---
+
 ## [0.7.0] - 2026-03-11
 
 ### Changed — Architecture (Breaking)

@@ -642,6 +642,7 @@
       "rolling": "Rolling...",
       "unconscious": "Character Unconscious - Survives",
       "death": "Character Dies",
+      "killedUnconscious": "Character is unconscious – every attack hits and kills!",
       "description": "When Life Points reach 0, make a Grit test (Difficulty 8). Success means unconsciousness, failure means death. You can use Flex Effect or spend Stamina to improve the result."
     },
 

@@ -759,7 +759,8 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
     await this.baseActor.update({
       'system.defenceActive': newState
     });
-    
+    await this.baseActor.toggleStatusEffect("conan-defence", { active: newState });
+
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {
       ui.combat.render();
@@ -781,14 +782,16 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
       'system.immobilized': newState
     };
     
-    // Disable Defence when becoming immobilized
+    // Disable Defence when becoming immobilized — also clear defence status effect
     if (newState && this.baseActor.system.defenceActive) {
       updates['system.defenceActive'] = false;
+      await this.baseActor.toggleStatusEffect("conan-defence", { active: false });
     }
     
     // Just toggle flags - prepareDerivedData() will recalculate defense automatically
     await this.baseActor.update(updates);
-    
+    await this.baseActor.toggleStatusEffect("conan-immobilized", { active: newState });
+
     // Refresh Combat Tracker if in combat
     if (game.combat && ui.combat) {
       ui.combat.render();

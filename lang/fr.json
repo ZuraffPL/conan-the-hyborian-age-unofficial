@@ -638,6 +638,7 @@
       "rolling": "Lancement...",
       "unconscious": "Personnage Inconscient - Survit",
       "death": "Le Personnage Meurt",
+      "killedUnconscious": "Le personnage est inconscient – chaque attaque touche et tue!",
       "description": "Lorsque les Points de Vie atteignent 0, effectuez un test de Résistance (Difficulté 8). Le succès signifie l'inconscience, l'échec signifie la mort. Vous pouvez utiliser l'Effet Flex ou dépenser de l'Endurance pour améliorer le résultat."
     },
 

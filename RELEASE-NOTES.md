@@ -1,32 +1,38 @@
 # Release Notes - Conan: The Hyborian Age System
 
-## Current Version: v0.7.0 — Full TypeDataModel Migration & Code Cleanup
+## Current Version: v0.7.1 — Token Status Effects & Fight for Life Fixes
 
 ### Overview
 
-Version 0.7.0 is a **major architecture release**. Every Actor and Item type in the system is now backed by a Foundry v13 `TypeDataModel` class, a shared `PoisonEffectsModel` eliminates duplicated schemas, and a batch of code quality issues (deprecated API usage, dead code, compat-checks) were resolved. No gameplay mechanics were changed.
-
-> ⚠️ **Note for existing worlds**: data migrations run automatically on first load via `migrateData()` in each TypeDataModel. No manual intervention is required.
+Version 0.7.1 to wydanie naprawcze do v0.7.0. Poprawia regresję z ikonami statusów na tokenach (czaszka, wounded, obrona, unieruchomienie, zatrucie), naprawia pętlę Walki o Życie przy kolejnych atakach na nieprzytomnych postaciach oraz dodaje routing uprawnień przez socket GM dla `toggleStatusEffect`.
 
 ---
 
-### What's New in v0.7.0
+### Co nowego w v0.7.1
 
-#### TypeDataModel — Complete Migration
+#### Ikony statusów na tokenach
 
-All six document types now have dedicated `TypeDataModel` classes registered in `CONFIG.Item/Actor.systemDataModels`:
+- Czaszka (pokonanie antagonisty / sługusa) — `toggleStatusEffect("dead")`
+- Krew (wounded sługus poniżej progu) — `toggleStatusEffect("wounded")`
+- Obrona, unieruchomienie, zatrucie — trzy nowe statusy systemu widoczne bezpośrednio na tokenach
+- `paralysis.svg` naprawiony (usunięto DOCTYPE, czarny fill + biały stroke dla widoczności na obu tłach)
 
-| Type | Model class | Location |
-|------|-------------|----------|
-| weapon | `WeaponModel` | `module/models/items/weapon.mjs` |
-| armor | `ArmorModel` | `module/models/items/armor.mjs` |
-| skill | `SkillModel` | `module/models/items/skill.mjs` |
-| spell | `SpellModel` | `module/models/items/spell.mjs` |
-| character | `CharacterModel` | `module/models/actors/character.mjs` |
-| minion | `MinionModel` | `module/models/actors/minion.mjs` |
-| antagonist | `AntagonistModel` | `module/models/actors/antagonist.mjs` |
+#### Walka o Życie — naprawa pełnego cyklu
 
-Each model defines its schema in `static defineSchema()` and handles data derivation in `prepareDerivedData()`. Backward-compatibility is handled by `migrateData()` static methods in each class.
+| Sytuacja | Poprzednio | Teraz |
+|----------|-----------|-------|
+| Nieudany WoŻ | Brak ikony śmierci | `toggleStatusEffect("dead")` → czaszka na tokenie |
+| Kolejny atak na nieprzytomną postać | Kolejny dialog WoŻ | Brak WoŻ, od razu `dead` |
+| Trudność ataku na nieprzytomną | Normalna obrona | 0 (każdy atak trafia) |
+| Zdany WoŻ | Brak statusu | `toggleStatusEffect("unconscious")` |
+| Zdany WoŻ przez konwersję Brawury | Brak statusu | `toggleStatusEffect("unconscious")` |
+
+#### ConanSocket — nowa metoda
+
+`requestToggleStatusEffect(sceneId, tokenId, actorId, effectId, active)` — gracze bez uprawnień Owner mogą wywoływać toggle przez socket GM.
+
+---
+
 
 #### `PoisonEffectsModel` — Shared Sub-Schema
 
