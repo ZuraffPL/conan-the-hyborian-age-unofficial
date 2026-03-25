@@ -25,3 +25,13 @@ npm-debug.log*
 
 # Copilot agent instructions
 CLAUDE.md
+
+# Ignoruj plik BFG .jar
+bfg-1.15.0.jar
+
+# Ignoruj narzędzie BFG
+bfg-1.15.0/
+
+# Ignoruj instalatory PowerShell i inne duże pliki MSI
+PowerShell-*.msi
+*.msi
