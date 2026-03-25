@@ -500,10 +500,12 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
    * Organize and classify Items for Character sheets
    */
   _prepareCharacterData(context) {
-    // Handle attribute modifiers
-    for (let [k, v] of Object.entries(context.system.attributes)) {
-      v.label = game.i18n.localize(`CONAN.Attributes.${k}.label`) || k;
-      v.abbr = game.i18n.localize(`CONAN.Attributes.${k}.abbr`) || k;
+    // Handle attribute modifiers (defensive: skip if attributes missing)
+    if (context.system.attributes && typeof context.system.attributes === "object") {
+      for (let [k, v] of Object.entries(context.system.attributes)) {
+        v.label = game.i18n.localize(`CONAN.Attributes.${k}.label`) || k;
+        v.abbr = game.i18n.localize(`CONAN.Attributes.${k}.abbr`) || k;
+      }
     }
     
     // Calculate total armor rating and encumbrance from equipped armor
@@ -521,7 +523,7 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
     context.totalEncumbrance = totalEncumbrance;
     
     // Check if overencumbered (encumbrance > Might value)
-    const mightValue = context.system.attributes.might?.value || 1;
+    const mightValue = context.system.attributes?.might?.value || 1;
     context.isOverencumbered = totalEncumbrance > mightValue;
     
     // Check magic restrictions based on origin
