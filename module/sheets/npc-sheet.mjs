@@ -1,3 +1,14 @@
+// Wspólna funkcja defensywnej inicjalizacji atrybutów dla NPC
+function ensureNPCAttributes(context) {
+  if (!context.system.attributes) {
+    context.system.attributes = {
+      might: { value: 1, die: "d6" },
+      edge:  { value: 1, die: "d6" },
+      grit:  { value: 1, die: "d6" },
+      wits:  { value: 1, die: "d6" }
+    };
+  }
+}
 /**
  * Extend ActorSheet for Minion actors
  */
@@ -104,9 +115,15 @@ export class ConanMinionSheet extends ConanActorSheet {
     // Add the actor reference to context
     context.actor = this.baseActor;
     
+
+
+
     // Add the actor's data to context
     context.system = this.baseActor.system;
     context.flags = this.baseActor.flags;
+    // Wspólna defensywna inicjalizacja atrybutów
+    ensureNPCAttributes(context);
+
 
     // Add roll data for convenience
     context.rollData = this.baseActor.getRollData();
@@ -556,6 +573,8 @@ export class ConanAntagonistSheet extends ConanActorSheet {
     // Add the actor's data to context
     context.system = this.baseActor.system;
     context.flags = this.baseActor.flags;
+    // Wspólna defensywna inicjalizacja atrybutów
+    ensureNPCAttributes(context);
 
     // Add roll data for convenience
     context.rollData = this.baseActor.getRollData();
