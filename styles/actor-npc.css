@@ -1,3 +1,32 @@
+/* Upewnij się, że inputy i selecty atrybutów są zawsze widoczne i stylowane */
+.conan.sheet.actor.minion .attribute-value input,
+.conan.sheet.actor.antagonist .attribute-value input {
+  display: inline-block;
+  width: 2.5em;
+  height: 2.5em;
+  font-size: 1.6em;
+  text-align: center;
+  border: 2px solid #a36a3c;
+  border-radius: 50%;
+  background: #f8f3ed;
+  color: #5a2d0c;
+  margin: 0 auto 0.5em auto;
+  box-shadow: none;
+}
+
+.conan.sheet.actor.minion .attribute-die select,
+.conan.sheet.actor.antagonist .attribute-die select {
+  display: inline-block;
+  width: 3.5em;
+  font-size: 1.1em;
+  text-align: center;
+  border: 1.5px solid #a36a3c;
+  border-radius: 0.5em;
+  background: #f8f3ed;
+  color: #5a2d0c;
+  margin: 0.2em auto 0 auto;
+  box-shadow: none;
+}
 /**
  * NPC Actor Sheet Styles (Minion & Antagonist)
  */
