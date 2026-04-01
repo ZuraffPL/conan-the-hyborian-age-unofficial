@@ -40,16 +40,16 @@
 .conan.sheet.actor.minion .sheet-header,
 .conan.sheet.actor.antagonist .sheet-header {
   display: flex;
-  gap: 15px;
-  padding: 15px;
+  gap: 10px;
+  padding: 8px 12px;
   background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(101, 67, 33, 0.1) 100%);
   border-bottom: 2px solid #8b4513;
 }
 
 .conan.sheet.actor.minion .profile-img,
 .conan.sheet.actor.antagonist .profile-img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border: 3px solid #8b4513;
   border-radius: 5px;
   cursor: pointer;
@@ -125,8 +125,9 @@ html[lang="en"] .conan.sheet.actor.antagonist .actor-type-label .subtitle-label 
 .conan.sheet.actor.minion .creature-type-field,
 .conan.sheet.actor.antagonist .creature-type-field {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
 }
 
 .conan.sheet.actor.minion .creature-type-field label,
@@ -217,7 +218,7 @@ html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-lab
 .conan.sheet.actor.minion .sheet-tabs .item,
 .conan.sheet.actor.antagonist .sheet-tabs .item {
   flex: 1;
-  padding: 12px 20px;
+  padding: 7px 20px;
   text-align: center;
   font-size: 14px;
   font-weight: bold;
@@ -257,7 +258,7 @@ html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-lab
 .conan.sheet.actor.minion .tab,
 .conan.sheet.actor.antagonist .tab {
   display: none;
-  padding: 20px;
+  padding: 8px 12px;
   flex: 1;
   overflow-y: auto;
 }
