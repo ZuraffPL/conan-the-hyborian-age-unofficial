@@ -48,8 +48,8 @@
 
 .conan.sheet.actor.minion .profile-img,
 .conan.sheet.actor.antagonist .profile-img {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border: 3px solid #8b4513;
   border-radius: 5px;
   cursor: pointer;

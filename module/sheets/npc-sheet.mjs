@@ -215,36 +215,31 @@ export class ConanMinionSheet extends ConanActorSheet {
     
     // Update wounded box CSS based on current state
     this._updateWoundedState();
-    
-    // Setup auto-resize for powers textareas
+
+    // Setup auto-resize for powers textareas.
+    // adjustHeight() must also run when the tab becomes visible (scrollHeight = 0 on hidden tabs).
+    const _adjustTextarea = (ta) => {
+      const minH = parseInt(window.getComputedStyle(ta).minHeight) || 80;
+      ta.style.height = 'auto';
+      const sh = ta.scrollHeight;
+      ta.style.height = Math.max(minH, Math.min(sh + 2, 400)) + 'px';
+      ta.style.overflowY = sh > 400 ? 'auto' : 'hidden';
+    };
     const powersTextareas = this.element.querySelectorAll('textarea.auto-resize-powers');
     powersTextareas.forEach(textarea => {
-      // Get the CSS min-height value (default 80px)
-      const computedStyle = window.getComputedStyle(textarea);
-      const minHeight = parseInt(computedStyle.minHeight) || 80;
-      const maxHeight = 400;
-      
-      const adjustHeight = () => {
-        // Temporarily set height to auto to get accurate scrollHeight
-        textarea.style.height = 'auto';
-        
-        // Calculate the needed height with a small buffer for line-height
-        const scrollHeight = textarea.scrollHeight;
-        
-        // Use the larger of minHeight or scrollHeight, but cap at maxHeight
-        const newHeight = Math.max(minHeight, Math.min(scrollHeight + 2, maxHeight));
-        textarea.style.height = newHeight + 'px';
-        
-        // Show/hide scrollbar based on content
-        textarea.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
-      };
-      
-      textarea.addEventListener('input', adjustHeight);
-      
-      // Initial adjustment - always run to set proper overflow
-      adjustHeight();
+      textarea.addEventListener('input', () => _adjustTextarea(textarea));
+      _adjustTextarea(textarea);
     });
-    
+    this.element.querySelectorAll('.sheet-tabs .item').forEach(tabBtn => {
+      tabBtn.addEventListener('click', () => {
+        requestAnimationFrame(() => {
+          this.element.querySelectorAll('textarea.auto-resize-powers').forEach(ta => {
+            if (ta.offsetParent !== null) _adjustTextarea(ta);
+          });
+        });
+      });
+    });
+
     // Validate attacks <= actions
     const actionsInput = this.element.querySelector('input[name="system.actions.perRound"]');
     const attacksInput = this.element.querySelector('input[name="system.actions.attacks"]');
@@ -688,36 +683,31 @@ export class ConanAntagonistSheet extends ConanActorSheet {
     
     // Handle N/A checkboxes for damage types
     setupNACheckboxes(this.element);
-    
-    // Setup auto-resize for powers textareas
+
+    // Setup auto-resize for powers textareas.
+    // adjustHeight() must also run when the tab becomes visible (scrollHeight = 0 on hidden tabs).
+    const _adjustTextarea2 = (ta) => {
+      const minH = parseInt(window.getComputedStyle(ta).minHeight) || 80;
+      ta.style.height = 'auto';
+      const sh = ta.scrollHeight;
+      ta.style.height = Math.max(minH, Math.min(sh + 2, 400)) + 'px';
+      ta.style.overflowY = sh > 400 ? 'auto' : 'hidden';
+    };
     const powersTextareas = this.element.querySelectorAll('textarea.auto-resize-powers');
     powersTextareas.forEach(textarea => {
-      // Get the CSS min-height value (default 80px)
-      const computedStyle = window.getComputedStyle(textarea);
-      const minHeight = parseInt(computedStyle.minHeight) || 80;
-      const maxHeight = 400;
-      
-      const adjustHeight = () => {
-        // Temporarily set height to auto to get accurate scrollHeight
-        textarea.style.height = 'auto';
-        
-        // Calculate the needed height with a small buffer for line-height
-        const scrollHeight = textarea.scrollHeight;
-        
-        // Use the larger of minHeight or scrollHeight, but cap at maxHeight
-        const newHeight = Math.max(minHeight, Math.min(scrollHeight + 2, maxHeight));
-        textarea.style.height = newHeight + 'px';
-        
-        // Show/hide scrollbar based on content
-        textarea.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
-      };
-      
-      textarea.addEventListener('input', adjustHeight);
-      
-      // Initial adjustment - always run to set proper overflow
-      adjustHeight();
+      textarea.addEventListener('input', () => _adjustTextarea2(textarea));
+      _adjustTextarea2(textarea);
     });
-    
+    this.element.querySelectorAll('.sheet-tabs .item').forEach(tabBtn => {
+      tabBtn.addEventListener('click', () => {
+        requestAnimationFrame(() => {
+          this.element.querySelectorAll('textarea.auto-resize-powers').forEach(ta => {
+            if (ta.offsetParent !== null) _adjustTextarea2(ta);
+          });
+        });
+      });
+    });
+
     // Validate attacks <= actions
     const actionsInput = this.element.querySelector('input[name="system.actions.perRound"]');
     const attacksInput = this.element.querySelector('input[name="system.actions.attacks"]');
