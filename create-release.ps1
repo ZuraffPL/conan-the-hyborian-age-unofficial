@@ -46,15 +46,13 @@ foreach ($item in $itemsToCopy) {
     }
 }
 
-# Create the zip file
-# Extract release notes for this version only from CHANGELOG.md
+# ─── Wyciągnij opis bieżącej wersji z CHANGELOG.md ───────────────────────────
 $changelogContent = Get-Content "CHANGELOG.md" -Raw
 $versionHeader = "## [$version]"
 $startIndex = $changelogContent.IndexOf($versionHeader)
 if ($startIndex -ge 0) {
     $afterHeader = $changelogContent.IndexOf("`n", $startIndex) + 1
-    # Find the next version header (## [) after the current one
-    $nextHeader = $changelogContent.IndexOf("`n## [", $afterHeader)
+    $nextHeader  = $changelogContent.IndexOf("`n## [", $afterHeader)
     if ($nextHeader -ge 0) {
         $sectionContent = $changelogContent.Substring($afterHeader, $nextHeader - $afterHeader).Trim()
     } else {
@@ -63,6 +61,26 @@ if ($startIndex -ge 0) {
 } else {
     $sectionContent = "Release v$version"
 }
+
+# ─── Dołącz listę commitów od poprzedniego taga ───────────────────────────────
+# Szukamy najnowszego istniejącego taga (czyli poprzedniej wersji).
+$prevTag = git describe --tags --abbrev=0 2>$null
+if ($LASTEXITCODE -ne 0 -or -not $prevTag) {
+    Write-Host "  (brak poprzedniego tagu — lista commitów pominięta)" -ForegroundColor DarkGray
+} else {
+    Write-Host "  Poprzedni tag: $prevTag" -ForegroundColor DarkGray
+    $rawCommits = git log --oneline "$prevTag..HEAD" 2>$null
+    if ($rawCommits) {
+        $commitLines = $rawCommits | ForEach-Object { "- ``$($_ -replace '^[0-9a-f]+ ', '')``" }
+        $commitSection  = "`n`n---`n`n### Commits since $prevTag`n`n"
+        $commitSection += $commitLines -join "`n"
+        $sectionContent  = $sectionContent + $commitSection
+        Write-Host "  Dołączono $($commitLines.Count) commit(ów) od $prevTag" -ForegroundColor DarkGray
+    } else {
+        Write-Host "  Brak nowych commitów od $prevTag" -ForegroundColor DarkGray
+    }
+}
+
 $releaseNotesFile = ".\temp-release-notes.md"
 Set-Content -Path $releaseNotesFile -Value $sectionContent -Encoding UTF8
 

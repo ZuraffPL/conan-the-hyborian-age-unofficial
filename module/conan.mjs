@@ -30,10 +30,16 @@ import { TalePlayerDialog } from "./helpers/tale.mjs";
 import { getFlexDieColorset } from "./helpers/dice-utils.mjs";
 import { applyThreatTier, applyAntagonistThreatTier } from "./helpers/threat-engine.mjs";
 
-// Threat Engine — losuje tier dla niezlinkowanych tokenów sługusów
+// Threat Engine — losuje tier dla niezlinkowanych tokenów sługusów.
+// Uruchamia się dla GM oraz dla gracza z uprawnieniem Owner na tym aktorze
+// (np. przywoływanie towarzyszy, zaklęcia). Tylko użytkownik który wystawił
+// token wykonuje logikę — zapobiega podwójnemu losowaniu na innych klientach.
 Hooks.on("createToken", (tokenDocument, _options, userId) => {
-  if (!game.user.isGM) return;
   if (game.user.id !== userId) return;
+  const actor = tokenDocument.actor;
+  const isOwner = actor &&
+    actor.getUserLevel(game.user) >= CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
+  if (!game.user.isGM && !isOwner) return;
   applyThreatTier(tokenDocument);
   applyAntagonistThreatTier(tokenDocument);
 });
