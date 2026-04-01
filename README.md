@@ -2,7 +2,7 @@
 
 An unofficial Foundry VTT implementation of **Conan: The Hyborian Age RPG** by Monolith Boardgames. Step into the savage world of Robert E. Howard's Conan the Barbarian and forge your legend in the Hyborian Age!
 
-![Version](https://img.shields.io/badge/version-0.7.0-darkred)
+![Version](https://img.shields.io/badge/version-0.7.3-darkred)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v13%2B-orange)
 
 ## Installation
@@ -47,169 +47,7 @@ Each character has **four attributes** (Might, Edge, Grit, Wits) rated 1–8:
 
 ## System Features
 
-### v0.7.0 — Full TypeDataModel Migration & Code Cleanup
-
-This release is a **major architecture overhaul**: every Actor and Item type is now backed by a `TypeDataModel` class, the legacy `template.json` schemas have been removed, and numerous code quality violations were resolved.
-
-#### TypeDataModel — Complete Migration
-
-- All six document types now have dedicated `TypeDataModel` classes in `module/models/`:
-  - **Items**: `WeaponModel`, `ArmorModel`, `SkillModel`, `SpellModel` (via `BaseItemModel`)
-  - **Actors**: `CharacterModel`, `MinionModel`, `AntagonistModel`
-- All derived-stat logic (`prepareDerivedData`) moved from `actor.mjs` into the respective models
-- `template.json` reduced to a minimal type declaration file — all schemas live exclusively in code
-
-#### `PoisonEffectsModel` — Shared Embedded DataModel
-
-- New `module/models/shared/poison-effects.mjs` — `PoisonEffectsModel extends DataModel`
-- Replaces three identical `SchemaField` blocks duplicated across all actor models
-- Embedded via `EmbeddedDataField(PoisonEffectsModel)` in each actor TypeDataModel
-- Exposes computed getters: `attributePenalty`, `rollPenalty`, `lifeDrain`, `staminaLocked`, `flexDieLocked`, `isAnyActive`
-
-#### Bug Fixes
-
-- **`Item.roll()` crash** — `item.mjs` accessed `this.system.damage.dice` which is now a `StringField`, not an object — fixed
-- **Weapon damage `[object Object]`** — `WeaponModel.damage` was a `SchemaField({dice,bonus,type})`; old data with a flat string caused the UI to display `[object Object]` — changed to `StringField`
-- **Might not added to melee damage** — `stamina-effects.mjs` was routing all damage through `rollWeaponDamage` (no Might adder) instead of `rollMeleeDamage`/`rollThrownDamage`/`rollRangedDamage`
-
-#### Code Cleanup
-
-- `starting-skills-dialog.mjs` — migrated from `Dialog` (V1) + jQuery `.find()` to `DialogV2.wait()` + native DOM
-- `npc-sheet.mjs` — removed local `function debounce()` implementation; replaced with `foundry.utils.debounce()`
-- `tale.mjs` — replaced 3× `foundry.utils.duplicate()` (deprecated) with `foundry.utils.deepClone()`
-- `roll-mechanics.mjs` — removed unused exported `rollWeaponDamage` function (~170 lines of dead code)
-- `actor.mjs` — removed empty `@deprecated` stub `_prepareNpcData()`
-- `damage-dialog.hbs`, `actor-character-sheet.hbs` — removed all compat-checks `{{#if weapon.system.damage.dice}}...{{else}}...{{/if}}`
-
----
-
-### v0.0.64 — Tale Dialog UX Fixes
-
-#### "Recovery" label moved above buttons
-
-- The Recovery section header (bed icon + label) is now rendered in a separate row above the "+1 Recovery" and "Respite" buttons — Respite no longer overflows the dialog window
-
-#### Respite resets Recovery uses to 2/2
-
-- After executing Respite, each active player character's Recovery counter is restored to the maximum (2) and the reset is broadcast via socket to all clients
-
-#### Chat message icon colours for Respite
-
-- Heart icon (LP restored to max) — **red**, consistent with the Recovery chat message
-- Bolt icon (Stamina restored to Grit) — **blue**, consistent with the Recovery chat message
-- Vial icon (poison effects cleared) — **green**
-
----
-
-### v0.0.63 — Respite, +1 Recovery, XP Award & GM Fixes
-
-#### "+1 Recovery" button in the GM Tale dialog
-
-- One click increments the Recovery use counter by 1 (up to max 2) for **all** active player characters at once
-- State synchronised via socket to all player views immediately
-
-#### Respite button in the GM Tale dialog
-
-- One click executes a full Respite for **all** active player characters:
-  - LP → maximum, Stamina → Grit, Defence deactivated, Immobilized removed, poison effects cleared
-- Per-character chat message lists every applied effect
-
-#### XP award on Respite
-
-- After clicking Respite the GM is prompted for an XP amount; each active player character receives that value
-- XP entry appears in the chat message (only when XP > 0)
-
-#### Fix: Dice So Nice animations not visible to GM
-
-- `showForRoll(..., true)` added in all call sites (`roll-mechanics.mjs`, `spellcasting-dialog.mjs`, `npc-attack-dialog.mjs`, `roll-sorcery-damage.mjs`, `conan.mjs`)
-
-#### Fix: Roll result notification always in English
-
-- Added `CONAN.Notifications.rolledResult` to en/pl/fr language files; `socket.mjs` now uses `game.i18n.format()`
-
----
-
-### v0.0.62 — Ranged Damage & Double Recovery Fixes
-
-#### Ranged weapon damage dice fix
-
-- `rollRangedDamage()` fell through to hardcoded `1d6` when `system.damage` was a plain string (e.g. `"1d8"`)
-- Fix: `weapon.system.damage?.dice || weapon.system.damage || "1d6"` — consistent with melee and thrown
-
-#### Double Recovery fix
-
-- When two GM users were active, a player's Rest request was processed twice (double healing, two chat messages)
-- Only the **first active GM** now executes `_decrementRecovery()` — guard added in `socket.mjs` and `tale.mjs`
-
----
-
-### v0.0.61 — Token Bars, Combat Icons & Flex Die Colorsets
-
-#### Token HP Bars — Native Foundry Support
-
-- **`lifePoints.value`** — HP field renamed from `lifePoints.actual` across the entire system
-- Foundry natively recognises `{ value, max }` — token HP bar works for **all actor types** without hacks
-- Antagonist `lifePoints` migrated from a flat number to a `{ value, max }` object
-- Existing characters and antagonists are **auto-migrated on first load** — no manual changes needed
-- `primaryTokenAttribute` in `system.json` points to `lifePoints.value`; max HP is freely editable in token configuration
-
-#### Combat Tracker Status Icons
-
-| Icon | Condition | Actor Types |
-|------|-----------|-------------|
-| `wounded.svg` | Active `wounded` status effect | Minion |
-| `Poisoned.svg` | `system.poisoned === true` | All types |
-
-- Icons fully visible in both the **sidebar tracker** and the **detached popout** (overflow clipping fixed)
-- Each icon uses a distinct colour filter for at-a-glance readability
-
-#### Flex Die Dynamic Colorset (Dice So Nice)
-
-- New `dice-utils.mjs` reads the player's DSN background colour and computes relative luminance (WCAG formula)
-- Picks the colorset with the strongest contrast against the player's table:
-  - **`conan_flex_dark`** — very dark body with gold pips (for light backgrounds)
-  - **`conan_flex_light`** — warm cream body with dark crimson pips (for dark backgrounds)
-- Applied to **all** flex die rolls: attack, sorcery fixed/custom/wits damage
-- Colorset embedded in the roll formula label — no manual override passed to `showForRoll`
-
-#### Fight for Life — Full Trigger Coverage
-
-- Fight for Life dialog now triggers when **any** damage source reduces a character's HP to 0
-- Previously only triggered via the poison drain path; NPC damage path was missing the check
-
-#### Winds of Fate Layout Fix
-
-- "Winds of Fate" banner moved outside the dice flex row into a standalone `.winds-of-fate-banner` element
-- Styled as a dark-red gradient row below the dice section — no longer disrupts dice layout
-
----
-
-### v0.0.60 — Tale Timer & Recovery System
-
-#### Tale Timer
-
-- GM-controlled session timer (HH:MM:SS) accessible from the toolbar scroll icon
-- Start / Pause / End Tale controls with **persistent state** across page reloads
-- Player read-only view opens automatically on Tale Start (frozen until GM starts), closes on Tale End
-- Timer syncs to all players every 15 s via socket; drift-corrected on reconnect
-- Auto-restores GM dialog after F5 if a tale was active
-
-#### Recovery Section (Odpoczynek)
-
-- Appears inside the Tale dialog for both GM and player views
-- **GM** sees all online players' characters; **Player** sees only their own character
-- Live HP display (`value / max`) with **animated gradient health bar** (green→red as HP drops)
-- Bed icon button with use-counter badge — **2 uses per tale**, resets on Tale End
-
-| Condition | Effect |
-|-----------|--------|
-| HP < max  | Restore `ceil(max / 2)` Life Points (capped at max) + 1 Stamina |
-| HP = max  | +1 Stamina only, no healing |
-
-- Styled chat message: character name header, recovered LP row, +1 Stamina row
-- Fully localized in **PL / EN / FR**
-
----
+> **Current version: v0.7.3** — For a full history of changes see [CHANGELOG.md](CHANGELOG.md).
 
 ### Core Feature Reference
 
@@ -267,7 +105,7 @@ All statuses display in the **Combat Tracker** with preserved icon colours.
 - Color-coded chat: green for minions, red for antagonists
 - Debounced text inputs (500 ms) on NPC sheets to prevent freezing
 
-#### 💀 Threat Engine (Skala Zagrożenia)
+#### 💀 Threat Engine (Skala Zagrożenia) — *new in v0.7.3*
 
 The Threat Engine automatically randomises NPC statistics when a token is placed on the scene, creating unique encounters without manual setup. It applies to **unlinked tokens only**.
 
@@ -458,7 +296,8 @@ conan-the-hyborian-age/
 │   │   ├── stamina-effects.mjs
 │   │   ├── stamina-spend-dialog.mjs
 │   │   ├── starting-skills-dialog.mjs
-│   │   ├── tale.mjs                       ← Added v0.0.59 — TaleDialog & TalePlayerDialog
+    ├── tale.mjs                       ← TaleDialog & TalePlayerDialog
+│   │   ├── threat-engine.mjs          ← NEW (v0.7.3) — Threat Engine tier logic
 │   │   └── templates.mjs
 │   └── sheets/
 │       ├── actor-sheet.mjs
@@ -478,7 +317,7 @@ conan-the-hyborian-age/
 │   ├── roll-dialog.css
 │   ├── stamina-effects.css
 │   ├── starting-skills.css
-│   ├── tale.css                           ← Added v0.0.59
+│   ├── tale.css
 │   └── partials/
 │       ├── actor-spell.css
 │       ├── attack-dialog.css
@@ -512,8 +351,8 @@ conan-the-hyborian-age/
 │   │   ├── spellcasting-dialog.hbs
 │   │   ├── stamina-spend-dialog.hbs
 │   │   ├── starting-skills-dialog.hbs
-│   │   ├── tale-dialog.hbs                ← Added v0.0.59
-│   │   └── tale-player-dialog.hbs         ← Added v0.0.59
+    ├── tale-dialog.hbs
+│   │   └── tale-player-dialog.hbs
 │   └── item/
 │       ├── item-sheet.hbs
 │       └── parts/

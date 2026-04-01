@@ -33,6 +33,14 @@ A new system that automatically randomises NPC statistics when a token is placed
 - Flag stored per token: `conan-the-hyborian-age.threatTier`
 - Fully localised in **PL / EN / FR** — Polish UI uses "Skala Zagrożenia"
 
+### Fixed — NPC Sheet Stability
+
+- **`Object.entries` crash on new actors** — `npc-sheet.mjs` now defensively initialises attribute data before iterating, preventing a runtime crash when a freshly created Minion or Antagonist had no attributes stored yet
+- **Disappearing attribute fields (minion/antagonist)** — `actor-minion-sheet.hbs` and `actor-antagonist-sheet.hbs` reworked so all attribute rows are always rendered, regardless of whether the data model already contains values
+- **Character sheet crash on missing attribute** — `actor-sheet.mjs` now skips attributes that are absent from `system` instead of throwing on `undefined`
+- **CSS — attribute inputs/selects always visible** — `actor-npc.css` gains explicit visibility rules for attribute `<input>` and `<select>` elements; previously they could collapse to zero-height in certain Foundry themes
+- **PowerShell installer accidentally committed** — `PowerShell-7.6.0-win-x64.msi` removed from the repository history via `.gitignore` update
+
 ---
 
 ## [0.7.2] - 2026-03-11
