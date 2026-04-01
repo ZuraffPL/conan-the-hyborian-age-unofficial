@@ -272,8 +272,8 @@ html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-lab
 .conan.sheet.actor.antagonist .attributes-section {
   background: rgba(139, 69, 19, 0.05);
   border-bottom: 3px solid #8b4513;
-  padding: 5px 10px;
-  margin: 0 0 5px 0;
+  padding: 3px 10px;
+  margin: 0;
 }
 
 .conan.sheet.actor.minion .section-header,
@@ -304,7 +304,7 @@ html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-lab
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 6px 10px;
+  padding: 4px 10px;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(245, 232, 216, 0.8) 100%);
   border: 2px solid #8b4513;
   border-right: none;
@@ -343,7 +343,7 @@ html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-lab
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   width: 100%;
 }
 
@@ -439,8 +439,8 @@ html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-lab
 
 .conan.sheet.actor.minion .attribute-mod,
 .conan.sheet.actor.antagonist .attribute-mod {
-  margin-top: 8px;
-  padding: 4px 12px;
+  margin-top: 4px;
+  padding: 3px 12px;
   font-size: 13px;
   font-weight: bold;
   color: #654321;
@@ -470,9 +470,9 @@ html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-lab
 .conan.sheet.actor.antagonist .defense-section {
   background: rgba(139, 69, 19, 0.05);
   border-bottom: 3px solid #8b4513;
-  padding: 10px;
+  padding: 5px 10px;
   margin: 0;
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 .conan.sheet.actor.minion .defense-row,
@@ -491,7 +491,7 @@ html[lang="en"] .conan.sheet.actor.antagonist .creature-type-field .subtitle-lab
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
+  padding: 5px 10px;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(245, 232, 216, 0.8) 100%);
   border: 2px solid #8b4513;
   border-right: none;
