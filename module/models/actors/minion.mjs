@@ -74,7 +74,18 @@ export class MinionModel extends foundry.abstract.TypeDataModel {
 
       // Pola nieudokumentowane w template.json — teraz formalizowane w schemacie
       defenceActive: new fields.BooleanField({ initial: false }),
-      immobilized:   new fields.BooleanField({ initial: false })
+      immobilized:   new fields.BooleanField({ initial: false }),
+
+      // ── Threat Engine ─────────────────────────────────────────────────────
+      // Przy wystawieniu tokena na scenę Threat Engine losuje tier:
+      //   0 = słaby (50%)  — wartości bazowe z karty
+      //   1 = silny (30%)  — wartości +1
+      //   2 = elitarny (20%) — wartości +2
+      threatEngineEnabled: new fields.BooleanField({ initial: true }),
+
+      // Tier przypisany przez Threat Engine (0=słaby, 1=silny, 2=elitarny).
+      // null = Threat Engine jeszcze nie był uruchomiony dla tego tokena.
+      threatTier: new fields.NumberField({ required: false, initial: null, nullable: true, integer: true })
     };
   }
 

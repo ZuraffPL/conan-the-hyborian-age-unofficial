@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.7.3] - 2026-04-01
+
+### Added — Threat Engine (Skala Zagrożenia)
+
+A new system that automatically randomises NPC statistics when a token is placed on the scene, creating unique encounters without manual setup.
+
+#### Minion Threat Engine
+
+- Toggle per actor sheet (collapsible section, default open)
+- Three tiers rolled at token placement: **Weak 50%** / **Strong 30% (+1)** / **Elite 20% (+2)**
+- Bonus applies to **Physical Defense**, **Sorcery Defense**, and **Armor** simultaneously
+- Token name receives a skull suffix: Strong → `💀`, Elite → `💀💀`
+- Preview table in the sheet shows exact stat values for each tier based on current base stats
+
+#### Antagonist Threat Engine
+
+- Same collapsible section on the antagonist sheet
+- Different probabilities and different tier icons: **Weak 70% ☠️** / **Strong 20% ☠️☠️** / **Elite 10% ☠️☠️☠️**
+- Applies **only to unlinked tokens** — linked tokens represent unique bosses
+
+#### Boss Support
+
+- Linked antagonist tokens (bosses) are skipped by Threat Engine tier randomisation — their stats remain untouched
+- Optional **Boss Icon** toggle: when enabled, the token name is wrapped with skull icons on placement: `💀Name💀`
+
+#### Technical
+
+- `MinionModel` and `AntagonistModel` gain `threatEngineEnabled` and `threatTier` fields (plus `bossIconEnabled` on antagonist)
+- `module/helpers/threat-engine.mjs` — new helper with `applyThreatTier` and `applyAntagonistThreatTier` exports
+- `Hooks.on("createToken", …)` — fires for GM only, once per placement
+- Flag stored per token: `conan-the-hyborian-age.threatTier`
+- Fully localised in **PL / EN / FR** — Polish UI uses "Skala Zagrożenia"
+
+---
+
 ## [0.7.2] - 2026-03-11
 
 ### Refactored — Localization & Code Quality

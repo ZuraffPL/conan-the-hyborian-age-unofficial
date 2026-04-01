@@ -77,7 +77,16 @@ export class AntagonistModel extends foundry.abstract.TypeDataModel {
 
       // Pola nieudokumentowane w template.json — teraz formalizowane w schemacie
       defenceActive: new fields.BooleanField({ initial: false }),
-      immobilized:   new fields.BooleanField({ initial: false })
+      immobilized:   new fields.BooleanField({ initial: false }),
+
+      // ── Threat Engine ─────────────────────────────────────────────────────
+      // Linked token = boss (własne stałe statystyki, Threat Engine nie dotyczy).
+      // Unlinked token = antagonista szablonowy — tier losowany przy wystawieniu:
+      //   0 = słaby (70%)  | 1 = silny (20%) ☠️  | 2 = elitarny (10%) ☠️☠️☠️
+      threatEngineEnabled: new fields.BooleanField({ initial: true }),
+      threatTier: new fields.NumberField({ required: false, initial: null, nullable: true, integer: true }),
+      // Dla bossów (linked): opcjonalna ikona 💀 dodawana do nazwy tokena przy wystawieniu.
+      bossIconEnabled: new fields.BooleanField({ initial: false })
     };
   }
 

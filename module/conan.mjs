@@ -28,6 +28,15 @@ import { initializeStaminaEffects } from "./helpers/stamina-effects.mjs";
 import { TaleDialog } from "./helpers/tale.mjs";
 import { TalePlayerDialog } from "./helpers/tale.mjs";
 import { getFlexDieColorset } from "./helpers/dice-utils.mjs";
+import { applyThreatTier, applyAntagonistThreatTier } from "./helpers/threat-engine.mjs";
+
+// Threat Engine — losuje tier dla niezlinkowanych tokenów sługusów
+Hooks.on("createToken", (tokenDocument, _options, userId) => {
+  if (!game.user.isGM) return;
+  if (game.user.id !== userId) return;
+  applyThreatTier(tokenDocument);
+  applyAntagonistThreatTier(tokenDocument);
+});
 
 /**
  * Initialize system

@@ -680,6 +680,19 @@
       "recoveryChatLP": "+{heal} Points de Vie",
       "recoveryChatFullHP": "Points de vie déjà au maximum",
       "recoveryChatStamina": "+1 Endurance"
+    },
+
+    "ThreatEngine": {
+      "title": "Threat Engine",
+      "enabled": "Activer le Threat Engine",
+      "enabledHint": "Quand activé, les statistiques du token sont déterminées aléatoirement au placement : Faible = valeurs de base, Fort = +1, Élite = +2.",
+      "probabilities": "50% faible — 30% fort (💀 +1) — 20% élite (💀💀 +2)",
+      "antagonistProbabilities": "70% faible (☠️) — 20% fort (☠️☠️ +1) — 10% élite (☠️☠️☠️ +2)",
+      "tierWeak": "Faible",
+      "tierStrong": "Fort",
+      "tierElite": "Élite",
+      "bossIcon": "Icône de boss encadrant le nom du token (💀Nom💀) — tokens liés uniquement",
+      "bossIconHint": "Si activé, placer un token d'antagoniste lié (boss) encadrera le nom avec des icônes 💀 : 💀Nom💀. Les niveaux de menace ne s'appliquent pas aux boss (tokens liés)."
     }
   }
 }

@@ -1093,7 +1093,136 @@ html[lang="en"] .conan.sheet.actor.antagonist .action-field .subtitle-label {
 .conan.sheet.actor.minion .action-value:hover,
 .conan.sheet.actor.antagonist .action-value:hover {
   border-color: #654321;
-  box-shadow: 0 0 8px rgba(139, 69, 19, 0.3);
+}
+
+/* ============================================================
+   Threat Engine — sekcja na karcie sługusa i antagonisty
+   ============================================================ */
+
+.conan.sheet.actor.minion .threat-engine-section,
+.conan.sheet.actor.antagonist .threat-engine-section {
+  background: rgba(139, 69, 19, 0.05);
+  border: 1px solid #c8a070;
+  border-radius: 4px;
+  margin: 8px 0;
+  padding: 6px 10px;
+}
+
+.conan.sheet.actor.minion .threat-engine-header,
+.conan.sheet.actor.antagonist .threat-engine-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Przycisk collapse (chevron + tytuł) */
+.conan.sheet.actor.minion .threat-engine-collapse,
+.conan.sheet.actor.antagonist .threat-engine-collapse {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #5a2d0c;
+  padding: 0;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.conan.sheet.actor.minion .threat-chevron,
+.conan.sheet.actor.antagonist .threat-chevron {
+  font-size: 0.75em;
+  transition: transform 0.18s;
+}
+
+.conan.sheet.actor.minion .threat-chevron.open,
+.conan.sheet.actor.antagonist .threat-chevron.open {
+  transform: rotate(90deg);
+}
+
+.conan.sheet.actor.minion .threat-engine-toggle,
+.conan.sheet.actor.antagonist .threat-engine-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82em;
+  color: #5a2d0c;
+  cursor: pointer;
+}
+
+.conan.sheet.actor.minion .threat-engine-info,
+.conan.sheet.actor.antagonist .threat-engine-info {
+  font-size: 0.8em;
+  color: #7a4018;
+  margin: 4px 0 6px;
+  text-align: center;
+}
+
+/* Tabela podglądu — 4 kolumny: stat | słaby | silny | elitarny */
+.conan.sheet.actor.minion .threat-ranges-table,
+.conan.sheet.actor.antagonist .threat-ranges-table {
+  width: 100%;
+  font-size: 0.82em;
+}
+
+.conan.sheet.actor.minion .threat-ranges-header,
+.conan.sheet.actor.minion .threat-range-row,
+.conan.sheet.actor.antagonist .threat-ranges-header,
+.conan.sheet.actor.antagonist .threat-range-row {
+  display: grid;
+  grid-template-columns: 1fr 50px 60px 70px;
+  gap: 4px;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.conan.sheet.actor.minion .threat-ranges-header,
+.conan.sheet.actor.antagonist .threat-ranges-header {
+  border-bottom: 1px solid #c8a070;
+  font-weight: bold;
+  color: #5a2d0c;
+  padding-bottom: 3px;
+  margin-bottom: 2px;
+}
+
+.conan.sheet.actor.minion .thr-stat-label,
+.conan.sheet.actor.antagonist .thr-stat-label {
+  font-size: 0.88em;
+  color: #5a2d0c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conan.sheet.actor.minion .thr-col,
+.conan.sheet.actor.antagonist .thr-col {
+  text-align: center;
+  font-size: 0.82em;
+  color: #7a4018;
+}
+
+.conan.sheet.actor.minion .thr-preview,
+.conan.sheet.actor.antagonist .thr-preview {
+  text-align: center;
+  font-size: 0.92em;
+  font-weight: bold;
+  color: #3a1a08;
+  background: rgba(200, 160, 112, 0.15);
+  border-radius: 3px;
+  padding: 1px 3px;
+}
+
+.conan.sheet.actor.minion .thr-preview.tier-strong,
+.conan.sheet.actor.antagonist .thr-preview.tier-strong {
+  color: #8b0000;
+}
+
+.conan.sheet.actor.minion .thr-preview.tier-elite,
+.conan.sheet.actor.antagonist .thr-preview.tier-elite {
+  color: #5a0000;
+  background: rgba(200, 100, 80, 0.2);
 }
 
 .conan.sheet.actor.minion .action-value:focus,

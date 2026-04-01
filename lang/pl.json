@@ -683,6 +683,19 @@
       "recoveryChatLP": "+{heal} Punktów Życia",
       "recoveryChatFullHP": "Punkty życia są pełne",
       "recoveryChatStamina": "+1 Wytrzymałość"
+    },
+
+    "ThreatEngine": {
+      "title": "Skala Zagrożenia",
+      "enabled": "Włącz Skalę Zagrożenia",
+      "enabledHint": "Tylko dla tokenów unlinked. Sługuś: 50% słaby / 30% silny (+1) / 20% elitarny (+2). Antagonista: 70% słaby / 20% silny (+1) / 10% elitarny (+2). Linked token = boss — tiery nie dotyczą.",
+      "probabilities": "50% słaby — 30% silny (💀 +1) — 20% elitarny (💀💀 +2)",
+      "antagonistProbabilities": "70% słaby (☠️) — 20% silny (☠️☠️ +1) — 10% elitarny (☠️☠️☠️ +2)",
+      "tierWeak": "Słaby",
+      "tierStrong": "Silny",
+      "tierElite": "Elitarny",
+      "bossIcon": "Ikona bossa wokół nazwy tokena (💀Nazwa💀) — tylko dla linked tokenów",
+      "bossIconHint": "Jeśli włączone, przy wystawieniu linked tokena antagonisty (bossa) nazwa tokena zostanie otoczona ikonami 💀: 💀Nazwa💀. Tiery Skali Zagrożenia nie mają zastosowania do bossów."
     }
   }
 }

@@ -199,6 +199,50 @@
       </div>
       </div>
 
+      {{!-- Threat Engine Section --}}
+      <div class="threat-engine-section">
+        <div class="threat-engine-header">
+          <button type="button" class="threat-engine-collapse">
+            <i class="fas fa-chevron-right threat-chevron"></i>
+            <span class="section-header">{{localize "CONAN.ThreatEngine.title"}}</span>
+          </button>
+          <label class="threat-engine-toggle" title="{{localize 'CONAN.ThreatEngine.enabledHint'}}">
+            <input type="checkbox" name="system.threatEngineEnabled" {{#if system.threatEngineEnabled}}checked{{/if}} data-dtype="Boolean" />
+            <span>{{localize "CONAN.ThreatEngine.enabled"}}</span>
+          </label>
+        </div>
+
+        <div class="threat-engine-content">
+          <p class="threat-engine-info">{{localize "CONAN.ThreatEngine.probabilities"}}</p>
+          <div class="threat-ranges-table">
+            <div class="threat-ranges-header">
+              <span class="thr-stat-label"></span>
+              <span class="thr-col thr-weak">{{localize "CONAN.ThreatEngine.tierWeak"}}</span>
+              <span class="thr-col thr-strong">{{localize "CONAN.ThreatEngine.tierStrong"}} 💀</span>
+              <span class="thr-col thr-elite">{{localize "CONAN.ThreatEngine.tierElite"}} 💀💀</span>
+            </div>
+            <div class="threat-range-row">
+              <span class="thr-stat-label">{{localize "CONAN.Defense.physical"}}</span>
+              <span class="thr-preview">{{threatPreview.physical.weak}}</span>
+              <span class="thr-preview tier-strong">{{threatPreview.physical.strong}}</span>
+              <span class="thr-preview tier-elite">{{threatPreview.physical.elite}}</span>
+            </div>
+            <div class="threat-range-row">
+              <span class="thr-stat-label">{{localize "CONAN.Defense.sorcery"}}</span>
+              <span class="thr-preview">{{threatPreview.sorcery.weak}}</span>
+              <span class="thr-preview tier-strong">{{threatPreview.sorcery.strong}}</span>
+              <span class="thr-preview tier-elite">{{threatPreview.sorcery.elite}}</span>
+            </div>
+            <div class="threat-range-row">
+              <span class="thr-stat-label">{{localize "CONAN.NPC.armor"}}</span>
+              <span class="thr-preview">{{threatPreview.armor.weak}}</span>
+              <span class="thr-preview tier-strong">{{threatPreview.armor.strong}}</span>
+              <span class="thr-preview tier-elite">{{threatPreview.armor.elite}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {{!-- Damage and Actions Section --}}
       <div class="damage-actions-container">
         {{!-- Damage Section --}}

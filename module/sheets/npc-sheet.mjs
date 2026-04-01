@@ -144,6 +144,16 @@ export class ConanMinionSheet extends ConanActorSheet {
     // Prepare NPC data and items
     this._prepareItems(context);
 
+    // Threat Engine: podgląd wartości tierów (baza z karty + bonus: +0/+1/+2)
+    const _basePhys = context.system.defense?.basePhysical ?? context.system.defense?.physical ?? 0;
+    const _baseSorc = context.system.defense?.sorcery ?? 0;
+    const _baseArm  = context.system.armor ?? 0;
+    context.threatPreview = {
+      physical: { weak: _basePhys, strong: _basePhys + 1, elite: _basePhys + 2 },
+      sorcery:  { weak: _baseSorc, strong: _baseSorc + 1, elite: _baseSorc + 2 },
+      armor:    { weak: _baseArm,  strong: _baseArm  + 1, elite: _baseArm  + 2 },
+    };
+
     // Prepare tabs
     context.tabs = this._getTabs();
 
@@ -251,6 +261,21 @@ export class ConanMinionSheet extends ConanActorSheet {
       
       actionsInput.addEventListener('change', validateAttacks);
       attacksInput.addEventListener('change', validateAttacks);
+    }
+
+    // Threat Engine — zwijana sekcja, stan zachowany na instancji arkusza
+    const teBtn  = this.element.querySelector('.threat-engine-collapse');
+    const teCont = this.element.querySelector('.threat-engine-content');
+    if (teBtn && teCont) {
+      const isOpen = this._threatEngineOpen ?? false;
+      teCont.style.display = isOpen ? '' : 'none';
+      teBtn.querySelector('.threat-chevron')?.classList.toggle('open', isOpen);
+      teBtn.addEventListener('click', () => {
+        const nowOpen = teCont.style.display === 'none';
+        teCont.style.display = nowOpen ? '' : 'none';
+        teBtn.querySelector('.threat-chevron')?.classList.toggle('open', nowOpen);
+        this._threatEngineOpen = nowOpen;
+      });
     }
   }
 
@@ -595,6 +620,16 @@ export class ConanAntagonistSheet extends ConanActorSheet {
     // Prepare NPC data and items
     this._prepareItems(context);
 
+    // Threat Engine: podgląd wartości tierów (baza z karty + bonus: +0/+1/+2)
+    const _basePhys = context.system.defense?.basePhysical ?? context.system.defense?.physical ?? 0;
+    const _baseSorc = context.system.defense?.sorcery ?? 0;
+    const _baseArm  = context.system.armor ?? 0;
+    context.threatPreview = {
+      physical: { weak: _basePhys, strong: _basePhys + 1, elite: _basePhys + 2 },
+      sorcery:  { weak: _baseSorc, strong: _baseSorc + 1, elite: _baseSorc + 2 },
+      armor:    { weak: _baseArm,  strong: _baseArm  + 1, elite: _baseArm  + 2 },
+    };
+
     // Prepare tabs
     context.tabs = this._getTabs();
 
@@ -699,6 +734,21 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       
       actionsInput.addEventListener('change', validateAttacks);
       attacksInput.addEventListener('change', validateAttacks);
+    }
+
+    // Threat Engine — zwijana sekcja, stan zachowany na instancji arkusza
+    const teBtn  = this.element.querySelector('.threat-engine-collapse');
+    const teCont = this.element.querySelector('.threat-engine-content');
+    if (teBtn && teCont) {
+      const isOpen = this._threatEngineOpen ?? false;
+      teCont.style.display = isOpen ? '' : 'none';
+      teBtn.querySelector('.threat-chevron')?.classList.toggle('open', isOpen);
+      teBtn.addEventListener('click', () => {
+        const nowOpen = teCont.style.display === 'none';
+        teCont.style.display = nowOpen ? '' : 'none';
+        teBtn.querySelector('.threat-chevron')?.classList.toggle('open', nowOpen);
+        this._threatEngineOpen = nowOpen;
+      });
     }
   }
 

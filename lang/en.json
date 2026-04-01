@@ -684,6 +684,19 @@
       "recoveryChatLP": "+{heal} Life Points",
       "recoveryChatFullHP": "Life points already full",
       "recoveryChatStamina": "+1 Stamina"
+    },
+
+    "ThreatEngine": {
+      "title": "Threat Engine",
+      "enabled": "Enable Threat Engine",
+      "enabledHint": "When enabled, concrete statistics for this token are randomized at placement: Weak = base values, Strong = +1, Elite = +2.",
+      "probabilities": "50% weak \u2014 30% strong (\ud83d\udc80 +1) \u2014 20% elite (\ud83d\udc80\ud83d\udc80 +2)",
+      "antagonistProbabilities": "70% weak (\u2620\ufe0f) \u2014 20% strong (\u2620\ufe0f\u2620\ufe0f +1) \u2014 10% elite (\u2620\ufe0f\u2620\ufe0f\u2620\ufe0f +2)",
+      "tierWeak": "Weak",
+      "tierStrong": "Strong",
+      "tierElite": "Elite",
+      "bossIcon": "Boss icon wrapping token name (💀Name💀) — linked tokens only",
+      "bossIconHint": "If enabled, placing a linked antagonist token (boss) will wrap the token name with 💀 icons: 💀Name💀. Threat Engine tiers do not apply to bosses (linked tokens)."
     }
   }
 }

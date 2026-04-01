@@ -267,6 +267,35 @@ All statuses display in the **Combat Tracker** with preserved icon colours.
 - Color-coded chat: green for minions, red for antagonists
 - Debounced text inputs (500 ms) on NPC sheets to prevent freezing
 
+#### 💀 Threat Engine (Skala Zagrożenia)
+
+The Threat Engine automatically randomises NPC statistics when a token is placed on the scene, creating unique encounters without manual setup. It applies to **unlinked tokens only**.
+
+**Minion tiers** (sługus):
+
+| Tier | Probability | Stat Bonus | Token suffix |
+|------|-------------|------------|--------------|
+| Weak (Słaby) | 50% | +0 | *(none)* |
+| Strong (Silny) | 30% | +1 | `💀` |
+| Elite (Elitarny) | 20% | +2 | `💀💀` |
+
+**Antagonist tiers** (antagonista — unlinked tokens only):
+
+| Tier | Probability | Stat Bonus | Token suffix |
+|------|-------------|------------|--------------|
+| Weak (Słaby) | 70% | +0 | `☠️` |
+| Strong (Silny) | 20% | +1 | `☠️☠️` |
+| Elite (Elitarny) | 10% | +2 | `☠️☠️☠️` |
+
+The stat bonus applies to **Physical Defense**, **Sorcery Defense**, and **Armor** simultaneously. Base values are read directly from the actor sheet at placement time.
+
+**Boss support** (linked antagonists): Linked tokens represent unique bosses — Threat Engine tier randomisation does not apply. Optionally, enabling **Boss Icon** in the Threat Engine section wraps the token name with skull icons: `💀Bhord the Merciless💀`.
+
+**Enabling Threat Engine**:
+- Check **"Enable Threat Engine"** in the NPC sheet's collapsible Threat Engine section
+- The preview table shows the exact values each tier would produce, based on current base stats
+- Each token placed on the scene is independent — re-placing creates a fresh roll
+
 #### 🌐 Localization
 
 - **Three languages**: English, Polish, French
