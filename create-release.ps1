@@ -63,8 +63,12 @@ if ($startIndex -ge 0) {
 }
 
 # ─── Dołącz listę commitów od poprzedniego taga ───────────────────────────────
-# Szukamy najnowszego istniejącego taga (czyli poprzedniej wersji).
-$prevTag = git describe --tags --abbrev=0 2>$null
+# Pobieramy najnowszy opublikowany release z GitHuba (= poprzednia wersja).
+$prevTag = gh release list --limit 1 --json tagName --jq '.[0].tagName' 2>$null
+if ($LASTEXITCODE -ne 0 -or -not $prevTag) {
+    # Fallback do lokalnego taga jeśli gh nie dostępne
+    $prevTag = git describe --tags --abbrev=0 2>$null
+}
 if ($LASTEXITCODE -ne 0 -or -not $prevTag) {
     Write-Host "  (brak poprzedniego tagu — lista commitów pominięta)" -ForegroundColor DarkGray
 } else {
@@ -129,6 +133,9 @@ Write-Host "`nCreating GitHub release v$version..." -ForegroundColor Yellow
 gh release create "v$version" --title "v$version" --notes-file $releaseNotesFile $zipPathVersioned $zipPathLatest "system.json"
 if ($LASTEXITCODE -eq 0) {
     Write-Host "  ✓ GitHub release created successfully!" -ForegroundColor Green
+    # Utwórz lokalny tag żeby kolejny release poprawnie znalazł poprzednią wersję
+    git tag "v$version" 2>$null
+    Write-Host "  ✓ Lokalny tag v$version utworzony" -ForegroundColor Green
 } else {
     Write-Host "  ✗ gh release create failed (exit code $LASTEXITCODE)" -ForegroundColor Red
 }
