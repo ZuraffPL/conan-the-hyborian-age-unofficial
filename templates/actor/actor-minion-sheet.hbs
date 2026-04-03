@@ -12,21 +12,21 @@
       <div class="actor-type-row">
         <div class="actor-type-label">
           <span class="primary-label">{{localize "TYPES.Actor.minion"}}</span>
-          <span class="subtitle-label">{{localize "TYPES.Actor.minion"}}</span>
+          <span class="subtitle-label">Minion</span>
         </div>
         
         <div class="creature-type-field">
           <label>
             <span class="primary-label">{{localize "CONAN.Common.type"}}</span>
-            <span class="subtitle-label">{{localize "CONAN.Common.type"}}</span>
+            <span class="subtitle-label">Creature Type</span>
           </label>
           <select name="system.creatureType" data-dtype="String">
-            <option value="human" {{#if (eq system.creatureType "human")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.human"}}</option>
-            <option value="inanimate" {{#if (eq system.creatureType "inanimate")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.inanimate"}}</option>
-            <option value="undead" {{#if (eq system.creatureType "undead")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.undead"}}</option>
-            <option value="monstrosity" {{#if (eq system.creatureType "monstrosity")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.monstrosity"}}</option>
-            <option value="demon" {{#if (eq system.creatureType "demon")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.demon"}}</option>
-            <option value="beast" {{#if (eq system.creatureType "beast")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.beast"}}</option>
+            <option value="human" {{#if (eq system.creatureType "human")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.human"}} / Human</option>
+            <option value="inanimate" {{#if (eq system.creatureType "inanimate")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.inanimate"}} / Inanimate</option>
+            <option value="undead" {{#if (eq system.creatureType "undead")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.undead"}} / Undead</option>
+            <option value="monstrosity" {{#if (eq system.creatureType "monstrosity")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.monstrosity"}} / Monstrosity</option>
+            <option value="demon" {{#if (eq system.creatureType "demon")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.demon"}} / Demon</option>
+            <option value="beast" {{#if (eq system.creatureType "beast")}}selected{{/if}}>{{localize "CONAN.CreatureTypes.beast"}} / Beast</option>
           </select>
         </div>
       </div>
@@ -49,7 +49,7 @@
     <div class="tab" data-group="primary" data-tab="stats">
       {{!-- Attributes Section --}}
       <div class="attributes-section">
-      <h3 class="section-header">{{localize "CONAN.CharacterSheet.attributes"}}</h3>
+      <h3 class="section-header">{{localize "CONAN.CharacterSheet.attributes"}} / Attributes</h3>
       
       <div class="attributes-row">
         <div class="attribute-box" data-attribute="might">
@@ -137,7 +137,7 @@
 
       {{!-- Defense and Threshold Section --}}
       <div class="defense-section">
-      <h3 class="section-header">{{localize "CONAN.NPC.defenseThreshold"}}</h3>
+      <h3 class="section-header">{{localize "CONAN.NPC.defenseThreshold"}} / Defence & Threshold</h3>
       
       <div class="defense-row">
         <div class="defense-box">
@@ -247,7 +247,7 @@
       <div class="damage-actions-container">
         {{!-- Damage Section --}}
         <div class="damage-section">
-          <h3 class="section-header">{{localize "CONAN.NPC.damage"}}</h3>
+          <h3 class="section-header">{{localize "CONAN.NPC.damage"}} / Damage</h3>
         
         {{!-- Melee Damage --}}
         <div class="damage-row">
@@ -332,7 +332,7 @@
         <div class="right-column">
           {{!-- Actions Section --}}
           <div class="actions-section">
-            <h3 class="section-header">{{localize "CONAN.NPC.actions"}}</h3>
+            <h3 class="section-header">{{localize "CONAN.NPC.actions"}} / Actions & Attacks</h3>
           
           <div class="action-field">
             <label>
@@ -353,7 +353,7 @@
           
           {{!-- Effects Section --}}
           <div class="effects-section">
-            <h3 class="section-header">{{localize "CONAN.NPC.effects"}}</h3>
+            <h3 class="section-header">{{localize "CONAN.NPC.effects"}} / Effects</h3>
             
             <div class="effects-row">
               <button type="button" class="defence-toggle-btn {{#if system.defenceActive}}active{{/if}}" data-action="toggleDefence" title="{{localize 'CONAN.EffectTooltips.defence'}}">
@@ -381,7 +381,7 @@
 
     {{!-- Tab: Powers and Special Rules --}}
     <div class="tab" data-group="primary" data-tab="powers">
-      <h3 class="section-header">{{localize "CONAN.NPC.powersAndRules"}}</h3>
+      <h3 class="section-header">{{localize "CONAN.NPC.powersAndRules"}} / Powers & Special Rules</h3>
       
       <div class="powers-section">
         <div class="powers-subsection">
