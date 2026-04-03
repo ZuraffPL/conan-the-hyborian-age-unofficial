@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.7.4] - 2026-04-03
+
+### Fixed — NPC Sheet UX & Layout
+
+- **Threat Engine accessible to players with Owner permission** — `createToken` hook now fires for any user who placed the token and has `OWNER` level on the actor, not only for the GM; enables companion/summoning mechanics where players own NPC tokens
+- **NPC sheet vertical space** — reduced padding in attribute boxes, defense boxes, section headers, tab buttons and tab content area so the full sheet (including Threat Engine) fits on a 1080p screen without scrolling
+- **Creature type select inline** — `creature-type-field` changed from `flex-direction: column` to `row`; the type dropdown now sits next to its label instead of below it
+- **Header/tab padding** — `sheet-header` padding reduced (`15px → 8px 12px`), tab items padding reduced (`12px → 7px`), tab content padding reduced (`20px → 8px 12px`)
+- **Textarea height on first open** — `auto-resize-powers` textareas now recalculate their height when the **Moce i Akcje Specjalne** tab is clicked (previously height was 0 because the tab was hidden during initial render); text is immediately visible without requiring the sheet to be closed and reopened
+- **Minion sheet English suffixes** — all section headers, subtitle labels and creature type options now include the English translation (e.g. `ATRYBUTY / Attributes`, `Bestia / Beast`), matching the antagonist sheet style
+
+---
+
 ## [0.7.3] - 2026-04-01
 
 ### Added — Threat Engine (Skala Zagrożenia)
