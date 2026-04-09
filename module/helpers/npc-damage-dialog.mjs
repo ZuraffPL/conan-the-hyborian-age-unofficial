@@ -34,16 +34,16 @@ export class NPCDamageDialog extends foundry.applications.api.HandlebarsApplicat
     }
   };
 
-  constructor(actor, attackType, options = {}) {
+  constructor(actor, attackIndex, options = {}) {
     super(options);
     this.actor = actor;
-    this.attackType = attackType; // 'melee' or 'ranged'
+    this.attackIndex = attackIndex; // indeks w actor.system.damage[]
     this.modifier = 0;
     this.resolve = null;
   }
 
-  static async prompt(actor, attackType) {
-    const dialog = new NPCDamageDialog(actor, attackType);
+  static async prompt(actor, attackIndex) {
+    const dialog = new NPCDamageDialog(actor, attackIndex);
     return new Promise((resolve) => {
       dialog.resolve = resolve;
       dialog.render(true);
@@ -54,20 +54,21 @@ export class NPCDamageDialog extends foundry.applications.api.HandlebarsApplicat
     const context = await super._prepareContext(options);
     
     // Get damage data from actor
-    const damageData = this.actor.system.damage[this.attackType];
+    const damageData = this.actor.system.damage[this.attackIndex];
+    const attackType = damageData?.type || 'melee';
     
-    context.attackType = this.attackType;
-    context.attackTypeLabel = this.attackType === 'melee' 
+    context.attackType = attackType;
+    context.attackTypeLabel = attackType.startsWith('melee') 
       ? game.i18n.localize("CONAN.NPC.meleeDamage")
       : game.i18n.localize("CONAN.NPC.rangedDamage");
     
-    context.weaponName = damageData.name || game.i18n.localize("CONAN.NPC.weaponName");
-    context.damageDie = damageData.die || "d6";
-    context.damageModifier = damageData.modifier || 0;
+    context.weaponName = damageData?.name || game.i18n.localize("CONAN.NPC.weaponName");
+    context.damageDie = damageData?.die || "d6";
+    context.damageModifier = damageData?.modifier || 0;
     context.modifier = this.modifier;
     
     // For melee attacks, include Brawn value
-    if (this.attackType === 'melee') {
+    if (attackType.startsWith('melee')) {
       context.brawnValue = this.actor.system.attributes.might?.effectiveValue || this.actor.system.attributes.might?.value || 0;
     }
     

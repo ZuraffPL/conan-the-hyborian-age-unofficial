@@ -6,10 +6,10 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
   foundry.applications.api.ApplicationV2
 ) {
 
-  constructor(actor, attackType, options = {}) {
+  constructor(actor, attackIndex, options = {}) {
     super(options);
     this.actor = actor;
-    this.attackType = attackType; // 'melee' or 'ranged'
+    this.attackIndex = attackIndex; // indeks w actor.system.damage[]
   }
 
   /** @override */
@@ -47,13 +47,15 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     const context = await super._prepareContext(options);
     
     context.actor = this.actor;
-    context.attackType = this.attackType;
+    const attackData = this.actor.system.damage[this.attackIndex];
+    const attackType = attackData?.type || 'melee';
+    context.attackType = attackType;
     context.attackTypeLabel = game.i18n.localize(
-      this.attackType === 'melee' ? 'CONAN.Attack.melee' : 'CONAN.Attack.ranged'
+      attackType.startsWith('melee') ? 'CONAN.Attack.melee' : 'CONAN.Attack.ranged'
     );
     
     // Get attribute based on attack type
-    const attribute = this.attackType === 'melee' ? 'might' : 'edge';
+    const attribute = attackType.startsWith('melee') ? 'might' : 'edge';
     context.attribute = attribute;
     context.attributeValue = this.actor.system.attributes[attribute].effectiveValue || this.actor.system.attributes[attribute].value;
     context.attributeDie = this.actor.system.attributes[attribute].die;
@@ -122,7 +124,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     const effect2Multiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
     const poisonPenalty = (this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
     
-    const attribute = this.attackType === 'melee' ? 'might' : 'edge';
+    const attribute = this.actor.system.damage[this.attackIndex]?.type?.startsWith('melee') ? 'might' : 'edge';
     const attributeValue = this.actor.system.attributes[attribute].effectiveValue || this.actor.system.attributes[attribute].value;
     const attributeDie = this.actor.system.attributes[attribute].die;
     
@@ -141,7 +143,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     // Prepare chat message
     const attributeLabel = game.i18n.localize(`CONAN.Attributes.${attribute}.label`);
     const attributeAbbr = game.i18n.localize(`CONAN.Attributes.${attribute}.abbr`);
-    const attackTypeLabel = game.i18n.localize(this.attackType === 'melee' ? 'CONAN.Attack.melee' : 'CONAN.Attack.ranged');
+    const attackTypeLabel = game.i18n.localize(this.actor.system.damage[this.attackIndex]?.type?.startsWith('melee') ? 'CONAN.Attack.melee' : 'CONAN.Attack.ranged');
     const isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
     const isPoisonedAttributes = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect1;
     
@@ -196,7 +198,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
       const baseActorId = this.actor.token ? this.actor._stats.systemId : this.actor.id;
       messageContent += `
           <div class="damage-actions" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0, 0, 0, 0.1); text-align: center;">
-            <button class="roll-npc-damage-btn" data-actor-id="${baseActorId}" data-token-id="${this.actor.token?.id || ''}" data-scene-id="${this.actor.token?.parent?.id || ''}" data-attack-type="${this.attackType}">
+            <button class="roll-npc-damage-btn" data-actor-id="${baseActorId}" data-token-id="${this.actor.token?.id || ''}" data-scene-id="${this.actor.token?.parent?.id || ''}" data-attack-index="${this.attackIndex}">
               <i class="fas fa-dice-d20"></i> ${game.i18n.localize('CONAN.Roll.rollDamage')}
             </button>
           </div>`;
@@ -215,7 +217,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
       flags: {
         "conan-the-hyborian-age": {
           attackSuccess: isSuccess,
-          attackType: this.attackType,
+          attackIndex: this.attackIndex,
           actorId: this.actor.id,
           tokenId: this.actor.token?.id || null,
           sceneId: this.actor.token?.parent?.id || null
@@ -235,8 +237,8 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
   /**
    * Static method to show the dialog
    */
-  static async prompt(actor, attackType) {
-    const dialog = new NPCAttackDialog(actor, attackType);
+  static async prompt(actor, attackIndex) {
+    const dialog = new NPCAttackDialog(actor, attackIndex);
     dialog.render(true);
     return dialog;
   }

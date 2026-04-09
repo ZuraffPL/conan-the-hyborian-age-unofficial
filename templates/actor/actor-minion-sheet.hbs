@@ -248,83 +248,53 @@
         {{!-- Damage Section --}}
         <div class="damage-section">
           <h3 class="section-header">{{localize "CONAN.NPC.damage"}} / Damage</h3>
-        
-        {{!-- Melee Damage --}}
-        <div class="damage-row">
+
+        {{#each system.damage}}
+        <div class="damage-row" data-index="{{@index}}">
           <div class="damage-row-header">
-            <span class="primary-label">{{localize "CONAN.NPC.meleeDamage"}}</span>
-            <span class="subtitle-label">Melee DMG</span>
-            <button type="button" class="npc-attack-btn {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="npcAttack" data-attack-type="melee" title="{{localize 'CONAN.Attack.rollAttack'}}">
+            <select name="system.damage.{{@index}}.type" data-dtype="String" class="damage-type-select">
+              <option value="melee" {{#if (eq type "melee")}}selected{{/if}}>{{localize "CONAN.NPC.meleeDamage"}}</option>
+              <option value="ranged" {{#if (eq type "ranged")}}selected{{/if}}>{{localize "CONAN.NPC.rangedDamage"}}</option>
+            </select>
+            <button type="button" class="npc-attack-btn {{#if (and @root.system.poisoned @root.system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="npcAttack" data-attack-index="{{@index}}" title="{{localize 'CONAN.Attack.rollAttack'}}">
               <i class="fas fa-sword"></i>
-              {{#if (and system.poisoned system.poisonEffects.effect2)}}
+              {{#if (and @root.system.poisoned @root.system.poisonEffects.effect2)}}
                 <i class="fas fa-skull-crossbones poison-icon" style="color: #15a20e; font-size: 0.8em; margin-left: 4px;"></i>
               {{/if}}
             </button>
-            <button type="button" class="npc-damage-btn {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="npcDamage" data-attack-type="melee" title="{{localize 'CONAN.Damage.rollDamage'}}">
+            <button type="button" class="npc-damage-btn {{#if (and @root.system.poisoned @root.system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="npcDamage" data-attack-index="{{@index}}" title="{{localize 'CONAN.Damage.rollDamage'}}">
               <img src="systems/conan-the-hyborian-age/assets/icons/damage.svg" alt="{{localize 'CONAN.Damage.rollDamage'}}" />
-              {{#if (and system.poisoned system.poisonEffects.effect2)}}
+              {{#if (and @root.system.poisoned @root.system.poisonEffects.effect2)}}
                 <i class="fas fa-skull-crossbones poison-icon" style="color: #15a20e; font-size: 0.8em; margin-left: 4px;"></i>
               {{/if}}
+            </button>
+            <button type="button" class="remove-attack-btn" data-action="removeAttack" data-index="{{@index}}" title="{{localize 'CONAN.Common.delete'}}">
+              <i class="fas fa-trash"></i>
             </button>
           </div>
-          
           <div class="damage-fields">
-            <input type="text" name="system.damage.melee.name" value="{{system.damage.melee.name}}" placeholder="{{localize 'CONAN.NPC.weaponName'}}" class="damage-name" {{#if system.damage.melee.notApplicable}}disabled{{/if}} />
+            <input type="text" name="system.damage.{{@index}}.name" value="{{name}}" placeholder="{{localize 'CONAN.NPC.weaponName'}}" class="damage-name" />
             
-            <select name="system.damage.melee.die" data-dtype="String" class="damage-die" {{#if system.damage.melee.notApplicable}}disabled{{/if}}>
-              <option value="d4" {{#if (eq system.damage.melee.die "d4")}}selected{{/if}}>d4</option>
-              <option value="d6" {{#if (eq system.damage.melee.die "d6")}}selected{{/if}}>d6</option>
-              <option value="d8" {{#if (eq system.damage.melee.die "d8")}}selected{{/if}}>d8</option>
-              <option value="d10" {{#if (eq system.damage.melee.die "d10")}}selected{{/if}}>d10</option>
-              <option value="d12" {{#if (eq system.damage.melee.die "d12")}}selected{{/if}}>d12</option>
+            <select name="system.damage.{{@index}}.die" data-dtype="String" class="damage-die">
+              <option value="d4" {{#if (eq die "d4")}}selected{{/if}}>d4</option>
+              <option value="d6" {{#if (eq die "d6")}}selected{{/if}}>d6</option>
+              <option value="d8" {{#if (eq die "d8")}}selected{{/if}}>d8</option>
+              <option value="d10" {{#if (eq die "d10")}}selected{{/if}}>d10</option>
+              <option value="d12" {{#if (eq die "d12")}}selected{{/if}}>d12</option>
             </select>
             
-            <input type="number" name="system.damage.melee.modifier" value="{{system.damage.melee.modifier}}" min="0" max="15" data-dtype="Number" class="damage-modifier" {{#if system.damage.melee.notApplicable}}disabled{{/if}} />
-            
-            <label class="damage-na">
-              <input type="checkbox" name="system.damage.melee.notApplicable" {{#if system.damage.melee.notApplicable}}checked{{/if}} data-dtype="Boolean" />
-              <span>{{localize "CONAN.NPC.notApplicable"}}</span>
-            </label>
+            <input type="number" name="system.damage.{{@index}}.modifier" value="{{modifier}}" min="0" max="15" data-dtype="Number" class="damage-modifier" />
           </div>
         </div>
-        
-        {{!-- Ranged Damage --}}
-        <div class="damage-row">
-          <div class="damage-row-header">
-            <span class="primary-label">{{localize "CONAN.NPC.rangedDamage"}}</span>
-            <span class="subtitle-label">Ranged DMG</span>
-            <button type="button" class="npc-attack-btn {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="npcAttack" data-attack-type="ranged" title="{{localize 'CONAN.Attack.rollAttack'}}">
-              <i class="fas fa-sword"></i>
-              {{#if (and system.poisoned system.poisonEffects.effect2)}}
-                <i class="fas fa-skull-crossbones poison-icon" style="color: #15a20e; font-size: 0.8em; margin-left: 4px;"></i>
-              {{/if}}
-            </button>
-            <button type="button" class="npc-damage-btn {{#if (and system.poisoned system.poisonEffects.effect2)}}poisoned-penalty{{/if}}" data-action="npcDamage" data-attack-type="ranged" title="{{localize 'CONAN.Damage.rollDamage'}}">
-              <img src="systems/conan-the-hyborian-age/assets/icons/damage.svg" alt="{{localize 'CONAN.Damage.rollDamage'}}" />
-              {{#if (and system.poisoned system.poisonEffects.effect2)}}
-                <i class="fas fa-skull-crossbones poison-icon" style="color: #15a20e; font-size: 0.8em; margin-left: 4px;"></i>
-              {{/if}}
-            </button>
-          </div>
-          
-          <div class="damage-fields">
-            <input type="text" name="system.damage.ranged.name" value="{{system.damage.ranged.name}}" placeholder="{{localize 'CONAN.NPC.weaponName'}}" class="damage-name" {{#if system.damage.ranged.notApplicable}}disabled{{/if}} />
-            
-            <select name="system.damage.ranged.die" data-dtype="String" class="damage-die" {{#if system.damage.ranged.notApplicable}}disabled{{/if}}>
-              <option value="d4" {{#if (eq system.damage.ranged.die "d4")}}selected{{/if}}>d4</option>
-              <option value="d6" {{#if (eq system.damage.ranged.die "d6")}}selected{{/if}}>d6</option>
-              <option value="d8" {{#if (eq system.damage.ranged.die "d8")}}selected{{/if}}>d8</option>
-              <option value="d10" {{#if (eq system.damage.ranged.die "d10")}}selected{{/if}}>d10</option>
-              <option value="d12" {{#if (eq system.damage.ranged.die "d12")}}selected{{/if}}>d12</option>
-            </select>
-            
-            <input type="number" name="system.damage.ranged.modifier" value="{{system.damage.ranged.modifier}}" min="0" max="15" data-dtype="Number" class="damage-modifier" {{#if system.damage.ranged.notApplicable}}disabled{{/if}} />
-            
-            <label class="damage-na">
-              <input type="checkbox" name="system.damage.ranged.notApplicable" {{#if system.damage.ranged.notApplicable}}checked{{/if}} data-dtype="Boolean" />
-              <span>{{localize "CONAN.NPC.notApplicable"}}</span>
-            </label>
-          </div>
+        {{/each}}
+
+        <div class="add-attack-buttons">
+          <button type="button" class="add-attack-btn" data-action="addAttack" data-type="melee">
+            <i class="fas fa-plus"></i> {{localize "CONAN.NPC.meleeDamage"}}
+          </button>
+          <button type="button" class="add-attack-btn" data-action="addAttack" data-type="ranged">
+            <i class="fas fa-plus"></i> {{localize "CONAN.NPC.rangedDamage"}}
+          </button>
         </div>
         </div>
       

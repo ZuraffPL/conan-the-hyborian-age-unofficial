@@ -57,10 +57,21 @@ export class AntagonistModel extends foundry.abstract.TypeDataModel {
         max:   new fields.NumberField({ required: true, initial: 20, min: 0, integer: true })
       }),
 
-      damage: new fields.SchemaField({
-        melee:  attackSchema(),
-        ranged: attackSchema()
-      }),
+      damage: new fields.ArrayField(
+        new fields.SchemaField({
+          type:          new fields.StringField({ initial: "melee" }),
+          name:          new fields.StringField({ initial: "" }),
+          die:           new fields.StringField({ initial: "d6" }),
+          modifier:      new fields.NumberField({ initial: 0, integer: true }),
+          notApplicable: new fields.BooleanField({ initial: false })
+        }),
+        {
+          initial: [
+            { type: "melee",  name: "", die: "d6", modifier: 0, notApplicable: false },
+            { type: "ranged", name: "", die: "d6", modifier: 0, notApplicable: false }
+          ]
+        }
+      ),
 
       actions: new fields.SchemaField({
         perRound: new fields.NumberField({ required: true, initial: 1, min: 1, integer: true }),
@@ -91,12 +102,34 @@ export class AntagonistModel extends foundry.abstract.TypeDataModel {
   }
 
   /**
-   * Migracja: konwersja starego formatu lifePoints (scalar → {value, max}).
-   * Przeniesiona z ConanActor.prepareBaseData() — wywoływana automatycznie przez Foundry.
+   * Migracja: konwersja starego formatu lifePoints (scalar → {value, max})
+   * oraz starego formatu damage (obiekt → tablica).
+   * Wywoływana automatycznie przez Foundry.
    */
   static migrateData(source) {
     if (typeof source.lifePoints === "number") {
       source.lifePoints = { value: source.lifePoints, max: source.lifePoints };
+    }
+    // Migracja damage: obiekt { melee, ranged, ... } → tablica [{ type, name, die, modifier, notApplicable }]
+    if (source.damage && !Array.isArray(source.damage)) {
+      const ORDER = ["melee", "ranged", "melee2", "ranged2"];
+      const arr = [];
+      for (const key of ORDER) {
+        const val = source.damage[key];
+        if (val && typeof val === "object" && "die" in val) {
+          arr.push({
+            type:          key.startsWith("melee") ? "melee" : "ranged",
+            name:          val.name          ?? "",
+            die:           val.die           ?? "d6",
+            modifier:      val.modifier      ?? 0,
+            notApplicable: val.notApplicable ?? false
+          });
+        }
+      }
+      source.damage = arr.length ? arr : [
+        { type: "melee",  name: "", die: "d6", modifier: 0, notApplicable: false },
+        { type: "ranged", name: "", die: "d6", modifier: 0, notApplicable: false }
+      ];
     }
     return super.migrateData(source);
   }

@@ -20,44 +20,35 @@ import { NPCAttackDialog } from "../helpers/npc-attack-dialog.mjs";
  * Setup N/A checkbox handlers with strikethrough effect
  * @param {HTMLElement} element - The sheet element
  */
-function setupNACheckboxes(element) {
-  const naCheckboxes = element.querySelectorAll('input[name$=".notApplicable"]');
-  naCheckboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', (event) => {
-      const isNA = event.target.checked;
-      const damageType = event.target.name.includes('melee') ? 'melee' : 'ranged';
-      
-      // Find the damage row
-      const damageRow = event.target.closest('.damage-row');
-      
-      // Toggle strikethrough class
-      if (damageRow) {
-        if (isNA) {
-          damageRow.classList.add('not-applicable');
-        } else {
-          damageRow.classList.remove('not-applicable');
-        }
-      }
-      
-      // Disable/enable related fields
-      const nameField = element.querySelector(`input[name="system.damage.${damageType}.name"]`);
-      const dieField = element.querySelector(`select[name="system.damage.${damageType}.die"]`);
-      const modField = element.querySelector(`input[name="system.damage.${damageType}.modifier"]`);
-      
-      if (nameField) nameField.disabled = isNA;
-      if (dieField) dieField.disabled = isNA;
-      if (modField) modField.disabled = isNA;
-    });
-    
-    // Set initial state on load
-    const isChecked = checkbox.checked;
-    if (isChecked) {
-      const damageRow = checkbox.closest('.damage-row');
-      if (damageRow) {
-        damageRow.classList.add('not-applicable');
-      }
-    }
+/**
+ * Reads all damage rows from the sheet form and returns them as an array
+ * suitable for actor.update({ 'system.damage': [...] }).
+ * Foundry v13 ArrayField does NOT support dot-notation updates for individual
+ * array elements — the whole array must be sent at once.
+ * @param {HTMLElement} form
+ * @param {Actor} actor - used to copy unchanged fields not present in form
+ * @returns {Object[]}
+ */
+function getDamageArrayFromForm(form, actor) {
+  const rows = form.querySelectorAll('.damage-row[data-index]');
+  const raw = actor.system.damage;
+  const current = Array.isArray(raw) ? raw.map(d => ({...d})) : Object.values(raw ?? {}).map(d => ({...d}));
+  const result = [];
+  rows.forEach(row => {
+    const i = parseInt(row.dataset.index);
+    const base = current[i] ?? { type: 'melee', name: '', die: 'd6', modifier: 0 };
+    const nameEl  = row.querySelector(`input[name='system.damage.${i}.name']`);
+    const dieEl   = row.querySelector(`select[name='system.damage.${i}.die']`);
+    const modEl   = row.querySelector(`input[name='system.damage.${i}.modifier']`);
+    const typeEl  = row.querySelector(`select[name='system.damage.${i}.type']`);
+    result[i] = {
+      type:     typeEl  ? typeEl.value              : base.type,
+      name:     nameEl  ? nameEl.value              : base.name,
+      die:      dieEl   ? dieEl.value               : base.die,
+      modifier: modEl   ? (parseInt(modEl.value) || 0) : base.modifier,
+    };
   });
+  return result;
 }
 
 export class ConanMinionSheet extends ConanActorSheet {
@@ -80,6 +71,8 @@ export class ConanMinionSheet extends ConanActorSheet {
       rollAttribute: ConanMinionSheet._onRollAttribute,
       npcAttack: ConanMinionSheet._onNPCAttack,
       npcDamage: ConanMinionSheet._onNPCDamage,
+      addAttack: ConanMinionSheet._onAddAttack,
+      removeAttack: ConanMinionSheet._onRemoveAttack,
       toggleDefence: ConanMinionSheet._onToggleDefence,
       toggleImmobilized: ConanMinionSheet._onToggleImmobilized,
       togglePoisoned: ConanMinionSheet._onTogglePoisoned,
@@ -210,9 +203,6 @@ export class ConanMinionSheet extends ConanActorSheet {
       });
     }
     
-    // Handle N/A checkboxes for damage types
-    setupNACheckboxes(this.element);
-    
     // Update wounded box CSS based on current state
     this._updateWoundedState();
 
@@ -275,7 +265,7 @@ export class ConanMinionSheet extends ConanActorSheet {
   }
 
   /**
-   * Override rollAttribute for NPC (no flex die)
+   * Override rollAttribute for NPC (no flex die) — minion
    */
   static async _onRollAttribute(event, target) {
     const attribute = target.dataset.attribute;
@@ -283,20 +273,44 @@ export class ConanMinionSheet extends ConanActorSheet {
   }
 
   /**
-   * Handle NPC attack
+   * Handle NPC attack (minion)
    */
   static async _onNPCAttack(event, target) {
-    const attackType = target.dataset.attackType || event.currentTarget.dataset.attackType;
-    await NPCAttackDialog.prompt(this.baseActor, attackType);
+    const attackIndex = parseInt(target.dataset.attackIndex);
+    await NPCAttackDialog.prompt(this.baseActor, attackIndex);
   }
 
   /**
-   * Handle NPC damage roll
+   * Handle NPC damage roll (minion)
    */
   static async _onNPCDamage(event, target) {
-    const attackType = target.dataset.attackType || event.currentTarget.dataset.attackType;
+    const attackIndex = parseInt(target.dataset.attackIndex);
     const { rollNPCDamage } = await import("../helpers/roll-mechanics.mjs");
-    await rollNPCDamage(this.baseActor, attackType);
+    await rollNPCDamage(this.baseActor, attackIndex);
+  }
+
+  /**
+   * Add new attack row (minion)
+   */
+  static async _onAddAttack(event, target) {
+    const type = target.dataset.type || "melee";
+    const _raw = this.baseActor.system.damage;
+    const currentDamage = Array.isArray(_raw) ? _raw.map(d => ({...d})) : Object.values(_raw ?? {}).map(d => ({...d}));
+    currentDamage.push({ type, name: "", die: "d6", modifier: 0 });
+    await this.baseActor.update({ "system.damage": currentDamage });
+  }
+
+  /**
+   * Remove attack row (minion)
+   */
+  static async _onRemoveAttack(event, target) {
+    const index = parseInt(target.dataset.index);
+    const _raw = this.baseActor.system.damage;
+    const currentDamage = Array.isArray(_raw) ? _raw.map(d => ({...d})) : Object.values(_raw ?? {}).map(d => ({...d}));
+    if (!isNaN(index) && index >= 0 && index < currentDamage.length) {
+      currentDamage.splice(index, 1);
+      await this.baseActor.update({ "system.damage": currentDamage });
+    }
   }
 
   /**
@@ -427,6 +441,8 @@ export class ConanMinionSheet extends ConanActorSheet {
       input.addEventListener('input', (event) => {
         const fieldName = event.target.name;
         if (!fieldName) return;
+        // Damage array fields handled separately below
+        if (fieldName.startsWith('system.damage.')) return;
         
         // Don't allow empty name field
         if (fieldName === 'name' && !event.target.value.trim()) {
@@ -440,6 +456,8 @@ export class ConanMinionSheet extends ConanActorSheet {
       input.addEventListener('blur', async (event) => {
         const fieldName = event.target.name;
         if (!fieldName || this._isUpdating) return;
+        // Damage array fields handled separately below
+        if (fieldName.startsWith('system.damage.')) return;
         
         // Don't allow empty name field - revert to previous value
         if (fieldName === 'name' && !event.target.value.trim()) {
@@ -459,12 +477,35 @@ export class ConanMinionSheet extends ConanActorSheet {
       });
     });
     
+    // Helper: update whole damage array from form state
+    // IMPORTANT: read form dynamically at call time - the captured 'form' reference
+    // becomes stale after actor.update() triggers a sheet re-render.
+    const updateDamageArray = async () => {
+      if (this._isUpdating) return;
+      this._isUpdating = true;
+      try {
+        const liveForm = this.element?.querySelector('form');
+        if (!liveForm) return;
+        const damageArr = getDamageArrayFromForm(liveForm, this.baseActor);
+        if (damageArr.length === 0) return; // safety: never wipe all attacks
+        await this.baseActor.update({ 'system.damage': damageArr }, { render: false });
+      } finally {
+        this._isUpdating = false;
+      }
+    };
+    const debouncedDamageUpdate = foundry.utils.debounce(updateDamageArray, 500);
+
     // Handle number inputs and selects with immediate update on change
     const numberInputs = form.querySelectorAll('input[type="number"], select');
     numberInputs.forEach(input => {
       input.addEventListener('change', (event) => {
         const fieldName = event.target.name;
         if (!fieldName) return;
+        // Special handling for damage array fields
+        if (fieldName.startsWith('system.damage.')) {
+          updateDamageArray();
+          return;
+        }
         const dtype = event.target.dataset.dtype || (event.target.type === 'number' ? 'Number' : 'String');
         immediateUpdate(fieldName, event.target.value, dtype);
       });
@@ -479,8 +520,24 @@ export class ConanMinionSheet extends ConanActorSheet {
       checkbox.addEventListener('change', (event) => {
         const fieldName = event.target.name;
         if (!fieldName) return;
+        // Special handling for damage array fields
+        if (fieldName.startsWith('system.damage.')) {
+          updateDamageArray();
+          return;
+        }
         immediateUpdate(fieldName, event.target.checked, 'Boolean');
       });
+    });
+
+    // Text inputs inside damage rows also need full-array update
+    const damageTextInputs = form.querySelectorAll('.damage-row input[type="text"]');
+    damageTextInputs.forEach(input => {
+      input.removeEventListener('input', input._damageInputHandler);
+      input.removeEventListener('blur', input._damageBlurHandler);
+      input._damageInputHandler = () => debouncedDamageUpdate();
+      input._damageBlurHandler  = () => updateDamageArray();
+      input.addEventListener('input', input._damageInputHandler);
+      input.addEventListener('blur',  input._damageBlurHandler);
     });
   }
 
@@ -556,6 +613,8 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       rollAttribute: ConanAntagonistSheet._onRollAttribute,
       npcAttack: ConanAntagonistSheet._onNPCAttack,
       npcDamage: ConanAntagonistSheet._onNPCDamage,
+      addAttack: ConanAntagonistSheet._onAddAttack,
+      removeAttack: ConanAntagonistSheet._onRemoveAttack,
       toggleDefence: ConanAntagonistSheet._onToggleDefence,
       toggleImmobilized: ConanAntagonistSheet._onToggleImmobilized,
       togglePoisoned: ConanAntagonistSheet._onTogglePoisoned
@@ -681,9 +740,6 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       });
     }
     
-    // Handle N/A checkboxes for damage types
-    setupNACheckboxes(this.element);
-
     // Setup auto-resize for powers textareas.
     // adjustHeight() must also run when the tab becomes visible (scrollHeight = 0 on hidden tabs).
     const _adjustTextarea2 = (ta) => {
@@ -797,6 +853,8 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       input.addEventListener('input', (event) => {
         const fieldName = event.target.name;
         if (!fieldName) return;
+        // Damage array fields handled separately below
+        if (fieldName.startsWith('system.damage.')) return;
         
         // Don't allow empty name field
         if (fieldName === 'name' && !event.target.value.trim()) {
@@ -810,6 +868,8 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       input.addEventListener('blur', async (event) => {
         const fieldName = event.target.name;
         if (!fieldName || this._isUpdating) return;
+        // Damage array fields handled separately below
+        if (fieldName.startsWith('system.damage.')) return;
         
         // Don't allow empty name field - revert to previous value
         if (fieldName === 'name' && !event.target.value.trim()) {
@@ -829,12 +889,35 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       });
     });
     
+    // Helper: update whole damage array from form state
+    // IMPORTANT: read form dynamically at call time - the captured 'form' reference
+    // becomes stale after actor.update() triggers a sheet re-render.
+    const updateDamageArray = async () => {
+      if (this._isUpdating) return;
+      this._isUpdating = true;
+      try {
+        const liveForm = this.element?.querySelector('form');
+        if (!liveForm) return;
+        const damageArr = getDamageArrayFromForm(liveForm, this.baseActor);
+        if (damageArr.length === 0) return; // safety: never wipe all attacks
+        await this.baseActor.update({ 'system.damage': damageArr }, { render: false });
+      } finally {
+        this._isUpdating = false;
+      }
+    };
+    const debouncedDamageUpdate = foundry.utils.debounce(updateDamageArray, 500);
+
     // Handle number inputs and selects with immediate update on change
     const numberInputs = form.querySelectorAll('input[type="number"], select');
     numberInputs.forEach(input => {
       input.addEventListener('change', (event) => {
         const fieldName = event.target.name;
         if (!fieldName) return;
+        // Special handling for damage array fields
+        if (fieldName.startsWith('system.damage.')) {
+          updateDamageArray();
+          return;
+        }
         const dtype = event.target.dataset.dtype || (event.target.type === 'number' ? 'Number' : 'String');
         immediateUpdate(fieldName, event.target.value, dtype);
       });
@@ -849,13 +932,29 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       checkbox.addEventListener('change', (event) => {
         const fieldName = event.target.name;
         if (!fieldName) return;
+        // Special handling for damage array fields
+        if (fieldName.startsWith('system.damage.')) {
+          updateDamageArray();
+          return;
+        }
         immediateUpdate(fieldName, event.target.checked, 'Boolean');
       });
+    });
+
+    // Text inputs inside damage rows also need full-array update
+    const damageTextInputs = form.querySelectorAll('.damage-row input[type="text"]');
+    damageTextInputs.forEach(input => {
+      input.removeEventListener('input', input._damageInputHandler);
+      input.removeEventListener('blur', input._damageBlurHandler);
+      input._damageInputHandler = () => debouncedDamageUpdate();
+      input._damageBlurHandler  = () => updateDamageArray();
+      input.addEventListener('input', input._damageInputHandler);
+      input.addEventListener('blur',  input._damageBlurHandler);
     });
   }
 
   /**
-   * Override rollAttribute for NPC (no flex die)
+   * Override rollAttribute for NPC (no flex die) — antagonist
    */
   static async _onRollAttribute(event, target) {
     const attribute = target.dataset.attribute;
@@ -863,20 +962,44 @@ export class ConanAntagonistSheet extends ConanActorSheet {
   }
 
   /**
-   * Handle NPC attack
+   * Handle NPC attack (antagonist)
    */
   static async _onNPCAttack(event, target) {
-    const attackType = target.dataset.attackType || event.currentTarget.dataset.attackType;
-    await NPCAttackDialog.prompt(this.baseActor, attackType);
+    const attackIndex = parseInt(target.dataset.attackIndex);
+    await NPCAttackDialog.prompt(this.baseActor, attackIndex);
   }
 
   /**
-   * Handle NPC damage roll
+   * Handle NPC damage roll (antagonist)
    */
   static async _onNPCDamage(event, target) {
-    const attackType = target.dataset.attackType || event.currentTarget.dataset.attackType;
+    const attackIndex = parseInt(target.dataset.attackIndex);
     const { rollNPCDamage } = await import("../helpers/roll-mechanics.mjs");
-    await rollNPCDamage(this.baseActor, attackType);
+    await rollNPCDamage(this.baseActor, attackIndex);
+  }
+
+  /**
+   * Add new attack row (antagonist)
+   */
+  static async _onAddAttack(event, target) {
+    const type = target.dataset.type || "melee";
+    const _raw = this.baseActor.system.damage;
+    const currentDamage = Array.isArray(_raw) ? _raw.map(d => ({...d})) : Object.values(_raw ?? {}).map(d => ({...d}));
+    currentDamage.push({ type, name: "", die: "d6", modifier: 0 });
+    await this.baseActor.update({ "system.damage": currentDamage });
+  }
+
+  /**
+   * Remove attack row (antagonist)
+   */
+  static async _onRemoveAttack(event, target) {
+    const index = parseInt(target.dataset.index);
+    const _raw = this.baseActor.system.damage;
+    const currentDamage = Array.isArray(_raw) ? _raw.map(d => ({...d})) : Object.values(_raw ?? {}).map(d => ({...d}));
+    if (!isNaN(index) && index >= 0 && index < currentDamage.length) {
+      currentDamage.splice(index, 1);
+      await this.baseActor.update({ "system.damage": currentDamage });
+    }
   }
 
   /**

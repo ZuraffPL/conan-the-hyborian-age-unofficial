@@ -829,14 +829,15 @@ export async function rollRangedDamage(actor, weapon, modifier = 0) {
  * @param {string} attackType - The attack type ('melee' or 'ranged')
  * @returns {Object} - The roll result object
  */
-export async function rollNPCDamage(actor, attackType) {
+export async function rollNPCDamage(actor, attackIndex) {
   if (!actor || (actor.type !== "minion" && actor.type !== "antagonist")) {
     ui.notifications.error("Invalid NPC actor for damage roll");
     return null;
   }
 
   // Get damage data from actor
-  const damageData = actor.system.damage[attackType];
+  const damageData = actor.system.damage[attackIndex];
+  const attackType = damageData?.type || 'melee';
   
   if (!damageData || damageData.notApplicable) {
     ui.notifications.warn(game.i18n.localize("CONAN.Warnings.damageNotApplicable"));
@@ -845,7 +846,7 @@ export async function rollNPCDamage(actor, attackType) {
 
   // Show damage dialog
   const { NPCDamageDialog } = await import("./npc-damage-dialog.mjs");
-  const result = await NPCDamageDialog.prompt(actor, attackType);
+  const result = await NPCDamageDialog.prompt(actor, attackIndex);
   if (result === null) return null; // User cancelled
   
   const modifier = result.modifier || 0;
@@ -860,7 +861,7 @@ export async function rollNPCDamage(actor, attackType) {
   
   // For melee attacks, add Brawn value
   let brawnValue = 0;
-  if (attackType === 'melee') {
+  if (attackType.startsWith('melee')) {
     brawnValue = actor.system.attributes.might?.effectiveValue || actor.system.attributes.might?.value || 0;
   }
   
@@ -879,7 +880,7 @@ export async function rollNPCDamage(actor, attackType) {
   // Determine NPC type for styling
   const npcType = actor.type; // "minion" or "antagonist"
   const npcClass = npcType === "minion" ? "minion-roll" : "antagonist-roll";
-  const attackTypeLabel = attackType === 'melee' 
+  const attackTypeLabel = attackType.startsWith('melee') 
     ? game.i18n.localize("CONAN.NPC.meleeDamage")
     : game.i18n.localize("CONAN.NPC.rangedDamage");
   

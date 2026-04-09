@@ -877,7 +877,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       const actorId = button.dataset.actorId;
       const tokenId = button.dataset.tokenId;
       const sceneId = button.dataset.sceneId;
-      const attackType = button.dataset.attackType;
+      const attackIndex = parseInt(button.dataset.attackIndex);
       
       // Try to get actor from token first (for unlinked tokens)
       let actor = null;
@@ -899,7 +899,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       
       // Import and call rollNPCDamage
       const { rollNPCDamage } = await import("./helpers/roll-mechanics.mjs");
-      await rollNPCDamage(actor, attackType);
+      await rollNPCDamage(actor, attackIndex);
     });
   }
   
