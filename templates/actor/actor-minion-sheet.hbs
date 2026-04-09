@@ -143,7 +143,7 @@
         <div class="defense-box">
           <div class="defense-header">
             <span class="defense-abbr">{{localize "CONAN.Resources.physical"}}</span>
-            <span class="defense-label">Physical Defence</span>
+            <span class="defense-label">{{localize "CONAN.Defense.physical"}}</span>
           </div>
           
           <div class="defense-value-container {{#if system.defenceActive}}defence-active{{/if}} {{#if system.immobilized}}immobilized-active{{/if}}">
@@ -162,7 +162,7 @@
         <div class="defense-box">
           <div class="defense-header">
             <span class="defense-abbr">{{localize "CONAN.Resources.sorcery"}}</span>
-            <span class="defense-label">Sorcery Defence</span>
+            <span class="defense-label">{{localize "CONAN.Defense.sorcery"}}</span>
           </div>
           
           <input type="number" name="system.defense.sorcery" value="{{system.defense.sorcery}}" min="0" max="20" data-dtype="Number" class="defense-value" />
@@ -171,7 +171,7 @@
         <div class="defense-box">
           <div class="defense-header">
             <span class="defense-abbr">{{localize "CONAN.NPC.threshold"}}</span>
-            <span class="defense-label">Threshold</span>
+            <span class="defense-label">{{localize "CONAN.NPC.threshold"}}</span>
           </div>
           
           <input type="number" name="system.threshold" value="{{system.threshold}}" min="1" max="25" data-dtype="Number" class="defense-value" />
@@ -180,7 +180,7 @@
         <div class="defense-box">
           <div class="defense-header">
             <span class="defense-abbr">{{localize "CONAN.NPC.armor"}}</span>
-            <span class="defense-label">Armor ({{localize "CONAN.NPC.armorAbbr"}})</span>
+            <span class="defense-label">{{localize "CONAN.NPC.armor"}} ({{localize "CONAN.NPC.armorAbbr"}})</span>
           </div>
           
           <input type="number" name="system.armor" value="{{system.armor}}" min="0" max="20" data-dtype="Number" class="defense-value" />
@@ -191,7 +191,7 @@
             <input type="checkbox" name="system.wounded" {{#if system.wounded}}checked{{/if}} data-dtype="Boolean" data-action="toggleWounded" />
             <span class="wounded-label">
               <span class="primary-label">{{localize "CONAN.NPC.wounded"}}</span>
-              <span class="subtitle-label">Wounded</span>
+              <span class="subtitle-label">{{localize "CONAN.NPC.wounded"}}</span>
             </span>
             <i class="fas fa-heart-broken wounded-icon"></i>
           </label>
@@ -307,7 +307,7 @@
           <div class="action-field">
             <label>
               <span class="primary-label">{{localize "CONAN.NPC.actionsPerRound"}}</span>
-              <span class="subtitle-label">Actions per Round</span>
+              <span class="subtitle-label">{{localize "CONAN.NPC.actionsPerRound"}}</span>
             </label>
             <input type="number" name="system.actions.perRound" value="{{system.actions.perRound}}" min="1" max="10" data-dtype="Number" class="action-value" />
           </div>
@@ -315,7 +315,7 @@
           <div class="action-field">
             <label>
               <span class="primary-label">{{localize "CONAN.NPC.attacksPerRound"}}</span>
-              <span class="subtitle-label">Attacks per Round</span>
+              <span class="subtitle-label">{{localize "CONAN.NPC.attacksPerRound"}}</span>
             </label>
             <input type="number" name="system.actions.attacks" value="{{system.actions.attacks}}" min="1" max="10" data-dtype="Number" class="action-value" />
           </div>
