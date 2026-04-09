@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.7.5] - 2026-04-10
+
+### Added — Dynamic NPC Attack Slots
+
+- **Dynamic attack rows for Minions and Antagonists** — attacks are no longer static melee/ranged fields; the sheet now shows a list of attack rows that can be freely added and removed
+- **Add attack buttons** (`+ Wręcz` / `+ Dystansowe`) placed side by side at the bottom of the attacks section — create new rows pre-filled with the correct type
+- **Remove attack button** (trash icon) on each row — removes that slot instantly without a confirmation dialog
+- Attack rows support: name (text input), damage die (dropdown), modifier (number), type (melee/ranged) and roll/damage buttons
+- Data stored as `ArrayField` in `MinionModel` and `AntagonistModel`; old object-format data is migrated automatically via `migrateData`
+
+### Fixed — NPC Sheet Input Stability
+
+- **Modifier input no longer adds a new attack** — the previous flat dot-notation update (`system.damage.0.modifier`) was incompatible with Foundry v13 `ArrayField`; now the entire array is rebuilt from the DOM and sent as one update
+- **Trash button now works reliably** — `actor.system.damage` is a DataModel proxy, not a plain array; copy is now done via `JSON.parse(JSON.stringify(...))` to avoid proxy mutations
+- **Attack name/die/modifier no longer disappears after typing** — stale DOM closure replaced with a live `this.element.querySelector('form')` call inside the async handler; safety guard added if form is detached
+- **No lag/freeze while typing** — `actor.update()` called with `{ render: false }` to suppress full sheet re-render on each debounced save
+- **N/A checkbox removed** — redundant with the delete button; removed from both templates, styles and form-reading logic
+- **Scroll no longer cuts off add-buttons** — `.tab` now has `padding-bottom: 20px`
+
+---
+
 ## [0.7.4] - 2026-04-03
 
 ### Fixed — NPC Sheet UX & Layout
