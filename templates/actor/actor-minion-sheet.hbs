@@ -54,8 +54,8 @@
       <div class="attributes-row">
         <div class="attribute-box" data-attribute="might">
           <div class="attribute-header">
-            <span class="attribute-abbr">{{localize "CONAN.Attributes.might.abbr"}}</span>
-            <span class="attribute-label">{{localize "CONAN.Attributes.might.label"}}</span>
+            <span class="attribute-abbr">{{localize "CONAN.Attributes.might.label"}}</span>
+            <span class="attribute-label">{{localize "CONAN.Attributes.might.abbr"}}</span>
           </div>
           <div class="attribute-values">
             <input type="number" name="system.attributes.might.value" value="{{system.attributes.might.value}}" min="1" max="20" data-dtype="Number" class="attribute-value" />
@@ -74,8 +74,8 @@
         </div>
         <div class="attribute-box" data-attribute="edge">
           <div class="attribute-header">
-            <span class="attribute-abbr">{{localize "CONAN.Attributes.edge.abbr"}}</span>
-            <span class="attribute-label">{{localize "CONAN.Attributes.edge.label"}}</span>
+            <span class="attribute-abbr">{{localize "CONAN.Attributes.edge.label"}}</span>
+            <span class="attribute-label">{{localize "CONAN.Attributes.edge.abbr"}}</span>
           </div>
           <div class="attribute-values">
             <input type="number" name="system.attributes.edge.value" value="{{system.attributes.edge.value}}" min="1" max="20" data-dtype="Number" class="attribute-value" />
@@ -94,8 +94,8 @@
         </div>
         <div class="attribute-box" data-attribute="grit">
           <div class="attribute-header">
-            <span class="attribute-abbr">{{localize "CONAN.Attributes.grit.abbr"}}</span>
-            <span class="attribute-label">{{localize "CONAN.Attributes.grit.label"}}</span>
+            <span class="attribute-abbr">{{localize "CONAN.Attributes.grit.label"}}</span>
+            <span class="attribute-label">{{localize "CONAN.Attributes.grit.abbr"}}</span>
           </div>
           <div class="attribute-values">
             <input type="number" name="system.attributes.grit.value" value="{{system.attributes.grit.value}}" min="1" max="20" data-dtype="Number" class="attribute-value" />
@@ -114,8 +114,8 @@
         </div>
         <div class="attribute-box" data-attribute="wits">
           <div class="attribute-header">
-            <span class="attribute-abbr">{{localize "CONAN.Attributes.wits.abbr"}}</span>
-            <span class="attribute-label">{{localize "CONAN.Attributes.wits.label"}}</span>
+            <span class="attribute-abbr">{{localize "CONAN.Attributes.wits.label"}}</span>
+            <span class="attribute-label">{{localize "CONAN.Attributes.wits.abbr"}}</span>
           </div>
           <div class="attribute-values">
             <input type="number" name="system.attributes.wits.value" value="{{system.attributes.wits.value}}" min="1" max="20" data-dtype="Number" class="attribute-value" />
@@ -143,7 +143,7 @@
         <div class="defense-box">
           <div class="defense-header">
             <span class="defense-abbr">{{localize "CONAN.Resources.physical"}}</span>
-            <span class="defense-label">{{localize "CONAN.Defense.physical"}}</span>
+            <span class="defense-label">Physical Defence</span>
           </div>
           
           <div class="defense-value-container {{#if system.defenceActive}}defence-active{{/if}} {{#if system.immobilized}}immobilized-active{{/if}}">
@@ -162,7 +162,7 @@
         <div class="defense-box">
           <div class="defense-header">
             <span class="defense-abbr">{{localize "CONAN.Resources.sorcery"}}</span>
-            <span class="defense-label">{{localize "CONAN.Defense.sorcery"}}</span>
+            <span class="defense-label">Sorcery Defence</span>
           </div>
           
           <input type="number" name="system.defense.sorcery" value="{{system.defense.sorcery}}" min="0" max="20" data-dtype="Number" class="defense-value" />
@@ -171,7 +171,7 @@
         <div class="defense-box">
           <div class="defense-header">
             <span class="defense-abbr">{{localize "CONAN.NPC.threshold"}}</span>
-            <span class="defense-label">{{localize "CONAN.NPC.threshold"}}</span>
+            <span class="defense-label">Life Threshold</span>
           </div>
           
           <input type="number" name="system.threshold" value="{{system.threshold}}" min="1" max="25" data-dtype="Number" class="defense-value" />
@@ -180,7 +180,7 @@
         <div class="defense-box">
           <div class="defense-header">
             <span class="defense-abbr">{{localize "CONAN.NPC.armor"}}</span>
-            <span class="defense-label">{{localize "CONAN.NPC.armor"}} ({{localize "CONAN.NPC.armorAbbr"}})</span>
+            <span class="defense-label">Armor (AR)</span>
           </div>
           
           <input type="number" name="system.armor" value="{{system.armor}}" min="0" max="20" data-dtype="Number" class="defense-value" />
@@ -191,7 +191,7 @@
             <input type="checkbox" name="system.wounded" {{#if system.wounded}}checked{{/if}} data-dtype="Boolean" data-action="toggleWounded" />
             <span class="wounded-label">
               <span class="primary-label">{{localize "CONAN.NPC.wounded"}}</span>
-              <span class="subtitle-label">{{localize "CONAN.NPC.wounded"}}</span>
+              <span class="subtitle-label">Wounded</span>
             </span>
             <i class="fas fa-heart-broken wounded-icon"></i>
           </label>

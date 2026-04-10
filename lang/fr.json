@@ -53,19 +53,19 @@
     "Attributes": {
       "might": {
         "label": "Force",
-        "abbr": "FOR"
+        "abbr": "Might"
       },
       "edge": {
         "label": "Agilité",
-        "abbr": "AGI"
+        "abbr": "Edge"
       },
       "grit": {
         "label": "Résistance",
-        "abbr": "RES"
+        "abbr": "Grit"
       },
       "wits": {
         "label": "Astuce",
-        "abbr": "AST"
+        "abbr": "Wits"
       }
     },
     
