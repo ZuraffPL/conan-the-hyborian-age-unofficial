@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.7.51] - 2026-04-27
+
+### Changed — Foundry VTT v14 Compatibility Update
+
+- Verified compatibility with **Foundry VTT v14**
+- Updated `compatibility.verified` to `14` in `system.json`
+- No breaking changes; the system continues to support Foundry v13
+
+---
+
 ## [0.7.5] - 2026-04-10
 
 ### Added — Dynamic NPC Attack Slots

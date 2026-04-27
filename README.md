@@ -2,8 +2,8 @@
 
 An unofficial Foundry VTT implementation of **Conan: The Hyborian Age RPG** by Monolith Boardgames. Step into the savage world of Robert E. Howard's Conan the Barbarian and forge your legend in the Hyborian Age!
 
-![Version](https://img.shields.io/badge/version-0.7.4-darkred)
-![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v13%2B-orange)
+![Version](https://img.shields.io/badge/version-0.7.51-darkred)
+![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v13%2B%20%7C%20v14-orange)
 
 ## Installation
 
@@ -27,7 +27,7 @@ An unofficial Foundry VTT implementation of **Conan: The Hyborian Age RPG** by M
 
 ## Requirements
 
-- **Foundry VTT**: v13 or higher (tested on v13.351)
+- **Foundry VTT**: v13 or higher (verified on v14)
 - **Recommended**: [Dice So Nice](https://foundryvtt.com/packages/dice-so-nice) for 3D dice animations with dynamic flex die colorsets
 
 ## About the Game
