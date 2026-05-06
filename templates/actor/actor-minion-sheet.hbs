@@ -334,6 +334,10 @@
                 <img src="systems/conan-the-hyborian-age/assets/icons/paralysis.svg" alt="Immobilized" />
               </button>
               
+              <button type="button" class="prone-toggle-btn {{#if system.prone}}active{{/if}}" data-action="toggleProne" title="{{localize 'CONAN.Attack.prone'}}">
+                <img src="icons/svg/falling.svg" alt="Prone" />
+              </button>
+
               <div style="position: relative; display: inline-block;">
                 {{#if (and system.poisoned (gt activePoisonEffects 0))}}
                   <span class="poison-effect-count">{{activePoisonEffects}}</span>

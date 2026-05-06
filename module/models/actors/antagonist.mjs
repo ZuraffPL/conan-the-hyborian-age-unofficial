@@ -89,6 +89,7 @@ export class AntagonistModel extends foundry.abstract.TypeDataModel {
       // Pola nieudokumentowane w template.json — teraz formalizowane w schemacie
       defenceActive: new fields.BooleanField({ initial: false }),
       immobilized:   new fields.BooleanField({ initial: false }),
+      prone:         new fields.BooleanField({ initial: false }),
 
       // ── Threat Engine ─────────────────────────────────────────────────────
       // Linked token = boss (własne stałe statystyki, Threat Engine nie dotyczy).

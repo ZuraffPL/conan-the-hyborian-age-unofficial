@@ -360,7 +360,6 @@ Hooks.on("createActiveEffect", async (effect, options, userId) => {
   if (effect.statuses?.has("prone")) {
     const actor = effect.parent;
     if (!actor || actor.documentName !== "Actor") return;
-    if (actor.type !== "character") return;
     if (!actor.system.prone) {
       await actor.update({ "system.prone": true });
     }
@@ -372,7 +371,6 @@ Hooks.on("deleteActiveEffect", async (effect, options, userId) => {
   if (effect.statuses?.has("prone")) {
     const actor = effect.parent;
     if (!actor || actor.documentName !== "Actor") return;
-    if (actor.type !== "character") return;
     if (actor.system.prone) {
       await actor.update({ "system.prone": false });
     }
@@ -527,6 +525,116 @@ Hooks.on("renderCombatTracker", (app, html, data) => {
       tokenEffects.appendChild(poisonedIcon);
     }
   });
+});
+
+/**
+ * Combat Tracker — context menu (PPM na walczącym)
+ * Pozwala szybko przełączać efekty statusu bez otwierania karty postaci.
+ *
+ * Hook getCombatTrackerEntryContext jest wywoływany przez ContextMenu.create
+ * w _contextMenu() CombatTracker. li jest elementem jQuery (ContextMenu używa jQuery).
+ */
+Hooks.on("getCombatTrackerEntryContext", (html, options) => {
+  const getActor = (li) => {
+    // li jest elementem jQuery — używamy .data() do odczytu data atrybutu
+    const id = li.data?.("combatant-id") ?? li.dataset?.combatantId;
+    return id ? (game.combat?.combatants.get(id)?.actor ?? null) : null;
+  };
+
+  const canEdit = (li) => {
+    const actor = getActor(li);
+    if (!actor) return false;
+    return game.user.isGM || actor.isOwner;
+  };
+
+  const SEPARATOR = { name: "─────────────────", icon: "", condition: canEdit, callback: () => {} };
+
+  options.push(
+    SEPARATOR,
+    {
+      name: game.i18n.localize("CONAN.Attack.defence"),
+      icon: '<i class="fas fa-shield-alt"></i>',
+      condition: canEdit,
+      callback: async (li) => {
+        const actor = getActor(li);
+        if (!actor) return;
+        const current = actor.system.defenceActive || false;
+        if (!current && actor.system.immobilized) {
+          ui.notifications.warn(game.i18n.localize("CONAN.Warnings.cannotDefenceWhenImmobilized"));
+          return;
+        }
+        const newVal = !current;
+        const update = { "system.defenceActive": newVal };
+        if (actor.system.defense?.basePhysical == null)
+          update["system.defense.basePhysical"] = actor.system.defense?.physical;
+        await actor.update(update);
+        await actor.toggleStatusEffect("conan-defence", { active: newVal });
+        ui.combat?.render();
+      }
+    },
+    {
+      name: game.i18n.localize("CONAN.Attack.immobilized"),
+      icon: '<i class="fas fa-lock"></i>',
+      condition: canEdit,
+      callback: async (li) => {
+        const actor = getActor(li);
+        if (!actor) return;
+        const newVal = !(actor.system.immobilized || false);
+        const update = { "system.immobilized": newVal };
+        if (actor.system.defense?.basePhysical == null)
+          update["system.defense.basePhysical"] = actor.system.defense?.physical;
+        if (newVal && actor.system.defenceActive) {
+          update["system.defenceActive"] = false;
+          await actor.toggleStatusEffect("conan-defence", { active: false });
+        }
+        await actor.update(update);
+        await actor.toggleStatusEffect("conan-immobilized", { active: newVal });
+        ui.combat?.render();
+      }
+    },
+    {
+      name: game.i18n.localize("CONAN.Attack.prone"),
+      icon: '<i class="fas fa-person-falling"></i>',
+      condition: canEdit,
+      callback: async (li) => {
+        const actor = getActor(li);
+        if (!actor) return;
+        const newVal = !(actor.system.prone || false);
+        await actor.update({ "system.prone": newVal });
+        await actor.toggleStatusEffect("prone", { active: newVal });
+        ui.combat?.render();
+      }
+    },
+    {
+      name: game.i18n.localize("CONAN.Poisoned.title"),
+      icon: '<i class="fas fa-skull-crossbones"></i>',
+      condition: canEdit,
+      callback: async (li) => {
+        const actor = getActor(li);
+        if (!actor) return;
+        const newVal = !(actor.system.poisoned || false);
+        await actor.update({ "system.poisoned": newVal });
+        await actor.toggleStatusEffect("conan-poisoned", { active: newVal });
+        ui.combat?.render();
+      }
+    },
+    {
+      name: game.i18n.localize("CONAN.NPC.wounded"),
+      icon: '<i class="fas fa-heart-broken"></i>',
+      condition: (li) => {
+        const actor = getActor(li);
+        return actor?.type === "minion" && (game.user.isGM || actor.isOwner);
+      },
+      callback: async (li) => {
+        const actor = getActor(li);
+        if (!actor) return;
+        const newVal = !(actor.system.wounded || false);
+        await actor.update({ "system.wounded": newVal });
+        await actor.toggleStatusEffect("wounded", { active: newVal });
+        ui.combat?.render();
+      }
+    }
+  );
 });
 
 /**

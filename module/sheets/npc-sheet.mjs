@@ -76,6 +76,7 @@ export class ConanMinionSheet extends ConanActorSheet {
       toggleDefence: ConanMinionSheet._onToggleDefence,
       toggleImmobilized: ConanMinionSheet._onToggleImmobilized,
       togglePoisoned: ConanMinionSheet._onTogglePoisoned,
+      toggleProne: ConanMinionSheet._onToggleProne,
       toggleWounded: ConanMinionSheet._onToggleWounded
     }
   };
@@ -386,6 +387,14 @@ export class ConanMinionSheet extends ConanActorSheet {
     dialog.render(true);
   }
 
+  static async _onToggleProne(event, target) {
+    const currentState = this.baseActor.system.prone || false;
+    const newState = !currentState;
+    await this.baseActor.update({ 'system.prone': newState });
+    await this.baseActor.toggleStatusEffect("prone", { active: newState });
+    if (game.combat && ui.combat) { ui.combat.render(); }
+  }
+
   /**
    * Setup form handling for NPC sheets with debounce for text inputs
    * This prevents the sheet from freezing during text entry
@@ -617,7 +626,8 @@ export class ConanAntagonistSheet extends ConanActorSheet {
       removeAttack: ConanAntagonistSheet._onRemoveAttack,
       toggleDefence: ConanAntagonistSheet._onToggleDefence,
       toggleImmobilized: ConanAntagonistSheet._onToggleImmobilized,
-      togglePoisoned: ConanAntagonistSheet._onTogglePoisoned
+      togglePoisoned: ConanAntagonistSheet._onTogglePoisoned,
+      toggleProne: ConanAntagonistSheet._onToggleProne
     }
   };
 
@@ -1073,6 +1083,14 @@ export class ConanAntagonistSheet extends ConanActorSheet {
     const { PoisonedDialog } = await import("../helpers/poisoned-dialog.mjs");
     const dialog = new PoisonedDialog(this.baseActor);
     dialog.render(true);
+  }
+
+  static async _onToggleProne(event, target) {
+    const currentState = this.baseActor.system.prone || false;
+    const newState = !currentState;
+    await this.baseActor.update({ 'system.prone': newState });
+    await this.baseActor.toggleStatusEffect("prone", { active: newState });
+    if (game.combat && ui.combat) { ui.combat.render(); }
   }
 }
 

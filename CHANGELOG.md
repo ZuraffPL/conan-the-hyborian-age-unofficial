@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.7.61] - 2026-05-06
+
+### Fixed
+
+- Naprawiono hook menu kontekstowego w Combat Trackerze — poprawna nazwa hooka `getCombatTrackerEntryContext` (poprzednio błędnie używano `getCombatantContextOptions`, które nie istnieje w Foundry v13)
+- Opcje statusów (Obrona, Unieruchomienie, Leżenie, Zatrucie, Ranny) powinny teraz pojawiać się w menu PPM walczącego w Combat Trackerze
+
+---
+
 ## [0.7.6] - 2026-05-06
 
 ### Added — Prone Status (Leżenie)

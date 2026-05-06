@@ -195,7 +195,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
           </div>
           <div class="difficulty-check">
             <span class="difficulty-label">OF celu:</span>
-            <span class="difficulty-value">${effectiveTargetDefense}${targetProneActive ? ` <span class="prone-chat-modifier">(${proneModifier > 0 ? '+' : ''}${proneModifier} prone)</span>` : ''}</span>
+            <span class="difficulty-value">${effectiveTargetDefense}${targetProneActive ? ` <span class="prone-chat-modifier">(${proneModifier > 0 ? '+' : ''}${proneModifier} ${game.i18n.localize('CONAN.Attack.prone')})</span>` : ''}</span>
           </div>
           <div class="roll-result ${isSuccess ? 'success' : 'failure'}">
             <div class="result-text">${isSuccess ? game.i18n.localize('CONAN.Roll.success') : game.i18n.localize('CONAN.Roll.failure')}</div>`;
