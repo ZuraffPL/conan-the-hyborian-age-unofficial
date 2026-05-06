@@ -227,6 +227,9 @@
           <button type="button" class="immobilized-toggle-btn {{#if system.immobilized}}active{{/if}}" data-action="toggleImmobilized" title="{{localize 'CONAN.Attack.immobilized'}}">
             <img src="systems/conan-the-hyborian-age/assets/icons/paralysis.svg" alt="Immobilized" style="width: 20px; height: 20px;">
           </button>
+          <button type="button" class="prone-toggle-btn {{#if system.prone}}active{{/if}}" data-action="toggleProne" title="{{localize 'CONAN.Attack.prone'}}">
+            <img src="icons/svg/falling.svg" alt="Prone" style="width: 20px; height: 20px;">
+          </button>
         </div>
         <div class="defense-field">
           <label>
@@ -240,6 +243,9 @@
             {{/if}}
             {{#if system.immobilized}}
               <span class="immobilized-indicator">0</span>
+            {{/if}}
+            {{#if system.prone}}
+              <span class="prone-indicator" title="{{localize 'CONAN.Attack.proneDescription'}}"><span class="prone-melee">-1<i class="fas fa-sword"></i></span>/<span class="prone-ranged">+1<i class="fas fa-crosshairs"></i></span></span>
             {{/if}}
           </div>
         </div>

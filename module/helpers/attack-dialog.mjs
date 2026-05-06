@@ -63,8 +63,10 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
       } else {
         context.targetDefense = targetActor.system.defense?.physical || 5;
       }
+      context.targetProneActive = targetActor.system.prone || false;
     } else {
       context.targetDefense = 5;
+      context.targetProneActive = false;
     }
     
     return context;
@@ -110,6 +112,22 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     const sliderModifier = modifierInput ? parseInt(modifierInput.value) : 0;
     const targetDefense = targetDefenseInput ? parseInt(targetDefenseInput.value) : 5;
     
+    // Read prone flag from hidden input
+    const targetProneActiveInput = form.querySelector('input[name="targetProneActive"]');
+    const targetProneActive = targetProneActiveInput?.value === 'true';
+    
+    // Apply prone modifier based on attack type
+    let effectiveTargetDefense = targetDefense;
+    let proneModifier = 0;
+    if (targetProneActive) {
+      if (attackType === 'melee') {
+        proneModifier = -1; // easier to hit prone target with melee
+      } else {
+        proneModifier = +1; // harder to hit prone target with ranged/thrown
+      }
+      effectiveTargetDefense += proneModifier;
+    }
+    
     // Determine which attribute to use
     const attribute = attackType === 'melee' ? 'might' : 'edge';
     const attributeValue = this.actor.system.attributes[attribute].value;
@@ -142,7 +160,7 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     const isWindsOfFate = attributeResult === 1;
     
     // Check for success (total >= target defense, unless Winds of Fate)
-    const isSuccess = !isWindsOfFate && (total >= targetDefense);
+    const isSuccess = !isWindsOfFate && (total >= effectiveTargetDefense);
     
     // Check for Flex Effect (max on flex die, only if not disabled)
     const isFlexEffect = !flexDieDisabled && (flexResult === flexMax);
@@ -215,7 +233,7 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
           </div>
           <div class="difficulty-check">
             <span class="difficulty-label">OF celu:</span>
-            <span class="difficulty-value">${targetDefense}</span>
+            <span class="difficulty-value">${effectiveTargetDefense}${targetProneActive ? ` <span class="prone-chat-modifier">(${proneModifier > 0 ? '+' : ''}${proneModifier} prone)</span>` : ''}</span>
           </div>
           <div class="roll-result ${isSuccess ? 'success' : 'failure'}">
             <div class="result-text">${isSuccess ? game.i18n.localize('CONAN.Roll.success') : game.i18n.localize('CONAN.Roll.failure')}</div>

@@ -399,6 +399,8 @@
       "focusedAttack": "Skupiony Atak",
       "defence": "Obrona",
       "immobilized": "Unieruchomiona",
+      "prone": "Leżenie",
+      "proneDescription": "Leżenie: -1 do Obrony Fizycznej vs Wręcz, +1 vs Dystansowy/Miotany",
       "toAttack": "do ataku",
       "toPhysicalDefense": "do Obrony Fizycznej",
       "rollAttack": "Wykonaj Atak",
@@ -459,7 +461,8 @@
     "EffectTooltips": {
       "defence": "Obrona (+2 do Obrony Fizycznej)",
       "immobilized": "Unieruchomienie (Obrona Fizyczna = 0)",
-      "poisoned": "Zatrucie"
+      "poisoned": "Zatrucie",
+      "prone": "Leżenie (-1 OF vs Wręcz / +1 OF vs Dystansowy)"
     },
     
     "Poisoned": {

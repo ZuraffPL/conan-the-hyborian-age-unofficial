@@ -2,54 +2,88 @@
   "id": "conan-the-hyborian-age",
   "title": "Conan: The Hyborian Age",
   "description": "Unofficial system for playing Conan: The Hyborian Age RPG by Monolith Boardgames",
-  "version": "0.7.51",
+  "version": "0.7.6",
   "compatibility": {
     "minimum": "13",
-    "verified": "14",
+    "verified": "13.351",
     "maximum": "14"
   },
   "background": "systems/conan-the-hyborian-age/assets/img/conan-the-hyborian-age-main.jpg",
   "authors": [
     {
       "name": "Zuraff",
-      "discord": "eliandir_"
+      "discord": "eliandir_",
+      "flags": {}
     }
   ],
   "esmodules": [
     "module/conan.mjs"
   ],
   "styles": [
-    "styles/conan.css",
-    "styles/roll-chat.css",
-    "styles/roll-dialog.css",
-    "styles/flex-dialog.css",
-    "styles/character-creation-dialog.css",
-    "styles/starting-skills.css",
-    "styles/item-armor.css",
-    "styles/item-weapon.css",
-    "styles/item-skill.css",
-    "styles/actor-armor.css",
-    "styles/actor-weapon.css",
-    "styles/actor-npc.css",
-    "styles/stamina-effects.css",
-    "styles/partials/damage-dialog.css",
-    "styles/tale.css"
+    {
+      "src": "styles/conan.css"
+    },
+    {
+      "src": "styles/roll-chat.css"
+    },
+    {
+      "src": "styles/roll-dialog.css"
+    },
+    {
+      "src": "styles/flex-dialog.css"
+    },
+    {
+      "src": "styles/character-creation-dialog.css"
+    },
+    {
+      "src": "styles/starting-skills.css"
+    },
+    {
+      "src": "styles/item-armor.css"
+    },
+    {
+      "src": "styles/item-weapon.css"
+    },
+    {
+      "src": "styles/item-skill.css"
+    },
+    {
+      "src": "styles/actor-armor.css"
+    },
+    {
+      "src": "styles/actor-weapon.css"
+    },
+    {
+      "src": "styles/actor-npc.css"
+    },
+    {
+      "src": "styles/stamina-effects.css"
+    },
+    {
+      "src": "styles/partials/damage-dialog.css"
+    },
+    {
+      "src": "styles/tale.css"
+    }
   ],
   "languages": [
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     },
     {
       "lang": "pl",
       "name": "Polski",
-      "path": "lang/pl.json"
+      "path": "lang/pl.json",
+      "flags": {}
     },
     {
       "lang": "fr",
       "name": "Français",
-      "path": "lang/fr.json"
+      "path": "lang/fr.json",
+      "flags": {}
     }
   ],
   "documentTypes": {
@@ -66,12 +100,15 @@
     }
   },
   "socket": true,
-  "gridDistance": 2,
-  "gridUnits": "m",
   "primaryTokenAttribute": "lifePoints.value",
   "secondaryTokenAttribute": "combat.armor",
   "url": "https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial",
   "manifest": "https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/latest/download/system.json",
   "download": "https://github.com/ZuraffPL/conan-the-hyborian-age-unofficial/releases/latest/download/conan-the-hyborian-age.zip",
-  "license": "LICENSE.txt"
+  "license": "LICENSE.txt",
+  "grid": {
+    "distance": 2,
+    "units": "m"
+  },
+  "flags": {}
 }

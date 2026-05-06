@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.7.6] - 2026-05-06
+
+### Added — Prone Status (Leżenie)
+
+- **Prone toggle button** on the character sheet defense section (falling icon, below Immobilized) — clicking toggles the prone state on/off
+- **Prone indicator** next to Physical Defense value: shows `−1🗡 / +1🎯` to remind players of the active modifiers
+- **Combat Tracker icon** — the falling SVG icon appears automatically for prone characters via Foundry's built-in status effect system
+- **Token HUD sync** — toggling prone from the token status effects panel (right-click menu) now correctly updates `system.prone` on the actor and reflects immediately on the character sheet
+- **Attack dialog aware** — both PC (`AttackDialog`) and NPC (`NPCAttackDialog`) dialogs detect if the target is prone:
+  - Melee attacks: `−1` to effective Physical Defense (easier to hit a prone target)
+  - Ranged / thrown attacks: `+1` to effective Physical Defense (harder to hit)
+  - A **prone-warning banner** is shown inside the dialog when the modifier is active
+  - Chat result shows the adjusted defense value with `(+1 prone)` / `(−1 prone)` suffix
+
+### Technical
+
+- `system.prone: BooleanField` added to `CharacterModel.defineSchema()`
+- Foundry built-in status effect `"prone"` used (no custom ID needed); registered via `CONFIG.statusEffects` removed
+- `Hooks.on("createActiveEffect")` / `Hooks.on("deleteActiveEffect")` in `conan.mjs` handle bidirectional sync between the token status panel and `system.prone`
+- Button icon uses `filter: brightness(0)` CSS to make the white SVG visible on the light button background; golden tint when active
+- Localised in **PL / EN / FR** (`CONAN.Attack.prone`, `CONAN.Attack.proneDescription`)
+
+---
+
 ## [0.7.51] - 2026-04-27
 
 ### Changed — Foundry VTT v14 Compatibility Update

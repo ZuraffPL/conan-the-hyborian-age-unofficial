@@ -398,6 +398,8 @@
       "focusedAttack": "Attaque Concentrée",
       "defence": "Défense",
       "immobilized": "Immobilisé",
+      "prone": "Allongé",
+      "proneDescription": "Allongé : -1 en Défense Physique vs Mêlée, +1 vs Distance/Lancer",
       "toAttack": "à l'attaque",
       "toPhysicalDefense": "à la Défense Physique",
       "rollAttack": "Lancer l'Attaque",
@@ -458,7 +460,8 @@
     "EffectTooltips": {
       "defence": "Défense (+2 à la Défense Physique)",
       "immobilized": "Immobilisé (Défense Physique = 0)",
-      "poisoned": "Empoisonné"
+      "poisoned": "Empoisonné",
+      "prone": "Allongé (-1 DP vs Mêlée / +1 DP vs Distance)"
     },
     
     "Poisoned": {

@@ -105,6 +105,7 @@ Hooks.once("init", async function() {
       name: "CONAN.Poisoned.title",
       img: "systems/conan-the-hyborian-age/assets/icons/Poisoned.svg"
     }
+    // Prone używa wbudowanego efektu Foundry 'prone' (icons/svg/falling.svg)
   );
 
   // Register sheet application classes (ApplicationV2)
@@ -345,6 +346,35 @@ Hooks.on("updateItem", async (item, changes, options, userId) => {
           count: actorsWithItem.length
         })
       );
+    }
+  }
+});
+
+/**
+ * Synchronize Foundry built-in 'prone' ActiveEffect ↔ system.prone
+ * When the effect is toggled via the token HUD or any other source,
+ * update system.prone on the actor to match.
+ */
+Hooks.on("createActiveEffect", async (effect, options, userId) => {
+  if (game.user.id !== userId) return;
+  if (effect.statuses?.has("prone")) {
+    const actor = effect.parent;
+    if (!actor || actor.documentName !== "Actor") return;
+    if (actor.type !== "character") return;
+    if (!actor.system.prone) {
+      await actor.update({ "system.prone": true });
+    }
+  }
+});
+
+Hooks.on("deleteActiveEffect", async (effect, options, userId) => {
+  if (game.user.id !== userId) return;
+  if (effect.statuses?.has("prone")) {
+    const actor = effect.parent;
+    if (!actor || actor.documentName !== "Actor") return;
+    if (actor.type !== "character") return;
+    if (actor.system.prone) {
+      await actor.update({ "system.prone": false });
     }
   }
 });

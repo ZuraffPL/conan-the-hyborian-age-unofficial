@@ -632,7 +632,97 @@ html[lang="en"] .conan .defense-field .subtitle-label {
   filter: brightness(0) saturate(100%) invert(30%) sepia(87%) saturate(2477%) hue-rotate(335deg) brightness(91%) contrast(88%) !important;
 }
 
-/* Poisoned Toggle Button */
+/* Prone Toggle Button */
+.conan .prone-toggle-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #8b4513;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.conan .prone-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #6b3410;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.conan .prone-toggle-btn.active {
+  background: rgba(139, 105, 20, 0.3);
+  border-color: #8b6914;
+  box-shadow: 0 0 8px rgba(139, 105, 20, 0.4);
+}
+
+.conan .prone-toggle-btn.active:hover {
+  background: rgba(139, 105, 20, 0.4);
+  box-shadow: 0 0 12px rgba(139, 105, 20, 0.6);
+}
+
+.conan .prone-toggle-btn img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0);
+  transition: filter 0.2s ease;
+}
+
+.conan .prone-toggle-btn.active img {
+  filter: brightness(0) sepia(1) saturate(4) hue-rotate(10deg);
+}
+
+/* Prone Indicator */
+.conan .prone-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  background: rgba(139, 105, 20, 0.12);
+  border: 1px solid #8b6914;
+  border-radius: 3px;
+  padding: 2px 5px;
+  vertical-align: middle;
+}
+
+.conan .prone-indicator .prone-melee {
+  color: #b71c1c;
+}
+
+.conan .prone-indicator .prone-ranged {
+  color: #1565c0;
+}
+
+.conan .prone-indicator .prone-divider {
+  color: #555;
+}
+
+/* Prone Warning in attack dialog */
+.conan .prone-warning {
+  background: rgba(139, 105, 20, 0.12);
+  border: 1px solid #8b6914;
+  border-radius: 4px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  font-size: 0.85em;
+  color: #5a4000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Prone chat modifier */
+.prone-chat-modifier {
+  font-size: 0.85em;
+  opacity: 0.85;
+}
 .conan .poisoned-toggle-btn {
   width: 32px;
   height: 32px;

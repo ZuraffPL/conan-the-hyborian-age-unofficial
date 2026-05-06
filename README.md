@@ -2,7 +2,7 @@
 
 An unofficial Foundry VTT implementation of **Conan: The Hyborian Age RPG** by Monolith Boardgames. Step into the savage world of Robert E. Howard's Conan the Barbarian and forge your legend in the Hyborian Age!
 
-![Version](https://img.shields.io/badge/version-0.7.51-darkred)
+![Version](https://img.shields.io/badge/version-0.7.6-darkred)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v13%2B%20%7C%20v14-orange)
 
 ## Installation
@@ -47,7 +47,7 @@ Each character has **four attributes** (Might, Edge, Grit, Wits) rated 1–8:
 
 ## System Features
 
-> **Current version: v0.7.4** — For a full history of changes see [CHANGELOG.md](CHANGELOG.md).
+> **Current version: v0.7.6** — For a full history of changes see [CHANGELOG.md](CHANGELOG.md).
 
 ### Core Feature Reference
 
@@ -60,6 +60,7 @@ Each character has **four attributes** (Might, Edge, Grit, Wits) rated 1–8:
 | **Immobilized** | ⬛ black paralysis | Physical Defense set to 0; overrides Defence bonus |
 | **Defeated** | 💀 skull overlay | Auto-applied when NPC reaches 0 LP / threshold |
 | **Defence** | 🛡 gold highlight | +2 Physical Defense, costs 1 Action |
+| **Prone** | 🫃 falling icon | −1 Physical Defense vs melee / +1 vs ranged; syncs with token HUD |
 
 All statuses display in the **Combat Tracker** with preserved icon colours.
 

@@ -36,6 +36,7 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
       castSpell: ConanActorSheet._onCastSpell,
       toggleDefence: ConanActorSheet._onToggleDefence,
       toggleImmobilized: ConanActorSheet._onToggleImmobilized,
+      toggleProne: ConanActorSheet._onToggleProne,
       togglePoisoned: ConanActorSheet._onTogglePoisoned,
       spendStamina: ConanActorSheet._onSpendStamina,
       addStartingSkill: ConanActorSheet._onAddStartingSkill,
@@ -804,6 +805,21 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
     // Always open dialog to configure poison effects
     const dialog = new PoisonedDialog(this.baseActor);
     dialog.render(true);
+  }
+
+  static async _onToggleProne(event, target) {
+    const currentState = this.actor.system.prone || false;
+    const newState = !currentState;
+
+    await this.baseActor.update({
+      'system.prone': newState
+    });
+    await this.baseActor.toggleStatusEffect("prone", { active: newState });
+
+    // Refresh Combat Tracker if in combat
+    if (game.combat && ui.combat) {
+      ui.combat.render();
+    }
   }
 
   static async _onSpendStamina(event, target) {

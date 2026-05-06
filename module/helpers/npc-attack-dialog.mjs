@@ -70,8 +70,10 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
       } else {
         context.targetDefense = targetActor.system.defense?.physical || 5;
       }
+      context.targetProneActive = targetActor.system.prone || false;
     } else {
       context.targetDefense = 5;
+      context.targetProneActive = false;
     }
     
     context.isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
@@ -118,9 +120,27 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     const sliderModifier = modifierInput ? parseInt(modifierInput.value) : 0;
     const targetDefense = targetDefenseInput ? parseInt(targetDefenseInput.value) : 5;
     
-    const modifier = sliderModifier;
+    // Read prone flag from hidden input
+    const targetProneActiveInput = form.querySelector('input[name="targetProneActive"]');
+    const targetProneActive = targetProneActiveInput?.value === 'true';
     
-    // Apply poison effect 2: penalty to all rolls (multiplied)
+    // Determine attack type (melee vs ranged) for prone modifier
+    const npcAttackType = this.actor.system.damage[this.attackIndex]?.type || 'melee';
+    const isMeleeAttack = npcAttackType.startsWith('melee');
+    
+    // Apply prone modifier based on attack type
+    let effectiveTargetDefense = targetDefense;
+    let proneModifier = 0;
+    if (targetProneActive) {
+      if (isMeleeAttack) {
+        proneModifier = -1;
+      } else {
+        proneModifier = +1;
+      }
+      effectiveTargetDefense += proneModifier;
+    }
+    
+    const modifier = sliderModifier;
     const effect2Multiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
     const poisonPenalty = (this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
     
@@ -138,7 +158,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     
     // Calculate total (with poison penalty)
     const total = attributeResult + attributeValue + modifier + poisonPenalty;
-    const isSuccess = !isWindsOfFate && (total >= targetDefense);
+    const isSuccess = !isWindsOfFate && (total >= effectiveTargetDefense);
     
     // Prepare chat message
     const attributeLabel = game.i18n.localize(`CONAN.Attributes.${attribute}.label`);
@@ -175,7 +195,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
           </div>
           <div class="difficulty-check">
             <span class="difficulty-label">OF celu:</span>
-            <span class="difficulty-value">${targetDefense}</span>
+            <span class="difficulty-value">${effectiveTargetDefense}${targetProneActive ? ` <span class="prone-chat-modifier">(${proneModifier > 0 ? '+' : ''}${proneModifier} prone)</span>` : ''}</span>
           </div>
           <div class="roll-result ${isSuccess ? 'success' : 'failure'}">
             <div class="result-text">${isSuccess ? game.i18n.localize('CONAN.Roll.success') : game.i18n.localize('CONAN.Roll.failure')}</div>`;

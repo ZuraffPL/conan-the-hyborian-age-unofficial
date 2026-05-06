@@ -32,6 +32,13 @@
     </div>
   </div>
 
+  <!-- Hidden prone state -->
+  <input type="hidden" name="targetProneActive" value="{{targetProneActive}}">
+  {{#if targetProneActive}}
+  <div class="prone-warning">
+    <img src="icons/svg/falling.svg" style="width:16px;height:16px;vertical-align:middle;"> <span>{{localize "CONAN.Attack.proneDescription"}}</span>
+  </div>
+  {{/if}}
   <!-- Target Physical Defense -->
   <div class="form-group">
     <label for="targetDefense">

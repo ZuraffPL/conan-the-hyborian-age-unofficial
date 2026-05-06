@@ -87,7 +87,8 @@ export class CharacterModel extends foundry.abstract.TypeDataModel {
 
       // Pola nieudokumentowane w template.json — formalizowane w schemacie
       defenceActive: new fields.BooleanField({ initial: false }),
-      immobilized:   new fields.BooleanField({ initial: false })
+      immobilized:   new fields.BooleanField({ initial: false }),
+      prone:         new fields.BooleanField({ initial: false })
     };
   }
 

@@ -399,6 +399,8 @@
       "focusedAttack": "Focused Attack",
       "defence": "Defence",
       "immobilized": "Immobilized",
+      "prone": "Prone",
+      "proneDescription": "Prone: -1 to Physical Defence vs Melee, +1 vs Ranged/Thrown",
       "toAttack": "to attack",
       "toPhysicalDefense": "to Physical Defence",
       "rollAttack": "Roll Attack",
@@ -459,7 +461,8 @@
     "EffectTooltips": {
       "defence": "Defence (+2 to Physical Defence)",
       "immobilized": "Immobilized (Physical Defence = 0)",
-      "poisoned": "Poisoned"
+      "poisoned": "Poisoned",
+      "prone": "Prone (-1 PD vs Melee / +1 PD vs Ranged)"
     },
     
     "Poisoned": {
