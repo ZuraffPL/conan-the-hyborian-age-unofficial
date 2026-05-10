@@ -560,6 +560,25 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
     for (let i of this.baseActor.items) {
       const itemData = i.toObject();
       itemData.img = itemData.img || Item.DEFAULT_ICON;
+
+      // Normalizacja danych broni: toObject() zwraca surowe dane z bazy (sprzed TypeDataModel),
+      // więc stary format range (obiekt) i puste pola muszą być obsłużone tutaj.
+      if (itemData.type === "weapon") {
+        const sys = itemData.system;
+        // Stary format range: obiekt {value: "touch"} lub już skoercowany "[object Object]"
+        if (sys.range && typeof sys.range === "object") {
+          const wt = sys.weaponType || "";
+          if (wt === "thrown")       sys.range = "close";
+          else if (wt === "ranged")  sys.range = sys.weaponSize === "heavy" ? "distant8" : "medium3";
+          else                       sys.range = "touch";
+        }
+        if (!sys.range || sys.range === "[object Object]") sys.range = "touch";
+        // Uzupełnienie pól które mogą być "" (StringField.initial nie działa dla istniejących pustych wartości)
+        if (!sys.weaponType) sys.weaponType = "melee";
+        if (!sys.handedness) sys.handedness = "one-handed";
+        if (!sys.weaponSize) sys.weaponSize = "medium";
+        if (!sys.damage)     sys.damage     = "1d6";
+      }
       
       // Append to appropriate array
       if (itemData.type === "weapon") {

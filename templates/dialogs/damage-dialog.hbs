@@ -12,8 +12,8 @@
       <label>{{localize "CONAN.Damage.damageType"}}</label>
       <div class="damage-type-options">
         {{#if (conan-includes allowedDamageTypes 'melee')}}
-        <div class="radio-option">
-          <input type="radio" id="damage-melee" name="damageType" value="melee" {{#if (eq selectedDamageType 'melee')}}checked{{/if}}>
+        <div class="radio-option{{#if (conan-includes disabledDamageTypes 'melee')}} option-disabled{{/if}}">
+          <input type="radio" id="damage-melee" name="damageType" value="melee" {{#if (eq selectedDamageType 'melee')}}checked{{/if}} {{#if (conan-includes disabledDamageTypes 'melee')}}disabled{{/if}}>
           <label for="damage-melee">
             <span class="primary">{{localize "CONAN.Damage.meleeDamage"}}</span>
             <span class="subtitle">(Melee Damage)</span>
@@ -30,8 +30,8 @@
         </div>
         {{/if}}
         {{#if (conan-includes allowedDamageTypes 'ranged')}}
-        <div class="radio-option">
-          <input type="radio" id="damage-ranged" name="damageType" value="ranged" {{#if (eq selectedDamageType 'ranged')}}checked{{/if}}>
+        <div class="radio-option{{#if (conan-includes disabledDamageTypes 'ranged')}} option-disabled{{/if}}">
+          <input type="radio" id="damage-ranged" name="damageType" value="ranged" {{#if (eq selectedDamageType 'ranged')}}checked{{/if}} {{#if (conan-includes disabledDamageTypes 'ranged')}}disabled{{/if}}>
           <label for="damage-ranged">
             <span class="primary">{{localize "CONAN.Damage.rangedDamage"}}</span>
             <span class="subtitle">(Ranged Damage)</span>

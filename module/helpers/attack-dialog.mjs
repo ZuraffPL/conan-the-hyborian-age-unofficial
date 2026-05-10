@@ -68,7 +68,19 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
       context.targetDefense = 5;
       context.targetProneActive = false;
     }
-    
+
+    // Wykryj założoną broń, aby wstępnie zaznaczyć typ ataku i zablokować drugą opcję
+    const equippedWeapons = this.actor.items.filter(i => i.type === "weapon" && i.system.equipped);
+    const hasMelee = equippedWeapons.some(i => i.system.weaponType === "melee");
+    const hasRangedOrThrown = equippedWeapons.some(i =>
+      i.system.weaponType === "ranged" || i.system.weaponType === "thrown"
+    );
+    // Blokuj opcję tylko gdy założony jest wyłącznie jeden typ broni
+    context.meleeChecked  = hasMelee || (!hasMelee && !hasRangedOrThrown);
+    context.rangedChecked = hasRangedOrThrown && !hasMelee;
+    context.meleeDisabled  = hasRangedOrThrown && !hasMelee;
+    context.rangedDisabled = hasMelee && !hasRangedOrThrown;
+
     return context;
   }
 
@@ -283,28 +295,13 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
             {
               const { DamageDialog } = await import('./damage-dialog.mjs');
               const { rollSorceryWitsDamage, rollSorceryCustomDieDamage, rollSorceryFixedDamage } = await import('./roll-mechanics.mjs');
-              // Determine allowed damage types based on attack type
-              let allowedDamageTypes = ['melee', 'thrown', 'ranged', 'sorcery'];
-              // Try to extract attack type from chat message context
-              let chatContent = btn.closest('.conan-roll-chat');
-              let attackType = null;
-              if (chatContent) {
-                const header = chatContent.querySelector('.roll-header.attack h3');
-                if (header) {
-                  const text = header.textContent.toLowerCase();
-                  if (text.includes(game.i18n.localize('CONAN.Attack.melee').toLowerCase())) attackType = 'melee';
-                  else if (text.includes(game.i18n.localize('CONAN.Attack.ranged').toLowerCase())) attackType = 'ranged';
-                  else if (text.includes(game.i18n.localize('CONAN.Attack.thrown').toLowerCase())) attackType = 'thrown';
-                  else if (text.includes(game.i18n.localize('CONAN.Attack.sorcery').toLowerCase())) attackType = 'sorcery';
-                }
-              }
-              if (attackType === 'melee') allowedDamageTypes = ['melee'];
-              else if (attackType === 'ranged') allowedDamageTypes = ['ranged', 'thrown'];
-              else if (attackType === 'thrown') allowedDamageTypes = ['thrown'];
-              else if (attackType === 'sorcery') allowedDamageTypes = ['sorcery'];
+              // Zablokuj typ obrażeń przeciwny do wykonanego ataku (thrown i sorcery zawsze aktywne)
+              let disabledDamageTypes = [];
+              if (attackType === 'melee') disabledDamageTypes = ['ranged'];
+              else if (attackType === 'ranged') disabledDamageTypes = ['melee'];
               // Use base actor for damage dialog if available, to ensure consistent equipped weapons
               const dialogActor = baseActor || actor;
-              const result = await DamageDialog.prompt(dialogActor, { allowedDamageTypes });
+              const result = await DamageDialog.prompt(dialogActor, { disabledDamageTypes });
               if (!result) return;
               // --- Handle the result as in actor-sheet.mjs ---
               const { modifier, damageType, weaponId, sorceryCustomModifier, sorceryDamageType, sorceryCustomDie, sorceryFixedValue } = result;

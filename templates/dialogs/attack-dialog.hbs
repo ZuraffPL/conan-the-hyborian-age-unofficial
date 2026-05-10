@@ -15,15 +15,15 @@
   <div class="form-group">
     <label>{{localize "CONAN.Attack.attackType"}}</label>
     <div class="attack-type-options">
-      <div class="radio-option">
-        <input type="radio" id="attack-melee" name="attackType" value="melee" checked>
+      <div class="radio-option{{#if meleeDisabled}} option-disabled{{/if}}">
+        <input type="radio" id="attack-melee" name="attackType" value="melee" {{#if meleeChecked}}checked{{/if}} {{#if meleeDisabled}}disabled{{/if}}>
         <label for="attack-melee">
           <span class="primary">{{localize "CONAN.Attack.melee"}}</span>
           <span class="subtitle">(Melee Attack)</span>
         </label>
       </div>
-      <div class="radio-option">
-        <input type="radio" id="attack-ranged" name="attackType" value="ranged">
+      <div class="radio-option{{#if rangedDisabled}} option-disabled{{/if}}">
+        <input type="radio" id="attack-ranged" name="attackType" value="ranged" {{#if rangedChecked}}checked{{/if}} {{#if rangedDisabled}}disabled{{/if}}>
         <label for="attack-ranged">
           <span class="primary">{{localize "CONAN.Attack.ranged"}}</span>
           <span class="subtitle">(Ranged Attack)</span>

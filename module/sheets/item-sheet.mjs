@@ -292,6 +292,17 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
 
     // Prepare select options for weapons
     if (this.item.type === "weapon") {
+      // Normalizacja: pustych stringów (gdy StringField(initial) nie zadziałało na istniejących danych)
+      const weaponType = this.item.system.weaponType || "melee";
+      const handedness = this.item.system.handedness  || "one-handed";
+      const weaponSize = this.item.system.weaponSize  || "medium";
+      const improvised = this.item.system.improvised;
+
+      // Przekaż znormalizowane wartości wprost do kontekstu (template używa tych zmiennych przy warunkach)
+      context.weaponType = weaponType;
+      context.handedness = handedness;
+      context.weaponSize = weaponSize;
+
       context.weaponTypeOptions = [
         { value: "melee", label: game.i18n.localize("CONAN.Weapon.types.melee") },
         { value: "thrown", label: game.i18n.localize("CONAN.Weapon.types.thrown") },
@@ -304,9 +315,6 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
       ];
 
       // Weapon size options depend on weapon type and handedness
-      const weaponType = this.item.system.weaponType;
-      const handedness = this.item.system.handedness;
-      
       if (weaponType === "thrown") {
         context.weaponSizeOptions = [
           { value: "light", label: game.i18n.localize("CONAN.Weapon.sizes.light") },
@@ -349,7 +357,6 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
           { value: "medium3", label: game.i18n.localize("CONAN.Weapon.ranges.medium3") }
         ];
       } else if (weaponType === "ranged") {
-        const weaponSize = this.item.system.weaponSize;
         if (weaponSize === "light") {
           context.rangeOptions = [
             { value: "medium3", label: game.i18n.localize("CONAN.Weapon.ranges.medium3") },
@@ -368,9 +375,6 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
       }
 
       // Damage options
-      const weaponSize = this.item.system.weaponSize;
-      const improvised = this.item.system.improvised;
-
       if (weaponType === "melee") {
         if (handedness === "one-handed") {
           if (weaponSize === "light") {
@@ -422,6 +426,21 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
             { value: "1d10", label: "1d10" }
           ];
         }
+      }
+
+      // Fallback: zabezpieczenie przed undefined gdy weaponType/weaponSize nie pasuje do żadnej gałęzi
+      if (!context.rangeOptions) {
+        const rangeVal = this.item.system.range || "touch";
+        const rangeKey = `CONAN.Weapon.ranges.${rangeVal}`;
+        context.rangeOptions = [
+          { value: rangeVal, label: game.i18n.localize(rangeKey) }
+        ];
+      }
+      if (!context.damageOptions) {
+        const dmgVal = this.item.system.damage || "1d6";
+        context.damageOptions = [
+          { value: dmgVal, label: dmgVal }
+        ];
       }
     }
 

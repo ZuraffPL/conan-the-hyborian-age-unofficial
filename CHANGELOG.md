@@ -1,11 +1,38 @@
 # Changelog
 
+## [0.7.65] - 2026-05-10
+
+### Fixed — Weapon Data Model Migration & Actor Sheet Display
+
+- **New weapon items** no longer crash when opened — fixed `Cannot convert undefined or null to object` error caused by `selectOptions` receiving `undefined` range/damage option lists
+- **Weapon type, handedness and range** now display correctly on the actor sheet for both legacy items (pre-DataModel) and newly created ones
+- **Range `[object Object]`** bug fixed for legacy weapons — `_prepareItems` now normalises raw `toObject()` data before passing it to the Handlebars template, converting the old `{value, long}` range object to a plain string
+- Added fallback normalisation in `WeaponModel.prepareBaseData()` and `migrateData()` for empty-string fields (`weaponType`, `handedness`, `weaponSize`, `range`, `damage`) that bypass `StringField`'s `initial` value when the field already exists as `""`
+
+### Added — Attack & Damage Dialog Weapon Awareness
+
+- **Attack dialog** auto-detects the equipped weapon type and pre-selects the matching attack type (melee / ranged); the opposite option is greyed out and disabled when only one weapon type is equipped
+- **Damage dialog** now disables (but still shows) the incompatible damage type after a successful attack:
+  - Melee attack → *Ranged Damage* disabled
+  - Ranged attack → *Melee Damage* disabled
+  - Thrown and Sorcery damage are never disabled (too many situational exceptions)
+- Applied consistently from all three call sites: attack-dialog chat button, stamina-boost chat button, and actor sheet roll-damage button
+
+---
+
 ## [0.7.61] - 2026-05-06
+
+### Added — Prone Status dla NPC (Miniony i Antagoniści)
+
+- **Przycisk Leżenie** na kartach Miniona i Antagonisty (sekcja efektów, obok Unieruchomienia) — ikona falling.svg, działa identycznie jak u PC
+- `system.prone: BooleanField` dodane do `MinionModel` i `AntagonistModel`
+- Handler `toggleProne` w `ConanMinionSheet` i `ConanAntagonistSheet`
+- Ikona statusu widoczna na tokenie i w Combat Trackerze (Foundry built-in `prone`)
+- Hooki `createActiveEffect` / `deleteActiveEffect` — bidirectionalna synchronizacja dla NPC (brak ograniczenia do typu aktora)
 
 ### Fixed
 
-- Naprawiono hook menu kontekstowego w Combat Trackerze — poprawna nazwa hooka `getCombatTrackerEntryContext` (poprzednio błędnie używano `getCombatantContextOptions`, które nie istnieje w Foundry v13)
-- Opcje statusów (Obrona, Unieruchomienie, Leżenie, Zatrucie, Ranny) powinny teraz pojawiać się w menu PPM walczącego w Combat Trackerze
+- Naprawiono hook menu kontekstowego w Combat Trackerze — poprawna nazwa hooka `getCombatTrackerEntryContext` (poprzednio błędnie używano nieistniejącego `getCombatantContextOptions`)
 
 ---
 

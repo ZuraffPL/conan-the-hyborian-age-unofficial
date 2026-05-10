@@ -24,6 +24,18 @@ export class WeaponModel extends BaseItemModel {
     };
   }
 
+  /** @override */
+  prepareBaseData() {
+    super.prepareBaseData?.();
+    // Zabezpieczenie przed pustym stringiem – StringField(initial) działa tylko gdy pole jest NIEOBECNE.
+    // Jeśli w zapisanych danych jest "", przywracamy domyślne wartości.
+    if (!this.weaponType)  this.weaponType  = "melee";
+    if (!this.handedness)  this.handedness  = "one-handed";
+    if (!this.weaponSize)  this.weaponSize  = "medium";
+    if (!this.range)       this.range       = "touch";
+    if (!this.damage)      this.damage      = "1d6";
+  }
+
   /**
    * Migracja: konwersja starego formatu range ({value, long}) na string.
    * Wywoływana automatycznie przez Foundry przy ładowaniu dokumentu.
@@ -44,6 +56,14 @@ export class WeaponModel extends BaseItemModel {
         source.range = "touch";
       }
     }
+    // Obsługa artefaktu po koercji StringField: {value:"touch"} → "[object Object]"
+    if (source.range === "[object Object]") source.range = "touch";
+    // Uzupełnienie pustych stringów (StringField.initial nie działa gdy pole istnieje jako "")
+    if (!source.weaponType) source.weaponType = "melee";
+    if (!source.handedness) source.handedness = "one-handed";
+    if (!source.weaponSize) source.weaponSize = "medium";
+    if (!source.range)      source.range      = "touch";
+    if (!source.damage)     source.damage     = "1d6";
     return super.migrateData(source);
   }
 }

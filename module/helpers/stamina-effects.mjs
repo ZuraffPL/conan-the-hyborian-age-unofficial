@@ -268,14 +268,12 @@ async function spendStaminaToBoost(message, boost) {
         
         const { DamageDialog } = await import('./damage-dialog.mjs');
         
-        // Determine allowed damage types based on attack type
-        let allowedDamageTypes = ['melee', 'thrown', 'ranged', 'sorcery'];
-        if (attackType === 'melee') allowedDamageTypes = ['melee'];
-        else if (attackType === 'ranged') allowedDamageTypes = ['ranged', 'thrown'];
-        else if (attackType === 'thrown') allowedDamageTypes = ['thrown'];
-        else if (attackType === 'sorcery') allowedDamageTypes = ['sorcery'];
+        // Zablokuj typ obrażeń przeciwny do wykonanego ataku (thrown i sorcery zawsze aktywne)
+        let disabledDamageTypes = [];
+        if (attackType === 'melee') disabledDamageTypes = ['ranged'];
+        else if (attackType === 'ranged') disabledDamageTypes = ['melee'];
         
-        const result = await DamageDialog.prompt(foundActor, { allowedDamageTypes });
+        const result = await DamageDialog.prompt(foundActor, { disabledDamageTypes });
         if (!result) return;
         
         const { modifier, damageType, weaponId, sorceryCustomModifier, sorceryDamageType, sorceryCustomDie, sorceryFixedValue } = result;

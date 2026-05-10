@@ -172,7 +172,7 @@
         </div>
 
         {{!-- Handedness (only for melee weapons) --}}
-        {{#if (eq system.weaponType "melee")}}
+        {{#if (eq weaponType "melee")}}
         <div class="form-group">
           <label>
             <span class="primary-label">{{localize "CONAN.Weapon.handedness"}}</span>
@@ -185,7 +185,7 @@
         {{/if}}
 
         {{!-- Improvised (only for thrown weapons) --}}
-        {{#if (eq system.weaponType "thrown")}}
+        {{#if (eq weaponType "thrown")}}
         <div class="form-group checkbox-group" style="padding: 8px; margin: 0;">
           <label class="checkbox-label">
             <input type="checkbox" name="system.improvised" {{checked system.improvised}}/>
@@ -232,7 +232,7 @@
         </div>
 
         {{!-- Damage Modifier (only for ranged weapons) --}}
-        {{#if (eq system.weaponType "ranged")}}
+        {{#if (eq weaponType "ranged")}}
         <div class="form-group">
           <label>
             <span class="primary-label">{{localize "CONAN.Weapon.damageModifier"}}</span>

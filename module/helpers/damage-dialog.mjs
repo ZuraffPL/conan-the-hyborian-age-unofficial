@@ -41,6 +41,12 @@ export class DamageDialog extends foundry.applications.api.HandlebarsApplication
     this.modifier = 0;
     this.resolve = null;
     this.allowedDamageTypes = options.allowedDamageTypes || ['melee', 'thrown', 'ranged', 'sorcery'];
+    this.disabledDamageTypes = options.disabledDamageTypes || [];
+    // Auto-wybierz pierwszy niezablokowany, dozwolony typ obrażeń
+    const _typeOrder = ['melee', 'thrown', 'ranged', 'sorcery'];
+    this.selectedDamageType = options.selectedDamageType ||
+      _typeOrder.find(t => this.allowedDamageTypes.includes(t) && !this.disabledDamageTypes.includes(t)) ||
+      'melee';
   }
 
   static async prompt(actor, options = {}) {
@@ -62,6 +68,8 @@ export class DamageDialog extends foundry.applications.api.HandlebarsApplication
     context.sorceryCustomDie = "d6";
     context.sorceryFixedValue = 1;
     context.allowedDamageTypes = this.allowedDamageTypes;
+    context.disabledDamageTypes = this.disabledDamageTypes;
+    context.selectedDamageType = this.selectedDamageType;
     // Get equipped melee weapons
     const equippedMeleeWeapons = this.actor.items.filter(item => 
       item.type === "weapon" && 
