@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.7.70] - 2026-05-15
+
+### Fixed — Corrupted Weapon Data (`"undefined"` string in DB)
+
+- **Root cause removed** — all `selectOptions` objects in `item-sheet.mjs` converted from broken `[{value, label}]` array format to correct `{key: label}` plain-object format; Foundry's helper previously stored the literal string `"undefined"` in `weaponType`, `handedness`, `weaponSize`, `range`, `damage` fields for any weapon saved with the item sheet open
+- **Damage dialog** (`damage-dialog.mjs`) — filter now normalises corrupted `weaponType` values (`"undefined"`, `"null"`, `""`) to `"melee"` before filtering equipped weapons; fixes weapons showing as *Unarmed / no weapon* in the damage roll dialog
+- **Actor sheet equip toggle** (`actor-sheet.mjs`) — `_onToggleEquipped` auto-migrates corrupted weapon fields directly to the DB (via `updateEmbeddedDocuments`) before the equip / shield-check logic runs; fixes one-handed melee weapons being blocked by a shield due to `handedness = "undefined"`
+- **Shield compatibility check** (`actor-sheet.mjs`) — `_canUseWeaponWithShield` normalises `weaponType`, `handedness`, `weaponSize` before comparison so weapons with legacy corruption are treated as `melee / one-handed / medium` correctly
+
+### Fixed — Prone Status: Legacy `"conan-prone"` Effects
+
+- Actors created before the prone-system migration could have a stuck *Leżenie* overlay (an `ActiveEffect` with `statuses: ["conan-prone"]`, the old custom status ID) that was invisible to all cleanup code checking for Foundry's built-in `"prone"` status
+- All prone-effect filters in `_onToggleProne` (PC sheet, Minion sheet, Antagonist sheet), the Combat Tracker context-menu handler, and the `createActiveEffect` / `deleteActiveEffect` hooks now additionally match effects with the legacy `"conan-prone"` status — orphaned effects are cleaned up on the next prone toggle instead of accumulating
+
+### Fixed — Dice So Nice Resilience
+
+- All `game.dice3d.showForRoll()` calls in `roll-mechanics.mjs` and `stamina-effects.mjs` are now wrapped in `try / catch`; prevents unhandled promise rejections when the canvas is temporarily unavailable (e.g. during window resize)
+- Affected functions: `rollAttribute`, `rollInitiative`, `rollSkill`, `rollMeleeDamage`, `rollThrownDamage`, `rollRangedDamage`, `spendStaminaToDamage`
+
+### Fixed — Attribute Die Fallback (`"d6"`)
+
+- `attack-dialog.mjs`: `|| 'd6'` fallback for missing attribute `die` value — prevents crash when an actor's attribute lacks an explicit die (e.g. antagonists / minions with incomplete data)
+- `character.mjs`: `die` schema field marked `required: true`; `??=` changed to `||=` so that an empty string (`""`) also triggers the fallback to `"d6"`
+- `antagonist.mjs`, `minion.mjs`: `attribute.die ||= "d6"` added in `prepareBaseData` — prevents NPC attack dialog crash for actors without explicit die values
+
+---
+
 ## [0.7.65] - 2026-05-10
 
 ### Fixed — Weapon Data Model Migration & Actor Sheet Display

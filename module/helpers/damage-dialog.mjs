@@ -70,23 +70,25 @@ export class DamageDialog extends foundry.applications.api.HandlebarsApplication
     context.allowedDamageTypes = this.allowedDamageTypes;
     context.disabledDamageTypes = this.disabledDamageTypes;
     context.selectedDamageType = this.selectedDamageType;
-    // Get equipped melee weapons
+    // Get equipped melee weapons (treat corrupted/missing weaponType as "melee")
+    const BAD_WT = new Set(["", "undefined", "null", "[object Object]"]);
+    const normalizeWT = wt => (!wt || BAD_WT.has(wt)) ? "melee" : wt;
     const equippedMeleeWeapons = this.actor.items.filter(item => 
       item.type === "weapon" && 
       item.system.equipped && 
-      item.system.weaponType === "melee"
+      normalizeWT(item.system.weaponType) === "melee"
     );
     // Get equipped thrown weapons
     const equippedThrownWeapons = this.actor.items.filter(item => 
       item.type === "weapon" && 
       item.system.equipped && 
-      item.system.weaponType === "thrown"
+      normalizeWT(item.system.weaponType) === "thrown"
     );
     // Get equipped ranged weapons (support both "ranged" and legacy "range")
     const equippedRangedWeapons = this.actor.items.filter(item => 
       item.type === "weapon" && 
       item.system.equipped && 
-      (item.system.weaponType === "ranged" || item.system.weaponType === "range")
+      (normalizeWT(item.system.weaponType) === "ranged" || item.system.weaponType === "range")
     );
     context.equippedMeleeWeapons = equippedMeleeWeapons;
     context.equippedThrownWeapons = equippedThrownWeapons;

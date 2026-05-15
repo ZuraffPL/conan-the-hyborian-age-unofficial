@@ -143,6 +143,7 @@ export class AntagonistModel extends foundry.abstract.TypeDataModel {
     // Oblicz modyfikatory atrybutów
     const attributePenalty = this.poisoned ? (this.poisonEffects?.attributePenalty ?? 0) : 0;
     for (const [, attribute] of Object.entries(this.attributes)) {
+      attribute.die ||= "d6";
       attribute.isPoisonedAttributes = attributePenalty > 0;
       attribute.effectiveValue = Math.max(1, attribute.value - attributePenalty);
       attribute.mod = attribute.effectiveValue - 4;

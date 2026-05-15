@@ -27,13 +27,14 @@ export class WeaponModel extends BaseItemModel {
   /** @override */
   prepareBaseData() {
     super.prepareBaseData?.();
-    // Zabezpieczenie przed pustym stringiem – StringField(initial) działa tylko gdy pole jest NIEOBECNE.
-    // Jeśli w zapisanych danych jest "", przywracamy domyślne wartości.
-    if (!this.weaponType)  this.weaponType  = "melee";
-    if (!this.handedness)  this.handedness  = "one-handed";
-    if (!this.weaponSize)  this.weaponSize  = "medium";
-    if (!this.range)       this.range       = "touch";
-    if (!this.damage)      this.damage      = "1d6";
+    // Zabezpieczenie przed pustym stringiem LUB stringiem "undefined" (artefakt błędnego selectOptions).
+    // StringField(initial) działa tylko gdy pole jest NIEOBECNE w zapisanych danych.
+    const BAD = new Set(["", "undefined", "null", "[object Object]"]);
+    if (!this.weaponType || BAD.has(this.weaponType))  this.weaponType  = "melee";
+    if (!this.handedness || BAD.has(this.handedness))  this.handedness  = "one-handed";
+    if (!this.weaponSize || BAD.has(this.weaponSize))  this.weaponSize  = "medium";
+    if (!this.range      || BAD.has(this.range))       this.range       = "touch";
+    if (!this.damage     || BAD.has(this.damage))      this.damage      = "1d6";
   }
 
   /**
@@ -58,12 +59,14 @@ export class WeaponModel extends BaseItemModel {
     }
     // Obsługa artefaktu po koercji StringField: {value:"touch"} → "[object Object]"
     if (source.range === "[object Object]") source.range = "touch";
-    // Uzupełnienie pustych stringów (StringField.initial nie działa gdy pole istnieje jako "")
-    if (!source.weaponType) source.weaponType = "melee";
-    if (!source.handedness) source.handedness = "one-handed";
-    if (!source.weaponSize) source.weaponSize = "medium";
-    if (!source.range)      source.range      = "touch";
-    if (!source.damage)     source.damage     = "1d6";
+    // Uzupełnienie pustych stringów LUB stringu "undefined" (artefakt błędnego selectOptions).
+    // StringField.initial nie działa gdy pole istnieje jako "" lub "undefined".
+    const BAD = new Set(["", "undefined", "null", "[object Object]"]);
+    if (!source.weaponType || BAD.has(source.weaponType)) source.weaponType = "melee";
+    if (!source.handedness || BAD.has(source.handedness)) source.handedness = "one-handed";
+    if (!source.weaponSize || BAD.has(source.weaponSize)) source.weaponSize = "medium";
+    if (!source.range      || BAD.has(source.range))      source.range      = "touch";
+    if (!source.damage     || BAD.has(source.damage))     source.damage     = "1d6";
     return super.migrateData(source);
   }
 }

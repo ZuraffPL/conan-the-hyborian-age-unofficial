@@ -17,7 +17,7 @@ export class CharacterModel extends foundry.abstract.TypeDataModel {
     const attributeSchema = () => new fields.SchemaField({
       value: new fields.NumberField({ required: true, initial: 1, min: 1, integer: true }),
       mod:   new fields.NumberField({ required: false, initial: 0, integer: true }),
-      die:   new fields.StringField({ initial: "d6" })
+      die:   new fields.StringField({ required: true, initial: "d6" })
     });
 
     return {
@@ -134,7 +134,7 @@ export class CharacterModel extends foundry.abstract.TypeDataModel {
     // 1. Modyfikatory atrybutów
     const attributePenalty = this.poisoned ? (this.poisonEffects?.attributePenalty ?? 0) : 0;
     for (const [, attribute] of Object.entries(this.attributes)) {
-      attribute.die ??= "d6";
+      attribute.die ||= "d6";
       attribute.isPoisonedAttributes = attributePenalty > 0;
       attribute.effectiveValue = Math.max(1, attribute.value - attributePenalty);
       attribute.mod = attribute.effectiveValue - 4;

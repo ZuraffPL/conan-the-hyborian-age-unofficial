@@ -143,7 +143,7 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     // Determine which attribute to use
     const attribute = attackType === 'melee' ? 'might' : 'edge';
     const attributeValue = this.actor.system.attributes[attribute].value;
-    const attributeDie = this.actor.system.attributes[attribute].die;
+    const attributeDie = this.actor.system.attributes[attribute].die || 'd6';
     
     // Calculate modifier (slider + focused attack bonus)
     let modifier = sliderModifier;

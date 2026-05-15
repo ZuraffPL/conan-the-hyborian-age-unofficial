@@ -83,7 +83,11 @@ export async function rollAttribute(actor, attribute) {
     }
     
     // Wait for both animations to complete
-    await Promise.all(promises);
+    try {
+      await Promise.all(promises);
+    } catch(e) {
+      // Dice3D canvas may be unavailable (e.g. resizing), ignore
+    }
   }
 
   // Create modern chat message
@@ -222,7 +226,11 @@ export async function rollInitiative(actor, combatant = null) {
 
   // Show dice in 3D
   if (game.dice3d) {
-    await game.dice3d.showForRoll(mainRoll, game.user, true);
+    try {
+      await game.dice3d.showForRoll(mainRoll, game.user, true);
+    } catch(e) {
+      // Dice3D canvas may be unavailable (e.g. resizing), ignore
+    }
   }
 
   // Update combat tracker initiative if actor is in combat
@@ -319,7 +327,11 @@ export async function rollSkill(actor, skillName, attribute) {
 
   // Trigger 3D dice if Dice So Nice module is active
   if (game.dice3d) {
-    await game.dice3d.showForRoll(roll, game.user, true);
+    try {
+      await game.dice3d.showForRoll(roll, game.user, true);
+    } catch(e) {
+      // Dice3D canvas may be unavailable (e.g. resizing), ignore
+    }
   }
 
   return roll;
@@ -382,7 +394,11 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
       promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
     }
     if (promises.length > 0) {
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+      } catch(e) {
+        // Dice3D canvas may be unavailable (e.g. resizing), ignore
+      }
     }
   }
   
@@ -552,7 +568,11 @@ export async function rollThrownDamage(actor, weapon, modifier = 0) {
       promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
     }
     if (promises.length > 0) {
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+      } catch(e) {
+        // Dice3D canvas may be unavailable (e.g. resizing), ignore
+      }
     }
   }
   
@@ -707,7 +727,11 @@ export async function rollRangedDamage(actor, weapon, modifier = 0) {
       promises.push(game.dice3d.showForRoll(flexRoll, game.user, true));
     }
     if (promises.length > 0) {
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+      } catch(e) {
+        // Dice3D canvas may be unavailable (e.g. resizing), ignore
+      }
     }
   }
   

@@ -528,7 +528,11 @@ async function spendStaminaToDamage(message, cost) {
   
   // Show 3D dice ONLY for this roll (not the original one)
   if (game.dice3d) {
-    await game.dice3d.showForRoll(damageRoll, game.user, true);
+    try {
+      await game.dice3d.showForRoll(damageRoll, game.user, true);
+    } catch(e) {
+      // Dice3D canvas may be unavailable (e.g. resizing), ignore
+    }
   }
   
   const additionalDamage = damageRoll.total;

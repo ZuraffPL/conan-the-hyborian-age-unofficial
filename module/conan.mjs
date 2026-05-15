@@ -357,10 +357,7 @@ Hooks.on("updateItem", async (item, changes, options, userId) => {
  */
 Hooks.on("createActiveEffect", async (effect, options, userId) => {
   if (game.user.id !== userId) return;
-  if (effect.statuses?.has("prone")) {
-    const actor = effect.parent;
-    if (!actor || actor.documentName !== "Actor") return;
-    if (!actor.system.prone) {
+  if (effect.statuses?.has("prone") || effect.statuses?.has("conan-prone")) {
       await actor.update({ "system.prone": true });
     }
   }
@@ -368,10 +365,7 @@ Hooks.on("createActiveEffect", async (effect, options, userId) => {
 
 Hooks.on("deleteActiveEffect", async (effect, options, userId) => {
   if (game.user.id !== userId) return;
-  if (effect.statuses?.has("prone")) {
-    const actor = effect.parent;
-    if (!actor || actor.documentName !== "Actor") return;
-    if (actor.system.prone) {
+  if (effect.statuses?.has("prone") || effect.statuses?.has("conan-prone")) {
       await actor.update({ "system.prone": false });
     }
   }
@@ -600,8 +594,13 @@ Hooks.on("getCombatTrackerEntryContext", (html, options) => {
         const actor = getActor(li);
         if (!actor) return;
         const newVal = !(actor.system.prone || false);
+        const existingProne = actor.effects.filter(e => e.statuses?.has("prone") || e.statuses?.has("conan-prone"));
+        if (existingProne.length > 0) {
+          if (actor.system.prone) await actor.update({ "system.prone": false });
+          await actor.deleteEmbeddedDocuments("ActiveEffect", existingProne.map(e => e.id));
+        }
         await actor.update({ "system.prone": newVal });
-        await actor.toggleStatusEffect("prone", { active: newVal });
+        if (newVal) await actor.toggleStatusEffect("prone", { active: true });
         ui.combat?.render();
       }
     },

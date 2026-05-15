@@ -827,15 +827,23 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
   }
 
   static async _onToggleProne(event, target) {
-    const currentState = this.actor.system.prone || false;
+    // Efekty prone jako źródło prawdy — zapobiega desync z system.prone
+    const proneEffects = this.baseActor.effects.filter(e => e.statuses?.has("prone") || e.statuses?.has("conan-prone"));
+    const currentState = proneEffects.length > 0 || (this.actor.system.prone ?? false);
     const newState = !currentState;
 
-    await this.baseActor.update({
-      'system.prone': newState
-    });
-    await this.baseActor.toggleStatusEffect("prone", { active: newState });
+    // Przed zmianą: wyczyść wszystkie istniejące efekty prone (naprawia duplikaty/zombie)
+    if (proneEffects.length > 0) {
+      // Ustaw system.prone=false zanim usuniemy efekty, żeby hook deleteActiveEffect nie interferował
+      if (this.baseActor.system.prone) await this.baseActor.update({ 'system.prone': false });
+      await this.baseActor.deleteEmbeddedDocuments("ActiveEffect", proneEffects.map(e => e.id));
+    }
 
-    // Refresh Combat Tracker if in combat
+    await this.baseActor.update({ 'system.prone': newState });
+    if (newState) {
+      await this.baseActor.toggleStatusEffect("prone", { active: true });
+    }
+
     if (game.combat && ui.combat) {
       ui.combat.render();
     }
@@ -952,9 +960,24 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
 
   static async _onToggleEquipped(event, target) {
     const itemId = target.dataset.itemId;
-    const item = this.baseActor.items.get(itemId);
+    let item = this.baseActor.items.get(itemId);
     if (!item) return;
-    
+
+    // Jednorazowa migracja: naprawa uszkodzonych danych broni (artefakt błędnego selectOptions)
+    if (item.type === 'weapon') {
+      const BAD = new Set(["", "undefined", "null", "[object Object]"]);
+      const fix = {};
+      if (!item.system.weaponType || BAD.has(item.system.weaponType)) fix["system.weaponType"] = "melee";
+      if (!item.system.handedness || BAD.has(item.system.handedness)) fix["system.handedness"] = "one-handed";
+      if (!item.system.weaponSize || BAD.has(item.system.weaponSize)) fix["system.weaponSize"] = "medium";
+      if (!item.system.range || BAD.has(item.system.range)) fix["system.range"] = "touch";
+      if (!item.system.damage || BAD.has(item.system.damage)) fix["system.damage"] = "1d6";
+      if (Object.keys(fix).length > 0) {
+        await this.baseActor.updateEmbeddedDocuments("Item", [{ _id: itemId, ...fix }]);
+        item = this.baseActor.items.get(itemId);
+      }
+    }
+
     const newEquippedState = !item.system.equipped;
     
     // Check if trying to equip a weapon
@@ -1126,9 +1149,13 @@ export class ConanActorSheet extends foundry.applications.api.HandlebarsApplicat
   static _canUseWeaponWithShield(weapon) {
     if (weapon.type !== 'weapon') return true;
     
-    const weaponType = weapon.system.weaponType;
-    const handedness = weapon.system.handedness;
-    const weaponSize = weapon.system.weaponSize;
+    const BAD = new Set(["", "undefined", "null", "[object Object]"]);
+    const wt = weapon.system.weaponType;
+    const h  = weapon.system.handedness;
+    const s  = weapon.system.weaponSize;
+    const weaponType = (!wt || BAD.has(wt)) ? "melee" : wt;
+    const handedness = (!h  || BAD.has(h))  ? "one-handed" : h;
+    const weaponSize = (!s  || BAD.has(s))  ? "medium" : s;
     
     // Allowed: melee one-handed
     if (weaponType === 'melee' && handedness === 'one-handed') {

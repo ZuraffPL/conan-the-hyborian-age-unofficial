@@ -2,7 +2,7 @@
 
 An unofficial Foundry VTT implementation of **Conan: The Hyborian Age RPG** by Monolith Boardgames. Step into the savage world of Robert E. Howard's Conan the Barbarian and forge your legend in the Hyborian Age!
 
-![Version](https://img.shields.io/badge/version-0.7.65-darkred)
+![Version](https://img.shields.io/badge/version-0.7.70-darkred)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v13%2B%20%7C%20v14-orange)
 
 ## Installation

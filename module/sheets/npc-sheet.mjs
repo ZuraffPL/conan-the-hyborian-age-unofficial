@@ -388,10 +388,15 @@ export class ConanMinionSheet extends ConanActorSheet {
   }
 
   static async _onToggleProne(event, target) {
-    const currentState = this.baseActor.system.prone || false;
+    const proneEffects = this.baseActor.effects.filter(e => e.statuses?.has("prone") || e.statuses?.has("conan-prone"));
+    const currentState = proneEffects.length > 0 || (this.baseActor.system.prone ?? false);
     const newState = !currentState;
+    if (proneEffects.length > 0) {
+      if (this.baseActor.system.prone) await this.baseActor.update({ 'system.prone': false });
+      await this.baseActor.deleteEmbeddedDocuments("ActiveEffect", proneEffects.map(e => e.id));
+    }
     await this.baseActor.update({ 'system.prone': newState });
-    await this.baseActor.toggleStatusEffect("prone", { active: newState });
+    if (newState) await this.baseActor.toggleStatusEffect("prone", { active: true });
     if (game.combat && ui.combat) { ui.combat.render(); }
   }
 
@@ -1086,10 +1091,15 @@ export class ConanAntagonistSheet extends ConanActorSheet {
   }
 
   static async _onToggleProne(event, target) {
-    const currentState = this.baseActor.system.prone || false;
+    const proneEffects = this.baseActor.effects.filter(e => e.statuses?.has("prone") || e.statuses?.has("conan-prone"));
+    const currentState = proneEffects.length > 0 || (this.baseActor.system.prone ?? false);
     const newState = !currentState;
+    if (proneEffects.length > 0) {
+      if (this.baseActor.system.prone) await this.baseActor.update({ 'system.prone': false });
+      await this.baseActor.deleteEmbeddedDocuments("ActiveEffect", proneEffects.map(e => e.id));
+    }
     await this.baseActor.update({ 'system.prone': newState });
-    await this.baseActor.toggleStatusEffect("prone", { active: newState });
+    if (newState) await this.baseActor.toggleStatusEffect("prone", { active: true });
     if (game.combat && ui.combat) { ui.combat.render(); }
   }
 }
@@ -1267,7 +1277,7 @@ class NPCDifficultyDialog extends foundry.applications.api.HandlebarsApplication
 async function rollNPCAttribute(actor, attribute) {
   const attributeData = actor.system.attributes[attribute];
   const attributeValue = attributeData.effectiveValue || attributeData.value;
-  const attributeDie = attributeData.die;
+  const attributeDie = attributeData.die || 'd6';
   
   // Get attribute label
   const attrLabel = game.i18n.localize(`CONAN.Attributes.${attribute}.label`);

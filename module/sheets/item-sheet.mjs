@@ -258,36 +258,36 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
 
     // Prepare select options for armor
     if (this.item.type === "armor") {
-      context.armorTypeOptions = [
-        { value: "light", label: game.i18n.localize("CONAN.Armor.types.light") },
-        { value: "medium", label: game.i18n.localize("CONAN.Armor.types.medium") },
-        { value: "heavy", label: game.i18n.localize("CONAN.Armor.types.heavy") },
-        { value: "shield", label: game.i18n.localize("CONAN.Armor.types.shield") }
-      ];
+      context.armorTypeOptions = {
+        light:  game.i18n.localize("CONAN.Armor.types.light"),
+        medium: game.i18n.localize("CONAN.Armor.types.medium"),
+        heavy:  game.i18n.localize("CONAN.Armor.types.heavy"),
+        shield: game.i18n.localize("CONAN.Armor.types.shield")
+      };
 
       // Specific make options based on armor type
       const specificMakesByType = {
-        light: [
-          { value: "leather", label: game.i18n.localize("CONAN.Armor.makes.leather") },
-          { value: "hide", label: game.i18n.localize("CONAN.Armor.makes.hide") },
-          { value: "bones", label: game.i18n.localize("CONAN.Armor.makes.bones") }
-        ],
-        medium: [
-          { value: "breastplate", label: game.i18n.localize("CONAN.Armor.makes.breastplate") },
-          { value: "cuirass", label: game.i18n.localize("CONAN.Armor.makes.cuirass") },
-          { value: "hauberk", label: game.i18n.localize("CONAN.Armor.makes.hauberk") }
-        ],
-        heavy: [
-          { value: "fullPlate", label: game.i18n.localize("CONAN.Armor.makes.fullPlate") },
-          { value: "knightArmor", label: game.i18n.localize("CONAN.Armor.makes.knightArmor") }
-        ],
-        shield: [
-          { value: "wood", label: game.i18n.localize("CONAN.Armor.makes.wood") },
-          { value: "metal", label: game.i18n.localize("CONAN.Armor.makes.metal") },
-          { value: "makeshift", label: game.i18n.localize("CONAN.Armor.makes.makeshift") }
-        ]
+        light: {
+          leather: game.i18n.localize("CONAN.Armor.makes.leather"),
+          hide:    game.i18n.localize("CONAN.Armor.makes.hide"),
+          bones:   game.i18n.localize("CONAN.Armor.makes.bones")
+        },
+        medium: {
+          breastplate: game.i18n.localize("CONAN.Armor.makes.breastplate"),
+          cuirass:     game.i18n.localize("CONAN.Armor.makes.cuirass"),
+          hauberk:     game.i18n.localize("CONAN.Armor.makes.hauberk")
+        },
+        heavy: {
+          fullPlate:   game.i18n.localize("CONAN.Armor.makes.fullPlate"),
+          knightArmor: game.i18n.localize("CONAN.Armor.makes.knightArmor")
+        },
+        shield: {
+          wood:      game.i18n.localize("CONAN.Armor.makes.wood"),
+          metal:     game.i18n.localize("CONAN.Armor.makes.metal"),
+          makeshift: game.i18n.localize("CONAN.Armor.makes.makeshift")
+        }
       };
-      context.specificMakeOptions = specificMakesByType[this.item.system.armorType] || [];
+      context.specificMakeOptions = specificMakesByType[this.item.system.armorType] || {};
     }
 
     // Prepare select options for weapons
@@ -303,74 +303,68 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
       context.handedness = handedness;
       context.weaponSize = weaponSize;
 
-      context.weaponTypeOptions = [
-        { value: "melee", label: game.i18n.localize("CONAN.Weapon.types.melee") },
-        { value: "thrown", label: game.i18n.localize("CONAN.Weapon.types.thrown") },
-        { value: "ranged", label: game.i18n.localize("CONAN.Weapon.types.ranged") }
-      ];
+      context.weaponTypeOptions = {
+        melee:  game.i18n.localize("CONAN.Weapon.types.melee"),
+        thrown: game.i18n.localize("CONAN.Weapon.types.thrown"),
+        ranged: game.i18n.localize("CONAN.Weapon.types.ranged")
+      };
 
-      context.handednessOptions = [
-        { value: "one-handed", label: game.i18n.localize("CONAN.Weapon.handednessOptions.oneHanded") },
-        { value: "two-handed", label: game.i18n.localize("CONAN.Weapon.handednessOptions.twoHanded") }
-      ];
+      context.handednessOptions = {
+        "one-handed": game.i18n.localize("CONAN.Weapon.handednessOptions.oneHanded"),
+        "two-handed": game.i18n.localize("CONAN.Weapon.handednessOptions.twoHanded")
+      };
 
       // Weapon size options depend on weapon type and handedness
       if (weaponType === "thrown") {
-        context.weaponSizeOptions = [
-          { value: "light", label: game.i18n.localize("CONAN.Weapon.sizes.light") },
-          { value: "medium", label: game.i18n.localize("CONAN.Weapon.sizes.medium") },
-          { value: "various", label: game.i18n.localize("CONAN.Weapon.sizes.various") }
-        ];
+        context.weaponSizeOptions = {
+          light:   game.i18n.localize("CONAN.Weapon.sizes.light"),
+          medium:  game.i18n.localize("CONAN.Weapon.sizes.medium"),
+          various: game.i18n.localize("CONAN.Weapon.sizes.various")
+        };
       } else if (weaponType === "ranged") {
-        context.weaponSizeOptions = [
-          { value: "light", label: game.i18n.localize("CONAN.Weapon.sizes.light") },
-          { value: "medium", label: game.i18n.localize("CONAN.Weapon.sizes.medium") },
-          { value: "heavy", label: game.i18n.localize("CONAN.Weapon.sizes.heavy") }
-        ];
+        context.weaponSizeOptions = {
+          light:  game.i18n.localize("CONAN.Weapon.sizes.light"),
+          medium: game.i18n.localize("CONAN.Weapon.sizes.medium"),
+          heavy:  game.i18n.localize("CONAN.Weapon.sizes.heavy")
+        };
       } else if (handedness === "two-handed") {
-        context.weaponSizeOptions = [
-          { value: "medium", label: game.i18n.localize("CONAN.Weapon.sizes.medium") },
-          { value: "heavy", label: game.i18n.localize("CONAN.Weapon.sizes.heavy") }
-        ];
+        context.weaponSizeOptions = {
+          medium: game.i18n.localize("CONAN.Weapon.sizes.medium"),
+          heavy:  game.i18n.localize("CONAN.Weapon.sizes.heavy")
+        };
       } else {
-        context.weaponSizeOptions = [
-          { value: "light", label: game.i18n.localize("CONAN.Weapon.sizes.light") },
-          { value: "medium", label: game.i18n.localize("CONAN.Weapon.sizes.medium") },
-          { value: "heavy", label: game.i18n.localize("CONAN.Weapon.sizes.heavy") }
-        ];
+        context.weaponSizeOptions = {
+          light:  game.i18n.localize("CONAN.Weapon.sizes.light"),
+          medium: game.i18n.localize("CONAN.Weapon.sizes.medium"),
+          heavy:  game.i18n.localize("CONAN.Weapon.sizes.heavy")
+        };
       }
 
       // Range options
       if (weaponType === "melee") {
         if (handedness === "two-handed" && this.item.system.weaponSize === "medium") {
-          context.rangeOptions = [
-            { value: "close", label: game.i18n.localize("CONAN.Weapon.ranges.close") }
-          ];
+          context.rangeOptions = { close: game.i18n.localize("CONAN.Weapon.ranges.close") };
         } else {
-          context.rangeOptions = [
-            { value: "touch", label: game.i18n.localize("CONAN.Weapon.ranges.touch") }
-          ];
+          context.rangeOptions = { touch: game.i18n.localize("CONAN.Weapon.ranges.touch") };
         }
       } else if (weaponType === "thrown") {
-        context.rangeOptions = [
-          { value: "close", label: game.i18n.localize("CONAN.Weapon.ranges.close") },
-          { value: "medium3", label: game.i18n.localize("CONAN.Weapon.ranges.medium3") }
-        ];
+        context.rangeOptions = {
+          close:   game.i18n.localize("CONAN.Weapon.ranges.close"),
+          medium3: game.i18n.localize("CONAN.Weapon.ranges.medium3")
+        };
       } else if (weaponType === "ranged") {
         if (weaponSize === "light") {
-          context.rangeOptions = [
-            { value: "medium3", label: game.i18n.localize("CONAN.Weapon.ranges.medium3") },
-            { value: "long4", label: game.i18n.localize("CONAN.Weapon.ranges.long4") }
-          ];
+          context.rangeOptions = {
+            medium3: game.i18n.localize("CONAN.Weapon.ranges.medium3"),
+            long4:   game.i18n.localize("CONAN.Weapon.ranges.long4")
+          };
         } else if (weaponSize === "medium") {
-          context.rangeOptions = [
-            { value: "medium3", label: game.i18n.localize("CONAN.Weapon.ranges.medium3") },
-            { value: "long6", label: game.i18n.localize("CONAN.Weapon.ranges.long6") }
-          ];
+          context.rangeOptions = {
+            medium3: game.i18n.localize("CONAN.Weapon.ranges.medium3"),
+            long6:   game.i18n.localize("CONAN.Weapon.ranges.long6")
+          };
         } else if (weaponSize === "heavy") {
-          context.rangeOptions = [
-            { value: "distant8", label: game.i18n.localize("CONAN.Weapon.ranges.distant8") }
-          ];
+          context.rangeOptions = { distant8: game.i18n.localize("CONAN.Weapon.ranges.distant8") };
         }
       }
 
@@ -378,53 +372,38 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
       if (weaponType === "melee") {
         if (handedness === "one-handed") {
           if (weaponSize === "light") {
-            context.damageOptions = [{ value: "1d4", label: "1d4" }];
+            context.damageOptions = { "1d4": "1d4" };
           } else if (weaponSize === "medium") {
-            context.damageOptions = [{ value: "1d6", label: "1d6" }];
+            context.damageOptions = { "1d6": "1d6" };
           } else if (weaponSize === "heavy") {
-            context.damageOptions = [
-              { value: "1d6", label: "1d6" },
-              { value: "1d8", label: "1d8" }
-            ];
+            context.damageOptions = { "1d6": "1d6", "1d8": "1d8" };
           }
         } else if (handedness === "two-handed") {
           if (weaponSize === "medium") {
-            context.damageOptions = [{ value: "1d10", label: "1d10" }];
+            context.damageOptions = { "1d10": "1d10" };
           } else if (weaponSize === "heavy") {
-            context.damageOptions = [{ value: "1d12", label: "1d12" }];
+            context.damageOptions = { "1d12": "1d12" };
           }
         }
       } else if (weaponType === "thrown") {
         if (weaponSize === "light") {
           if (improvised) {
-            context.damageOptions = [{ value: "2", label: "2" }];
+            context.damageOptions = { "2": "2" };
           } else {
-            context.damageOptions = [{ value: "1d4", label: "1d4" }];
+            context.damageOptions = { "1d4": "1d4" };
           }
         } else if (weaponSize === "medium") {
-          context.damageOptions = [{ value: "1d6", label: "1d6" }];
+          context.damageOptions = { "1d6": "1d6" };
         } else if (weaponSize === "various") {
-          context.damageOptions = [
-            { value: "1d4", label: "1d4" },
-            { value: "1d6", label: "1d6" },
-            { value: "1d8", label: "1d8" },
-            { value: "1d10", label: "1d10" },
-            { value: "1d12", label: "1d12" }
-          ];
+          context.damageOptions = { "1d4": "1d4", "1d6": "1d6", "1d8": "1d8", "1d10": "1d10", "1d12": "1d12" };
         }
       } else if (weaponType === "ranged") {
         if (weaponSize === "light") {
-          context.damageOptions = [{ value: "1d4", label: "1d4" }];
+          context.damageOptions = { "1d4": "1d4" };
         } else if (weaponSize === "medium") {
-          context.damageOptions = [
-            { value: "1d6", label: "1d6" },
-            { value: "1d8", label: "1d8" }
-          ];
+          context.damageOptions = { "1d6": "1d6", "1d8": "1d8" };
         } else if (weaponSize === "heavy") {
-          context.damageOptions = [
-            { value: "1d8", label: "1d8" },
-            { value: "1d10", label: "1d10" }
-          ];
+          context.damageOptions = { "1d8": "1d8", "1d10": "1d10" };
         }
       }
 
@@ -432,37 +411,33 @@ export class ConanItemSheet extends foundry.applications.api.HandlebarsApplicati
       if (!context.rangeOptions) {
         const rangeVal = this.item.system.range || "touch";
         const rangeKey = `CONAN.Weapon.ranges.${rangeVal}`;
-        context.rangeOptions = [
-          { value: rangeVal, label: game.i18n.localize(rangeKey) }
-        ];
+        context.rangeOptions = { [rangeVal]: game.i18n.localize(rangeKey) };
       }
       if (!context.damageOptions) {
         const dmgVal = this.item.system.damage || "1d6";
-        context.damageOptions = [
-          { value: dmgVal, label: dmgVal }
-        ];
+        context.damageOptions = { [dmgVal]: dmgVal };
       }
     }
 
     // Prepare select options for skills
     if (this.item.type === "skill") {
-      context.skillTypeOptions = [
-        { value: "origin", label: game.i18n.localize("CONAN.Skill.skillType.origin") },
-        { value: "starting", label: game.i18n.localize("CONAN.Skill.skillType.starting") },
-        { value: "legendary", label: game.i18n.localize("CONAN.Skill.skillType.legendary") },
-        { value: "advanced", label: game.i18n.localize("CONAN.Skill.skillType.advanced") }
-      ];
+      context.skillTypeOptions = {
+        origin:    game.i18n.localize("CONAN.Skill.skillType.origin"),
+        starting:  game.i18n.localize("CONAN.Skill.skillType.starting"),
+        legendary: game.i18n.localize("CONAN.Skill.skillType.legendary"),
+        advanced:  game.i18n.localize("CONAN.Skill.skillType.advanced")
+      };
     }
 
     // Prepare select options for spells
     if (this.item.type === "spell") {
-      context.disciplineOptions = [
-        { value: "alchemy", label: game.i18n.localize("CONAN.Spell.disciplines.alchemy") },
-        { value: "blackMagic", label: game.i18n.localize("CONAN.Spell.disciplines.blackMagic") },
-        { value: "demonicMagic", label: game.i18n.localize("CONAN.Spell.disciplines.demonicMagic") },
-        { value: "necromanticMagic", label: game.i18n.localize("CONAN.Spell.disciplines.necromanticMagic") },
-        { value: "whiteMagic", label: game.i18n.localize("CONAN.Spell.disciplines.whiteMagic") }
-      ];
+      context.disciplineOptions = {
+        alchemy:         game.i18n.localize("CONAN.Spell.disciplines.alchemy"),
+        blackMagic:      game.i18n.localize("CONAN.Spell.disciplines.blackMagic"),
+        demonicMagic:    game.i18n.localize("CONAN.Spell.disciplines.demonicMagic"),
+        necromanticMagic: game.i18n.localize("CONAN.Spell.disciplines.necromanticMagic"),
+        whiteMagic:      game.i18n.localize("CONAN.Spell.disciplines.whiteMagic")
+      };
     }
 
     return context;
