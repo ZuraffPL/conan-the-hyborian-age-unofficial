@@ -358,6 +358,9 @@ Hooks.on("updateItem", async (item, changes, options, userId) => {
 Hooks.on("createActiveEffect", async (effect, options, userId) => {
   if (game.user.id !== userId) return;
   if (effect.statuses?.has("prone") || effect.statuses?.has("conan-prone")) {
+    const actor = effect.parent;
+    if (!actor || actor.documentName !== "Actor") return;
+    if (!actor.system.prone) {
       await actor.update({ "system.prone": true });
     }
   }
@@ -366,6 +369,9 @@ Hooks.on("createActiveEffect", async (effect, options, userId) => {
 Hooks.on("deleteActiveEffect", async (effect, options, userId) => {
   if (game.user.id !== userId) return;
   if (effect.statuses?.has("prone") || effect.statuses?.has("conan-prone")) {
+    const actor = effect.parent;
+    if (!actor || actor.documentName !== "Actor") return;
+    if (actor.system.prone) {
       await actor.update({ "system.prone": false });
     }
   }

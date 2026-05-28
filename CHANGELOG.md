@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.71] - 2026-05-28
+
+### Fixed — Character Sheets Not Opening
+
+- **`conan.mjs`** — Refactoring in v0.7.70 introduced a syntax error (extra closing brace `}`) in the `createActiveEffect` and `deleteActiveEffect` hooks; the variable `actor` was also left undefined after the `const actor = effect.parent` line was accidentally removed; both hooks are now corrected, restoring module load and character sheet functionality
+
+---
+
 ## [0.7.70] - 2026-05-15
 
 ### Fixed — Corrupted Weapon Data (`"undefined"` string in DB)
