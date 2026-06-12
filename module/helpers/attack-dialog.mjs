@@ -53,15 +53,15 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     context.isPoisonedAttributes = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect1;
     context.poisonMultiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
     
-    // Get target's Physical Defense from selected token
+    // Get target's Physical Defense from targeted tokens (all users)
     // Nieprzytomna cel ma obronę fizyczną = 0 (każdy atak trafia)
-    const targets = Array.from(game.user.targets);
+    const targets = canvas.tokens?.placeables?.filter(t => t.targeted.size > 0) ?? [];
     if (targets.length > 0 && targets[0].actor) {
       const targetActor = targets[0].actor;
       if (targetActor.statuses?.has("unconscious")) {
         context.targetDefense = 0;
       } else {
-        context.targetDefense = targetActor.system.defense?.physical || 5;
+        context.targetDefense = targetActor.system.defense?.physical ?? 5;
       }
       context.targetProneActive = targetActor.system.prone || false;
     } else {

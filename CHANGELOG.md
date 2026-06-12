@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.7.72] - 2026-06-12
+
+### Fixed — NPC Attack: Incorrect Target Defense (OF)
+
+- **`npc-attack-dialog.mjs`**, **`attack-dialog.mjs`** — Replaced `Array.from(game.user.targets)` with `canvas.tokens.placeables.filter(t => t.targeted.size > 0)` to read targeted tokens from all users, not only the current one. GM opening an NPC card while a player had targeted an enemy would see the fallback value of 5 instead of the real Physical Defense; now correctly reads e.g. 7 or 8 from the targeted token
+- Also fixed `|| 5` → `?? 5` so a target with Physical Defense = 0 (unconscious rule) is no longer overridden to 5
+
+### Fixed — NPC Attack Chat: Wrong Type Label (Ranged instead of Melee)
+
+- **`npc-attack-dialog.mjs`** — All attack-type decisions in `_onRoll` now use a single `isMeleeAttack` flag derived from `npcAttackType` (which has the `|| 'melee'` fallback). Previously, `attribute` and `attackTypeLabel` were recalculated from `?.type?.startsWith('melee')` without a fallback, so any actor with missing or old-format damage data would show "ATAK DYSTANSOWY" and roll Edge instead of Might
+
+### Fixed — NPC Damage Roll: "Ten typ obrażeń nie jest dostępny"
+
+- **`npc-attack-dialog.mjs`**, **`npc-damage-dialog.mjs`**, **`roll-mechanics.mjs`** — Added defensive normalisation of `actor.system.damage` to handle both old object format (`{melee:{…}, ranged:{…}}`) and current `ArrayField` format before indexing by `attackIndex`; when TypeDataModel returned an empty array from the legacy format, `damageData` was `undefined` and the damage roll was blocked
+
+### Fixed — NPC Damage Button: Wrong Actor ID in Chat Message
+
+- **`npc-attack-dialog.mjs`** — Replaced `this.actor._stats.systemId` (system meta-ID, not actor ID) with `this.actor.id` in the `data-actor-id` attribute of the "Roll Damage" button in NPC attack chat messages; the button would previously fail to find the actor when clicked
+
+### Added — NPC Attack Chat: Weapon Name in Header
+
+- **`npc-attack-dialog.mjs`** — The attack type label in the NPC attack chat card now includes the weapon name from the NPC's damage row in parentheses (e.g. **ATAK WRĘCZ (Szpony)**); shown only when the name field is not empty
+
+---
+
 ## [0.7.71] - 2026-05-28
 
 ### Fixed — Character Sheets Not Opening

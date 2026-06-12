@@ -859,8 +859,10 @@ export async function rollNPCDamage(actor, attackIndex) {
     return null;
   }
 
-  // Get damage data from actor
-  const damageData = actor.system.damage[attackIndex];
+  // Obsługa starego formatu danych (obiekt) i nowego (tablica ArrayField)
+  const rawDamage = actor.system.damage;
+  const damageArray = Array.isArray(rawDamage) ? rawDamage : Object.values(rawDamage ?? {});
+  const damageData = damageArray[attackIndex];
   const attackType = damageData?.type || 'melee';
   
   if (!damageData || damageData.notApplicable) {

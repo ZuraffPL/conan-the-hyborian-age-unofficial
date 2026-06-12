@@ -53,8 +53,10 @@ export class NPCDamageDialog extends foundry.applications.api.HandlebarsApplicat
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     
-    // Get damage data from actor
-    const damageData = this.actor.system.damage[this.attackIndex];
+    // Obsługa starego formatu danych (obiekt) i nowego (tablica ArrayField)
+    const rawDamage = this.actor.system.damage;
+    const damageArray = Array.isArray(rawDamage) ? rawDamage : Object.values(rawDamage ?? {});
+    const damageData = damageArray[this.attackIndex];
     const attackType = damageData?.type || 'melee';
     
     context.attackType = attackType;

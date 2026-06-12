@@ -47,7 +47,10 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     const context = await super._prepareContext(options);
     
     context.actor = this.actor;
-    const attackData = this.actor.system.damage[this.attackIndex];
+    // Obsługa starego formatu danych (obiekt) i nowego (tablica)
+    const rawDamage = this.actor.system.damage;
+    const damageArray = Array.isArray(rawDamage) ? rawDamage : Object.values(rawDamage ?? {});
+    const attackData = damageArray[this.attackIndex];
     const attackType = attackData?.type || 'melee';
     context.attackType = attackType;
     context.attackTypeLabel = game.i18n.localize(
@@ -60,15 +63,15 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     context.attributeValue = this.actor.system.attributes[attribute].effectiveValue || this.actor.system.attributes[attribute].value;
     context.attributeDie = this.actor.system.attributes[attribute].die;
     
-    // Get target's Physical Defense from selected token
+    // Get target's Physical Defense from targeted tokens (all users)
     // Nieprzytomna cel ma obronę fizyczną = 0 (każdy atak trafia)
-    const targets = Array.from(game.user.targets);
+    const targets = canvas.tokens?.placeables?.filter(t => t.targeted.size > 0) ?? [];
     if (targets.length > 0 && targets[0].actor) {
       const targetActor = targets[0].actor;
       if (targetActor.statuses?.has("unconscious")) {
         context.targetDefense = 0;
       } else {
-        context.targetDefense = targetActor.system.defense?.physical || 5;
+        context.targetDefense = targetActor.system.defense?.physical ?? 5;
       }
       context.targetProneActive = targetActor.system.prone || false;
     } else {
@@ -124,8 +127,12 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     const targetProneActiveInput = form.querySelector('input[name="targetProneActive"]');
     const targetProneActive = targetProneActiveInput?.value === 'true';
     
-    // Determine attack type (melee vs ranged) for prone modifier
-    const npcAttackType = this.actor.system.damage[this.attackIndex]?.type || 'melee';
+    // Obsługa starego formatu danych (obiekt) i nowego (tablica)
+    const rawDmg = this.actor?.system?.damage;
+    const dmgArray = Array.isArray(rawDmg) ? rawDmg : Object.values(rawDmg ?? {});
+    const attackData = dmgArray[this.attackIndex];
+    // Determine attack type (melee vs ranged) — jednolity fallback na 'melee'
+    const npcAttackType = attackData?.type || 'melee';
     const isMeleeAttack = npcAttackType.startsWith('melee');
     
     // Apply prone modifier based on attack type
@@ -144,7 +151,8 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     const effect2Multiplier = this.actor.system.poisonEffects?.effect2Multiplier || 1;
     const poisonPenalty = (this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2) ? -(effect2Multiplier) : 0;
     
-    const attribute = this.actor.system.damage[this.attackIndex]?.type?.startsWith('melee') ? 'might' : 'edge';
+    // Użyj isMeleeAttack (z jednolitym fallbackiem) zamiast ponownego odczytu z damage array
+    const attribute = isMeleeAttack ? 'might' : 'edge';
     const attributeValue = this.actor.system.attributes[attribute].effectiveValue || this.actor.system.attributes[attribute].value;
     const attributeDie = this.actor.system.attributes[attribute].die;
     
@@ -163,7 +171,8 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     // Prepare chat message
     const attributeLabel = game.i18n.localize(`CONAN.Attributes.${attribute}.label`);
     const attributeAbbr = game.i18n.localize(`CONAN.Attributes.${attribute}.abbr`);
-    const attackTypeLabel = game.i18n.localize(this.actor.system.damage[this.attackIndex]?.type?.startsWith('melee') ? 'CONAN.Attack.melee' : 'CONAN.Attack.ranged');
+    const attackTypeLabel = game.i18n.localize(isMeleeAttack ? 'CONAN.Attack.melee' : 'CONAN.Attack.ranged');
+    const weaponName = attackData?.name?.trim() || '';
     const isPoisoned = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect2;
     const isPoisonedAttributes = this.actor.system.poisoned && this.actor.system.poisonEffects?.effect1;
     
@@ -174,7 +183,7 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     let messageContent = `
       <div class="conan-roll-chat npc-roll ${npcClass} ${isPoisoned || isPoisonedAttributes ? 'poisoned-roll' : ''}">
         <div class="roll-header attack">
-          <h3>${attackTypeLabel}${isPoisoned || isPoisonedAttributes ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
+          <h3>${attackTypeLabel}${weaponName ? ` (${weaponName})` : ''}${isPoisoned || isPoisonedAttributes ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
           <div class="attribute-info">${attributeLabel} (${attributeAbbr})${isPoisonedAttributes ? ' <span style="color: #15a20e; font-size: 0.9em;">(zatruty)</span>' : ''}</div>
         </div>
         <div class="roll-details">
@@ -214,8 +223,8 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     
     // Add damage roll button if attack was successful
     if (isSuccess) {
-      // For unlinked tokens, we need the base actor ID for lookup
-      const baseActorId = this.actor.token ? this.actor._stats.systemId : this.actor.id;
+      // Zawsze użyj rzeczywistego ID aktora (nie systemId)
+      const baseActorId = this.actor.id;
       messageContent += `
           <div class="damage-actions" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0, 0, 0, 0.1); text-align: center;">
             <button class="roll-npc-damage-btn" data-actor-id="${baseActorId}" data-token-id="${this.actor.token?.id || ''}" data-scene-id="${this.actor.token?.parent?.id || ''}" data-attack-index="${this.attackIndex}">
