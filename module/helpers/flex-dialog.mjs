@@ -382,7 +382,7 @@ export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplica
       user: game.user.id,
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: content,
-      rollMode: game.settings.get("core", "rollMode")
+      rollMode: game.settings.get("core", "messageMode")
     });
   }
   

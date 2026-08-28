@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.0] - 2026-08-28
+
+### ⚠️ Foundry VTT Compatibility Requirement Raised to v14
+
+- **`system.json`** — `compatibility.minimum` raised from `13` to `14`, `verified` set to `14.367`. **This version requires Foundry VTT v14 (recommended: v14.367) — Foundry VTT v13 is no longer supported or tested.**
+
+### Fixed — Deprecated `core.rollMode` Client Setting (Foundry v14.367)
+
+- **`actor.mjs`, `item.mjs`, `flex-dialog.mjs`, `roll-mechanics.mjs`, `roll-sorcery-damage.mjs`, `npc-sheet.mjs`** — Replaced all 15 occurrences of `game.settings.get("core", "rollMode")` with `game.settings.get("core", "messageMode")`. The `core.rollMode` client setting is deprecated in Foundry v14 (removed in v16) and was throwing a console warning/error on every attribute, skill, initiative, weapon, and sorcery damage roll. The `rollMode:` property passed to `ChatMessage.create()` / `Roll#toMessage()` is unchanged — only the underlying client setting key used to read the player's current roll mode
+
+---
+
 ## [0.7.72] - 2026-06-12
 
 ### Fixed — NPC Attack: Incorrect Target Defense (OF)

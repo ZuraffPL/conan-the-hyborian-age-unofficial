@@ -241,7 +241,7 @@ export class ConanActor extends Actor {
     roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: label,
-      rollMode: game.settings.get("core", "rollMode")
+      rollMode: game.settings.get("core", "messageMode")
     });
 
     return roll;

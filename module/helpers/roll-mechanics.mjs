@@ -150,7 +150,7 @@ export async function rollAttribute(actor, attribute) {
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     content: content,
-    rollMode: game.settings.get("core", "rollMode"),
+    rollMode: game.settings.get("core", "messageMode"),
     flags: {
       "conan-the-hyborian-age": {
         rollType: "attribute"
@@ -277,7 +277,7 @@ export async function rollInitiative(actor, combatant = null) {
         </div>
       </div>
     `,
-    rollMode: game.settings.get("core", "rollMode"),
+    rollMode: game.settings.get("core", "messageMode"),
     flags: {
       "conan-the-hyborian-age": {
         rollType: "initiative"
@@ -320,9 +320,9 @@ export async function rollSkill(actor, skillName, attribute) {
   await roll.toMessage({
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     flavor: `<strong>${skillName}</strong> (${game.i18n.localize(`CONAN.Attributes.${attribute}.label`)})`,
-    rollMode: game.settings.get("core", "rollMode")
+    rollMode: game.settings.get("core", "messageMode")
   }, {
-    rollMode: game.settings.get("core", "rollMode")
+    rollMode: game.settings.get("core", "messageMode")
   });
 
   // Trigger 3D dice if Dice So Nice module is active
@@ -489,7 +489,7 @@ export async function rollMeleeDamage(actor, weapon, modifier = 0) {
   const chatMessage = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     content: content,
-    rollMode: game.settings.get("core", "rollMode"),
+    rollMode: game.settings.get("core", "messageMode"),
     flags: {
       "conan-the-hyborian-age": {
         damageDealt: false,
@@ -656,7 +656,7 @@ export async function rollThrownDamage(actor, weapon, modifier = 0) {
   const chatMessage = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     content: content,
-    rollMode: game.settings.get("core", "rollMode"),
+    rollMode: game.settings.get("core", "messageMode"),
     flags: {
       "conan-the-hyborian-age": {
         damageDealt: false,
@@ -816,7 +816,7 @@ export async function rollRangedDamage(actor, weapon, modifier = 0) {
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     content: content,
     sound: CONFIG.sounds.dice,
-    rollMode: game.settings.get("core", "rollMode"),
+    rollMode: game.settings.get("core", "messageMode"),
     flags: {
       "conan-the-hyborian-age": {
         damageDealt: false,
@@ -970,7 +970,7 @@ export async function rollNPCDamage(actor, attackIndex) {
     content: content,
     rolls: [damageRoll],
     sound: CONFIG.sounds.dice,
-    rollMode: game.settings.get("core", "rollMode"),
+    rollMode: game.settings.get("core", "messageMode"),
     flags: {
       "conan-the-hyborian-age": {
         damageDealt: false,

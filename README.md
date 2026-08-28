@@ -2,8 +2,8 @@
 
 An unofficial Foundry VTT implementation of **Conan: The Hyborian Age RPG** by Monolith Boardgames. Step into the savage world of Robert E. Howard's Conan the Barbarian and forge your legend in the Hyborian Age!
 
-![Version](https://img.shields.io/badge/version-0.7.72-darkred)
-![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v13%2B%20%7C%20v14-orange)
+![Version](https://img.shields.io/badge/version-0.8.0-darkred)
+![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v14%2B%20(14.367)-orange)
 
 ## Installation
 
@@ -27,7 +27,7 @@ An unofficial Foundry VTT implementation of **Conan: The Hyborian Age RPG** by M
 
 ## Requirements
 
-- **Foundry VTT**: v13 or higher (verified on v14)
+- **Foundry VTT**: v14 or higher (verified on v14.367)
 - **Recommended**: [Dice So Nice](https://foundryvtt.com/packages/dice-so-nice) for 3D dice animations with dynamic flex die colorsets
 
 ## About the Game
@@ -47,7 +47,7 @@ Each character has **four attributes** (Might, Edge, Grit, Wits) rated 1–8:
 
 ## System Features
 
-> **Current version: v0.7.72** — For a full history of changes see [CHANGELOG.md](CHANGELOG.md).
+> **Current version: v0.8.0** — For a full history of changes see [CHANGELOG.md](CHANGELOG.md).
 
 ### Core Feature Reference
 
@@ -374,13 +374,13 @@ conan-the-hyborian-age/
 
 | Principle | Implementation |
 |-----------|---------------|
-| **ApplicationV2** | All sheets and dialogs use the modern Foundry v13 API |
+| **ApplicationV2** | All sheets and dialogs use the modern Foundry v14 API |
 | **TypeDataModel** | All Actor (character, minion, antagonist) and Item (weapon, armor, skill, spell) types backed by `TypeDataModel`; shared sub-schemas via `EmbeddedDataField` |
 | **Native DOM** | No jQuery dependency — pure JavaScript throughout |
 | **Modern CSS** | Flexbox layouts, CSS variables, modular partials |
 | **Auto-save** | Real-time change detection with `foundry.utils.debounce()` form handling (500 ms for NPC sheets) |
 | **Socket Delegation** | Permission-free player actions via GM delegation (`socket.mjs`) |
-| **Token Delta** | Proper Foundry v13 unlinked token support via `delta.system` paths |
+| **Token Delta** | Proper Foundry v14 unlinked token support via `delta.system` paths |
 | **Custom Status Effects** | Registered in `CONFIG.statusEffects` with CSS filter colour preservation |
 | **Dice So Nice** | Two custom colorsets (`conan_flex_dark`, `conan_flex_light`) registered at startup; contrast-aware selection via `dice-utils.mjs` |
 | **Data Migrations** | `migrateData()` in TypeDataModel auto-migrates legacy data formats on first load |
@@ -428,8 +428,8 @@ This system is provided as-is for personal use. Not affiliated with or endorsed 
 - **System Developer**: Zuraff (Discord: `eliandir_`)
 - **Game System**: Conan: The Hyborian Age RPG by Monolith Boardgames
 - **Setting**: Based on Robert E. Howard's Conan the Barbarian
-- **Platform**: Foundry Virtual Tabletop v13+
+- **Platform**: Foundry Virtual Tabletop v14+
 
 ---
 
-Current version: **0.0.61** — see [CHANGELOG.md](CHANGELOG.md) for full history.
+Current version: **0.8.0** — see [CHANGELOG.md](CHANGELOG.md) for full history.

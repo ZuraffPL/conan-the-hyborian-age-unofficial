@@ -109,7 +109,7 @@ export async function rollSorceryFixedDamage(actor, fixedValue = 0, paramModifie
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     content: content,
     sound: CONFIG.sounds.dice,
-    rollMode: game.settings.get("core", "rollMode"),
+    rollMode: game.settings.get("core", "messageMode"),
     flags: {
       "conan-the-hyborian-age": {
         damageDealt: false,
@@ -268,7 +268,7 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     content: content,
     sound: CONFIG.sounds.dice,
-    rollMode: game.settings.get("core", "rollMode"),
+    rollMode: game.settings.get("core", "messageMode"),
     flags: {
       "conan-the-hyborian-age": {
         damageDealt: false,
@@ -437,7 +437,7 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     content: content,
     sound: CONFIG.sounds.dice,
-    rollMode: game.settings.get("core", "rollMode"),
+    rollMode: game.settings.get("core", "messageMode"),
     flags: {
       "conan-the-hyborian-age": {
         damageDealt: false,

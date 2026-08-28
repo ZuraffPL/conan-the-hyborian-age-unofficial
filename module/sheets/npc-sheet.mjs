@@ -1360,6 +1360,6 @@ async function rollNPCAttribute(actor, attribute) {
     speaker: ChatMessage.getSpeaker({ actor: actor }),
     content: content,
     rolls: [dieRoll],
-    rollMode: game.settings.get("core", "rollMode")
+    rollMode: game.settings.get("core", "messageMode")
   });
 }
