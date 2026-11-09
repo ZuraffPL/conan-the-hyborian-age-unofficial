@@ -1,4 +1,5 @@
 import { getFlexDieColorset } from "./dice-utils.mjs";
+import { renderCompactRoll, modifierTerm, poisonTerm, flexRow } from "./compact-roll.mjs";
 
 /**
  * Dialog for making attack rolls
@@ -190,7 +191,7 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
     
     // Determine if we should show the Deal Damage button
     let showDealDamageButton = false;
-    let dealDamageButtonHtml = '';
+    let rollDamageAction = null;
       // Show Deal Damage button for both PC and NPC attacks
       if (
         isSuccess &&
@@ -201,59 +202,39 @@ export class AttackDialog extends foundry.applications.api.HandlebarsApplication
       ) {
       showDealDamageButton = true;
       // Button with a unique class and data-actor-id for event delegation
-      dealDamageButtonHtml = `
-        <div class="deal-damage-row" style="text-align:center; margin-top:10px;">
-          <button class="roll-damage-btn" data-actor-id="${this.actor.id}" style="background: linear-gradient(90deg, #6a1b9a 0%, #ffd700 100%); color: #fff; border: 2px solid #4a148c; border-radius: 6px; font-weight: bold; font-size: 1em; padding: 6px 18px; box-shadow: 0 2px 8px rgba(106,27,154,0.18); cursor:pointer; transition: filter 0.2s;">
-            <i class="fas fa-bolt"></i> ${game.i18n.localize('CONAN.Damage.roll')}
-          </button>
-        </div>
-      `;
+      rollDamageAction = {
+        buttonClass: "roll-damage-btn",
+        icon: "fa-bolt",
+        label: game.i18n.localize('CONAN.Damage.roll'),
+        data: { "actor-id": this.actor.id }
+      };
     }
 
-    let messageContent = `
-      <div class="conan-roll-chat ${isPoisoned ? 'poisoned-roll' : ''}">
-        <div class="roll-header attack">
-          <h3>${attackTypeLabel}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
-          <div class="attribute-info">${attributeLabel} (${attributeAbbr})</div>
-        </div>
-        <div class="roll-details">
-          <div class="dice-results">
-            <div class="dice-roll">
-              <div class="die-label">${attributeLabel}</div>
-              <div class="die-result${isWindsOfFate ? ' winds-of-fate' : ''}">${attributeResult}</div>
-            </div>
-            ${!flexDieDisabled ? `
-            <div class="dice-roll">
-              <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
-              <div class="die-result${isFlexEffect ? ' flex-effect' : ''}">${flexResult}</div>
-            </div>
-            ` : `
-            <div class="dice-roll disabled">
-              <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
-              <div class="die-result disabled"><i class="fas fa-ban"></i></div>
-            </div>
-            `}
-          </div>
-          <div class="calculation">
-            <span class="calc-part">${attributeResult}</span>
-            <span class="calc-operator">+</span>
-            <span class="calc-part">${attributeValue}</span>
-            ${modifier !== 0 ? `<span class="calc-operator">+</span><span class="calc-part">${modifier}</span>` : ''}
-            ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">${effect2Multiplier}</span>` : ''}
-            <span class="calc-operator">=</span>
-            <span class="calc-total">${total}</span>
-          </div>
-          <div class="difficulty-check">
-            <span class="difficulty-label">OF celu:</span>
-            <span class="difficulty-value">${effectiveTargetDefense}${targetProneActive ? ` <span class="prone-chat-modifier">(${proneModifier > 0 ? '+' : ''}${proneModifier} ${game.i18n.localize('CONAN.Attack.prone')})</span>` : ''}</span>
-          </div>
-          <div class="roll-result ${isSuccess ? 'success' : 'failure'}">
-            <div class="result-text">${isSuccess ? game.i18n.localize('CONAN.Roll.success') : game.i18n.localize('CONAN.Roll.failure')}</div>
-          </div>
-          ${isWindsOfFate ? `<div class="winds-of-fate-message" style="color:#b71c1c; font-weight:bold; margin-top:8px; font-size:1.1em; text-shadow:0 0 4px #fff,0 0 2px #b71c1c;">${game.i18n.localize('CONAN.Roll.windsOfFate')}</div>` : ''}
-          ${dealDamageButtonHtml}
-        </div>
-      </div>`;
+    const terms = [
+      { label: game.i18n.localize("CONAN.Roll.attributeDie"), value: attributeResult, winds: isWindsOfFate },
+      { operator: "+", label: game.i18n.localize("CONAN.Roll.attributeValue"), value: attributeValue }
+    ];
+    if (modifier !== 0) terms.push(modifierTerm(modifier));
+    if (poisonPenalty !== 0) terms.push(poisonTerm(effect2Multiplier));
+
+    const messageContent = await renderCompactRoll({
+      headerClass: "attack",
+      kind: attackTypeLabel,
+      info: `${attributeLabel} (${attributeAbbr})`,
+      poisoned: isPoisoned,
+      terms,
+      totalLabel: game.i18n.localize("CONAN.Roll.total"),
+      total,
+      flex: flexRow({ disabled: flexDieDisabled, result: flexResult, triggered: isFlexEffect }),
+      verdict: {
+        label: game.i18n.localize("CONAN.Attack.targetPhysicalDefense"),
+        difficulty: effectiveTargetDefense,
+        note: targetProneActive ? `(${proneModifier > 0 ? '+' : ''}${proneModifier} ${game.i18n.localize('CONAN.Attack.prone')})` : "",
+        success: isSuccess
+      },
+      windsOfFate: isWindsOfFate,
+      action: rollDamageAction
+    });
     
     // Create chat message
     const chatMsg = await ChatMessage.create({

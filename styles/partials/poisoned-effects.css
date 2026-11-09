@@ -222,19 +222,6 @@
   border: 1px solid #15a20e;
 }
 
-/* Old multiplier controls (kept for backwards compatibility) */
-.conan.dialog.poisoned .multiplier-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 8px;
-  background: rgba(21, 162, 14, 0.1);
-  border-radius: 4px;
-  border: 1px solid #15a20e;
-  margin-top: 5px;
-}
-
 .conan.dialog.poisoned .multiplier-btn {
   width: 32px;
   height: 32px;
@@ -334,58 +321,6 @@
   padding: 2px 5px;
   border-radius: 3px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* Effect 2: Roll Penalty indicator */
-.poison-roll-penalty {
-  display: inline-block;
-  background: rgba(21, 162, 14, 0.2);
-  color: #15a20e;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-weight: bold;
-  font-size: 11px;
-  margin-left: 4px;
-  border: 1px solid #15a20e;
-}
-
-/* Effect 3: Life Drain indicator */
-.conan.sheet.actor .life-actual.poisoned-drain,
-.conan.sheet.actor.npc .defense-value.poisoned-drain {
-  animation: poison-pulse 2s infinite;
-  border-color: #15a20e;
-}
-
-@keyframes poison-pulse {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(21, 162, 14, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 15px rgba(21, 162, 14, 0.6);
-  }
-}
-
-/* Effect 4: Stamina Locked */
-.conan.sheet.actor .stamina-value.poisoned-locked {
-  background: rgba(21, 162, 14, 0.2);
-  opacity: 0.6;
-  cursor: not-allowed;
-  border-color: #15a20e;
-  position: relative;
-}
-
-.conan.sheet.actor .stamina-value.poisoned-locked::before {
-  content: "\f023";
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 20px;
-  color: #15a20e;
-  opacity: 0.5;
-  pointer-events: none;
 }
 
 /* Locked stamina box styling */
@@ -498,45 +433,10 @@
   color: #8b0000;
 }
 
-/* Effect 5: Flex Die Disabled */
-.flex-die-disabled-indicator {
-  display: inline-block;
-  background: rgba(21, 162, 14, 0.2);
-  color: #15a20e;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 12px;
-  border: 1px solid #15a20e;
-  margin-left: 6px;
-}
-
-.flex-die-disabled-indicator i {
-  margin-right: 4px;
-}
-
 /* Chat message poison indicators */
 .conan-roll-chat.poisoned {
   border-left: 4px solid #15a20e;
   background: linear-gradient(135deg, rgba(21, 162, 14, 0.05) 0%, transparent 100%);
-}
-
-.conan-roll-chat .poison-indicator {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
-  background: rgba(21, 162, 14, 0.15);
-  border: 1px solid #15a20e;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  font-size: 11px;
-  color: #15a20e;
-  font-weight: bold;
-}
-
-.conan-roll-chat .poison-indicator i {
-  font-size: 14px;
 }
 
 /* Poison status chat message styling */
@@ -621,27 +521,6 @@
   color: #654321;
 }
 
-/* Minion wounded/dead from poison */
-.conan.sheet.actor.minion .defense-box.wounded-box.poison-wounded {
-  background: linear-gradient(135deg, rgba(220, 20, 60, 0.1) 0%, rgba(21, 162, 14, 0.1) 100%);
-  border-color: #15a20e;
-}
-
-.conan.sheet.actor.minion .defense-box.wounded-box.poison-wounded .wounded-icon {
-  filter: hue-rotate(90deg);
-}
-
-/* Disabled Flex Die in chat messages */
-.conan-roll-chat .dice-roll.disabled {
-  opacity: 0.5;
-}
-
-.conan-roll-chat .dice-roll.disabled .die-result {
-  background: rgba(139, 0, 0, 0.2);
-  border-color: #8b0000;
-  color: #8b0000;
-}
-
 /* Poison Effect 2: Roll Penalty Styles */
 
 /* Poisoned penalty indicator on attribute roll buttons */
@@ -717,21 +596,6 @@
   text-shadow: 0 0 4px rgba(21, 162, 14, 0.6);
 }
 
-/* Poison indicator in initiative roll */
-.conan-initiative-roll.poisoned-roll {
-  border-left: 4px solid #15a20e;
-  box-shadow: 0 0 10px rgba(21, 162, 14, 0.3);
-}
-
-.conan-initiative-roll.poisoned-roll .poison-skull {
-  animation: poison-skull-pulse 1.5s infinite;
-  margin-left: 6px;
-}
-
-
-.conan-roll-chat .dice-roll.disabled .die-result i {
-  font-size: 16px;
-}
 /* Life Drain Effect 3: Poison Life Drain Visual Effects */
 
 /* Poison life drain skull icon */

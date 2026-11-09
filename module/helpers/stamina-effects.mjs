@@ -3,6 +3,8 @@
  * Handles spending Stamina to boost roll results
  */
 
+import { renderCompactRoll, dealDamageAction } from "./compact-roll.mjs";
+
 /**
  * Add context menu options to chat messages for spending Stamina
  * @param {jQuery} html - The chat log HTML
@@ -187,46 +189,33 @@ async function spendStaminaToBoost(message, boost) {
     });
   }
   
-  // Prepare damage button HTML for successful attacks
-  let damageButtonHtml = '';
-  if (isAttack && isSuccess) {
-    damageButtonHtml = `
-      <button class="roll-damage-btn" data-actor-id="${actor.id}" data-attack-type="${attackType}">
-        <i class="fas fa-dice-d20"></i> ${game.i18n.localize('CONAN.Roll.rollDamage')}
-      </button>
-    `;
-  }
+  // Prepare damage button for successful attacks
+  const damageAction = (isAttack && isSuccess) ? {
+    buttonClass: "roll-damage-btn",
+    icon: "fa-dice-d20",
+    label: game.i18n.localize('CONAN.Roll.rollDamage'),
+    data: { "actor-id": actor.id, "attack-type": attackType }
+  } : null;
   
   // Create new chat message showing the boosted result
-  const content = `
-    <div class="conan-stamina-boost">
-      <div class="stamina-header">
-        <i class="fas fa-bolt"></i>
-        <h3>${game.i18n.localize("CONAN.Stamina.boosted")}</h3>
-      </div>
-      <div class="stamina-content">
-        <div class="boost-info">
-          <span class="original-value">${originalTotal}</span>
-          <i class="fas fa-arrow-right"></i>
-          <span class="new-value ${isSuccess ? 'success' : ''}">${newTotal}</span>
-          <span class="boost-amount">(+${boost})</span>
-        </div>
-        ${difficulty ? `
-        <div class="difficulty-check">
-          <span class="difficulty-label">${game.i18n.localize('CONAN.Roll.targetDifficulty')}:</span>
-          <span class="difficulty-value">${difficulty}</span>
-        </div>
-        <div class="roll-result ${isSuccess ? 'success' : ''}">
-          ${isSuccess ? game.i18n.localize('CONAN.Roll.success') : game.i18n.localize('CONAN.Roll.failure')}
-        </div>
-        ` : ''}
-        <div class="stamina-cost">
-          ${game.i18n.format("CONAN.Stamina.spent", { cost: boost })}
-        </div>
-        ${damageButtonHtml}
-      </div>
-    </div>
-  `;
+  const content = await renderCompactRoll({
+    rootClass: "conan-stamina-boost",
+    icon: "fa-bolt",
+    kind: game.i18n.localize("CONAN.Stamina.boosted"),
+    terms: [
+      { label: game.i18n.localize("CONAN.Stamina.originalResult"), value: originalTotal },
+      { operator: "+", label: game.i18n.localize("CONAN.Resources.stamina"), value: boost }
+    ],
+    totalLabel: game.i18n.localize("CONAN.Stamina.boostedResult"),
+    total: newTotal,
+    verdict: difficulty ? {
+      label: game.i18n.localize('CONAN.Roll.targetDifficulty'),
+      difficulty,
+      success: isSuccess
+    } : null,
+    footnote: game.i18n.format("CONAN.Stamina.spent", { cost: boost }),
+    action: damageAction
+  });
   
   const chatMsg = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: actor }),
@@ -327,20 +316,8 @@ async function spendStaminaToBoost(message, boost) {
  */
 function extractTotalFromMessage(message) {
   const doc = new DOMParser().parseFromString(message.content, "text/html");
-
-  // Try to find .calc-total element (for attribute tests and attacks)
   const calcTotal = doc.querySelector('.calc-total');
-  if (calcTotal) {
-    return parseInt(calcTotal.textContent) || 0;
-  }
-
-  // For initiative rolls, look for the initiative value
-  const initiativeMatch = message.content.match(/:\s*<strong>(\d+)<\/strong>/);
-  if (initiativeMatch) {
-    return parseInt(initiativeMatch[1]) || 0;
-  }
-
-  return 0;
+  return calcTotal ? (parseInt(calcTotal.textContent) || 0) : 0;
 }
 
 /**
@@ -538,52 +515,20 @@ async function spendStaminaToDamage(message, cost) {
   const additionalDamage = damageRoll.total;
   const totalDamage = originalDamage + additionalDamage;
   
-  // Prepare damage button HTML
-  const damageButtonHtml = `
-    <button class="deal-pc-damage-btn" 
-            data-damage="${totalDamage}" 
-            data-attacker-id="${actor.id}" 
-            data-token-id="${actor.token?.id || ''}" 
-            data-scene-id="${actor.token?.parent?.id || ''}">
-      <i class="fas fa-heart-broken"></i> ${game.i18n.localize('CONAN.Damage.DealDamage')}
-    </button>
-  `;
-  
   // Create new chat message showing the boosted damage
-  const content = `
-    <div class="conan-stamina-boost damage-boost">
-      <div class="stamina-header">
-        <i class="fas fa-bolt"></i>
-        <h3>${game.i18n.localize("CONAN.Stamina.damageBoosted")}</h3>
-      </div>
-      <div class="stamina-content">
-        <div class="damage-breakdown">
-          <div class="damage-component">
-            <span class="component-label">${game.i18n.localize("CONAN.Common.damage")}:</span>
-            <span class="component-value">${originalDamage}</span>
-          </div>
-          <div class="damage-component additional">
-            <span class="component-label">${game.i18n.localize("CONAN.Stamina.damageIncrease")} (${diceFormula}):</span>
-            <span class="component-value">+${additionalDamage}</span>
-          </div>
-        </div>
-        <div class="boost-info">
-          <span class="original-value">${originalDamage}</span>
-          <i class="fas fa-arrow-right"></i>
-          <span class="new-value success">${totalDamage}</span>
-          <span class="boost-amount">(+${additionalDamage})</span>
-        </div>
-        <div class="damage-total">
-          <span class="total-label">${game.i18n.localize("CONAN.Stamina.totalDamageAfterBoost")}:</span>
-          <span class="total-value">${totalDamage}</span>
-        </div>
-        <div class="stamina-cost">
-          ${game.i18n.format("CONAN.Stamina.spent", { cost: cost })}
-        </div>
-        ${damageButtonHtml}
-      </div>
-    </div>
-  `;
+  const content = await renderCompactRoll({
+    rootClass: "conan-stamina-boost damage-boost",
+    icon: "fa-bolt",
+    kind: game.i18n.localize("CONAN.Stamina.damageBoosted"),
+    terms: [
+      { label: game.i18n.localize("CONAN.Common.damage"), value: originalDamage },
+      { operator: "+", label: `${game.i18n.localize("CONAN.Stamina.damageIncrease")} (${diceFormula})`, value: additionalDamage }
+    ],
+    totalLabel: game.i18n.localize("CONAN.Stamina.boostedResult"),
+    total: totalDamage,
+    footnote: game.i18n.format("CONAN.Stamina.spent", { cost: cost }),
+    action: dealDamageAction(actor, totalDamage)
+  });
   
   const chatMsg = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: actor }),
@@ -669,55 +614,21 @@ async function spendStaminaToMassiveDamage(message) {
   
   const totalDamage = originalDamage + bonusDamage;
   
-  // Prepare damage button HTML
-  const damageButtonHtml = `
-    <button class="deal-pc-damage-btn" 
-            data-damage="${totalDamage}" 
-            data-attacker-id="${actor.id}" 
-            data-token-id="${actor.token?.id || ''}" 
-            data-scene-id="${actor.token?.parent?.id || ''}">  
-      <i class="fas fa-heart-broken"></i> ${game.i18n.localize('CONAN.Damage.DealDamage')}
-    </button>
-  `;
-  
   // Create new chat message showing the massive damage effect
-  const content = `
-    <div class="conan-stamina-boost damage-boost massive-damage">
-      <div class="stamina-header">
-        <i class="fas fa-explosion"></i>
-        <h3>${game.i18n.localize("CONAN.Stamina.massiveDamage")}</h3>
-      </div>
-      <div class="stamina-content">
-        <div class="massive-damage-info">
-          <p><strong>${actor.name}</strong> ${game.i18n.localize("CONAN.Stamina.massiveDamageMessage")}</p>
-          <div class="damage-breakdown">
-            <div class="damage-component">
-              <span class="component-label">${game.i18n.localize("CONAN.Common.damage")}:</span>
-              <span class="component-value">${originalDamage}</span>
-            </div>
-            <div class="damage-component additional">
-              <span class="component-label">${game.i18n.localize("CONAN.FlexEffect.massive.bonusDamage")}:</span>
-              <span class="component-value">+${bonusDamage}</span>
-            </div>
-          </div>
-        </div>
-        <div class="boost-info">
-          <span class="original-value">${originalDamage}</span>
-          <i class="fas fa-arrow-right"></i>
-          <span class="new-value success">${totalDamage}</span>
-          <span class="boost-amount">(+${bonusDamage})</span>
-        </div>
-        <div class="damage-total">
-          <span class="total-label">${game.i18n.localize("CONAN.FlexEffect.massive.totalDamage")}:</span>
-          <span class="total-value">${totalDamage}</span>
-        </div>
-        <div class="stamina-cost">
-          ${game.i18n.localize("CONAN.Stamina.lastPointSpent")}
-        </div>
-        ${damageButtonHtml}
-      </div>
-    </div>
-  `;
+  const content = await renderCompactRoll({
+    rootClass: "conan-stamina-boost damage-boost massive-damage",
+    icon: "fa-explosion",
+    kind: game.i18n.localize("CONAN.Stamina.massiveDamage"),
+    info: actor.name,
+    terms: [
+      { label: game.i18n.localize("CONAN.Common.damage"), value: originalDamage },
+      { operator: "+", label: game.i18n.localize("CONAN.FlexEffect.massive.bonusDamage"), value: bonusDamage }
+    ],
+    totalLabel: game.i18n.localize("CONAN.FlexEffect.massive.totalDamage"),
+    total: totalDamage,
+    footnote: game.i18n.localize("CONAN.Stamina.lastPointSpent"),
+    action: dealDamageAction(actor, totalDamage)
+  });
   
   const chatMsg = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: actor }),
@@ -750,17 +661,15 @@ function extractDamageRollData(message) {
   const doc = new DOMParser().parseFromString(message.content, "text/html");
   const flags = message.flags?.["conan-the-hyborian-age"] || {};
 
-  // Check if it's fixed damage via flag (reliable) or legacy HTML markers
-  const isFixedDamage = flags.isFixedDamage === true ||
-                        message.content.includes('unarmedDamage');
+  // Check if it's fixed damage via flag
+  const isFixedDamage = flags.isFixedDamage === true;
 
   if (isFixedDamage) {
     const originalDamage = flags.totalDamage || 0;
     return { isFixedDamage: true, maxDieValue: originalDamage };
   }
 
-  // Try to extract die type from .component-value elements
-  // Look for patterns like "1k8", "2k6", "1d8", "2d6"
+  // Extract die type from .component-value elements (e.g. "1d8", "2d6")
   const dicePattern = /(\d+)?[kd](\d+)/i;
   let maxDieValue = 0;
 
@@ -774,15 +683,6 @@ function extractDamageRollData(message) {
 
   if (maxDieValue > 0) {
     return { isFixedDamage: false, maxDieValue: maxDieValue };
-  }
-
-  // Try to find in .damage-roll div (older format)
-  const damageRollDiv = doc.querySelector('.damage-roll');
-  if (damageRollDiv) {
-    const match = damageRollDiv.innerHTML.match(dicePattern);
-    if (match) {
-      return { isFixedDamage: false, maxDieValue: parseInt(match[2]) };
-    }
   }
 
   // Default to d8 if we can't determine (most common weapon die)

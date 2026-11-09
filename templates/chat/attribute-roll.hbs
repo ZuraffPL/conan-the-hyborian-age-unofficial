@@ -1,0 +1,87 @@
+<div class="conan-roll-chat conan-attribute-roll{{#if poisoned}} poisoned-roll{{/if}}">
+  <div class="roll-header">
+    <span class="attribute-roll-kind">{{localize "CONAN.Roll.attributeTest"}}</span>
+    <strong class="attribute-info">{{displayName}}</strong>
+  </div>
+
+  <div class="attribute-roll-body">
+    <div class="attribute-equation">
+      <div class="attribute-term">
+        <span class="attribute-operand">
+          <span class="attribute-label">{{localize "CONAN.Roll.attributeDie"}}</span>
+          <strong class="attribute-number{{#if windsOfFate}} is-winds{{/if}}">{{attributeDieResult}}</strong>
+        </span>
+      </div>
+      <div class="attribute-term">
+        <span class="attribute-operator">+</span>
+        <span class="attribute-operand">
+          <span class="attribute-label">
+            {{localize "CONAN.Roll.attributeValue"}}
+            {{#if attributePoisoned}}
+              <i class="fas fa-skull-crossbones attribute-poison"
+                 role="img"
+                 aria-label="{{localize 'CONAN.Poisoned.attributePenalty'}}"
+                 data-tooltip="{{localize 'CONAN.Poisoned.attributePenalty'}}"></i>
+            {{/if}}
+          </span>
+          <strong class="attribute-number{{#if attributePoisoned}} attribute-poison{{/if}}">{{attributeValue}}</strong>
+        </span>
+      </div>
+      {{#if modifierValue}}
+        <div class="attribute-term attribute-adjustment">
+          <span class="attribute-operator">{{modifierSign}}</span>
+          <span class="attribute-operand">
+            <span class="attribute-label">{{localize "CONAN.Dialog.difficulty.modifierLabel"}}</span>
+            <strong class="attribute-number">{{modifierValue}}</strong>
+          </span>
+        </div>
+      {{/if}}
+      {{#if poisonPenalty}}
+        <div class="attribute-term attribute-adjustment">
+          <span class="attribute-operator">−</span>
+          <span class="attribute-operand">
+            <span class="attribute-label" data-tooltip="{{localize 'CONAN.Poisoned.rollPenalty'}}">
+              {{localize "CONAN.Roll.poisonPenalty"}}
+            </span>
+            <strong class="attribute-number attribute-poison">{{poisonPenalty}}</strong>
+          </span>
+        </div>
+      {{/if}}
+      <div class="attribute-term">
+        <span class="attribute-operator">=</span>
+        <span class="attribute-operand">
+          <span class="attribute-label">{{localize "CONAN.Roll.total"}}</span>
+          <strong class="attribute-number calc-total">{{mainTotal}}</strong>
+        </span>
+      </div>
+    </div>
+
+    <div class="attribute-flex">
+      <span>{{localize "CONAN.Roll.flexDie"}}</span>
+      {{#if flexDieDisabled}}
+        <strong class="attribute-poison">{{localize "CONAN.Roll.flexDieDisabled"}}</strong>
+      {{else}}
+        <strong class="attribute-flex-value">{{flexResult}}</strong>
+        {{#if flexTriggered}}
+          <span class="attribute-flex-effect">
+            <i class="fas fa-star" aria-hidden="true"></i> {{localize "CONAN.Roll.flexEffect"}}
+          </span>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="attribute-verdict">
+    <span>{{localize "CONAN.Roll.targetDifficulty"}} <strong class="difficulty-value">{{difficulty}}</strong></span>
+    {{#if success}}
+      <strong class="attribute-outcome success"><span aria-hidden="true">✓</span> {{localize "CONAN.Roll.success"}}</strong>
+    {{else}}
+      <strong class="attribute-outcome failure"><span aria-hidden="true">✗</span> {{localize "CONAN.Roll.failure"}}</strong>
+    {{/if}}
+  </div>
+  {{#if windsOfFate}}
+    <div class="attribute-winds">
+      <i class="fas fa-wind" aria-hidden="true"></i> {{localize "CONAN.Roll.windsOfFate"}}
+    </div>
+  {{/if}}
+</div>

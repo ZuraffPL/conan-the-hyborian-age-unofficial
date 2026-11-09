@@ -369,6 +369,10 @@
       "windsOfFate": "Wiatry losu nie sprzyjają. Wypadła jedynka",
       "attributeTest": "Test Atrybutu",
       "attributeDie": "Kość Atrybutu",
+      "attributeValue": "Wartość atrybutu",
+      "total": "Suma",
+      "flexDieDisabled": "Zablokowana przez truciznę",
+      "poisonPenalty": "Trucizna",
       "targetDifficulty": "Trudność",
       "rollDamage": "Rzuć na Obrażenia"
     },
@@ -646,7 +650,9 @@
       "boostedNotification": "Wynik rzutu podniesiony o +{boost} (wydano {cost} pkt Wytrwałości)",
       "massiveDamageNotification": "Kolosalne Obrażenia! +{bonus} do obrażeń (wydano ostatni punkt Wytrwałości)",
       "damageIncrease": "Dodatkowe obrażenia",
-      "totalDamageAfterBoost": "Obrażenia po wzmocnieniu"
+      "totalDamageAfterBoost": "Obrażenia po wzmocnieniu",
+      "originalResult": "Wynik",
+      "boostedResult": "Po wzmocnieniu"
     },
     
     "FightForLife": {

@@ -1,4 +1,5 @@
 import { getFlexDieColorset } from "./dice-utils.mjs";
+import { renderCompactRoll, modifierTerm, poisonTerm, flexRow, dealDamageAction } from "./compact-roll.mjs";
 
 /**
  * Roll sorcery damage using a fixed value (stała wartość)
@@ -37,72 +38,23 @@ export async function rollSorceryFixedDamage(actor, fixedValue = 0, paramModifie
   }
 
   // Prepare chat message content
-  const modifierSign = totalModifier >= 0 ? '+' : '';
   const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
-  const content = `
-    <div class="conan-roll-chat damage-roll spellcasting-roll ${isPoisoned ? 'poisoned-roll' : ''}">
-      <div class="roll-header">
-        <h3>${game.i18n.localize("CONAN.Damage.sorceryDamage")}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
-        <div class="weapon-info">${game.i18n.localize("CONAN.Damage.sorceryFixedValue")}</div>
-      </div>
-      <div class="roll-details">
-        <div class="dice-results">
-          <div class="dice-roll">
-            <div class="die-label">${game.i18n.localize("CONAN.Damage.fixedValue")}</div>
-            <div class="die-result">${fixedValue}</div>
-          </div>
-          ${!flexDieDisabled ? `
-          <div class="dice-roll">
-            <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
-            <div class="die-result${flexTriggered ? ' flex-effect' : ''}">${flexResult}</div>
-          </div>
-          ` : `
-          <div class="dice-roll disabled">
-            <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
-            <div class="die-result disabled"><i class="fas fa-ban"></i></div>
-          </div>
-          `}
-        </div>
-        <div class="damage-components">
-          <div class="component">
-            <span class="component-label">${game.i18n.localize("CONAN.Damage.fixedValue")}</span>:
-            <span class="component-value">${fixedValue}</span>
-          </div>
-          ${totalModifier !== 0 ? `
-          <div class="component">
-            <span class="component-label">${game.i18n.localize("CONAN.Dialog.difficulty.modifierLabel")}</span>:
-            <span class="component-value">${modifierSign}${totalModifier}</span>
-          </div>
-          ` : ''}
-          ${poisonPenalty !== 0 ? `
-          <div class="component">
-            <span class="component-label">${game.i18n.localize("CONAN.Poisoned.rollPenalty")}</span>:
-            <span class="component-value poison-penalty">-${effect2Multiplier}</span>
-          </div>
-          ` : ''}
-        </div>
-        <div class="damage-total highlighted">
-          <span class="total-label">${game.i18n.localize("CONAN.Common.damage")}</span>:
-          <span class="total-value">${total}</span>
-        </div>
-        ${flexTriggered ? `
-        <div class="roll-result">
-          <div class="flex-notice"><i class="fas fa-star"></i> ${game.i18n.localize('CONAN.Roll.flexEffect')}</div>
-        </div>
-        ` : ''}
-      </div>
-      
-      <div class="damage-actions" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0, 0, 0, 0.1); text-align: center;">
-        <button class="deal-pc-damage-btn" 
-                data-damage="${total}" 
-                data-attacker-id="${actor._id || actor.id}" 
-                data-token-id="${actor.token?.id || ''}" 
-                data-scene-id="${actor.token?.parent?.id || ''}">
-          <i class="fas fa-heart-broken"></i> ${game.i18n.localize('CONAN.Damage.DealDamage')}
-        </button>
-      </div>
-    </div>
-  `;
+
+  const terms = [{ label: game.i18n.localize("CONAN.Damage.fixedValue"), value: Number(fixedValue) }];
+  if (totalModifier !== 0) terms.push(modifierTerm(totalModifier));
+  if (poisonPenalty !== 0) terms.push(poisonTerm(effect2Multiplier));
+
+  const content = await renderCompactRoll({
+    rootClass: "damage-roll spellcasting-roll",
+    kind: game.i18n.localize("CONAN.Damage.sorceryDamage"),
+    info: game.i18n.localize("CONAN.Damage.sorceryFixedValue"),
+    poisoned: isPoisoned,
+    terms,
+    totalLabel: game.i18n.localize("CONAN.Common.damage"),
+    total,
+    flex: isCharacter ? flexRow({ disabled: !!flexDieDisabled, result: flexResult, triggered: !!flexTriggered }) : null,
+    action: dealDamageAction(actor, total)
+  });
 
   // Create chat message with flags
   await ChatMessage.create({
@@ -193,75 +145,28 @@ export async function rollSorceryCustomDieDamage(actor, dieType = 'd6', paramMod
   }
 
   // Prepare chat message content (inspired by melee damage)
-  const modifierSign = totalModifier >= 0 ? '+' : '-';
   const dieResult = mainRoll.dice.length > 0 ? mainRoll.dice[0].total : null;
-  const dieLabel = dieType.toUpperCase();
   const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
 
-  const content = `
-    <div class="conan-roll-chat damage-roll spellcasting-roll ${isPoisoned ? 'poisoned-roll' : ''}">
-      <div class="roll-header">
-        <h3>${game.i18n.localize("CONAN.Damage.sorceryDamage")}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
-        <div class="weapon-info">${game.i18n.localize("CONAN.Damage.sorceryCustomDie")}</div>
-      </div>
-      <div class="roll-details">
-        <div class="dice-results">
-          <div class="dice-roll">
-            <div class="die-label">${dieLabel}</div>
-            <div class="die-result">${dieResult}</div>
-          </div>
-          ${!flexDieDisabled ? `
-          <div class="dice-roll">
-            <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
-            <div class="die-result${flexTriggered ? ' flex-effect' : ''}">${flexResult}</div>
-          </div>
-          ` : `
-          <div class="dice-roll disabled">
-            <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
-            <div class="die-result disabled"><i class="fas fa-ban"></i></div>
-          </div>
-          `}
-        </div>
-        <div class="damage-components">
-          <div class="component">
-            <span class="component-label">${game.i18n.localize("CONAN.Damage.sorceryCustomDie")}</span>:
-            <span class="component-value">${dieType}</span>
-          </div>
-          ${totalModifier !== 0 ? `
-          <div class="component">
-            <span class="component-label">${game.i18n.localize("CONAN.Dialog.difficulty.modifierLabel")}</span>:
-            <span class="component-value">${modifierSign}${totalModifier}</span>
-          </div>
-          ` : ''}
-          ${poisonPenalty !== 0 ? `
-          <div class="component">
-            <span class="component-label">${game.i18n.localize("CONAN.Poisoned.rollPenalty")}</span>:
-            <span class="component-value poison-penalty">-${effect2Multiplier}</span>
-          </div>
-          ` : ''}
-        </div>
-        <div class="damage-total highlighted">
-          <span class="total-label">${game.i18n.localize("CONAN.Common.damage")}</span>:
-          <span class="total-value">${damageTotal}</span>
-        </div>
-        ${flexTriggered ? `
-        <div class="roll-result">
-          <div class="flex-notice"><i class="fas fa-star"></i> ${game.i18n.localize('CONAN.Roll.flexEffect')}</div>
-        </div>
-        ` : ''}
-      </div>
-      
-      <div class="damage-actions" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0, 0, 0, 0.1); text-align: center;">
-        <button class="deal-pc-damage-btn" 
-                data-damage="${damageTotal}" 
-                data-attacker-id="${actor._id || actor.id}" 
-                data-token-id="${actor.token?.id || ''}" 
-                data-scene-id="${actor.token?.parent?.id || ''}">
-          <i class="fas fa-heart-broken"></i> ${game.i18n.localize('CONAN.Damage.DealDamage')}
-        </button>
-      </div>
-    </div>
-  `;
+  const terms = [{
+    label: game.i18n.localize("CONAN.Damage.sorceryCustomDie"),
+    expression: dieType,
+    value: dieResult
+  }];
+  if (totalModifier !== 0) terms.push(modifierTerm(totalModifier));
+  if (poisonPenalty !== 0) terms.push(poisonTerm(effect2Multiplier));
+
+  const content = await renderCompactRoll({
+    rootClass: "damage-roll spellcasting-roll",
+    kind: game.i18n.localize("CONAN.Damage.sorceryDamage"),
+    info: game.i18n.localize("CONAN.Damage.sorceryCustomDie"),
+    poisoned: isPoisoned,
+    terms,
+    totalLabel: game.i18n.localize("CONAN.Common.damage"),
+    total: damageTotal,
+    flex: isCharacter ? flexRow({ disabled: !!flexDieDisabled, result: flexResult, triggered: !!flexTriggered }) : null,
+    action: dealDamageAction(actor, damageTotal)
+  });
 
   // Create chat message with flags
   await ChatMessage.create({
@@ -361,76 +266,28 @@ export async function rollSorceryWitsDamage(actor, paramModifier = 0, sliderModi
   }
 
   // Prepare chat message content (inspired by melee damage)
-  const modifierSign = totalModifier >= 0 ? '+' : '-';
   const witsDieResult = mainRoll.dice.length > 0 ? mainRoll.dice[0].total : null;
-  const witsAbbr = game.i18n.localize("CONAN.Attributes.wits.abbr");
-  const witsLabel = game.i18n.localize("CONAN.Attributes.wits.label");
   const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
 
-  const content = `
-    <div class="conan-roll-chat damage-roll spellcasting-roll ${isPoisoned ? 'poisoned-roll' : ''}">
-      <div class="roll-header">
-        <h3>${game.i18n.localize("CONAN.Damage.sorceryDamage")}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
-        <div class="weapon-info">${game.i18n.localize("CONAN.Damage.sorceryWitsDie")}</div>
-      </div>
-      <div class="roll-details">
-        <div class="dice-results">
-          <div class="dice-roll">
-            <div class="die-label">${witsAbbr} (${witsLabel})</div>
-            <div class="die-result">${witsDieResult}</div>
-          </div>
-          ${!flexDieDisabled ? `
-          <div class="dice-roll">
-            <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
-            <div class="die-result${flexTriggered ? ' flex-effect' : ''}">${flexResult}</div>
-          </div>
-          ` : `
-          <div class="dice-roll disabled">
-            <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
-            <div class="die-result disabled"><i class="fas fa-ban"></i></div>
-          </div>
-          `}
-        </div>
-        <div class="damage-components">
-          <div class="component">
-            <span class="component-label">${game.i18n.localize("CONAN.Attributes.wits.die")}</span>:
-            <span class="component-value">${witsDie}</span>
-          </div>
-          ${totalModifier !== 0 ? `
-          <div class="component">
-            <span class="component-label">${game.i18n.localize("CONAN.Dialog.difficulty.modifierLabel")}</span>:
-            <span class="component-value">${modifierSign}${totalModifier}</span>
-          </div>
-          ` : ''}
-          ${poisonPenalty !== 0 ? `
-          <div class="component">
-            <span class="component-label">${game.i18n.localize("CONAN.Poisoned.rollPenalty")}</span>:
-            <span class="component-value poison-penalty">-${effect2Multiplier}</span>
-          </div>
-          ` : ''}
-        </div>
-        <div class="damage-total highlighted">
-          <span class="total-label">${game.i18n.localize("CONAN.Common.damage")}</span>:
-          <span class="total-value">${damageTotal}</span>
-        </div>
-        ${flexTriggered ? `
-        <div class="roll-result">
-          <div class="flex-notice"><i class="fas fa-star"></i> ${game.i18n.localize('CONAN.Roll.flexEffect')}</div>
-        </div>
-        ` : ''}
-      </div>
-      
-      <div class="damage-actions" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0, 0, 0, 0.1); text-align: center;">
-        <button class="deal-pc-damage-btn" 
-                data-damage="${damageTotal}" 
-                data-attacker-id="${actor._id || actor.id}" 
-                data-token-id="${actor.token?.id || ''}" 
-                data-scene-id="${actor.token?.parent?.id || ''}">
-          <i class="fas fa-heart-broken"></i> ${game.i18n.localize('CONAN.Damage.DealDamage')}
-        </button>
-      </div>
-    </div>
-  `;
+  const terms = [{
+    label: game.i18n.localize("CONAN.Damage.sorceryWitsDie"),
+    expression: witsDie,
+    value: witsDieResult
+  }];
+  if (totalModifier !== 0) terms.push(modifierTerm(totalModifier));
+  if (poisonPenalty !== 0) terms.push(poisonTerm(effect2Multiplier));
+
+  const content = await renderCompactRoll({
+    rootClass: "damage-roll spellcasting-roll",
+    kind: game.i18n.localize("CONAN.Damage.sorceryDamage"),
+    info: `${game.i18n.localize("CONAN.Attributes.wits.label")} (${game.i18n.localize("CONAN.Attributes.wits.abbr")})`,
+    poisoned: isPoisoned,
+    terms,
+    totalLabel: game.i18n.localize("CONAN.Common.damage"),
+    total: damageTotal,
+    flex: isCharacter ? flexRow({ disabled: !!flexDieDisabled, result: flexResult, triggered: !!flexTriggered }) : null,
+    action: dealDamageAction(actor, damageTotal)
+  });
 
   // Create chat message with flags
   await ChatMessage.create({

@@ -1,3 +1,5 @@
+import { renderCompactRoll, modifierTerm, poisonTerm } from "./compact-roll.mjs";
+
 /**
  * Dialog for making NPC attack rolls
  * NPCs do not use Flex Die, only Winds of Fate applies
@@ -180,62 +182,41 @@ export class NPCAttackDialog extends foundry.applications.api.HandlebarsApplicat
     const actorType = this.actor.type; // 'minion' or 'antagonist'
     const npcClass = actorType === 'minion' ? 'minion-roll' : 'antagonist-roll';
     
-    let messageContent = `
-      <div class="conan-roll-chat npc-roll ${npcClass} ${isPoisoned || isPoisonedAttributes ? 'poisoned-roll' : ''}">
-        <div class="roll-header attack">
-          <h3>${attackTypeLabel}${weaponName ? ` (${weaponName})` : ''}${isPoisoned || isPoisonedAttributes ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
-          <div class="attribute-info">${attributeLabel} (${attributeAbbr})${isPoisonedAttributes ? ' <span style="color: #15a20e; font-size: 0.9em;">(zatruty)</span>' : ''}</div>
-        </div>
-        <div class="roll-details">
-          <div class="dice-results">
-            <div class="dice-roll">
-              <div class="die-label">${attributeLabel}</div>
-              <div class="die-result${isWindsOfFate ? ' winds-of-fate' : ''}">${attributeResult}</div>
-            </div>
-          </div>
-          <div class="calculation">
-            <span class="calc-part">${attributeResult}</span>
-            <span class="calc-operator">+</span>
-            <span class="calc-part${isPoisonedAttributes ? ' poisoned-value' : ''}">${attributeValue}</span>
-            ${modifier !== 0 ? `<span class="calc-operator">+</span><span class="calc-part">${modifier}</span>` : ''}
-            ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">${effect2Multiplier}</span>` : ''}
-            <span class="calc-operator">=</span>
-            <span class="calc-total">${total}</span>
-          </div>
-          <div class="difficulty-check">
-            <span class="difficulty-label">OF celu:</span>
-            <span class="difficulty-value">${effectiveTargetDefense}${targetProneActive ? ` <span class="prone-chat-modifier">(${proneModifier > 0 ? '+' : ''}${proneModifier} ${game.i18n.localize('CONAN.Attack.prone')})</span>` : ''}</span>
-          </div>
-          <div class="roll-result ${isSuccess ? 'success' : 'failure'}">
-            <div class="result-text">${isSuccess ? game.i18n.localize('CONAN.Roll.success') : game.i18n.localize('CONAN.Roll.failure')}</div>`;
-    
-    // Add special conditions
-    if (isWindsOfFate) {
-      messageContent += `
-            <div class="winds-notice">
-              <i class="fas fa-wind"></i>
-              ${game.i18n.localize('CONAN.Roll.windsOfFate')}
-            </div>`;
-    }
-    
-    messageContent += `
-          </div>`;
-    
-    // Add damage roll button if attack was successful
-    if (isSuccess) {
-      // Zawsze użyj rzeczywistego ID aktora (nie systemId)
-      const baseActorId = this.actor.id;
-      messageContent += `
-          <div class="damage-actions" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0, 0, 0, 0.1); text-align: center;">
-            <button class="roll-npc-damage-btn" data-actor-id="${baseActorId}" data-token-id="${this.actor.token?.id || ''}" data-scene-id="${this.actor.token?.parent?.id || ''}" data-attack-index="${this.attackIndex}">
-              <i class="fas fa-dice-d20"></i> ${game.i18n.localize('CONAN.Roll.rollDamage')}
-            </button>
-          </div>`;
-    }
-    
-    messageContent += `
-        </div>
-      </div>`;
+    const terms = [
+      { label: game.i18n.localize("CONAN.Roll.attributeDie"), value: attributeResult, winds: isWindsOfFate },
+      { operator: "+", label: game.i18n.localize("CONAN.Roll.attributeValue"), value: attributeValue, poison: !!isPoisonedAttributes }
+    ];
+    if (modifier !== 0) terms.push(modifierTerm(modifier));
+    if (poisonPenalty !== 0) terms.push(poisonTerm(effect2Multiplier));
+
+    const messageContent = await renderCompactRoll({
+      headerClass: "attack",
+      rootClass: `npc-roll ${npcClass}`,
+      kind: `${attackTypeLabel}${weaponName ? ` (${weaponName})` : ''}`,
+      info: `${attributeLabel} (${attributeAbbr})`,
+      poisoned: isPoisoned || isPoisonedAttributes,
+      terms,
+      totalLabel: game.i18n.localize("CONAN.Roll.total"),
+      total,
+      verdict: {
+        label: game.i18n.localize("CONAN.Attack.targetPhysicalDefense"),
+        difficulty: effectiveTargetDefense,
+        note: targetProneActive ? `(${proneModifier > 0 ? '+' : ''}${proneModifier} ${game.i18n.localize('CONAN.Attack.prone')})` : "",
+        success: isSuccess
+      },
+      windsOfFate: isWindsOfFate,
+      action: isSuccess ? {
+        buttonClass: "roll-npc-damage-btn",
+        icon: "fa-dice-d20",
+        label: game.i18n.localize('CONAN.Roll.rollDamage'),
+        data: {
+          "actor-id": this.actor.id,
+          "token-id": this.actor.token?.id || '',
+          "scene-id": this.actor.token?.parent?.id || '',
+          "attack-index": this.attackIndex
+        }
+      } : null
+    });
     
     // Create chat message with flags
     await ChatMessage.create({

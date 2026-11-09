@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.8.3] - 2026-11-09
+
+### Changed — Unified "Compact Roll" Chat Cards
+
+- **`module/helpers/compact-roll.mjs`** *(new)* — Shared helper module (`renderCompactRoll`, `modifierTerm`, `poisonTerm`, `flexRow`, `dealDamageAction`) that renders every roll chat card through one Handlebars template instead of each caller building its own large inline-HTML/inline-CSS string
+- **`templates/chat/compact-roll.hbs`, `templates/chat/attribute-roll.hbs`** *(new)* — Shared chat card templates covering attribute tests, PC/NPC attacks, initiative, melee/sorcery damage, spellcasting, Flex Effect bonuses and Stamina boosts
+- **`attack-dialog.mjs`, `npc-attack-dialog.mjs`, `npc-sheet.mjs`, `flex-dialog.mjs`, `roll-mechanics.mjs`, `roll-sorcery-damage.mjs`, `spellcasting-dialog.mjs`, `stamina-effects.mjs`** — Refactored to build their chat message content via `renderCompactRoll()`, removing hundreds of lines of duplicated inline markup/styles; no change to rolled values or game mechanics
+- **`styles/roll-chat.css`, `styles/stamina-effects.css`, `styles/partials/poisoned-effects.css`, `styles/partials/attack-dialog.css`, `styles/partials/damage-dialog.css`** — Cleaned up and consolidated to match the new unified card markup, removing a large amount of now-unused CSS
+- **`lang/en.json`, `lang/fr.json`, `lang/pl.json`** — Added localization keys used by the new cards: `CONAN.Roll.attributeValue`, `CONAN.Roll.total`, `CONAN.Roll.flexDieDisabled`, `CONAN.Roll.poisonPenalty`, `CONAN.Stamina.originalResult`, `CONAN.Stamina.boostedResult`
+- **`system.json`** — `compatibility.verified` bumped from `14.367` to `14.370`
+
+### Removed — Deprecated `template.json` (Foundry v14.367)
+
+- **`template.json`** — File deleted. Its content (`Actor.types` / `Item.types`) was already fully duplicated by `documentTypes` in `system.json`, and all field schemas already live exclusively in `TypeDataModel` classes registered via `CONFIG.Actor.systemDataModels` / `CONFIG.Item.systemDataModels`. The mere presence of `template.json` triggers Foundry's console warning: *"System template.json is deprecated... Support for template.json will be removed in V16."* Removing the file silences the warning with no functional change
+- **`create-release.ps1`** — Removed `template.json` from the list of files copied into release packages
+- **`README.md`** — Removed `template.json` from the project structure tree
+
 ## [0.8.0] - 2026-08-28
 
 ### ⚠️ Foundry VTT Compatibility Requirement Raised to v14

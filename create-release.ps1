@@ -26,7 +26,6 @@ Write-Host "Copying files..." -ForegroundColor Yellow
 # Copy all necessary files and directories
 $itemsToCopy = @(
     "system.json",
-    "template.json",
     "LICENSE.txt",
     "README.md",
     "CHANGELOG.md",

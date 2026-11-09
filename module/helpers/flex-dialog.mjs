@@ -2,6 +2,8 @@
  * Flex Effect Dialog for Conan: The Hyborian Age
  */
 
+import { renderCompactRoll, modifierTerm, dealDamageAction } from "./compact-roll.mjs";
+
 export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.api.ApplicationV2
 ) {
@@ -174,24 +176,14 @@ export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplica
     // Create chat message
     const messageData = {
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `
-        <div class="conan-roll-chat flex-sorcery-recovery">
-          <div class="roll-header">
-            <h3><i class="fas fa-wand-sparkles"></i> ${game.i18n.localize("CONAN.FlexEffect.sorcery.name")}</h3>
-          </div>
-          <div class="roll-details">
-            <div class="flex-notice">
-              <i class="fas fa-star"></i> ${game.i18n.localize("CONAN.FlexEffect.flexEffectUsed")}
-            </div>
-            <div class="sorcery-recovery-info">
-              <p><strong>${this.actor.name}</strong> ${game.i18n.localize("CONAN.FlexEffect.sorcery.recovered")}:</p>
-              <div class="recovery-details">
-                ${restoredDetails.map(detail => `<div class="recovery-item">${detail}</div>`).join('')}
-              </div>
-            </div>
-          </div>
-        </div>
-      `
+      content: await renderCompactRoll({
+        rootClass: "flex-sorcery-recovery",
+        icon: "fa-wand-sparkles",
+        kind: game.i18n.localize("CONAN.FlexEffect.sorcery.name"),
+        info: `${this.actor.name} ${game.i18n.localize("CONAN.FlexEffect.sorcery.recovered")}:`,
+        lines: restoredDetails,
+        footnote: game.i18n.localize("CONAN.FlexEffect.flexEffectUsed")
+      })
     };
     
     await ChatMessage.create(messageData);
@@ -239,36 +231,20 @@ export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplica
     // Create chat message with massive damage
     const messageData = {
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `
-        <div class="conan-roll-chat flex-massive-damage">
-          <div class="roll-header">
-            <h3><i class="fas fa-explosion"></i> ${game.i18n.localize("CONAN.FlexEffect.massive.name")}</h3>
-          </div>
-          <div class="roll-details">
-            <div class="flex-notice">
-              <i class="fas fa-star"></i> ${game.i18n.localize("CONAN.FlexEffect.flexEffectUsed")}
-            </div>
-            <div class="massive-damage-info">
-              <p><strong>${this.actor.name}</strong> ${game.i18n.localize("CONAN.FlexEffect.massive.message")}</p>
-              <div class="damage-breakdown">
-                <div class="damage-item">${game.i18n.localize("CONAN.Common.damage")}: ${originalDamage}</div>
-                <div class="damage-item">${game.i18n.localize("CONAN.FlexEffect.massive.bonusDamage")}: +${bonusDamage}</div>
-                <div class="damage-total">${game.i18n.localize("CONAN.FlexEffect.massive.totalDamage")}: <strong>${totalDamage}</strong></div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="damage-actions" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0, 0, 0, 0.1); text-align: center;">
-            <button class="deal-pc-damage-btn" 
-                    data-damage="${totalDamage}" 
-                    data-attacker-id="${this.actor._id || this.actor.id}" 
-                    data-token-id="${this.actor.token?.id || ''}" 
-                    data-scene-id="${this.actor.token?.parent?.id || ''}">
-              <i class="fas fa-heart-broken"></i> ${game.i18n.localize('CONAN.Damage.DealDamage')}
-            </button>
-          </div>
-        </div>
-      `,
+      content: await renderCompactRoll({
+        rootClass: "flex-massive-damage",
+        icon: "fa-explosion",
+        kind: game.i18n.localize("CONAN.FlexEffect.massive.name"),
+        info: this.actor.name,
+        terms: [
+          { label: game.i18n.localize("CONAN.Common.damage"), value: originalDamage },
+          { operator: "+", label: game.i18n.localize("CONAN.FlexEffect.massive.bonusDamage"), value: bonusDamage }
+        ],
+        totalLabel: game.i18n.localize("CONAN.FlexEffect.massive.totalDamage"),
+        total: totalDamage,
+        footnote: game.i18n.localize("CONAN.FlexEffect.flexEffectUsed"),
+        action: dealDamageAction(this.actor, totalDamage)
+      }),
       flags: {
         "conan-the-hyborian-age": {
           damageDealt: false,
@@ -336,47 +312,26 @@ export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplica
     const flexMax = ctx.flexMax || 10;
     const flexTriggered = flexResult === flexMax;
     
-    const modifierSign = modifier >= 0 ? '+' : '';
-    
-    const content = `
-      <div class="conan-roll-chat">
-        <div class="roll-header">
-          <h3>${game.i18n.localize('CONAN.Roll.attributeTest')}</h3>
-          <div class="attribute-info">${displayName}</div>
-        </div>
-        <div class="roll-details">
-          <div class="dice-results">
-            <div class="dice-roll">
-              <div class="die-label">${game.i18n.localize('CONAN.Roll.attributeDie')}</div>
-              <div class="die-result">${attributeResult}</div>
-            </div>
-            <div class="dice-roll">
-              <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
-              <div class="die-result${flexTriggered ? ' flex-effect' : ''}">${flexResult}</div>
-            </div>
-          </div>
-          
-          <div class="calculation">
-            <span class="calc-part">${attributeResult}</span>
-            <span class="calc-operator">+</span>
-            <span class="calc-part">${attributeValue}</span>
-            ${modifier !== 0 ? `<span class="calc-operator">${modifierSign}</span><span class="calc-part">${Math.abs(modifier)}</span>` : ''}
-            <span class="calc-operator">=</span>
-            <span class="calc-total">${total}</span>
-          </div>
-          
-          <div class="difficulty-check">
-            <span class="difficulty-label">${game.i18n.localize('CONAN.Roll.targetDifficulty')}:</span>
-            <span class="difficulty-value">${difficulty}</span>
-          </div>
-          
-          <div class="roll-result success">
-            <div class="result-text">${game.i18n.localize('CONAN.Roll.success')}</div>
-            <div class="flex-bonus-note">${game.i18n.localize('CONAN.FlexEffect.flexEffectUsed')}</div>
-          </div>
-        </div>
-      </div>
-    `;
+    const terms = [
+      { label: game.i18n.localize('CONAN.Roll.attributeDie'), value: attributeResult },
+      { operator: "+", label: game.i18n.localize('CONAN.Roll.attributeValue'), value: attributeValue }
+    ];
+    if (modifier !== 0) terms.push(modifierTerm(modifier));
+
+    const content = await renderCompactRoll({
+      kind: game.i18n.localize('CONAN.Roll.attributeTest'),
+      info: displayName,
+      terms,
+      totalLabel: game.i18n.localize('CONAN.Roll.total'),
+      total,
+      flex: { disabled: false, result: flexResult, triggered: flexTriggered },
+      verdict: {
+        label: game.i18n.localize('CONAN.Roll.targetDifficulty'),
+        difficulty,
+        success: true
+      },
+      footnote: game.i18n.localize('CONAN.FlexEffect.flexEffectUsed')
+    });
     
     await ChatMessage.create({
       user: game.user.id,
@@ -410,57 +365,33 @@ export class FlexEffectDialog extends foundry.applications.api.HandlebarsApplica
     
     // Generate damage button - use unique class to avoid handler conflicts
     const buttonClass = 'flex-roll-damage-btn';
-    const dealDamageButtonHtml = `
-      <div class="deal-damage-row" style="text-align:center; margin-top:10px;">
-        <button class="${buttonClass}" data-actor-id="${this.actor.id}" data-attack-type="${ctx.attackType}" style="background: linear-gradient(90deg, #6a1b9a 0%, #ffd700 100%); color: #fff; border: 2px solid #4a148c; border-radius: 6px; font-weight: bold; font-size: 1em; padding: 6px 18px; box-shadow: 0 2px 8px rgba(106,27,154,0.18); cursor:pointer; transition: filter 0.2s;">
-          <i class="fas fa-bolt"></i> ${game.i18n.localize('CONAN.Damage.roll')}
-        </button>
-      </div>
-    `;
-    
-    const modifierSign = modifier >= 0 ? '+' : '';
-    const modifierText = modifier !== 0 ? ` ${modifierSign}${modifier}` : '';
-    
-    const messageContent = `
-      <div class="conan-roll-chat">
-        <div class="roll-header attack">
-          <h3>${attackTypeLabel}</h3>
-          <div class="attribute-info">${attributeLabel} (${attributeAbbr})</div>
-        </div>
-        <div class="roll-details">
-          <div class="dice-results">
-            <div class="dice-roll">
-              <div class="die-label">${attributeLabel}</div>
-              <div class="die-result">${attributeResult}</div>
-            </div>
-            <div class="dice-roll">
-              <div class="die-label">${game.i18n.localize('CONAN.Roll.flexDie')}</div>
-              <div class="die-result${flexTriggered ? ' flex-effect' : ''}">${flexResult}</div>
-            </div>
-          </div>
-          
-          <div class="calculation">
-            <span class="calc-part">${attributeResult}</span>
-            <span class="calc-operator">+</span>
-            <span class="calc-part">${attributeValue}</span>
-            ${modifier !== 0 ? `<span class="calc-operator">${modifierSign}</span><span class="calc-part">${Math.abs(modifier)}</span>` : ''}
-            <span class="calc-operator">=</span>
-            <span class="calc-total">${total}</span>
-          </div>
-          
-          <div class="difficulty-check">
-            <span class="difficulty-label">OF celu:</span>
-            <span class="difficulty-value">${difficulty}</span>
-          </div>
-          
-          <div class="roll-result success">
-            <div class="result-text">${game.i18n.localize('CONAN.Roll.success')}</div>
-            <div class="flex-bonus-note">${game.i18n.localize('CONAN.FlexEffect.flexEffectUsed')}</div>
-          </div>
-          ${dealDamageButtonHtml}
-        </div>
-      </div>
-    `;
+    const terms = [
+      { label: game.i18n.localize('CONAN.Roll.attributeDie'), value: attributeResult },
+      { operator: "+", label: game.i18n.localize('CONAN.Roll.attributeValue'), value: attributeValue }
+    ];
+    if (modifier !== 0) terms.push(modifierTerm(modifier));
+
+    const messageContent = await renderCompactRoll({
+      headerClass: "attack",
+      kind: attackTypeLabel,
+      info: `${attributeLabel} (${attributeAbbr})`,
+      terms,
+      totalLabel: game.i18n.localize('CONAN.Roll.total'),
+      total,
+      flex: { disabled: false, result: flexResult, triggered: flexTriggered },
+      verdict: {
+        label: game.i18n.localize('CONAN.Attack.targetPhysicalDefense'),
+        difficulty,
+        success: true
+      },
+      footnote: game.i18n.localize('CONAN.FlexEffect.flexEffectUsed'),
+      action: {
+        buttonClass,
+        icon: "fa-bolt",
+        label: game.i18n.localize('CONAN.Damage.roll'),
+        data: { "actor-id": this.actor.id, "attack-type": ctx.attackType }
+      }
+    });
     
     const chatMsg = await ChatMessage.create({
       user: game.user.id,

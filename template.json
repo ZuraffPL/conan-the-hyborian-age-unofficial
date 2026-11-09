@@ -1,8 +1,0 @@
-{
-  "Actor": {
-    "types": ["character", "minion", "antagonist"]
-  },
-  "Item": {
-    "types": ["weapon", "armor", "skill", "spell"]
-  }
-}

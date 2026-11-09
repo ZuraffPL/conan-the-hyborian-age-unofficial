@@ -1,0 +1,97 @@
+<div class="conan-roll-chat conan-attribute-roll conan-compact-roll{{#if rootClass}} {{rootClass}}{{/if}}{{#if poisoned}} poisoned-roll{{/if}}">
+  <div class="roll-header{{#if headerClass}} {{headerClass}}{{/if}}">
+    <span class="attribute-roll-kind">
+      {{#if icon}}<i class="fas {{icon}}" aria-hidden="true"></i>{{/if}}
+      {{kind}}
+      {{#if poisoned}}<i class="fas fa-skull-crossbones attribute-poison" aria-hidden="true"></i>{{/if}}
+    </span>
+    {{#if info}}<strong class="attribute-info">{{info}}</strong>{{/if}}
+  </div>
+
+  <div class="attribute-roll-body">
+    {{#if terms}}
+    <div class="attribute-equation">
+      {{#each terms}}
+        <div class="attribute-term">
+          {{#if operator}}<span class="attribute-operator">{{operator}}</span>{{/if}}
+          <span class="attribute-operand">
+            <span class="attribute-label">
+              {{label}}
+              {{#if expression}}<span class="component-value">{{expression}}</span>{{/if}}
+            </span>
+            <strong class="attribute-number{{#if poison}} attribute-poison{{/if}}{{#if winds}} is-winds{{/if}}">{{value}}</strong>
+          </span>
+        </div>
+      {{/each}}
+      <div class="attribute-term">
+        <span class="attribute-operator">=</span>
+        <span class="attribute-operand">
+          <span class="attribute-label">{{totalLabel}}</span>
+          <strong class="attribute-number calc-total">{{total}}</strong>
+        </span>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#each lines}}
+      <div class="attribute-flex attribute-line">
+        <strong>{{this}}</strong>
+      </div>
+    {{/each}}
+
+    {{#if flex}}
+      <div class="attribute-flex">
+        <span>{{localize "CONAN.Roll.flexDie"}}</span>
+        {{#if flex.disabled}}
+          <strong class="attribute-poison">{{localize "CONAN.Roll.flexDieDisabled"}}</strong>
+        {{else}}
+          <strong class="attribute-flex-value">{{flex.result}}</strong>
+          {{#if flex.triggered}}
+            <span class="attribute-flex-effect">
+              <i class="fas fa-star" aria-hidden="true"></i> {{localize "CONAN.Roll.flexEffect"}}
+            </span>
+          {{/if}}
+        {{/if}}
+      </div>
+    {{/if}}
+
+    {{#if note}}
+      <div class="attribute-flex">
+        <span>{{note.label}}</span>
+        <strong>{{note.value}}</strong>
+      </div>
+    {{/if}}
+  </div>
+
+  {{#if verdict}}
+    <div class="attribute-verdict">
+      <span>
+        {{verdict.label}} <strong class="difficulty-value">{{verdict.difficulty}}</strong>
+        {{#if verdict.note}}<span class="prone-chat-modifier">{{verdict.note}}</span>{{/if}}
+      </span>
+      {{#if verdict.success}}
+        <strong class="attribute-outcome success"><span aria-hidden="true">✓</span> {{localize "CONAN.Roll.success"}}</strong>
+      {{else}}
+        <strong class="attribute-outcome failure"><span aria-hidden="true">✗</span> {{localize "CONAN.Roll.failure"}}</strong>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if windsOfFate}}
+    <div class="attribute-winds">
+      <i class="fas fa-wind" aria-hidden="true"></i> {{localize "CONAN.Roll.windsOfFate"}}
+    </div>
+  {{/if}}
+
+  {{#if footnote}}
+    <div class="attribute-footnote"><i class="fas fa-star" aria-hidden="true"></i> {{footnote}}</div>
+  {{/if}}
+
+  {{#if action}}
+    <div class="attribute-actions">
+      <button type="button" class="{{action.buttonClass}} compact-roll-action" {{#each action.data}}data-{{@key}}="{{this}}" {{/each}}>
+        <i class="fas {{action.icon}}" aria-hidden="true"></i> {{action.label}}
+      </button>
+    </div>
+  {{/if}}
+</div>

@@ -15,6 +15,7 @@ function ensureNPCAttributes(context) {
 
 import { ConanActorSheet } from "./actor-sheet.mjs";
 import { NPCAttackDialog } from "../helpers/npc-attack-dialog.mjs";
+import { renderCompactRoll, modifierTerm } from "../helpers/compact-roll.mjs";
 
 /**
  * Setup N/A checkbox handlers with strikethrough effect
@@ -1316,45 +1317,29 @@ async function rollNPCAttribute(actor, attribute) {
   const npcClass = npcType === "minion" ? "minion-roll" : "antagonist-roll";
   
   // Create chat message with same style as character rolls
-  const modifierText = modifier !== 0 ? ` ${modifier >= 0 ? '+' : ''}${modifier}` : '';
-  const modifierSign = modifier >= 0 ? '+' : '';
   const hasPoisonPenalty = poisonPenalty !== 0;
-  
-  const content = `
-    <div class="conan-roll-chat npc-roll ${npcClass} ${hasPoisonPenalty || isPoisonedAttributes ? 'poisoned-roll' : ''}">
-      <div class="roll-header">
-        <h3>${game.i18n.localize('CONAN.Roll.attributeTest')}${hasPoisonPenalty || isPoisonedAttributes ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
-        <div class="attribute-info">${displayName}${isPoisonedAttributes ? ' <span style="color: #15a20e; font-size: 0.9em;">(zatruty)</span>' : ''}</div>
-      </div>
-      <div class="roll-details">
-        <div class="dice-results">
-          <div class="dice-roll">
-            <div class="die-label">${game.i18n.localize('CONAN.Roll.attributeDie')}</div>
-            <div class="die-result${windsOfFate ? ' winds-of-fate' : ''}">${dieResult}</div>
-          </div>
-        </div>
-        
-        <div class="calculation">
-          <span class="calc-part">${dieResult}</span>
-          <span class="calc-operator">+</span>
-          <span class="calc-part${isPoisonedAttributes ? ' poisoned-value' : ''}">${attributeValue}</span>
-          ${modifier !== 0 ? `<span class="calc-operator">${modifierSign}</span><span class="calc-part">${Math.abs(modifier)}</span>` : ''}
-          <span class="calc-operator">=</span>
-          <span class="calc-total">${total}</span>
-        </div>
-        
-        <div class="difficulty-check">
-          <span class="difficulty-label">${game.i18n.localize('CONAN.Roll.targetDifficulty')}:</span>
-          <span class="difficulty-value">${difficulty}</span>
-        </div>
-        
-        <div class="roll-result ${success ? 'success' : 'failure'}">
-          <div class="result-text">${success ? game.i18n.localize('CONAN.Roll.success') : game.i18n.localize('CONAN.Roll.failure')}</div>
-          ${windsOfFate ? `<div class="winds-notice"><i class="fas fa-wind"></i> ${game.i18n.localize('CONAN.Roll.windsOfFate')}</div>` : ''}
-        </div>
-      </div>
-    </div>
-  `;
+
+  const terms = [
+    { label: game.i18n.localize('CONAN.Roll.attributeDie'), value: dieResult, winds: windsOfFate },
+    { operator: "+", label: game.i18n.localize('CONAN.Roll.attributeValue'), value: attributeValue, poison: !!isPoisonedAttributes }
+  ];
+  if (modifier !== 0) terms.push(modifierTerm(modifier));
+
+  const content = await renderCompactRoll({
+    rootClass: `npc-roll ${npcClass}`,
+    kind: game.i18n.localize('CONAN.Roll.attributeTest'),
+    info: displayName,
+    poisoned: hasPoisonPenalty || isPoisonedAttributes,
+    terms,
+    totalLabel: game.i18n.localize('CONAN.Roll.total'),
+    total,
+    verdict: {
+      label: game.i18n.localize('CONAN.Roll.targetDifficulty'),
+      difficulty,
+      success
+    },
+    windsOfFate
+  });
   
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: actor }),

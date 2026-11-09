@@ -1,4 +1,5 @@
 import { getFlexDieColorset } from "./dice-utils.mjs";
+import { renderCompactRoll, modifierTerm, poisonTerm, flexRow } from "./compact-roll.mjs";
 
 /**
  * Dialog for spellcasting rolls in Conan: The Hyborian Age
@@ -270,60 +271,41 @@ export class SpellcastingDialog extends foundry.applications.api.HandlebarsAppli
     
     // Create chat message
     const isPoisoned = actor.system.poisoned && actor.system.poisonEffects?.effect2;
+
+    const terms = [
+      { label: game.i18n.localize("CONAN.Roll.attributeDie"), value: witsResult, winds: isWindsOfFate },
+      { operator: "+", label: game.i18n.localize("CONAN.Roll.attributeValue"), value: witsValue }
+    ];
+    if (modifier !== 0) terms.push(modifierTerm(modifier));
+    if (poisonPenalty !== 0) terms.push(poisonTerm(effect2Multiplier));
+
+    const content = await renderCompactRoll({
+      rootClass: "spellcasting-roll",
+      kind: game.i18n.localize("CONAN.Spellcasting.magicAttack"),
+      info: `${game.i18n.localize("CONAN.Attributes.wits.label")} (${game.i18n.localize("CONAN.Attributes.wits.abbr")})`,
+      poisoned: isPoisoned,
+      terms,
+      totalLabel: game.i18n.localize("CONAN.Roll.total"),
+      total,
+      flex: flexRow({ disabled: !!flexDieDisabled, result: flexResult, triggered: isFlexEffect }),
+      note: { label: game.i18n.localize("CONAN.Spellcasting.cost"), value: costString },
+      verdict: {
+        label: game.i18n.localize("CONAN.Spellcasting.targetDefense"),
+        difficulty,
+        success: isSuccess
+      },
+      windsOfFate: isWindsOfFate,
+      action: isSuccess ? {
+        buttonClass: "sorcery-damage-btn",
+        icon: "fa-bolt",
+        label: game.i18n.localize("CONAN.Damage.roll"),
+        data: { "actor-id": actor.id }
+      } : null
+    });
+
     const messageData = {
       speaker: ChatMessage.getSpeaker({ actor: actor }),
-      content: `
-        <div class="conan-roll-chat spellcasting-roll ${isPoisoned ? 'poisoned-roll' : ''}">
-          <div class="roll-header">
-            <h3>${game.i18n.localize("CONAN.Spellcasting.magicAttack")}${isPoisoned ? ' <i class="fas fa-skull-crossbones poison-skull" style="color: #15a20e;"></i>' : ''}</h3>
-            <div class="attribute-info">
-              ${game.i18n.localize("CONAN.Attributes.wits.label")} (${game.i18n.localize("CONAN.Attributes.wits.abbr")})
-            </div>
-          </div>
-          <div class="roll-details">
-            <div class="dice-results">
-              <div class="dice-roll">
-                <div class="die-label">${game.i18n.localize("CONAN.Attributes.wits.label")}</div>
-                <div class="die-result${isWindsOfFate ? ' winds-of-fate' : ''}">${witsResult}</div>
-              </div>
-              ${!flexDieDisabled ? `
-              <div class="dice-roll">
-                <div class="die-label">${game.i18n.localize("CONAN.Roll.flexDie")}</div>
-                <div class="die-result${isFlexEffect ? ' flex-effect' : ''}">${flexResult}</div>
-              </div>
-              ` : `
-              <div class="dice-roll disabled">
-                <div class="die-label">${game.i18n.localize("CONAN.Roll.flexDie")}</div>
-                <div class="die-result disabled"><i class="fas fa-ban"></i></div>
-              </div>
-              `}
-            </div>
-            <div class="calculation">
-              <span class="calc-part">${witsResult}</span>
-              <span class="calc-operator">+</span>
-              <span class="calc-part">${witsValue}</span>
-              ${modifier !== 0 ? `<span class="calc-operator">${modifier >= 0 ? '+' : ''}</span><span class="calc-part">${modifier}</span>` : ''}
-              ${poisonPenalty !== 0 ? `<span class="calc-operator">-</span><span class="calc-part poison-penalty">${effect2Multiplier}</span>` : ''}
-              <span class="calc-operator">=</span>
-              <span class="calc-total">${total}</span>
-            </div>
-            <div class="difficulty-check">
-              <span class="difficulty-label">${game.i18n.localize("CONAN.Spellcasting.targetDefense")}: </span>
-              <span class="difficulty-value">${difficulty}</span>
-            </div>
-            <div class="spell-cost-display">
-              <span class="cost-label">${game.i18n.localize("CONAN.Spellcasting.cost")}: </span>
-              <span class="cost-value">${costString}</span>
-            </div>
-          </div>
-          <div class="roll-result ${isSuccess ? 'success' : 'failure'}">
-            ${isWindsOfFate ? `<div class="conan-winds-of-fate">${game.i18n.localize("CONAN.Roll.windsOfFate")}</div>` : ''}
-            <div class="result-text">${isSuccess ? game.i18n.localize("CONAN.Roll.success") : game.i18n.localize("CONAN.Roll.failure")}</div>
-            ${isFlexEffect ? `<div class="flex-notice">${game.i18n.localize("CONAN.Roll.flexEffect")}</div>` : ''}
-            ${isSuccess ? `<div class="deal-damage-row" style="text-align:center; margin-top:10px;"><button class="sorcery-damage-btn" data-actor-id="${actor.id}" style="background: linear-gradient(90deg, #6a1b9a 0%, #ffd700 100%); color: #fff; border: 2px solid #4a148c; border-radius: 6px; font-weight: bold; font-size: 1em; padding: 6px 18px; box-shadow: 0 2px 8px rgba(106,27,154,0.18); cursor:pointer; transition: filter 0.2s; white-space: nowrap;"><i class="fas fa-bolt"></i> ${game.i18n.localize('CONAN.Damage.roll')}</button></div>` : ''}
-          </div>
-        </div>
-      `
+      content
     };
     
     const chatMsg = await ChatMessage.create(messageData);

@@ -2,7 +2,7 @@
 
 An unofficial Foundry VTT implementation of **Conan: The Hyborian Age RPG** by Monolith Boardgames. Step into the savage world of Robert E. Howard's Conan the Barbarian and forge your legend in the Hyborian Age!
 
-![Version](https://img.shields.io/badge/version-0.8.0-darkred)
+![Version](https://img.shields.io/badge/version-0.8.3-darkred)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v14%2B%20(14.367)-orange)
 
 ## Installation
@@ -47,7 +47,7 @@ Each character has **four attributes** (Might, Edge, Grit, Wits) rated 1–8:
 
 ## System Features
 
-> **Current version: v0.8.0** — For a full history of changes see [CHANGELOG.md](CHANGELOG.md).
+> **Current version: v0.8.3** — For a full history of changes see [CHANGELOG.md](CHANGELOG.md).
 
 ### Core Feature Reference
 
@@ -364,8 +364,7 @@ conan-the-hyborian-age/
 ├── LICENSE.txt
 ├── README.md
 ├── RELEASE-NOTES.md
-├── system.json
-└── template.json
+└── system.json
 ```
 
 ---
@@ -432,4 +431,4 @@ This system is provided as-is for personal use. Not affiliated with or endorsed 
 
 ---
 
-Current version: **0.8.0** — see [CHANGELOG.md](CHANGELOG.md) for full history.
+Current version: **0.8.3** — see [CHANGELOG.md](CHANGELOG.md) for full history.

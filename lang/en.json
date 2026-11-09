@@ -369,6 +369,10 @@
       "windsOfFate": "Winds of Fate are against you. Rolled a one",
       "attributeTest": "Attribute Test",
       "attributeDie": "Attribute Die",
+      "attributeValue": "Attribute value",
+      "total": "Total",
+      "flexDieDisabled": "Locked by poison",
+      "poisonPenalty": "Poison",
       "targetDifficulty": "Difficulty",
       "rollDamage": "Roll Damage"
     },
@@ -647,7 +651,9 @@
       "boostedNotification": "Roll result boosted by +{boost} (spent {cost} Stamina)",
       "massiveDamageNotification": "Massive Damage! +{bonus} to damage (spent last Stamina point)",
       "damageIncrease": "Additional Damage",
-      "totalDamageAfterBoost": "Total Damage After Boost"
+      "totalDamageAfterBoost": "Total Damage After Boost",
+      "originalResult": "Result",
+      "boostedResult": "Boosted"
     },
     
     "FightForLife": {

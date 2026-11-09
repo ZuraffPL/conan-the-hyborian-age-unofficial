@@ -12,27 +12,6 @@
   cursor: not-allowed;
 }
 
-/* Magic Damage Chat Header - purple with pulse */
-
-.conan-roll-chat.damage-roll.spellcasting-roll .roll-header {
-  background: linear-gradient(90deg, #4b176a 0%, #a020f0 100%);
-  border-radius: 8px 8px 0 0;
-  padding: 10px 0 4px 0;
-  box-shadow: 0 2px 8px rgba(75,23,106,0.18);
-  position: relative;
-  animation: magic-pulse 2.2s infinite alternate;
-}
-
-@keyframes magic-pulse {
-  0% {
-    box-shadow: 0 0 16px 4px #4b176a, 0 2px 8px rgba(75,23,106,0.18);
-    filter: brightness(1.04) saturate(1.08);
-  }
-  100% {
-    box-shadow: 0 0 40px 12px #a020f0, 0 2px 16px rgba(160,32,240,0.22);
-    filter: brightness(1.14) saturate(1.22);
-  }
-}
 .value-display-witsdie {
   padding: 8px 16px;
   background: rgba(212, 175, 55, 0.18);
@@ -91,16 +70,11 @@
   gap: 12px;
   flex-wrap: wrap;
 }
-.magic-type-col, .magic-die-col, .magic-mod-col {
+.magic-mod-col {
   flex: 0 0 auto;
   margin: 0;
   padding: 0;
   min-width: unset;
-  align-items: center;
-}
-.magic-type-col {
-  min-width: 140px;
-  display: flex;
   align-items: center;
 }
 .magic-mod-col {
@@ -408,14 +382,6 @@ html[lang="en"] .conan.damage .subtitle {
   text-align: center;
 }
 
-/* Placeholder text */
-.conan.damage .placeholder-text {
-  text-align: center;
-  color: #8b6914;
-  font-style: italic;
-  margin: 10px 0;
-}
-
 .conan.damage .damage-info {
   padding: 12px;
   background: linear-gradient(135deg, rgba(220, 20, 60, 0.1) 0%, rgba(139, 0, 0, 0.1) 100%);
@@ -429,23 +395,6 @@ html[lang="en"] .conan.damage .subtitle {
   color: #5a2e0a;
   font-size: 14px;
   line-height: 1.4;
-}
-
-.conan.damage .damage-options {
-  padding: 12px;
-  background: rgba(139, 69, 19, 0.05);
-  border: 2px solid #8b4513;
-  border-radius: 6px;
-  margin-bottom: 15px;
-  min-height: 100px;
-}
-
-.conan.damage .damage-options p {
-  margin: 0;
-  color: #8b4513;
-  font-size: 14px;
-  text-align: center;
-  font-style: italic;
 }
 
 /* === Modifier Slider === */
